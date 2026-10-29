@@ -11,7 +11,7 @@ Fakta server terakhir diverifikasi **28 Oktober 2026**; catatan proyek diperbaru
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, NVMe 500 GB. Modul RAM cadangan 16 GB dan 8 GB belum dipasang; targetnya 32 GB (16+16).
-- **Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci** belum dipasang ke server. Model tiap unit belum dicatat; setidaknya satu belum diformat. Keduanya memerlukan enclosure/dock USB bertenaga untuk M710q Tiny.
+- Ada **dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci**. Rencana sementara: mulai dengan satu unit melalui enclosure single-bay yang tersedia; HDD kedua ditunda. Model tiap unit belum dicatat, setidaknya satu belum diformat, dan belum ada yang dipasang ke server.
 - **Proxmox belum diinstal** di M710q. Langkah berikutnya: pasang RAM 16 GB, jalankan MemTest86, atur BIOS, lalu instal Proxmox.
 - Buku panduan Bab 1–56 sudah ditulis, tetapi **belum diuji di mesin asli**. Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
@@ -84,7 +84,7 @@ Pada RAM 16 GB, semua guest tidak dapat menyala bersamaan; buku merencanakan pro
 
 ## Penyimpanan dan backup
 
-Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci dapat dipertimbangkan untuk data atau backup setelah model, kondisi, dan enclosure bertenaga diverifikasi. Penempatan datastore PBS belum diputuskan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
+Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara adalah memakai satu HDD 3,5 inci melalui enclosure single-bay yang tersedia; HDD kedua ditunda. Model, kondisi, dan peran storage (termasuk datastore PBS) belum diputuskan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
 
 **Keadaan saat ini:** kedua HDD belum terpasang, setidaknya satu belum diformat, Proxmox/PBS belum berjalan, salinan USB belum dibuat, dan belum ada uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
 
