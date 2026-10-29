@@ -1,6 +1,8 @@
 # STATUS (perbarui setiap sesi)
 
-**Terakhir diperbarui:** 28 Oktober 2026
+**Terakhir diperbarui:** 30 Oktober 2026
+
+> Keadaan server di bawah ini terakhir diverifikasi pada 28 Oktober 2026. Pembaruan 30 Oktober adalah audit dokumentasi; tidak ada pemeriksaan atau perubahan pada server.
 
 ## Posisi sekarang
 - Mesin asli sudah ada: **Lenovo ThinkCentre M710q** (i5-6500T, RAM 16 GB terpasang, NVMe 500 GB). RAM cadangan 16 GB dan 8 GB belum dipasang. HDD 2 TB belum dipasang ke server.
@@ -22,4 +24,9 @@
 - Semua isi buku belum diuji: lihat `catatan/hasil-uji.md`.
 
 ## Catatan sesi terakhir
-Repo dibuat dan diperbarui untuk Revisi 3. Belum ada perintah buku yang dijalankan di M710q.
+- Repo dirapikan: README diperluas dengan diagram jaringan dan status aktual vs target.
+- Duplikasi pada `docs/00-ide-awal.md` dan `docs/08-keputusan.md` dihapus; pohon repo di `docs/03-pohon.md` diselaraskan.
+- Konflik lama terkait Tailscale di STB HG680 ditandai dan diselaraskan dengan rancangan terbaru.
+- Contoh firewall Bab 51, blok instalasi Docker Bab 49, Caddyfile Bab 36, dan YAML Homepage Bab 34 dirapikan.
+- Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru.
+- Belum ada perintah panduan yang dijalankan di M710q; audit materi lainnya masih berlangsung.
