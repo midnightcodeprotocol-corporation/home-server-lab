@@ -252,7 +252,7 @@ kedaluwarsa kuncinya.
 3. Uji dari HP (data seluler): buka https://192.168.88.10:8006. Harus tetap berhasil.  
 TIPS  
 Jika editor menolak dst berupa rentang IP pada grants, pakai sintaks lama yang juga didukung: "acls": [{ "action":  
-"accept", "src": ["autogroup:member"], "dst": ["tag:router:\*", "192.168.88.0/24:\*"] }].  
+"accept", "src": ["group:home-admins"], "dst": ["tag:router:*", "192.168.88.0/24:*"] }].  
 KEAMANAN  
 Editor kebijakan dibuka lewat situs web Tailscale, bukan lewat tailnet, sehingga kesalahan aturan tidak mengunci jalur  
 Anda untuk memperbaikinya. Tetap simpan salinan JSON lama.  
