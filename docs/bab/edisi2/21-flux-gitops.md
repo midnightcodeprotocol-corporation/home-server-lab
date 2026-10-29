@@ -42,9 +42,10 @@ export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 flux check --pre
 ```
 > Penjelasan: Memeriksa prasyarat cluster. Harus berakhir "prerequisites checks passed".
-4  
-# flux bootstrap git --url=ssh://git@192.168.88.20:2222/USERNAME/homelab.git \  
- --branch=main --path=clusters/home  
+```
+flux bootstrap git --url=ssh://git@192.168.88.20:2222/USERNAME/homelab.git \
+  --branch=main --path=clusters/home
+```
 > Penjelasan: Memasang Flux di cluster dan menyimpan konfigurasinya di repository. Ganti USERNAME.
 1. Perintah bootstrap menampilkan kunci publik. Tambahkan di repository: Settings &gt; Deploy  
 Keys &gt; Add, centang Enable Write Access.  
