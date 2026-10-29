@@ -1,17 +1,20 @@
 // Potongan kebijakan akses tailnet (Bab 26.6 dan 44.3). Ganti email.
 {
+  "groups": {
+    "group:home-admins": ["EMAIL-ADMIN-ANDA@example.com"],
+  },
   "tagOwners": {
-    "tag:router": ["EMAIL-ANDA@gmail.com"],
+    "tag:router": ["group:home-admins"],
   },
   "grants": [
     {
-      "src": ["autogroup:member"],
+      "src": ["group:home-admins"],
       "dst": ["tag:router", "192.168.88.0/24"],
       "ip":  ["*"],
     },
     {
       // untuk node Tailscale Serve (lab-vault, lab-music, lab-sso, lab-immich)
-      "src": ["autogroup:member"],
+      "src": ["group:home-admins"],
       "dst": ["autogroup:self"],
       "ip":  ["tcp:443"],
     },
