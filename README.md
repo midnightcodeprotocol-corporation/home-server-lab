@@ -7,7 +7,7 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Status ini mengikuti [STATUS.md](STATUS.md), terakhir diperbarui **28 Oktober 2026**.
+Fakta server terakhir diverifikasi **28 Oktober 2026**; catatan proyek diperbarui **30 Oktober 2026** di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, NVMe 500 GB. Modul RAM cadangan 16 GB dan 8 GB belum dipasang; targetnya 32 GB (16+16).
