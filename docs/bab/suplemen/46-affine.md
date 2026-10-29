@@ -38,10 +38,10 @@ Langkah berikut dijalankan di VM affine:
 mkdir -p /opt/stacks/affine/{config,storage,db,backup} && cd /opt/stacks/affine
 ```
 > Penjelasan: Folder konfigurasi, unggahan, database, dan backup.
-2  
-# curl -fsSL -o /root/affine-resmi.yml  
-https://github.com/toeverything/AFFiNE/releases/latest/download/docker-compose.yml && grep  
--n "image:" /root/affine-resmi.yml  
+```
+curl -fsSL -o /root/affine-resmi.yml https://github.com/toeverything/AFFiNE/releases/latest/download/docker-compose.yml
+grep -n "image:" /root/affine-resmi.yml
+```
 > Penjelasan: Mengunduh berkas compose resmi dari rilis terbaru hanya untuk dibandingkan. Bila nama image di
 sana berbeda dari yang ada di kotak compose di bawah, pakai nama dari berkas resmi.  
 ```
