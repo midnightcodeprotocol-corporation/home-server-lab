@@ -1,5 +1,6 @@
 # Rahasia: jangan pernah di-commit
 .env
+.env.*
 *.env
 !*.env.example
 !.env.example
@@ -8,7 +9,14 @@
 *.pem
 *.crt
 id_ed25519*
+id_ecdsa*
+id_rsa*
+id_dsa*
 *.ppk
+*.p12
+*.pfx
+credentials.json
+*-credentials.json
 
 # Arsip backup dan dump (berisi rahasia / data pribadi)
 *.tgz
