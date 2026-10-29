@@ -29,5 +29,6 @@
 - Konflik lama terkait Tailscale di STB HG680 ditandai dan diselaraskan dengan rancangan terbaru.
 - Contoh firewall Bab 51, blok instalasi Docker Bab 49, Caddyfile dan batas jaringan Docker Bab 36, YAML Homepage Bab 34, serta beberapa contoh perintah Bab 41–47 dirapikan.
 - Vaultwarden dan konektor Cloudflare diarahkan memakai tag image yang diverifikasi/dipatok; tag yang dipilih tetap perlu dicek saat implementasi.
-- Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru.
+- Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru; blok perintah yang rusak di Bab 11–14, 16, 18, 21, 23–25, 27, 32, 37, 41–47, 49–55 telah dirapikan.
+- Katalog masalah Bab 24 diubah menjadi tabel Markdown; `AGENTS.md` diselaraskan dengan status Proxmox belum terpasang, status Tailscale, dan alur koordinasi SSH.
 - Belum ada perintah panduan yang dijalankan di M710q; audit materi lainnya masih berlangsung.
