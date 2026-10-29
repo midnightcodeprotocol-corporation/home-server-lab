@@ -88,12 +88,10 @@ chown 1000:1000 data
 ```
 > Penjelasan: Data dimiliki UID:GID yang menjalankan Pocket ID (PUID dan PGID di .env). Dokumentasi menyebut
 nilai bawaan 1000.  
-3  
-# printf  
-"APP_URL=https://lab-sso.NAMA-TAILNET.ts.net\nTRUST_PROXY=true\nPUID=1000\nPGID=1000\n" &gt;  
-.env  
-> Penjelasan: Menulis .env. Ganti NAMA-TAILNET dengan nama tailnet Anda sebelum menekan Enter. APP_URL
-harus persis alamat yang dipakai browser.  
+```
+printf 'APP_URL=https://lab-sso.NAMA-TAILNET.ts.net\nTRUST_PROXY=true\nPUID=1000\nPGID=1000\n' > .env
+```
+> Penjelasan: Menulis .env. Ganti NAMA-TAILNET dengan nama tailnet Anda. APP_URL harus persis alamat yang dipakai browser.  
 ```
 echo "ENCRYPTION_KEY=$(openssl rand -base64 32)" >> .env
 ```
