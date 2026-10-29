@@ -194,9 +194,10 @@ wget $URL/debian-13-genericcloud-amd64.qcow2
 IMG=/var/lib/vz/template/iso/debian-13-genericcloud-amd64.qcow2
 ```
 > Penjelasan: Menyimpan jalur image dalam variabel.
-5  
-# qm create 9000 --name debian13-template --memory 2048 --cores 2 --cpu host \  
- --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci  
+```
+qm create 9000 --name debian13-template --memory 2048 --cores 2 --cpu host \
+  --net0 virtio,bridge=vmbr0 --scsihw virtio-scsi-pci
+```
 > Penjelasan: Membuat VM kosong ID 9000.
 ```
 qm set 9000 --scsi0 local-lvm:0,import-from=$IMG
