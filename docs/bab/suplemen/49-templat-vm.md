@@ -162,11 +162,10 @@ di WinBox atau SSH ke MikroTik:
 /ip dhcp-server print
 ```
 > Penjelasan: Melihat nama server DHCP (misalnya defconf) untuk dipakai di bawah.
-2  
-[admin@MikroTik] &gt; /ip dhcp-server lease add address=192.168.88.24  
-mac-address=AA:BB:CC:DD:EE:FF server=defconf comment=vault  
-> Penjelasan: Mereservasi 192.168.88.24 untuk MAC VM. Ganti MAC dan nama server. Alamat di luar rentang pool
-100-254 untuk lease statis umumnya diterima [BELUM PASTI]; bila ditolak, atur IP statis di Debian.  
+```
+/ip dhcp-server lease add address=192.168.88.24 mac-address=AA:BB:CC:DD:EE:FF server=defconf comment=vault
+```
+> Penjelasan: Mereservasi 192.168.88.24 untuk MAC VM. Ganti MAC dan nama server. Alamat di luar rentang pool 100-254 untuk lease statis umumnya diterima [BELUM PASTI]; bila ditolak, atur IP statis di Debian.  
 
 **TERMINAL VM BARU** | Konsol VM baru, sebagai root
 
