@@ -26,21 +26,20 @@ Apakah disk mulai rusak? Pemeriksaan bulanan: smartctl -H (Suplemen 2 Bab
 
 ## 34.2 Kartu di dashboard Homepage
 
-Tambahkan tiga kartu ke berkas services.yaml Homepage (lokasi mengikuti Edisi 2 Bab 19), lalu muat ulang  
-halaman Homepage.  
+Konfigurasi contoh di repo sudah memuat kartu monitoring ini. Jika Anda membuat Homepage dari awal, tambahkan entri berikut ke services.yaml, lalu muat ulang halaman. Gunakan nama HTTPS lokal setelah Caddy aktif.  
 
 **services.yaml (tambahan)** | Hati-hati dengan spasi; YAML sensitif terhadap indentasi
 
 ```
 - Monitoring:
     - Uptime Kuma:
-        href: http://192.168.88.20:3001
+        href: https://kuma.home.arpa
         description: Uptime semua layanan
     - Beszel:
-        href: http://192.168.88.20:8090
+        href: https://beszel.home.arpa
         description: CPU, RAM, disk, suhu
     - Gotify:
-        href: http://192.168.88.20:8070
+        href: https://gotify.home.arpa
         description: Notifikasi ke HP
 ```
 
