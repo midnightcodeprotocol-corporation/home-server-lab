@@ -60,12 +60,10 @@ Perbaiki di compose, docker compose up -d
 n8n: webhook produksi 404 Workflow belum Active, atau  
 memakai alamat webhook-test  
 Aktifkan workflow dan pakai /webhook/...  
-Postgres: database kosong  
-setelah ganti versi  
-PGDATA terhapus atau lompat  
-versi mayor  
-Pertahankan PGDATA; backup dengan pg_dump sebelum  
-naik versi mayor  
+Postgres: data tidak bertahan  
+setelah container dibuat ulang  
+Volume tidak dipasang ke direktori induk PostgreSQL 18 atau PGDATA tidak sesuai  
+Gunakan ./db:/var/lib/postgresql dan PGDATA=/var/lib/postgresql/18/docker; backup sebelum naik versi mayor  
 Tunnel: halaman 502 atau  
 1033 di alamat publik  
 cloudflared tidak terhubung atau  
