@@ -9,6 +9,7 @@
 | Bab 44 | Contoh akses Tailscale Serve diselaraskan dengan grup admin dan keterangan `autogroup:self` diperjelas. |
 | Bab 42 dan Compose n8n | Volume PostgreSQL 18 dipindahkan ke direktori induk yang benar dan `PGDATA` disetel ke `/var/lib/postgresql/18/docker`, agar data tetap berada pada volume yang dimaksud. |
 | Compose Vaultwarden | Pendaftaran akun dimatikan pada konfigurasi referensi. Panduan instalasi masih menjelaskan kapan pendaftaran perlu dibuka sementara untuk membuat akun pertama, lalu ditutup. |
+| `.gitignore` | Tambah perlindungan untuk nama umum kunci SSH, varian `.env`, arsip/dump database, dan state kredensial Cloudflare/Tailscale lokal. |
 
 ## Batas verifikasi
 
