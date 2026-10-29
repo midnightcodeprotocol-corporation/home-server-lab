@@ -431,16 +431,13 @@ MikroTik dapat memblokir permintaan DNS ke internet kecuali dari server AdGuard.
 ```
 /ip firewall address-list add list=dns-servers address=192.168.88.11
 ```
-> Penjelasan: Server DNS kedua.
-3  
-&gt; /ip firewall filter add chain=forward action=drop protocol=udp dst-port=53 \  
- out-interface=ether1 src-address-list=!dns-servers place-before=0 \  
- comment="blok DNS UDP luar"  
+```
+/ip firewall filter add chain=forward action=drop protocol=udp dst-port=53 out-interface=ether1 src-address-list=!dns-servers place-before=0 comment="blok DNS UDP luar"
+```
 > Penjelasan: Menjatuhkan DNS UDP ke internet kecuali dari AdGuard.
-4  
-&gt; /ip firewall filter add chain=forward action=drop protocol=tcp dst-port=53 \  
- out-interface=ether1 src-address-list=!dns-servers place-before=0 \  
- comment="blok DNS TCP luar"  
+```
+/ip firewall filter add chain=forward action=drop protocol=tcp dst-port=53 out-interface=ether1 src-address-list=!dns-servers place-before=0 comment="blok DNS TCP luar"
+```
 > Penjelasan: Sama untuk DNS TCP.
 PERINGATAN  
 Aturan ini memutus perangkat yang tidak memakai DNS dari DHCP. Uji dulu, dan siapkan cara membatalkan  
