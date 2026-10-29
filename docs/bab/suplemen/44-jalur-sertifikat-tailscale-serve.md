@@ -114,21 +114,19 @@ pada halaman Machines.
 kunci kedaluwarsa.  
 2. Buka halaman DNS: pastikan MagicDNS aktif dan aktifkan HTTPS Certificates (ada peringatan bahwa nama  
 tailnet menjadi publik di catatan sertifikat; baca lalu setujui).  
-3. Buka editor kebijakan (Suplemen 1 Bab 26.6) dan tambahkan satu entri di dalam daftar grants, di bawah  
-entri yang sudah ada (lihat kotak di bawah).  
+3. Kebijakan terbaru di Suplemen 1 Bab 26.6 sudah memuat izin TCP 443 untuk node milik admin. Jika Anda memakai kebijakan lama, tambahkan aturan pada kotak berikut ke daftar `grants`; pastikan sumbernya hanya grup admin.  
 
 **Tambahan pada tailnet policy (di dalam "grants")** | Tambahan
 
 ```
  {
- "src": ["autogroup:member"],
+ "src": ["group:home-admins"],
  "dst": ["autogroup:self"],
  "ip": ["tcp:443"],
  },
 ```
 
-Tanpa entri ini kebijakan Bab 26.6 hanya mengizinkan akses ke router-vm dan LAN, sehingga lab-vault tidak  
-terjangkau dari HP. autogroup:self berarti perangkat milik Anda sendiri. Sintaks ip bernilai tcp:443 dan  
+Tanpa entri ini lab-vault tidak terjangkau dari HP. `autogroup:self` membatasi tujuan ke perangkat yang dimiliki akun sumber; gunakan anggota grup admin yang sama dengan kebijakan Bab 26.6. Sintaks `ip` bernilai `tcp:443` dan  
 penggunaan autogroup:self pada grants [BELUM PASTI] - bila editor menolak, pakai bentuk lama: "acls": [{  
 "action": "accept", "src": ["autogroup:member"], "dst": ["autogroup:self:443"] }]. Karena tiap VM punya  
 nama .ts.net sendiri di port 443, satu entri ini cukup untuk semua node Serve milik Anda.  
