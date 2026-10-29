@@ -1,78 +1,128 @@
 # Home Server Lab
 
-Buku panduan dan catatan konfigurasi home server pribadi di **Lenovo ThinkCentre M710q**: Proxmox VE, jaringan MikroTik, AdGuard Home, Tailscale, Docker, Caddy, Vaultwarden, Nextcloud, Immich, Proxmox Backup Server, dan lainnya.
+Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M710q**. Repo ini menggabungkan rancangan jaringan, panduan Proxmox, konfigurasi layanan, catatan pengujian, dan keputusan proyek dalam satu tempat.
 
-> **Repo ini PRIVATE dan tidak boleh berisi rahasia.** Kata sandi, token, kunci SSH/age, `ENCRYPTION_KEY`, dan arsip backup tidak pernah di-commit (lihat `.gitignore`). Nilai asli disimpan di Vaultwarden. Di repo hanya ada contoh (`*.example`).
+> [!IMPORTANT]
+> Repo ini **private dan tidak boleh berisi rahasia**. Jangan commit kata sandi, token, private key SSH/age, `ENCRYPTION_KEY`, kunci backup, dump database, atau arsip konfigurasi host. Nilai asli disimpan di Vaultwarden; repo hanya menyimpan contoh seperti `*.example`.
 
-## Status (28 Oktober 2026)
+## Status proyek
 
-- Mesin asli ada: **Lenovo ThinkCentre M710q**, Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, **cadangan RAM 16 GB dan 8 GB** (rencana 16+16 = 32 GB), **NVMe 500 GB**, HDD 2 TB sebagai disk data/backup.
-- Buku di-**Revisi 3**: lab VMware (Model A) dan instal-ke-disk-dulu (Model C) dihapus. Lihat `docs/bab/REVISI-3.md`.
-- Isi buku (Bab 1-56) sudah ditulis, **belum diuji di mesin asli**. Hasil uji dicatat di `catatan/hasil-uji.md`.
+Status ini mengikuti [STATUS.md](STATUS.md), terakhir diperbarui **28 Oktober 2026**.
 
-## Mulai dari sini
+- **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
+- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, NVMe 500 GB. Modul RAM cadangan 16 GB dan 8 GB belum dipasang; targetnya 32 GB (16+16).
+- **HDD 2 TB belum dipasang** ke server. Kecocokan dengan bay 2,5 inci atau kebutuhan casing USB masih perlu dipastikan.
+- **Proxmox belum diinstal** di M710q. Langkah berikutnya: pasang RAM 16 GB, jalankan MemTest86, atur BIOS, lalu instal Proxmox.
+- Buku panduan Bab 1–56 sudah ditulis, tetapi **belum diuji di mesin asli**. Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
+- Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
-1. `docs/00-ide-awal.md` dan `docs/01-ide-akhir.md`
-2. `docs/09-mulai-di-m710q.md` (urutan hari pertama: RAM, BIOS, USB, instal)
-3. `docs/04-board.md` (papan kerja)
-4. `docs/bab/` (isi buku per bab)
+Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
 
-## Isi repo
+## Gambaran jaringan
 
-| Folder / berkas | Isi |
+Diagram berikut menggabungkan jaringan rumah yang sudah berjalan dengan server dan layanan yang **masih menjadi target**, bukan klaim bahwa semuanya sudah dipasang.
+
+```mermaid
+flowchart TB
+  Internet["Internet: IndiHome<br/>uplink WiFi"] -. WiFi .-> WISP["TP-Link TL-WR840N<br/>mode WISP"]
+  WISP -->|"Ethernet"| MT["MikroTik RB750GL<br/>WAN 192.168.0.100<br/>LAN 192.168.88.1/24"]
+  MT --> AP["TP-Link TL-WR820N<br/>Access Point .2"]
+  AP -. WiFi rumah .-> Clients["Laptop Windows, HP,<br/>perangkat rumah"]
+  MT --> Switch["Switch LiteWave LS1005"]
+  MT --> STB1["STB HG680 .253<br/>Armbian + AdGuard Home<br/>DNS utama"]
+  Switch --> PVE
+
+  subgraph PVE["Target: Proxmox di ThinkCentre M710q — 192.168.88.10"]
+    direction TB
+    Core["VM 201 .20 — docker-core<br/>Caddy, Portainer, monitoring,<br/>notifikasi, dashboard"]
+    Apps["VM layanan terpisah<br/>Forgejo, Vaultwarden, AFFiNE,<br/>Nextcloud, n8n, web, musik"]
+    Special["VM khusus<br/>Home Assistant, k3s/Flux,<br/>PBS, Pocket ID, Immich"]
+    LXC["LXC<br/>AdGuard kedua .11,<br/>Samba .12, Tailscale router"]
+    Core -. proxy HTTPS .-> Apps
+    Core -. proxy HTTPS .-> Special
+  end
+
+  Clients -->|"DNS *.home.arpa"| STB1
+  Clients -->|"HTTPS 443"| Core
+  Remote["Laptop / HP di luar rumah<br/>Tailscale aktif"] <-->|"tailnet / HTTPS Serve"| TS["Tailscale<br/>CT103 sementara;<br/>STB 2 direncanakan"]
+  TS --> PVE
+  Remote <-->|"HTTPS *.ts.net"| Private["Vaultwarden, Navidrome,<br/>Pocket ID, Immich"]
+  Internet -. "opsional: situs statis saja" .-> CF["Cloudflare Tunnel keluar<br/>VM 210 web-public"]
+```
+
+### Cara membaca diagram
+
+- **Jaringan rumah:** MikroTik menjadi gateway, DHCP, firewall, dan NAT. Pool DHCP direncanakan pada `192.168.88.100–254`; alamat server menggunakan rentang statis di luar pool.
+- **DNS:** AdGuard Home utama berada di STB HG680 `192.168.88.253`. AdGuard kedua di CT101 `.11` direncanakan sebagai cadangan. Nama `*.home.arpa` diarahkan ke Caddy di VM 201.
+- **Akses privat lokal:** klien membuka layanan melalui Caddy pada HTTPS 443; firewall Proxmox membatasi port aplikasi agar hanya dapat dijangkau dari gerbang yang diperlukan.
+- **Akses dari luar rumah:** memakai Tailscale. Rancangan tidak membuka port admin Proxmox atau router ke internet dan tidak memakai Tailscale Funnel.
+- **Situs publik opsional:** hanya situs statis di VM 210 melalui koneksi keluar Cloudflare Tunnel; VM ini dirancang terisolasi dari LAN.
+- Detail kabel, DNS, akses jauh, GitOps, monitoring, dan backup ada di [diagram alur koneksi](docs/02-rangkaian-koneksi.md).
+
+## Arsitektur layanan target
+
+Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Layanan yang memakai Docker ditempatkan di VM Debian; layanan Linux ringan tanpa Docker dapat memakai LXC. Pemisahan ini membantu membatasi dampak gangguan, mengatur akses jaringan, dan memulihkan layanan satu per satu.
+
+| Guest | Alamat | Peran target |
+|---|---:|---|
+| Host Proxmox | `192.168.88.10` | Hypervisor M710q |
+| CT101 / CT102 | `.11 / .12` | AdGuard kedua / Samba |
+| CT103 | Belum ditetapkan | Tailscale subnet router sementara |
+| VM 201 | `.20` | Caddy, Portainer, Gotify, Uptime Kuma, Beszel, Homepage |
+| VM 202 / 203 | `.21 / .22` | Home Assistant OS / k3s + Flux |
+| VM 204 / 205 | `.23 / .24` | Forgejo + Renovate / Vaultwarden |
+| VM 206 / 207 | `.25 / .26` | AFFiNE / Nextcloud |
+| VM 208 / 209 | `.27 / .28` | n8n / situs privat + WordPress |
+| VM 210 | `.29` | Situs statis publik opsional; akses melalui tunnel keluar |
+| VM 212 / 211 | `.30 / .31` | Proxmox Backup Server / Navidrome |
+| VM 213 / 214 | `.32 / .33` | Pocket ID / Immich |
+| VM 9100 | — | Templat Debian 13 + Docker, tidak dinyalakan |
+
+Peta ini adalah **rancangan**; VM/LXC belum dibuat karena Proxmox belum diinstal. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+
+Pada RAM 16 GB, semua guest tidak dapat menyala bersamaan; buku merencanakan profil pemakaian. Mode hemat menggabungkan n8n, web, AFFiNE, dan musik di VM 206. Setelah RAM 32 GB, mode hemat menjadi pilihan utama, tetapi beban CPU 4 thread tetap perlu dipantau. Angka RAM masih perkiraan dan harus disesuaikan dari hasil pengukuran.
+
+## Penyimpanan dan backup
+
+Rancangan penyimpanan memisahkan NVMe 500 GB untuk sistem/VM dan HDD 2 TB untuk datastore PBS. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
+
+**Keadaan saat ini:** HDD belum terpasang, Proxmox/PBS belum berjalan, salinan USB belum dibuat, dan belum ada uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
+
+## Mulai menjelajahi repo
+
+1. Baca [tujuan awal](docs/00-ide-awal.md) dan [arsitektur target](docs/01-ide-akhir.md).
+2. Lihat [status dan langkah berikutnya](STATUS.md), lalu [urutan hari pertama di M710q](docs/09-mulai-di-m710q.md).
+3. Gunakan [board proyek](docs/04-board.md) untuk melihat fase dan backlog.
+4. Baca [Edisi 2: Bab 1–24](docs/bab/edisi2/README.md) dan [Suplemen: Bab 25–56](docs/bab/suplemen/README.md).
+5. Cek [butir yang belum pasti](catatan/belum-pasti.md) dan [hasil uji](catatan/hasil-uji.md).
+
+### Peta dokumentasi
+
+| Lokasi | Isi |
 |---|---|
-| `docs/00-ide-awal.md` | Ide awal, prinsip, daftar keinginan |
-| `docs/01-ide-akhir.md` | Target arsitektur, aturan penempatan, jalur akses |
-| `docs/02-rangkaian-koneksi.md` | Kabel, alamat, alur DNS/akses/Tailscale/tunnel/backup/peringatan (diagram Mermaid) |
-| `docs/03-pohon.md` | Pohon perangkat, ketergantungan, folder |
-| `docs/04-board.md` | Board kanban |
-| `docs/05-inventaris-perangkat.md` | Perangkat dan perannya |
-| `docs/06-dasar-konsep.md` | Konsep dasar |
-| `docs/07-port-dan-akses.md` | Tabel port dan matriks akses |
-| `docs/08-keputusan.md` | Catatan keputusan |
-| `docs/09-mulai-di-m710q.md` | Langkah pertama di mesin asli |
-| `docs/11-rencana-kerja-ai-ssh.md` | Rencana koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
-| `docs/bab/edisi2/` | Bab 1-24 + lampiran (diekstrak dan direvisi) |
-| `docs/bab/suplemen/` | Bab 25-56 + pengantar/penutup tiap bagian |
-| `docs/bab/REVISI-3.md` | Daftar perubahan Revisi 3 |
-| `docs/arsip/` | Teks buku sebelum Revisi 3 (tersimpan untuk riwayat) |
-| `catatan/` | `belum-pasti.md`, `hasil-uji.md`, `kasus-nyata-lab.md` |
-| `konfigurasi/server/` | Berkas konfigurasi sesuai jalur aslinya (`/opt/stacks/...`, `/etc/...`) |
-| `konfigurasi/gitops/` | Manifest Flux, Kustomize, SOPS, Renovate |
-| `konfigurasi/caddy`, `firewall`, `skrip`, `contoh-env` | Contoh Caddyfile, aturan firewall, skrip, `.env` |
+| `docs/00-ide-awal.md` – `docs/10-konteks-proyek.md` | Tujuan, arsitektur, diagram jaringan, perangkat, konsep, port, keputusan, status awal, dan preferensi kerja |
+| `docs/11-rencana-kerja-ai-ssh.md` | Koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
+| `docs/bab/edisi2/` | Instalasi Proxmox, jaringan, VM/LXC, Docker, Git, Home Assistant, dan dasar layanan |
+| `docs/bab/suplemen/` | Keamanan, Tailscale, M710q, monitoring, Caddy, web, aplikasi, penempatan, PBS, firewall, audit, foto, dan profil RAM |
+| `konfigurasi/` | Contoh konfigurasi server, GitOps, Caddy, firewall, skrip, dan contoh environment |
+| `data/` | Data terstruktur perangkat dan guest |
+| `catatan/` | Hasil uji, hal belum pasti, dan pelajaran dari lab terdahulu |
+| `docs/arsip/` | Materi lama sebelum Revisi 3 untuk riwayat |
 
-**Catatan teknis penting.** Berkas YAML di `docs/bab/` dan `docs/arsip/` hasil ekstraksi teks kehilangan indentasinya. Gunakan `konfigurasi/` untuk berkas compose dan YAML: semuanya sudah dibuat ulang dengan indentasi benar dan lolos pemeriksaan sintaks YAML (belum dijalankan di server).
+> [!WARNING]
+> Teks bab hasil ekstraksi dan arsip dapat kehilangan indentasi YAML. Untuk Compose dan YAML, gunakan berkas di `konfigurasi/` sebagai sumber format yang benar. Konfigurasi tersebut belum dijalankan di server.
 
-## Peta guest (Bab 48.3)
+## Aturan kerja dan keamanan
 
-Jaringan `192.168.88.0/24` (MikroTik). Host Proxmox `192.168.88.10`, tanpa Docker dan tanpa aplikasi.
+- Jawab dan tulis panduan dalam **Bahasa Indonesia**; pengguna belajar dari dasar dan menggunakan Windows serta Android. Panduan klien juga mencakup iPhone bila relevan.
+- Berikan satu langkah per giliran untuk sesi pengujian; tunggu hasil dan catat pesan error persis sebelum lanjut.
+- Gunakan IP, VMID, dan RAM dari `data/guest.yaml`; jangan menebak bila data berbeda atau belum diperiksa.
+- Perintah panduan memakai alur tanpa `sudo` (akun biasa lalu `su -`, atau root di host Proxmox).
+- Tandai asumsi yang belum diverifikasi dengan **[BELUM PASTI]**. Periksa dokumentasi resmi saat menulis instruksi teknis baru.
+- Sebelum perubahan berisiko—misalnya disk, firewall, jaringan, SSH, atau penghapusan VM—jelaskan dampak dan jalur pemulihan.
+- Untuk akses melalui SSH oleh lebih dari satu asisten, hanya satu operator yang boleh mengubah server pada satu waktu. Lakukan audit baca-saja dahulu dan tulis catatan serah-terima. Lihat [rencana kerja AI melalui SSH](docs/11-rencana-kerja-ai-ssh.md).
+- Jangan menaruh rahasia di chat maupun repo; gunakan Vaultwarden untuk nilai asli.
 
-| VMID | Nama | IP | Isi |
-|---|---|---|---|
-| 9100 | tpl-debian-docker | - | Templat Debian 13 + Docker (tidak dinyalakan) |
-| 201 | docker-core | .20 | Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage |
-| 202 | haos | .21 | Home Assistant OS |
-| 203 | k3s | .22 | Kubernetes + Flux |
-| 204 | git | .23 | Forgejo + Renovate |
-| 205 | vault | .24 | Vaultwarden (Tailscale Serve) |
-| 206 | affine | .25 | AFFiNE |
-| 207 | nextcloud | .26 | Nextcloud (kalender) |
-| 208 | n8n | .27 | n8n |
-| 209 | web | .28 | Situs statis, WordPress |
-| 210 | web-public | .29 | Situs publik (opsional) |
-| 211 | music | .31 | Navidrome |
-| 212 | pbs | .30 | Proxmox Backup Server |
-| 213 | sso | .32 | Pocket ID |
-| 214 | immich | .33 | Immich |
-| CT101 | adguard2 | .11 | AdGuard Home kedua |
-| CT102 | files | .12 | Samba |
-| CT103 | ts-router | - | Tailscale subnet router |
-| STB 1 | - | .253 | AdGuard Home utama (di luar Proxmox) |
+## Riwayat revisi
 
-## Aturan kerja
-
-- Perintah tanpa `sudo` (SSH sebagai user biasa lalu `su -`).
-- Setiap bab memuat sisi server dan sisi klien (Windows, Android, iPhone).
-- Setiap layanan di VM/LXC sendiri; bab pemasangan dibuka dengan Kotak Penempatan.
-- Backup belum dianggap ada sebelum uji pulih berhasil (Bab 50.12).
-- Uji satu langkah, catat hasil, baru lanjut.
+- **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
