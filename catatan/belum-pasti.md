@@ -7,6 +7,7 @@ Dikumpulkan dari tabel penutup tiap bagian. Centang dan catat hasilnya setelah d
 - [ ] Nomor versi n8n stabil terkini (contoh 2.29.10 belum dikonfirmasi)
 - [ ] Perkiraan RAM WordPress dan n8n (ukur dengan Beszel)
 - [ ] Aplikasi WordPress, HTTP Shortcuts, Pintasan menerima CA lokal
+- [ ] Tag versi cloudflared yang didukung dan cara mematoknya di Compose; tag quick tunnel sementara
 - [ ] Letak menu Cloudflare Tunnels dan batasan quick tunnel
 - [ ] Biaya domain dan apakah Tunnel gratis untuk kebutuhan ini
 - [ ] Cloudflare Access dan webhook sebagian jalur (tidak dikaji)
@@ -20,6 +21,7 @@ Dikumpulkan dari tabel penutup tiap bagian. Centang dan catat hasilnya setelah d
 - [ ] AFFiNE Android/iPhone menerima CA lokal; langkah menu aplikasi
 - [ ] Nomor mayor Nextcloud terkini untuk `NEXTCLOUD_TAG`
 - [ ] DAVx5 menerima CA lokal, harga Play Store; Thunderbird; kode kalender bawaan `personal`
+- [ ] Tag rilis Vaultwarden yang dipilih sebelum instalasi; pin versi image dan alur pembaruan
 - [ ] Backup daring Vaultwarden dan titik pemeriksaan sehat
 - [ ] Kebutuhan RAM gabungan
 
