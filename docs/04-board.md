@@ -1,6 +1,6 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 28 Oktober 2026.
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 30 Oktober 2026.
 
 ## Sedang dikerjakan
 - [ ] **Fase A: pengujian dari nol di mesin asli (ThinkCentre M710q)**, satu bab satu langkah, urut buku. Langkah pertama: `docs/09-mulai-di-m710q.md`
@@ -11,7 +11,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 28 Okto
 - [ ] USB bootable, hash ISO, instal Proxmox (Bab 6, 8, 28)
 - [ ] Bab 9: jaringan, DNS, repository, update
 - [ ] Bab 30: sensor, SMART, Wake-on-LAN dari STB
-- [ ] Pasang HDD 2 TB sebagai disk data/backup (Bab 27.4, 9.9)
+- [ ] Setelah model dan kondisi diverifikasi, siapkan satu HDD Seagate Surveillance 2 TB, 3,5 inci lewat enclosure single-bay; tentukan peruntukannya sebelum diformat (Bab 27.4, 9.9)
 - [ ] Bab 10-11: LXC pertama, VM Debian 13, templat
 - [ ] Bab 13: AdGuard kedua + failover DNS
 - [ ] Bab 14: Docker dan Portainer
@@ -37,6 +37,7 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 - [x] Buku: Edisi 2 + Suplemen 1-9 (Bab 1-56) ditulis (belum diuji)
 - [x] Mesin asli tiba: Lenovo ThinkCentre M710q
 - [x] **Revisi 3:** Model A (VMware) dan Model C dihapus dari buku
+- [x] **Revisi 4:** koreksi kebijakan Tailscale, volume PostgreSQL 18, dan signup Vaultwarden dicatat
 - [x] Repo GitHub sebagai basis pengetahuan (AGENTS.md, STATUS.md, data, konfigurasi)
 
 ## Dihentikan
@@ -46,9 +47,10 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 ## Ditunda / menunggu
 - [ ] Tailscale subnet router di STB 2 (belum tiba; alamat usulan .250); sementara CT103 di Proxmox (Bab 26)
 - [ ] Penambahan RAM: pasang modul cadangan (Bab 27.1)
-- [ ] HDD 2 TB: pastikan muat di bay 2,5" atau pakai casing USB
+- [ ] HDD kedua ditunda; enclosure yang tersedia single-bay. Rencana awal memakai satu unit lebih dahulu
 
 ## Fase lanjutan (rencana)
+Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-manfaat-keamanan.md`.
 **Fase B. Revisi dari log uji**
 - [ ] Daftar errata dari hasil uji; jawab semua butir [BELUM PASTI]; Revisi 4 bertahap, bukan tulis ulang
 
@@ -57,7 +59,7 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 - [ ] Ollama (butuh RAM besar; 32 GB membantu, tetapi CPU 4 thread terbatas)
 - [ ] Katalog layanan kecil (tiap layanan VM/LXC sendiri + kotak penempatan)
 
-**Fase D. Mesin utama (Suplemen 11)**
+**Fase D. Penyempurnaan setelah instalasi di M710q**
 - [ ] RAM 32 GB dipasang dan diuji
 - [ ] OnlyOffice
 - [ ] Tailscale subnet router dipindah ke STB 2
