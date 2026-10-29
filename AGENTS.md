@@ -18,7 +18,7 @@ Anda membaca repo ini karena pengguna kehilangan riwayat chat atau memori. **Sem
 | 5 | `docs/05-inventaris-perangkat.md`, `data/*.yaml` | Perangkat dan daftar VM/LXC (terstruktur) |
 | 6 | `docs/07-port-dan-akses.md`, `docs/08-keputusan.md` | Port, akses, keputusan dan alasannya |
 | 7 | `docs/04-board.md`, `catatan/hasil-uji.md` | Papan kerja dan hasil uji |
-| 8 | `docs/bab/` | Isi buku per bab (Bab 1-56), `docs/bab/REVISI-3.md` untuk perubahan terbaru |
+| 8 | `docs/bab/` | Isi buku per bab (Bab 1-56), `docs/bab/REVISI-4.md` untuk perubahan audit terbaru |
 | 9 | `konfigurasi/` | Berkas konfigurasi siap pakai (indentasi benar) |
 | 10 | `catatan/belum-pasti.md`, `catatan/kasus-nyata-lab.md` | Hal tak pasti dan masalah nyata |
 
