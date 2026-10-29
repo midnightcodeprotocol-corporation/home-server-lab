@@ -3,6 +3,7 @@
 Diekstrak dari teks buku dan direvisi (Revisi 3: tanpa VMware dan tanpa instal-ke-disk-dulu; mesin asli ThinkCentre M710q).
 
 > [!NOTE]
+> Koreksi audit terbaru untuk konfigurasi Tailscale dan PostgreSQL ada di [Revisi 4](../REVISI-4.md).
 > Edisi 2 adalah materi dasar dan berisi beberapa penempatan atau nilai lama. Sebelum mengikuti langkah, periksa [STATUS.md](../../../STATUS.md), [peta penempatan Bab 48](../suplemen/48-peta-penempatan.md), dan [data guest](../../../data/guest.yaml). Khusus Bab 12, jangan memasang Tailscale di STB HG680; lihat catatan Revisi 3 di bab tersebut dan [Bab 26 terbaru](../suplemen/26-tailscale.md).
 
 - [Bab 1. Gambaran Besar dan Konsep Dasar](01-gambaran-besar.md)
