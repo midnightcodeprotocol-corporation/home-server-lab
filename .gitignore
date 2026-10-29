@@ -24,7 +24,16 @@ credentials.json
 *.zst
 *.vma
 *.sql
+*.dump
+*.db
+*.sqlite
+*.sqlite3
 *.backup
+*.zip
+*.7z
+*.rar
+*.ova
+*.qcow2
 pve-config-*
 pve-host-config*
 etc-pve*
@@ -34,6 +43,8 @@ cadangan-*
 token*
 *.token
 secrets*
+**/.cloudflared/
+*tailscaled.state
 
 # OS / editor
 .DS_Store
