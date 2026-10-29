@@ -37,10 +37,10 @@ lalu:
 
 **TERMINAL VM WEB-PUBLIC** | VM web-public, sebagai root
 
-1  
-# docker run --rm --network publicweb cloudflare/cloudflared:latest tunnel --url  
-http://web-public:80  
-> Penjelasan: Menjalankan quick tunnel ke container web-public. Perintah menampilkan alamat
+```
+docker run --rm --network publicweb cloudflare/cloudflared:latest tunnel --url http://web-public:80
+```
+> Penjelasan: Menjalankan quick tunnel sementara untuk uji. Tag `latest` di sini hanya untuk uji sekali jalan; jangan gunakan untuk konektor tunnel permanen. Perintah menampilkan alamat
 https://....trycloudflare.com; buka dari HP dengan data seluler. Hentikan dengan Ctrl+C.  
 
 ## 43.3 Server: VM web-public dan situs publik
@@ -112,7 +112,7 @@ services:
     networks:
       - publicweb
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:${CLOUDFLARED_VERSION}
     container_name: cloudflared
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
@@ -125,10 +125,7 @@ networks:
     external: true
 ```
 
-Container web-public memakai Caddy tersendiri pada port 80 di dalam jaringan publicweb saja; ia tidak  
-mempublikasikan port ke host. Perintah tunnel --no-autoupdate run --token sesuai contoh Docker di  
-dokumentasi Cloudflare. Tag latest dipakai demi kesederhanaan; pertimbangkan menyematkan nomor versi bila  
-Anda ingin pembaruan yang terkendali.  
+Container web-public memakai Caddy tersendiri pada port 80 di dalam jaringan publicweb saja; ia tidak memublikasikan port ke host. Perintah tunnel --no-autoupdate run --token mengikuti contoh Docker Cloudflare. Sebelum menjalankan Compose, isi `CLOUDFLARED_VERSION` di `.env` dengan tag versi yang telah diperiksa pada dokumentasi/rilis resmi Cloudflare. Jangan biarkan variabel kosong dan jangan memakai `latest` untuk konektor permanen.  
 
 ## 43.4 Membuat tunnel di dasbor Cloudflare
 
@@ -136,8 +133,7 @@ Anda ingin pembaruan yang terkendali.
 menu [BELUM PASTI]).  
 2. Buat tunnel baru, pilih konektor cloudflared, beri nama (misalnya home-web), lalu pilih lingkungan Docker.  
 3. Dasbor menampilkan perintah docker run dengan token panjang. Salin hanya token (teks setelah --token).  
-4. Di server, simpan token (tempel sendiri saat nano terbuka, jangan di riwayat perintah): nano  
-/opt/stacks/tunnel-web/.env berisi satu baris TUNNEL_TOKEN=..., lalu chmod 600 .env.  
+4. Di server, edit `/opt/stacks/tunnel-web/.env` secara lokal. Isi `TUNNEL_TOKEN=...` dengan token dari dasbor dan `CLOUDFLARED_VERSION=...` dengan tag versi yang sudah diverifikasi. Jangan kirim token ke chat atau GitHub. Setelah disimpan, jalankan `chmod 600 .env`.  
 5. Di dasbor, tambah Route bertipe Published application: hostname (misalnya www.domain-anda), Service  
 URL http://web-public:80. Dasbor membuat catatan DNS yang diperlukan.  
 
