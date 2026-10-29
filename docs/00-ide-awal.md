@@ -54,4 +54,4 @@ Gagasan lain yang belum diputuskan: VM sebagai gaming PC (GPU passthrough), serv
 Mesin asli sudah ada (Lenovo ThinkCentre M710q). Rencana "lab dulu di VMware, lalu pindah" **sudah selesai peran**nya dan dihentikan: model instalasi A (VMware) dan C (instal ke disk dulu) dihapus dari buku. Pengalaman lab dicatat di `catatan/kasus-nyata-lab.md`.
 
 ## Revisi 3 (28 Oktober 2026)
-Mesin asli sudah ada (Lenovo ThinkCentre M710q). Rencana "lab dulu di VMware, lalu pindah" **sudah selesai peran**nya dan dihentikan: model instalasi A (VMware) dan C (instal ke disk dulu) dihapus dari buku. Pengalaman lab dicatat di `catatan/kasus-nyata-lab.md`.
+Mesin asli sudah ada (Lenovo ThinkCentre M710q). Rencana "lab dulu di VMware, lalu pindah" **sudah selesai perannya** dan dihentikan: Model A (VMware) dan Model C (instal ke disk terlebih dahulu) dihapus dari alur panduan. Pengalaman lab lama disimpan sebagai catatan di `catatan/kasus-nyata-lab.md`.
