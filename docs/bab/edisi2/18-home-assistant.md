@@ -37,10 +37,11 @@ xz -d haos_ova-$V.qcow2.xz
 
 **TERMINAL (login sebagai root)** | Shell Proxmox (root)
 
-1  
-# qm create 202 --name haos --memory 2048 --cores 2 --cpu host \  
- --bios ovmf --machine q35 --ostype l26 --scsihw virtio-scsi-pci \  
- --agent enabled=1 --net0 virtio,bridge=vmbr0  
+```
+qm create 202 --name haos --memory 2048 --cores 2 --cpu host \
+  --bios ovmf --machine q35 --ostype l26 --scsihw virtio-scsi-pci \
+  --agent enabled=1 --net0 virtio,bridge=vmbr0
+```
 > Penjelasan: Membuat VM 202 kosong dengan UEFI (ovmf) dan jaringan VirtIO.
 ```
 qm set 202 --efidisk0 local-lvm:1,efitype=4m,pre-enrolled-keys=0
