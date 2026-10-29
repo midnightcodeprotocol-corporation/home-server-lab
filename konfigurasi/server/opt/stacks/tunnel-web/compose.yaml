@@ -9,7 +9,7 @@ services:
     networks:
       - publicweb
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    image: cloudflare/cloudflared:${CLOUDFLARED_VERSION}
     container_name: cloudflared
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
