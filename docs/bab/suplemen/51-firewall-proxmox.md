@@ -151,7 +151,7 @@ OUT DROP -dest 192.168.88.0/24
 Untuk VM 205, 211, 213, dan 214, jangan buka port layanan pada LAN; layanan diakses melalui Tailscale Serve. Untuk VM 212 PBS, izinkan port 8007 hanya dari host Proxmox dan perangkat admin. Aturan VM 202 Home Assistant dan VM 203 k3s mengikuti matriks 51.2.
 
 > [!WARNING]
-> Contoh ini mengasumsikan IPSet Datacenter bernama `admin` dan sintaks `+dc/admin) diterima oleh versi Proxmox yang dipakai. Bagian ini masih perlu diuji pada host sebelum firewall diaktifkan. Jangan mengaktifkan aturan massal; uji satu guest dan pastikan akses konsol serta jalur pemulihan tersedia.
+> Contoh ini mengasumsikan IPSet Datacenter bernama `admin` dan sintaks `+dc/admin` diterima oleh versi Proxmox yang dipakai. Bagian ini masih perlu diuji pada host sebelum firewall diaktifkan. Jangan mengaktifkan aturan massal; uji satu guest dan pastikan akses konsol serta jalur pemulihan tersedia.
 
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
