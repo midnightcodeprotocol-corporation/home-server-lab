@@ -62,9 +62,10 @@ Salin berkas .tgz ini keluar dengan WinSCP seperti 23.2.
 qmrestore /var/lib/vz/dump/vzdump-qemu-201-TANGGAL.vma.zst 201 --storage local-lvm
 ```
 > Penjelasan: Memulihkan VM 201 dari backup ke storage local-lvm.
-2  
-# pct restore 101 /var/lib/vz/dump/vzdump-lxc-101-TANGGAL.tar.zst \  
- --storage local-lvm  
+```
+pct restore 101 /var/lib/vz/dump/vzdump-lxc-101-TANGGAL.tar.zst \
+  --storage local-lvm
+```
 > Penjelasan: Memulihkan container 101.
 Lewat web: pilih storage tempat berkas, buka Backups, pilih berkas, klik Restore, tentukan ID dan  
 storage.  
