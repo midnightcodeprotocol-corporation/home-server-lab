@@ -11,7 +11,7 @@ Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat s
 | CPU | 64-bit dengan VT-x/AMD-V, 4 core disarankan | Core i5-6500T, 4 core / 4 thread, VT-x dan VT-d | Lulus |
 | RAM | 16 GB atau lebih | 16 GB terpasang; cadangan 16 GB dan 8 GB | Lulus (target 32 GB) |
 | Disk sistem | SSD 120 GB atau lebih | NVMe M.2 500 GB | Lulus |
-| Disk data / backup | HDD/SSD terpisah | HDD 2 TB | Perlu dipasang (27.4) |
+| Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB | Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat |
 | Jaringan | 1 port LAN kabel | 1 Gigabit Ethernet (Intel) | Lulus |
 
 Spesifikasi di atas adalah patokan umum model M710q; **cek label RAM, tipe slot, dan ketebalan disk pada unit Anda sendiri** sebelum membeli atau memasang.
@@ -92,7 +92,8 @@ HDMI jalan
 | Disk | Peran | Sistem berkas | Catatan |
 |---|---|---|---|
 | NVMe M.2 500 GB | Sistem Proxmox + disk VM (local-lvm) | **ext4** (bawaan installer) | RAM 16-32 GB; ZFS tidak dipakai (satu disk, tanpa mirror) |
-| HDD 2 TB | Datastore PBS dan salinan berkas | ext4 (Directory) | **Wajib perangkat fisik berbeda** dari NVMe agar backup terpisah dari data |
+| HDD Seagate Surveillance 2 TB (unit 1) | Calon datastore PBS / salinan berkas | ext4 (Directory) | Pilih setelah model, kondisi, dan sambungan diverifikasi; pisahkan secara fisik dari NVMe |
+| HDD Seagate Surveillance 2 TB (unit 2) | Belum ditentukan | — | Jangan anggap sebagai salinan backup tambahan sebelum tujuan dan statusnya diverifikasi |
 
 **Anggaran ruang NVMe 500 GB.** Disk VM dibuat tipis (thin), jadi ruang terpakai mengikuti isi, bukan ukuran yang diminta. Tetap hitung: sekitar 10-15 VM dengan sistem 4-8 GB aktual, ditambah image Docker dan data aplikasi. Contoh di bab layanan memakai disk data besar (musik 200 GiB di Bab 53, foto 300 GiB di Bab 55, datastore PBS 200 GiB di Bab 50). **Jangan menaruh semuanya di NVMe.** Saran:
 
@@ -103,7 +104,7 @@ HDMI jalan
 | Pustaka musik (VM 211) | NVMe atau HDD, 80-100 GiB | 80 GiB |
 | Datastore PBS (VM 212) | **HDD 2 TB** | 1-1,5 TB |
 
-**Memasang HDD 2 TB.** M710q punya satu bay 2,5". Periksa ketebalan dan jenis: HDD 2 TB 2,5" yang tebal (15 mm) biasanya **tidak muat**. Bila tidak muat atau HDD Anda 3,5", pakai casing USB 3.0 sebagai disk eksternal; lebih lambat tetapi cukup untuk backup. Jangan mencabut disk saat backup berjalan. Catat nomor seri disk (`lsblk -o NAME,SIZE,MODEL,SERIAL`) agar tidak salah pilih saat membuat datastore.
+**Memasang salah satu HDD.** Anda memiliki dua HDD Seagate Surveillance 2 TB; model dan ukuran fisik tiap unit belum dicatat, dan setidaknya satu belum diformat. M710q punya satu bay SATA 2,5". Periksa label masing-masing sebelum memilih: drive 3,5" tidak muat di bay ini dan memerlukan casing/dock USB bertenaga sendiri; drive 2,5" yang tebal (15 mm) biasanya juga tidak muat. Pilih paling banyak satu sebagai calon datastore PBS setelah kondisi dan koneksinya diverifikasi; peran unit kedua belum ditentukan. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat membuat datastore.
 
 > Disk tunggal bukan backup. Backup VM ke HDD 2 TB (Bab 50), ditambah satu salinan lagi di media lain (Bab 50.13).
 
