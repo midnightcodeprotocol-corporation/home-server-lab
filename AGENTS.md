@@ -1,7 +1,7 @@
 # AGENTS.md - panduan untuk AI (Claude, Gemini, ChatGPT, dan lainnya)
 
 > English summary: this private repo is the complete knowledge base of a beginner's home-server project
-> (Lenovo ThinkCentre M710q running Proxmox VE, MikroTik router, AdGuard Home on an STB, Tailscale, Docker services).
+> (Lenovo ThinkCentre M710q planned for Proxmox VE, MikroTik router, AdGuard Home on an STB, planned Tailscale, Docker services).
 > Read the files in the order below, then continue the work. Answer the user in **Bahasa Indonesia**.
 
 Anda membaca repo ini karena pengguna kehilangan riwayat chat atau memori. **Semua yang perlu Anda ketahui ada di sini.** Jangan menebak: bila sesuatu tidak ada di repo, tanyakan ke pengguna.
@@ -11,6 +11,7 @@ Anda membaca repo ini karena pengguna kehilangan riwayat chat atau memori. **Sem
 | Urut | Berkas | Isi |
 |---|---|---|
 | 1 | `STATUS.md` | Posisi terakhir, langkah berikutnya, masalah terbuka |
+| 1a | `docs/11-rencana-kerja-ai-ssh.md` | Serah-terima dan koordinasi bila Codex/Claude mengakses server lewat SSH |
 | 2 | `docs/10-konteks-proyek.md` | Siapa pengguna, riwayat proyek, preferensi kerja |
 | 3 | `docs/00-ide-awal.md`, `docs/01-ide-akhir.md` | Tujuan dan target arsitektur |
 | 4 | `docs/02-rangkaian-koneksi.md`, `docs/03-pohon.md` | Kabel, alamat, alur, ketergantungan |
@@ -26,9 +27,9 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 ## 2. Fakta kunci (jangan dilanggar)
 
 - Pengguna **pemula**, berbahasa Indonesia, laptop Windows, HP Android (instruksi harus mencakup **Android dan iPhone**).
-- Server: **Lenovo ThinkCentre M710q**, Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang (cadangan 16 GB + 8 GB; rencana 32 GB), NVMe 500 GB, HDD 2 TB untuk backup. Proxmox VE dipasang **langsung** di mesin ini. **Tidak ada VMware** dan tidak ada "instal ke disk dulu" (dihapus di Revisi 3).
+- Server target: **Lenovo ThinkCentre M710q**, Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang (cadangan 16 GB + 8 GB; target 32 GB), NVMe 500 GB. HDD 2 TB belum dipasang. **Proxmox belum diinstal**; rencana pemasangan langsung di M710q. Jangan menyebut rencana sebagai keadaan yang sudah berjalan. **Tidak ada VMware** dan tidak ada "instal ke disk dulu" (dihapus di Revisi 3).
 - Jaringan: IndiHome (WiFi) -> TL-WR840N (WISP) -> MikroTik RB750GL `192.168.88.1/24` -> AP TL-WR820N, STB, Proxmox `.10`, VM `.20-.33`. AdGuard utama di STB HG680 `.253` (di luar Proxmox).
-- Akses jarak jauh **hanya lewat Tailscale**. Tidak ada port forwarding. `tailscale funnel` tidak dipakai.
+- Akses jarak jauh untuk administrasi dan layanan privat **direncanakan lewat Tailscale**; saat ini Tailscale belum diterapkan. Tidak ada port forwarding. `tailscale funnel` tidak dipakai. Cloudflare Tunnel hanya opsi untuk menerbitkan situs statis dari VM 210.
 - Satu layanan = satu VM/LXC (kecuali kelompok ringan di `docker-core`). Setiap bab pemasangan dibuka dengan **Kotak Penempatan**.
 - Host Proxmox **tanpa Docker dan tanpa aplikasi**.
 - Domain lokal `*.home.arpa` (Caddy, CA lokal). Layanan sensitif (Vaultwarden, Navidrome, Pocket ID, Immich) lewat Tailscale Serve `*.ts.net`.
@@ -53,7 +54,7 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 
 ## 5. Keterbatasan repo yang perlu Anda tahu
 
-- Isi `docs/bab/` diekstrak dari teks buku. **Indentasi YAML hilang** pada ekstraksi itu; gunakan `konfigurasi/` untuk YAML yang benar.
+- Isi `docs/bab/` diekstrak dari teks buku. Sebagian blok konfigurasi kehilangan indentasi atau pagar kode; gunakan `konfigurasi/` untuk konfigurasi siap pakai dan jangan menganggap teks bab sebagai berkas yang dapat langsung ditempel.
 - Seluruh isi buku **belum diuji**. Hasil uji ada di `catatan/hasil-uji.md`. Jangan menganggap perintah pasti benar.
 - Butir [BELUM PASTI] terkumpul di `catatan/belum-pasti.md`.
 - Lembar Revisi 1 (errata E1-E6) tidak ada di repo; lihat `catatan/kasus-nyata-lab.md` untuk ringkasannya.
