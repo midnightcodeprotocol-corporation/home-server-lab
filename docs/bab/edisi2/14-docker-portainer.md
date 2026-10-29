@@ -26,9 +26,9 @@ apt update && apt install -y ca-certificates curl
 install -m 0755 -d /etc/apt/keyrings
 ```
 > Penjelasan: Membuat folder penyimpanan kunci repository.
-3  
-# curl -fsSL https://download.docker.com/linux/debian/gpg \  
- -o /etc/apt/keyrings/docker.asc  
+```
+curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+```
 > Penjelasan: Mengunduh kunci GPG Docker untuk memverifikasi paket.
 ```
 chmod a+r /etc/apt/keyrings/docker.asc
