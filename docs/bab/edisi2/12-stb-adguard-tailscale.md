@@ -1,7 +1,7 @@
 # Bab 12. STB HG680: AdGuard Home dan Tailscale
 
 > [!IMPORTANT]
-> **Catatan Revisi 3:** Bab ini adalah materi historis Edisi 2. Dalam rancangan saat ini, STB HG680 .253 menjalankan AdGuard Home saja; Tailscale subnet router ditunda sampai STB 2 tersedia, dengan CT103 Proxmox sebagai pilihan sementara. Jangan ikuti langkah pemasangan Tailscale di STB 1 dari bab ini. Gunakan [Bab 26 versi terbaru](../suplemen/26-tailscale.md) dan [status proyek](../../../../STATUS.md).
+> **Catatan Revisi 3:** Bab ini adalah materi historis Edisi 2. Dalam rancangan saat ini, STB HG680 .253 menjalankan AdGuard Home saja; Tailscale subnet router ditunda sampai STB 2 tersedia, dengan CT103 Proxmox sebagai pilihan sementara. Jangan ikuti langkah pemasangan Tailscale di STB 1 dari bab ini. Gunakan [Bab 26 versi terbaru](../suplemen/26-tailscale.md) dan [status proyek](../../../STATUS.md).
 
 
 ## 12.1 Ringkasan
