@@ -46,9 +46,9 @@ Cara B: dengan PowerShell
 
 **POWERSHELL WINDOWS** | PowerShell sebagai Administrator
 
-1  
-PS&gt; Import-Certificate -FilePath "$env:USERPROFILE\caddy-root.crt" -CertStoreLocation  
-Cert:\LocalMachine\Root  
+```powershell
+Import-Certificate -FilePath "$env:USERPROFILE\caddy-root.crt" -CertStoreLocation Cert:\LocalMachine\Root
+```
 > Penjelasan: Memasang sertifikat akar ke penyimpanan tepercaya Windows. Sesuaikan lokasi berkas. Chrome
 dan Edge memakai penyimpanan ini.  
 CATATAN  
