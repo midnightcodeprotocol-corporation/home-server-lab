@@ -72,14 +72,9 @@ bisa membuat VM tak terjangkau.
 
 ## 51.4 Aturan per VM
 
-Cara paling mudah mengetik aturan adalah menyunting berkas tiap guest di host. Berkas docker-core:  
+Contoh berikut mengikuti matriks di 51.2 dan contoh berkas di `konfigurasi/firewall/`. Port agen Beszel adalah `45876` menurut `docs/07-port-dan-akses.md`. Sesuaikan hanya setelah memeriksa port aktual pada guest; aktifkan firewall per guest satu per satu dan uji dari klien.
 
-**TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
-
-```
-nano /etc/pve/firewall/201.fw
-```
-> Penjelasan: Isi seperti kotak di bawah. Nomor berkas = VMID.
+Berkas docker-core:
 
 **/etc/pve/firewall/201.fw** | Isi berkas
 
@@ -92,14 +87,13 @@ dhcp: 1
 [RULES]
 IN ACCEPT -source +dc/admin -p tcp -dport 22
 IN ACCEPT -source 192.168.88.0/24 -p tcp -dport 80,443
+IN ACCEPT -source 192.168.88.10 -p tcp -dport 8070
+IN ACCEPT -source 192.168.88.27 -p tcp -dport 8070
+IN ACCEPT -source 192.168.88.30 -p tcp -dport 8070
+IN ACCEPT -p icmp
 ```
 
-IN ACCEPT -source 192.168.88.10 -p tcp -dport 8070  
-IN ACCEPT -source 192.168.88.27 -p tcp -dport 8070  
-IN ACCEPT -source 192.168.88.30 -p tcp -dport 8070  
-IN ACCEPT -p icmp  
-Berkas untuk VM aplikasi (contoh 206 affine; untuk lainnya ganti port sesuai 51.2, dan 209 memakai dua port  
-8081,8082):  
+VM aplikasi di belakang Caddy (contoh VM 206 AFFiNE):
 
 **/etc/pve/firewall/206.fw** | Isi berkas
 
@@ -111,12 +105,14 @@ policy_out: ACCEPT
 dhcp: 1
 [RULES]
 IN ACCEPT -source +dc/admin -p tcp -dport 22
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 3010
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 45876
+IN ACCEPT -p icmp
 ```
 
-IN ACCEPT -source 192.168.88.20 -p tcp -dport 3010  
-IN ACCEPT -source 192.168.88.20 -p tcp -dport PORT-AGEN-BESZEL  
-IN ACCEPT -p icmp  
-Berkas untuk VM git (204): web Forgejo hanya dari Caddy, SSH Git dari admin dan dari VM k3s (Flux):  
+Untuk VM 207, 208, dan 209, ganti port layanan dengan nilai pada matriks 51.2: `8080`, `5678`, dan `8081,8082`. Jika memakai mode hemat dan layanan digabung ke VM 206, aturan harus mencakup seluruh port layanan yang benar-benar dipakai VM tersebut.
+
+VM git: web hanya dari Caddy; SSH Git dari admin dan VM k3s:
 
 **/etc/pve/firewall/204.fw** | Isi berkas
 
@@ -129,14 +125,13 @@ dhcp: 1
 [RULES]
 IN ACCEPT -source +dc/admin -p tcp -dport 22
 IN ACCEPT -source +dc/admin -p tcp -dport 2222
+IN ACCEPT -source 192.168.88.22 -p tcp -dport 2222
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 3000
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 45876
+IN ACCEPT -p icmp
 ```
 
-IN ACCEPT -source 192.168.88.22 -p tcp -dport 2222  
-IN ACCEPT -source 192.168.88.20 -p tcp -dport 3000  
-IN ACCEPT -source 192.168.88.20 -p tcp -dport PORT-AGEN-BESZEL  
-IN ACCEPT -p icmp  
-Berkas untuk VM web-public (210) paling ketat: tidak menerima apa pun kecuali SSH admin dan tidak boleh  
-keluar ke LAN selain DNS:  
+VM web-public: izinkan SSH admin, DNS keluar ke AdGuard, lalu blokir akses ke LAN:
 
 **/etc/pve/firewall/210.fw** | Isi berkas
 
@@ -148,20 +143,15 @@ policy_out: ACCEPT
 dhcp: 1
 [RULES]
 IN ACCEPT -source +dc/admin -p tcp -dport 22
+OUT ACCEPT -dest 192.168.88.253 -p udp -dport 53
+OUT ACCEPT -dest 192.168.88.253 -p tcp -dport 53
+OUT DROP -dest 192.168.88.0/24
 ```
 
-OUT ACCEPT -dest 192.168.88.253 -p udp -dport 53  
-OUT ACCEPT -dest 192.168.88.253 -p tcp -dport 53  
-OUT DROP -dest 192.168.88.0/24  
-CATATAN  
-Aturan diproses dari atas ke bawah dan yang cocok pertama menang, jadi izin DNS harus sebelum blokir LAN.  
-Cloudflare Tunnel adalah koneksi keluar ke internet, tidak tersentuh aturan itu (port keluar tunnel 7844 [BELUM  
-PASTI]). Perpanjangan alamat DHCP lewat unicast ke MikroTik bisa terblokir; opsi dhcp: 1 dimaksudkan  
-mengizinkannya [BELUM PASTI]. Bila bermasalah, atur alamat statis di Debian untuk VM 210.  
-Sintaks +dc/admin merujuk IPSet tingkat Datacenter; bila ditolak, coba +admin [BELUM PASTI].  
-Untuk VM 205 vault cukup aturan SSH admin dan ICMP (tidak ada layanan lain yang menerima sambungan  
-masuk). Untuk VM 212 pbs: SSH admin ditambah -dport 8007 dari 192.168.88.10 dan dari +dc/admin. Setelah  
-berkas disimpan, firewall membacanya otomatis.  
+Untuk VM 205, 211, 213, dan 214, jangan buka port layanan pada LAN; layanan diakses melalui Tailscale Serve. Untuk VM 212 PBS, izinkan port 8007 hanya dari host Proxmox dan perangkat admin. Aturan VM 202 Home Assistant dan VM 203 k3s mengikuti matriks 51.2.
+
+> [!WARNING]
+> Contoh ini mengasumsikan IPSet Datacenter bernama `admin` dan sintaks `+dc/admin) diterima oleh versi Proxmox yang dipakai. Bagian ini masih perlu diuji pada host sebelum firewall diaktifkan. Jangan mengaktifkan aturan massal; uji satu guest dan pastikan akses konsol serta jalur pemulihan tersedia.
 
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
