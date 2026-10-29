@@ -208,9 +208,9 @@ docker exec -u www-data nextcloud php occ app:install calendar
 ```
 > Penjelasan: Memasang aplikasi Calendar dari toko aplikasi Nextcloud. Bila sudah terpasang akan tertulis
 demikian (itu normal).  
-2  
-# docker exec -u www-data nextcloud php occ config:system:set default_phone_region  
---value=ID  
+```
+docker exec -u www-data nextcloud php occ config:system:set default_phone_region --value=ID
+```
 > Penjelasan: Mengisi wilayah telepon bawaan (ID = Indonesia) untuk menghilangkan satu peringatan.
 ```
 docker exec -u www-data nextcloud php occ db:add-missing-indices
