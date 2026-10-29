@@ -69,11 +69,13 @@ Signed-By: /etc/apt/keyrings/docker.asc
 
 **TERMINAL VM TEMPLAT** | VM 9100, sebagai root
 
-7  
-# apt update && apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin  
-docker-compose-plugin  
-> Penjelasan: Memasang Docker Engine dan Compose dari repositori resmi. Bila Docker mengubah cara
-pemasangan Debian 13, ikuti halaman instalasi resmi Docker [BELUM PASTI].  
+```
+apt update
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+> Penjelasan: Memasang Docker Engine dan Compose dari repositori resmi. Ketersediaan paket dan langkah
+pemasangan Debian 13 perlu dicocokkan lagi dengan dokumentasi resmi saat instalasi.
+
 ```
 docker run --rm hello-world
 ```
