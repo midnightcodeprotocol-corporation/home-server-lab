@@ -1,5 +1,9 @@
 # Bab 3. Fondasi Jaringan Rumah (MikroTik)
 
+> [!NOTE]
+> **Peta Edisi 2, diselaraskan dengan Revisi 3:** STB HG680 .253 menjalankan AdGuard Home saja. Tailscale subnet router ditunda sampai STB 2 tersedia; CT103 adalah pilihan sementara bila diperlukan. Daftar guest dan alamat terbaru ada di [peta penempatan Bab 48](../suplemen/48-peta-penempatan.md) dan [data/guest.yaml](../../../data/guest.yaml).
+
+
 Seluruh bab berikutnya mengandalkan jaringan MikroTik 192.168.88.0/24. Bab ini menyiapkan  
 fondasinya dan membuat "resep" yang akan dipakai berulang: reservasi IP (static lease), pengaturan DNS  
 di DHCP, dan pengamanan dasar. Jika MikroTik Anda sudah terkonfigurasi, baca 3.2, 3.5, dan 3.6 lalu  
@@ -31,7 +35,7 @@ dashboard)
 Static lease MikroTik  
 192.168.88.21 VM Home Assistant OS Static lease MikroTik  
 192.168.88.22 VM k3s (Kubernetes) Static lease MikroTik  
-192.168.88.253 STB HG680 (AdGuard utama + Tailscale) Static lease MikroTik  
+192.168.88.253 STB HG680 (AdGuard Home utama saja) Static lease MikroTik  
 192.168.88.100 - .254 Laptop, HP, dan perangkat lain DHCP otomatis  
 IndiHome (uplink WiFi)  
 TL-WR840N (mode WISP)  
@@ -40,7 +44,7 @@ MikroTik RB750GL
 ether1 = 192.168.0.100 (dari WR840N)  
 LAN 192.168.88.1/24, DHCP .100-.254  
 STB HG680  
-AdGuard + Tailscale  
+AdGuard Home saja  
 192.168.88.253  
 TL-WR820N (AP)  
 mode Access Point  
