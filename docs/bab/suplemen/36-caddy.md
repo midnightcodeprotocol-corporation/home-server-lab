@@ -90,36 +90,70 @@ nano Caddyfile
 
 ```
 {
- local_certs
+  local_certs
 }
+
 kuma.home.arpa {
- reverse_proxy uptime-kuma:3001
+  reverse_proxy uptime-kuma:3001
 }
+
 beszel.home.arpa {
- reverse_proxy beszel:8090
+  reverse_proxy beszel:8090
 }
+
 gotify.home.arpa {
- reverse_proxy gotify:80
+  reverse_proxy gotify:80
 }
+
 proxmox.home.arpa {
- reverse_proxy https://192.168.88.10:8006 {
- transport http {
- tls_insecure_skip_verify
- }
- }
+  reverse_proxy https://192.168.88.10:8006 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
 }
+
 portainer.home.arpa {
- reverse_proxy https://192.168.88.20:9443 {
- transport http {
- tls_insecure_skip_verify
- }
- }
+  reverse_proxy https://192.168.88.20:9443 {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
 }
+
 adguard.home.arpa {
- reverse_proxy 192.168.88.253:80
+  reverse_proxy 192.168.88.253:80
 }
+
 dash.home.arpa {
- reverse_proxy 192.168.88.20:3002
+  reverse_proxy 192.168.88.20:3002
+}
+
+git.home.arpa {
+  reverse_proxy 192.168.88.23:3000
+}
+
+affine.home.arpa {
+  reverse_proxy 192.168.88.25:3010
+}
+
+nextcloud.home.arpa {
+  header Strict-Transport-Security "max-age=15552000"
+  redir /.well-known/carddav /remote.php/dav/ 301
+  redir /.well-known/caldav /remote.php/dav/ 301
+  reverse_proxy 192.168.88.26:8080
+}
+
+n8n.home.arpa {
+  reverse_proxy 192.168.88.27:5678
+}
+
+wp.home.arpa {
+  reverse_proxy 192.168.88.28:8081
+}
+
+web.home.arpa {
+  reverse_proxy 192.168.88.28:8082
 }
 ```
 
