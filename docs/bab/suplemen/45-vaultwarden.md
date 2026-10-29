@@ -16,19 +16,19 @@ lupa, data tidak dapat dibuka siapa pun, termasuk Anda dan saya. Tulis di kertas
 
 **TERMINAL VM VAULT** | VM vault (192.168.88.24), sebagai root
 
-1  
-# mkdir -p /opt/stacks/vaultwarden/data /opt/stacks/vaultwarden/backup && cd  
-/opt/stacks/vaultwarden  
-> Penjelasan: Folder aplikasi, data, dan hasil backup.
+```
+mkdir -p /opt/stacks/vaultwarden/data /opt/stacks/vaultwarden/backup
+cd /opt/stacks/vaultwarden
+```
+> Penjelasan: Membuat folder aplikasi, data, dan hasil backup.
 ```
 echo "TS_HOST=lab-vault.NAMA-TAILNET.ts.net" > .env
 ```
 > Penjelasan: Ganti dengan nama panjang lab-vault dari konsol admin. Jangan ada spasi.
 ```
-echo "VW_VERSION=latest" >> .env
+echo "VW_VERSION=TAG_RILIS_TER_VERIFIKASI" >> .env
 ```
-> Penjelasan: Nomor versi image. Untuk pengelola kata sandi, sebaiknya diganti dengan nomor rilis tertentu dari
-halaman rilis Vaultwarden di GitHub setelah berjalan.  
+> Penjelasan: Ganti nilai contoh dengan tag rilis tertentu yang telah diperiksa pada halaman rilis resmi Vaultwarden **sebelum** menjalankan Compose. Jangan gunakan `latest` untuk pengelola kata sandi; catat tag yang dipilih agar pembaruan dapat dikendalikan.  
 ```
 chmod 600 .env && nano compose.yaml
 ```
