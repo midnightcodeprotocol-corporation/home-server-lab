@@ -1,6 +1,6 @@
 # 05 - Inventaris perangkat
 
-| Perangkat | Peran | Alamat / catatan |
+  Perangkat   Peran | Alamat / catatan |
 |---|---|---|
 | IndiHome | Sumber internet | Tidak ada kabel LAN yang bisa dipakai; uplink WiFi |
 | TP-Link TL-WR840N v6.20 | Penerima (mode WISP) | LAN 192.168.0.1 |
