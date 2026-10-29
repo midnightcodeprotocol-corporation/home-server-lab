@@ -25,8 +25,7 @@ nslookup kuma.home.arpa 192.168.88.253
 
 ## 36.2 Jaringan Docker bersama
 
-Caddy dan layanan harus berada di satu jaringan Docker agar Caddy dapat memanggil layanan memakai nama  
-container.  
+Caddy dan container yang berada di VM 201 harus bergabung ke jaringan Docker `proxy` agar Caddy dapat memanggilnya memakai nama container. Jaringan Docker ini hanya berlaku di VM 201; layanan pada VM lain dijangkau memakai alamat IP dan port yang diizinkan firewall Proxmox.  
 
 **TERMINAL VM DEBIAN** | Sebagai root (setelah su -)
 
@@ -122,17 +121,13 @@ adguard.home.arpa {
 dash.home.arpa {
  reverse_proxy 192.168.88.20:3002
 }
-local_certs memerintahkan Caddy memakai otoritas sertifikat lokalnya sendiri untuk semua nama (bukan Let's
 ```
 
-Encrypt). tls_insecure_skip_verify hanya dipakai untuk Proxmox dan Portainer karena sertifikat bawaan mereka  
-buatan sendiri; koneksi itu tetap di dalam LAN.  
+Opsi global `local_certs` memerintahkan Caddy memakai otoritas sertifikat lokal untuk nama-nama ini. `tls_insecure_skip_verify` hanya dipakai untuk Proxmox dan Portainer karena sertifikat bawaan mereka ditandatangani sendiri; koneksi tetap berada di LAN.  
 
 ## 36.4 Menyiapkan layanan agar berada di belakang Caddy
 
-Setiap layanan yang diproksi harus bergabung ke jaringan proxy. Layanan yang hanya diakses lewat Caddy  
-bahkan tidak perlu mempublikasikan port lagi; dengan begitu satu-satunya pintu adalah Caddy (ini sekaligus  
-menutup masalah "Docker melewati UFW" dari Suplemen 1).  
+Untuk container di VM 201 yang hanya diakses melalui Caddy, hapus publikasi port dan hubungkan container ke jaringan `proxy`; Caddy dapat mengaksesnya lewat nama container. Gotify tetap memublikasikan port 8070 untuk klien dan pengirim notifikasi. Homepage tetap diakses lewat port 3002. Container di VM lain tidak dapat bergabung ke jaringan Docker ini: pertahankan port layanan di LAN VM dan batasi sumbernya dengan firewall Proxmox.  
 
 **TERMINAL VM DEBIAN** | Sebagai root
 
