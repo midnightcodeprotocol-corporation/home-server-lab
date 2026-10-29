@@ -9,5 +9,5 @@ dhcp: 1
 [RULES]
 IN ACCEPT -source +dc/admin -p tcp -dport 22
 IN ACCEPT -source 192.168.88.20 -p tcp -dport 3010
-IN ACCEPT -source 192.168.88.20 -p tcp -dport PORT-AGEN-BESZEL
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 45876
 IN ACCEPT -p icmp
