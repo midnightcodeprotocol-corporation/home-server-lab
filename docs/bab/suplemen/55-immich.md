@@ -119,9 +119,9 @@ dan hanya menambah dua pengaturan.
 mkdir -p /opt/stacks/immich && cd /opt/stacks/immich
 ```
 > Penjelasan: Folder aplikasi (database ada di sini, di disk sistem).
-2  
-# wget -O docker-compose.yml  
-https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml  
+```
+wget -O docker-compose.yml https://github.com/immich-app/immich/releases/latest/download/docker-compose.yml
+```
 > Penjelasan: Mengunduh berkas compose rilis terbaru dari halaman resmi.
 ```
 wget -O .env https://github.com/immich-app/immich/releases/latest/download/example.env
