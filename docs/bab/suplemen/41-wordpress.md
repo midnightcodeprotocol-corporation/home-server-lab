@@ -158,8 +158,8 @@ Aplikasi resmi WordPress iOS dengan CA lokal:
 mkdir -p /opt/stacks/wordpress/backup
 ```
 > Penjelasan: Folder hasil dump.
-2  
-# docker exec wp-db sh -c 'exec mariadb-dump -uroot -p"$MARIADB_ROOT_PASSWORD"  
---all-databases' &gt; /opt/stacks/wordpress/backup/wp-$(date +%F).sql  
+```
+docker exec wp-db sh -c 'exec mariadb-dump -uroot -p"$MARIADB_ROOT_PASSWORD" --all-databases' > /opt/stacks/wordpress/backup/wp-$(date +%F).sql
+```
 > Penjelasan: Dump database ke berkas SQL bertanggal. Folder /opt/stacks/wordpress/html (berisi tema, plugin,
 unggahan) ikut dibackup bersama folder lain.
