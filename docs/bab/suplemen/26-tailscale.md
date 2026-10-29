@@ -217,24 +217,31 @@ CATATAN
 Pada tailnet satu pengguna, manfaat utamanya adalah mengurung perangkat ber-tag. Aturan ini juga menjadi dasar  
 bila kelak ada anggota keluarga yang diberi akses sebagian.  
 1. Buka Access controls. Salin seluruh isi editor ke berkas teks di laptop sebagai cadangan.  
-2. Tambahkan bagian tagOwners dan ganti bagian grants bawaan dengan isi di kotak bawah. Biarkan bagian  
-lain apa adanya. Ganti alamat email dengan milik Anda.  
+2. Tambahkan anggota Anda ke `group:home-admins`, setel `tagOwners`, dan gabungkan aturan `grants` di kotak bawah dengan kebijakan yang sudah ada. Jika bagian `groups` atau `grants` sudah ada, gabungkan isinya; jangan membuat kunci tingkat atas duplikat. Gunakan alamat akun Tailscale Anda sendiri.  
 3. Klik Save. Editor menolak penyimpanan bila ada kesalahan sintaks.  
 
 **Access controls (potongan)** | tailnet policy file (HuJSON)
 
 ```
+ // Hanya akun admin yang Anda masukkan ke grup ini boleh mengakses LAN rumah.
+ "groups": {
+ "group:home-admins": ["EMAIL-ADMIN-ANDA@example.com"],
+ },
  // Siapa yang boleh memberi tag router pada perangkat
  "tagOwners": {
- "tag:router": ["EMAIL-ANDA@gmail.com"],
+ "tag:router": ["group:home-admins"],
  },
- // Anggota tailnet boleh menjangkau perangkat router dan LAN rumah.
- // Perangkat ber-tag router tidak diberi hak memulai koneksi ke HP atau laptop.
+ // Grup admin boleh menjangkau router dan LAN rumah; anggota lain tidak mendapat akses LAN otomatis.
  "grants": [
  {
- "src": ["autogroup:member"],
+ "src": ["group:home-admins"],
  "dst": ["tag:router", "192.168.88.0/24"],
  "ip": ["*"],
+ },
+ {
+ "src": ["group:home-admins"],
+ "dst": ["autogroup:self"],
+ "ip": ["tcp:443"],
  },
  ],
 ```
