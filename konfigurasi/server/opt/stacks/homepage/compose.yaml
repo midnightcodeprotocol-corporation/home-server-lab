@@ -4,8 +4,8 @@ services:
     container_name: homepage
     restart: unless-stopped
     ports:
-      - "80:3000"
+      - "3002:3000"
     environment:
-      - HOMEPAGE_ALLOWED_HOSTS=192.168.88.20,home.lan
-volumes:
-  - ./config:/app/config
+      - HOMEPAGE_ALLOWED_HOSTS=192.168.88.20:3002,dash.home.arpa
+    volumes:
+      - ./config:/app/config
