@@ -73,11 +73,11 @@ memformat.
 mkfs.ext4 -L music /dev/sdb
 ```
 > Penjelasan: Memformat disk (menghapus isinya). Ganti sdb bila berbeda.
-3  
-# mkdir -p /srv/music && echo "LABEL=music /srv/music ext4 defaults,nofail 0 2" &gt;&gt;  
-/etc/fstab  
-> Penjelasan: Membuat titik pasang dan mendaftarkannya ke fstab agar terpasang saat boot. nofail mencegah VM
-macet bila disk hilang.  
+```
+mkdir -p /srv/music
+echo "LABEL=music /srv/music ext4 defaults,nofail 0 2" >> /etc/fstab
+```
+> Penjelasan: Membuat titik pasang dan mendaftarkannya ke fstab agar terpasang saat boot. nofail mencegah VM macet bila disk hilang.  
 ```
 mount -a && df -h /srv/music
 ```
