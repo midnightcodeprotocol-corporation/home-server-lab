@@ -52,9 +52,9 @@ Signed-By: /etc/apt/keyrings/docker.asc
 apt update
 ```
 > Penjelasan: Memuat daftar paket Docker.
-2  
-# apt install -y docker-ce docker-ce-cli containerd.io \  
- docker-buildx-plugin docker-compose-plugin  
+```
+apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
 > Penjelasan: Memasang Docker Engine dan plugin Compose.
 ```
 docker run --rm hello-world
