@@ -11,7 +11,7 @@
 | STB 2 | Tailscale subnet router (rencana) | Belum tiba; usulan 192.168.88.250 |
 | **Lenovo ThinkCentre M710q** | **Server Proxmox** | **192.168.88.10; Core i5-6500T (4 core/4 thread); RAM 16 GB terpasang; NVMe M.2 500 GB** |
 | RAM cadangan 16 GB dan 8 GB | Suku cadang / penambah RAM | Rencana: 16+16 = 32 GB; 8 GB disimpan (slot hanya dua) |
-| HDD 2 TB | Disk data / backup | Belum dipasang ke server; bay 2,5" atau casing USB (Bab 27.4) |
+| 2 × HDD Seagate Surveillance 2 TB | Calon disk data / backup; belum dialokasikan | Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat. Verifikasi ukuran fisik dan kebutuhan daya sebelum menentukan penempatan. |
 | Laptop (AMD Ryzen 3 4300U, RAM 19,4 GB) | Laptop admin | 192.168.88.252 via adaptor USB-LAN (ASIX); WinBox, browser, SSH |
 
 ## Perangkat lain yang dimiliki (belum berperan)
