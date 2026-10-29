@@ -1,0 +1,5 @@
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin prohibit-password
+MaxAuthTries 3
+LoginGraceTime 30

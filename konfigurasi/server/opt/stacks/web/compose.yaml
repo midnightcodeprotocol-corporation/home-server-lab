@@ -1,0 +1,10 @@
+services:
+  sites:
+    image: caddy:2
+    container_name: sites
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./sites:/srv/sites:ro
+    ports:
+      - "8082:80"

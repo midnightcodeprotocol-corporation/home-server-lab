@@ -1,0 +1,13 @@
+# /etc/pve/firewall/210.fw  (web-public, paling ketat) - Bab 51.4
+# Urutan penting: izin DNS harus sebelum blokir LAN
+[OPTIONS]
+enable: 1
+policy_in: DROP
+policy_out: ACCEPT
+dhcp: 1
+
+[RULES]
+IN ACCEPT -source +dc/admin -p tcp -dport 22
+OUT ACCEPT -dest 192.168.88.253 -p udp -dport 53
+OUT ACCEPT -dest 192.168.88.253 -p tcp -dport 53
+OUT DROP -dest 192.168.88.0/24

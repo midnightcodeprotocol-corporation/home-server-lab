@@ -1,0 +1,13 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:${VW_VERSION}
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      DOMAIN: "https://${TS_HOST}"
+      SIGNUPS_ALLOWED: "true"
+      TZ: Asia/Jakarta
+    volumes:
+      - ./data:/data
+    ports:
+      - "127.0.0.1:8081:80"

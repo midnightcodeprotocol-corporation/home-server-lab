@@ -1,0 +1,27 @@
+# Perangkat fisik dan jaringan
+jaringan:
+  uplink: "IndiHome (WiFi saja, tidak ada LAN)"
+  lan_atas: 192.168.0.0/24
+  lan_rumah: 192.168.88.0/24
+  dhcp_pool: 192.168.88.100-192.168.88.254
+  domain_lokal: home.arpa
+perangkat:
+  - {nama: TP-Link TL-WR840N v6.20, peran: "penerima WISP", ip: 192.168.0.1}
+  - {nama: MikroTik RB750GL, peran: "router utama", ip: 192.168.88.1, routeros: 6.49.23, catatan: "ether1 = WAN (192.168.0.100 dari WR840N); admin lewat WinBox di ether2"}
+  - {nama: TP-Link TL-WR820N, peran: "Access Point (DHCP mati)", ip: 192.168.88.2}
+  - {nama: TP-Link LiteWave LS1005, peran: "switch"}
+  - {nama: STB HG680 (Armbian v25.05.0, eMMC), peran: "AdGuard Home utama", ip: 192.168.88.253}
+  - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, cpu: "i5-6500T", ram_gb_terpasang: 16, ram_cadangan_gb: [16, 8], nvme_gb: 500}
+  - {nama: HDD 2 TB, peran: "disk data / backup (belum dipasang)"}
+  - {nama: "Laptop AMD Ryzen 3 4300U (RAM 19,4 GB)", peran: "laptop admin", ip: 192.168.88.252, catatan: "kabel via adaptor USB-LAN (ASIX)"}
+lain_dimiliki:
+  - Ubiquiti UniFi U6 Lite
+  - Nokia G-2425G-A
+  - FortiGate 60F
+  - Cisco IP1101
+  - TP-Link TL-POE160S
+rencana:
+  - STB 2 (Tailscale subnet router)
+  - Modem kedua untuk failover internet
+  - TP-Link MR3020 (cetak dari mana saja)
+  - UPS kecil dan monitor listrik

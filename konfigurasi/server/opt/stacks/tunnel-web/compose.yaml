@@ -1,0 +1,22 @@
+services:
+  web-public:
+    image: caddy:2
+    container_name: web-public
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./public:/srv:ro
+    networks:
+      - publicweb
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
+    depends_on:
+      - web-public
+    networks:
+      - publicweb
+networks:
+  publicweb:
+    external: true

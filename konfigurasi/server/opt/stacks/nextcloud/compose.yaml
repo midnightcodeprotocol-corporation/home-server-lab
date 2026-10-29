@@ -1,0 +1,64 @@
+x-nc-env: &nc-env
+  POSTGRES_HOST: nc-db
+  POSTGRES_DB: nextcloud
+  POSTGRES_USER: nextcloud
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  REDIS_HOST: nc-redis
+  REDIS_HOST_PASSWORD: ${REDIS_PASSWORD}
+  NEXTCLOUD_TRUSTED_DOMAINS: nextcloud.home.arpa
+  TRUSTED_PROXIES: 192.168.88.20
+  OVERWRITEPROTOCOL: https
+services:
+  nc-db:
+    image: postgres:16-alpine
+    container_name: nc-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nextcloud
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - nc-internal
+  nc-redis:
+    image: redis:7-alpine
+    container_name: nc-redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    networks:
+      - nc-internal
+  nextcloud:
+    image: nextcloud:${NEXTCLOUD_TAG}
+    container_name: nextcloud
+    restart: unless-stopped
+    depends_on:
+      - nc-db
+      - nc-redis
+    environment:
+      <<: *nc-env
+      NEXTCLOUD_ADMIN_USER: ${NC_ADMIN_USER}
+      NEXTCLOUD_ADMIN_PASSWORD: ${NC_ADMIN_PASSWORD}
+    volumes:
+      - ./html:/var/www/html
+      - ./data:/var/www/html/data
+    ports:
+      - "8080:80"
+    networks:
+      - nc-internal
+  nc-cron:
+    image: nextcloud:${NEXTCLOUD_TAG}
+    container_name: nc-cron
+    restart: unless-stopped
+    entrypoint: /cron.sh
+    depends_on:
+      - nextcloud
+    environment:
+      <<: *nc-env
+    volumes:
+      - ./html:/var/www/html
+      - ./data:/var/www/html/data
+    networks:
+      - nc-internal
+networks:
+  nc-internal:

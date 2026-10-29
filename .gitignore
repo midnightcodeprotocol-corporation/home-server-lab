@@ -1,0 +1,33 @@
+# Rahasia: jangan pernah di-commit
+.env
+*.env
+!*.env.example
+!.env.example
+*.key
+*.agekey
+*.pem
+*.crt
+id_ed25519*
+*.ppk
+
+# Arsip backup dan dump (berisi rahasia / data pribadi)
+*.tgz
+*.tar.gz
+*.zst
+*.vma
+*.sql
+*.backup
+pve-config-*
+pve-host-config*
+etc-pve*
+cadangan-*
+
+# Token dan kredensial
+token*
+*.token
+secrets*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

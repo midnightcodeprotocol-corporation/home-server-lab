@@ -1,0 +1,3 @@
+#!/bin/sh
+# Dijalankan di STB (192.168.88.253). Ganti MAC dengan MAC kartu LAN M710q (ip -br link di Proxmox).
+wakeonlan AA:BB:CC:DD:EE:FF

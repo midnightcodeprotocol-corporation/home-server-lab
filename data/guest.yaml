@@ -1,0 +1,36 @@
+# Daftar VM/LXC (sumber: Bab 48.3, 48.6, Bab 56). Ubah bersama docs/05, docs/07, README.
+host:
+  nama: pve
+  mesin: Lenovo ThinkCentre M710q (Core i5-6500T, 4 core/4 thread)
+  ip: 192.168.88.10
+  web: https://192.168.88.10:8006
+  ram_terpasang_gb: 16
+  ram_cadangan_gb: [16, 8]
+  ram_target_gb: 32
+  disk_sistem: NVMe 500 GB (ext4, local-lvm)
+  disk_data: HDD 2 TB (datastore PBS / backup)
+  docker_di_host: false
+templat:
+  - {vmid: 9100, nama: tpl-debian-docker, catatan: "Debian 13 + Docker; tidak dinyalakan"}
+  - {vmid: 9000, nama: debian13-template, catatan: "cloud-init, untuk VM k3s"}
+guest:
+  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
+  - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}
+  - {vmid: 203, nama: k3s, jenis: vm, ip: 192.168.88.22, ram_mb: 3072, isi: "k3s + Flux", port: [6443]}
+  - {vmid: 204, nama: git, jenis: vm, ip: 192.168.88.23, ram_mb: 1024, isi: "Forgejo + Renovate", port: [3000, 2222]}
+  - {vmid: 205, nama: vault, jenis: vm, ip: 192.168.88.24, ram_mb: 1024, isi: "Vaultwarden", akses: "Tailscale Serve lab-vault"}
+  - {vmid: 206, nama: affine, jenis: vm, ip: 192.168.88.25, ram_mb: 2048, isi: "AFFiNE", port: [3010], catatan: "mode hemat: menjadi VM 'apps' bersama n8n, web, musik (3072 MB)"}
+  - {vmid: 207, nama: nextcloud, jenis: vm, ip: 192.168.88.26, ram_mb: 2048, isi: "Nextcloud (kalender)", port: [8080]}
+  - {vmid: 208, nama: n8n, jenis: vm, ip: 192.168.88.27, ram_mb: 1536, isi: "n8n + Postgres", port: [5678]}
+  - {vmid: 209, nama: web, jenis: vm, ip: 192.168.88.28, ram_mb: 1536, isi: "situs statis + WordPress", port: [8081, 8082]}
+  - {vmid: 210, nama: web-public, jenis: vm, ip: 192.168.88.29, ram_mb: 768, isi: "cloudflared + situs statis publik (opsional)", akses: "Cloudflare Tunnel keluar; tidak boleh ke LAN"}
+  - {vmid: 211, nama: music, jenis: vm, ip: 192.168.88.31, ram_mb: 1024, isi: "Navidrome", akses: "Tailscale Serve lab-music"}
+  - {vmid: 212, nama: pbs, jenis: vm, ip: 192.168.88.30, ram_mb: 2048, isi: "Proxmox Backup Server", port: [8007]}
+  - {vmid: 213, nama: sso, jenis: vm, ip: 192.168.88.32, ram_mb: 1024, isi: "Pocket ID", akses: "Tailscale Serve lab-sso"}
+  - {vmid: 214, nama: immich, jenis: vm, ip: 192.168.88.33, ram_mb: 6144, isi: "Immich", akses: "Tailscale Serve lab-immich"}
+  - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, isi: "AdGuard Home kedua (failover DNS)"}
+  - {vmid: 102, nama: files, jenis: lxc, ip: 192.168.88.12, isi: "Samba", port: [445]}
+  - {vmid: 103, nama: ts-router, jenis: lxc, ip: null, isi: "Tailscale subnet router (nanti STB 2)"}
+perangkat_luar_proxmox:
+  - {nama: stb-1, ip: 192.168.88.253, isi: "AdGuard Home utama (HG680, Armbian, eMMC)"}
+  - {nama: stb-2, ip: 192.168.88.250, isi: "Tailscale subnet router (rencana, belum tiba)"}

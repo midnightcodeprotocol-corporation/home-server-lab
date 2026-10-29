@@ -1,0 +1,4 @@
+services:
+  immich-server:
+    extra_hosts:
+      - "lab-sso.NAMA-TAILNET.ts.net:100.X.Y.Z"

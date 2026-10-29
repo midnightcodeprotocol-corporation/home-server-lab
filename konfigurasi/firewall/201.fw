@@ -1,0 +1,14 @@
+# /etc/pve/firewall/201.fw  (docker-core) - Bab 51.4
+[OPTIONS]
+enable: 1
+policy_in: DROP
+policy_out: ACCEPT
+dhcp: 1
+
+[RULES]
+IN ACCEPT -source +dc/admin -p tcp -dport 22
+IN ACCEPT -source 192.168.88.0/24 -p tcp -dport 80,443
+IN ACCEPT -source 192.168.88.10 -p tcp -dport 8070
+IN ACCEPT -source 192.168.88.27 -p tcp -dport 8070
+IN ACCEPT -source 192.168.88.30 -p tcp -dport 8070
+IN ACCEPT -p icmp

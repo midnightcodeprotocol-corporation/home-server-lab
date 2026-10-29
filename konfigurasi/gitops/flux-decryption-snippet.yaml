@@ -1,0 +1,6 @@
+# Tambahkan pada spec Kustomization Flux yang berisi rahasia
+spec:
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age

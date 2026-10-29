@@ -1,0 +1,56 @@
+# Gambaran akhir Caddyfile di VM 201 docker-core (Bab 36 dan 48.4)
+# Vaultwarden, Navidrome, Pocket ID, Immich TIDAK di sini: hanya lewat Tailscale Serve.
+{
+	local_certs
+}
+
+kuma.home.arpa {
+	reverse_proxy uptime-kuma:3001
+}
+beszel.home.arpa {
+	reverse_proxy beszel:8090
+}
+gotify.home.arpa {
+	reverse_proxy gotify:80
+}
+proxmox.home.arpa {
+	reverse_proxy https://192.168.88.10:8006 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+portainer.home.arpa {
+	reverse_proxy https://192.168.88.20:9443 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+adguard.home.arpa {
+	reverse_proxy 192.168.88.253:80
+}
+dash.home.arpa {
+	reverse_proxy 192.168.88.20:3002
+}
+web.home.arpa {
+	reverse_proxy 192.168.88.28:8082
+}
+wp.home.arpa {
+	reverse_proxy 192.168.88.28:8081
+}
+n8n.home.arpa {
+	reverse_proxy 192.168.88.27:5678
+}
+affine.home.arpa {
+	reverse_proxy 192.168.88.25:3010
+}
+git.home.arpa {
+	reverse_proxy 192.168.88.23:3000
+}
+nextcloud.home.arpa {
+	header Strict-Transport-Security "max-age=15552000"
+	redir /.well-known/carddav /remote.php/dav/ 301
+	redir /.well-known/caldav /remote.php/dav/ 301
+	reverse_proxy 192.168.88.26:8080
+}

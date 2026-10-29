@@ -1,0 +1,13 @@
+# /etc/pve/firewall/206.fw  (affine; contoh untuk VM aplikasi di belakang Caddy) - Bab 51.4
+# Layanan lain: ganti port 3010 (207=8080, 208=5678, 209=8081,8082)
+[OPTIONS]
+enable: 1
+policy_in: DROP
+policy_out: ACCEPT
+dhcp: 1
+
+[RULES]
+IN ACCEPT -source +dc/admin -p tcp -dport 22
+IN ACCEPT -source 192.168.88.20 -p tcp -dport 3010
+IN ACCEPT -source 192.168.88.20 -p tcp -dport PORT-AGEN-BESZEL
+IN ACCEPT -p icmp

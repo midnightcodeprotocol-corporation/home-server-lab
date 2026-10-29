@@ -1,0 +1,50 @@
+- Jaringan:
+    - MikroTik:
+        href: http://192.168.88.1
+        description: Router utama (WebFig)
+        ping: 192.168.88.1
+    - TP-Link penerima:
+        href: http://192.168.0.1
+        description: TL-WR840N mode WISP
+    - TP-Link AP:
+        href: http://192.168.88.2
+        description: TL-WR820N Access Point
+        ping: 192.168.88.2
+    - AdGuard utama:
+        href: http://192.168.88.253
+        description: DNS pemblokir iklan (STB)
+        ping: 192.168.88.253
+        widget:
+          type: adguard
+          url: http://192.168.88.253
+          username: admin
+          password: GANTI
+- Server:
+    - Proxmox:
+        href: https://192.168.88.10:8006
+        description: Hypervisor (ThinkCentre M710q)
+        ping: 192.168.88.10
+    - Portainer:
+        href: https://192.168.88.20:9443
+        description: Manajemen Docker
+    - Forgejo:
+        href: http://192.168.88.23:3000
+        description: Git pribadi
+    - AdGuard kedua:
+        href: http://192.168.88.11
+        description: DNS cadangan (LXC 101)
+        ping: 192.168.88.11
+- Aplikasi:
+    - Nextcloud:
+        href: http://192.168.88.26:8080
+        description: Cloud pribadi
+    - Home Assistant:
+        href: http://192.168.88.21:8123
+        description: Otomasi rumah
+        ping: 192.168.88.21
+    - Folder jaringan:
+        href: file://192.168.88.12/share
+        description: Samba (buka dari Explorer)
+    - Tailscale:
+        href: https://login.tailscale.com/admin/machines
+        description: Konsol admin

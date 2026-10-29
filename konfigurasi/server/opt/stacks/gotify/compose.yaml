@@ -1,0 +1,13 @@
+services:
+  gotify:
+    image: gotify/server:latest
+    container_name: gotify
+    restart: unless-stopped
+    ports:
+      - "8070:80"
+    environment:
+      - TZ=Asia/Jakarta
+      - GOTIFY_DEFAULTUSER_NAME=admin
+      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_ADMIN_PASS}
+    volumes:
+      - ./data:/app/data

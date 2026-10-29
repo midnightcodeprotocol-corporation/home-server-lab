@@ -1,0 +1,7 @@
+# Nextcloud cron (VM nextcloud, jika tidak memakai container nc-cron)
+*/5 * * * * docker exec -u www-data nextcloud php -f /var/www/html/cron.php
+# Renovate tiap 6 jam (VM git)
+0 */6 * * * docker run --rm --env-file /opt/renovate/env renovate/renovate:<VERSI>
+# Profil RAM 16 GB (host, Bab 56.5; tidak perlu setelah RAM 32 GB)
+45 1 * * * /root/profil.sh backup
+30 6 * * * /root/profil.sh harian

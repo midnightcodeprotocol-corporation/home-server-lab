@@ -1,0 +1,15 @@
+services:
+  navidrome:
+    image: deluan/navidrome:${ND_VERSION}
+    container_name: navidrome
+    user: "1000:1000"
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4533:4533"
+    environment:
+      ND_SCANSCHEDULE: 1h
+      ND_LOGLEVEL: info
+      ND_BASEURL: ""
+    volumes:
+      - ./data:/data
+      - /srv/music:/music:ro

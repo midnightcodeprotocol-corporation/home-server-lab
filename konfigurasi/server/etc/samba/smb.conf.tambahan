@@ -1,0 +1,5 @@
+[share]
+    path = /srv/share
+    browseable = yes
+    read only = no
+    valid users = userfile
