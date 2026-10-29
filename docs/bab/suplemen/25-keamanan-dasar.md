@@ -546,23 +546,25 @@ semua uji berhasil.
 /ip firewall filter print
 ```
 > Penjelasan: Melihat aturan yang sudah ada. Jika sudah ada aturan "drop all not coming from LAN" atau drop dari
-ether1-gateway, jangan menambah aturan serupa (langkah 2 sampai 5); cukup periksa urutannya.  
-2  
-&gt; /ip firewall filter add chain=input action=accept connection-state=established,related  
-place-before=0 comment="terima koneksi berjalan"  
+ether1, jangan menambah aturan serupa (langkah 2 sampai 5); cukup periksa urutannya.  
+```
+/ip firewall filter add chain=input action=accept connection-state=established,related place-before=0 comment="terima koneksi berjalan"
+```
 > Penjelasan: Menerima balasan dari koneksi yang sudah berjalan. Harus paling atas.
-3  
-&gt; /ip firewall filter add chain=input action=drop connection-state=invalid place-before=1  
-comment="buang paket tidak valid"  
+
+```
+/ip firewall filter add chain=input action=drop connection-state=invalid place-before=1 comment="buang paket tidak valid"
+```
 > Penjelasan: Membuang paket yang tidak sah.
-4  
-&gt; /ip firewall filter add chain=input action=drop in-interface=ether1-gateway  
-place-before=2 comment="tutup router dari sisi WAN"  
+
+```
+/ip firewall filter add chain=input action=drop in-interface=ether1 place-before=2 comment="tutup router dari sisi WAN"
+```
 > Penjelasan: Menutup seluruh akses ke router dari arah internet/WR840N. Router tetap terbuka dari LAN.
-5  
-&gt; /ip firewall filter add chain=forward action=drop in-interface=ether1-gateway  
-connection-state=new connection-nat-state=!dstnat comment="tolak koneksi baru dari WAN ke  
-LAN"  
+
+```
+/ip firewall filter add chain=forward action=drop in-interface=ether1 connection-state=new connection-nat-state=!dstnat comment="tolak koneksi baru dari WAN ke LAN"
+```
 > Penjelasan: Menolak koneksi baru dari arah WAN ke jaringan rumah.
 ```
 /ip firewall filter print
