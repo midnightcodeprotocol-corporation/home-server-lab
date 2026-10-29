@@ -31,6 +31,7 @@ Buku panduan dan catatan konfigurasi home server pribadi di **Lenovo ThinkCentre
 | `docs/07-port-dan-akses.md` | Tabel port dan matriks akses |
 | `docs/08-keputusan.md` | Catatan keputusan |
 | `docs/09-mulai-di-m710q.md` | Langkah pertama di mesin asli |
+| `docs/11-rencana-kerja-ai-ssh.md` | Rencana koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
 | `docs/bab/edisi2/` | Bab 1-24 + lampiran (diekstrak dan direvisi) |
 | `docs/bab/suplemen/` | Bab 25-56 + pengantar/penutup tiap bagian |
 | `docs/bab/REVISI-3.md` | Daftar perubahan Revisi 3 |
