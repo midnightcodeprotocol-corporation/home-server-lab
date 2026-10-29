@@ -126,8 +126,8 @@ tailnet menjadi publik di catatan sertifikat; baca lalu setujui).
  },
 ```
 
-Tanpa entri ini lab-vault tidak terjangkau dari HP. `autogroup:self` membatasi tujuan ke perangkat yang dimiliki akun sumber; gunakan anggota grup admin yang sama dengan kebijakan Bab 26.6. Sintaks `ip` bernilai `tcp:443` dan  
-`autogroup:self` didukung pada grants untuk membatasi tujuan ke perangkat milik akun sumber. Jika memakai ACL lama, gunakan sumber grup admin: "acls": [{  
+Tanpa entri ini lab-vault tidak terjangkau dari HP. Aturan memakai `autogroup:self` untuk membatasi akses grup  
+admin ke node yang dimiliki anggotanya pada TCP 443. ACL lama dapat memakai bentuk berikut dengan sumber grup admin: "acls": [{  
 "action": "accept", "src": ["group:home-admins"], "dst": ["autogroup:self:443"] }]. Karena tiap VM punya  
 nama .ts.net sendiri di port 443, satu entri ini cukup untuk semua node Serve milik Anda.  
 KEAMANAN  
