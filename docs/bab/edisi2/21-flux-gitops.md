@@ -154,9 +154,10 @@ berkas rahasia terenkripsi di Git dan hanya didekripsi di dalam cluster.
 age-keygen -o age.agekey
 ```
 > Penjelasan: Membuat kunci age. Salin kunci publik (age1...) dari keluarannya.
-2  
-# kubectl create secret generic sops-age --namespace=flux-system \  
- --from-file=age.agekey=age.agekey  
+```
+kubectl create secret generic sops-age --namespace=flux-system \
+  --from-file=age.agekey=age.agekey
+```
 > Penjelasan: Menyimpan kunci privat di cluster. Jangan masukkan age.agekey ke Git.
 
 **BERKAS: .sops.yaml** | Di akar repository
