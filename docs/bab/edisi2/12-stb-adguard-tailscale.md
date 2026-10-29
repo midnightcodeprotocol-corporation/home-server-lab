@@ -141,11 +141,11 @@ Memasang AdGuard Home
 
 **TERMINAL (login sebagai root)** | SSH ke STB
 
-1  
-# U=https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts  
- curl -s -S -L $U/install.sh | sh -s -- -v  
-> Penjelasan: Mengunduh dan menjalankan skrip instalasi resmi. AdGuard dipasang di /opt/AdGuardHome dan
-dijalankan sebagai layanan.  
+```
+U=https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts
+curl -s -S -L "$U/install.sh" | sh -s -- -v
+```
+> Penjelasan: Mengunduh dan menjalankan skrip instalasi resmi. AdGuard dipasang di /opt/AdGuardHome dan dijalankan sebagai layanan.  
 ```
 /opt/AdGuardHome/AdGuardHome -s status
 ```
