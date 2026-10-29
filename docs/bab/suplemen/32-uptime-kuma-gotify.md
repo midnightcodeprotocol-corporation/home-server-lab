@@ -194,10 +194,10 @@ tar czf /root/uptime-kuma-$(date +%F).tgz -C /opt/stacks uptime-kuma
 docker compose start
 ```
 > Penjelasan: Menyalakan kembali.
-4  
-# cd /opt/stacks/gotify && docker compose stop && tar czf /root/gotify-$(date +%F).tgz -C  
-/opt/stacks gotify && docker compose start  
-> Penjelasan: Hal yang sama untuk Gotify dalam satu baris. Arsip berisi .env (rahasia), simpan di tempat aman.
+```
+cd /opt/stacks/gotify && docker compose stop && tar czf /root/gotify-$(date +%F).tgz -C /opt/stacks gotify && docker compose start
+```
+> Penjelasan: Mengarsipkan Gotify dalam satu baris. Arsip berisi .env (rahasia), simpan di tempat aman.
 Salin arsip ke laptop atau HDD 2 TB (scp seperti di Suplemen 2 Bab 30.6). Pemulihan: ekstrak arsip ke  
 /opt/stacks lalu docker compose up -d di folder aplikasinya.  
 
