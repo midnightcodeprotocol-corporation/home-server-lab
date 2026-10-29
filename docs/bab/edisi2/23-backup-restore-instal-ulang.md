@@ -42,10 +42,11 @@ Backup VM tidak menyimpan pengaturan tingkat host. Simpan berkas berikut:
 
 **TERMINAL (login sebagai root)** | Shell Proxmox
 
-1  
-# tar czf /root/pve-host-config.tgz /etc/network/interfaces /etc/hosts \  
- /etc/resolv.conf /etc/pve/storage.cfg /etc/pve/user.cfg \  
- /etc/pve/jobs.cfg /etc/pve/firewall /etc/apt/sources.list.d  
+```
+tar czf /root/pve-host-config.tgz /etc/network/interfaces /etc/hosts \
+  /etc/resolv.conf /etc/pve/storage.cfg /etc/pve/user.cfg \
+  /etc/pve/jobs.cfg /etc/pve/firewall /etc/apt/sources.list.d
+```
 > Penjelasan: Mengarsipkan konfigurasi jaringan, storage, user, jadwal backup, firewall, dan repository.
 ```
 ls -lh /root/pve-host-config.tgz
