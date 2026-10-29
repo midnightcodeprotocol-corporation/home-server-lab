@@ -12,7 +12,7 @@ perangkat:
   - {nama: TP-Link LiteWave LS1005, peran: "switch"}
   - {nama: STB HG680 (Armbian v25.05.0, eMMC), peran: "AdGuard Home utama", ip: 192.168.88.253}
   - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, cpu: "i5-6500T", ram_gb_terpasang: 16, ram_cadangan_gb: [16, 8], nvme_gb: 500}
-  - {nama: "HDD Seagate Surveillance 2 TB (2 unit)", peran: "belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat"}
+  - {nama: "HDD Seagate Surveillance 2 TB (2 unit, 3.5 inci)", peran: "rencana awal: pakai satu unit melalui enclosure single-bay; unit kedua ditunda; belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat"}
   - {nama: "Laptop AMD Ryzen 3 4300U (RAM 19,4 GB)", peran: "laptop admin", ip: 192.168.88.252, catatan: "kabel via adaptor USB-LAN (ASIX)"}
 lain_dimiliki:
   - Ubiquiti UniFi U6 Lite
