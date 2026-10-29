@@ -89,12 +89,12 @@ dan nanti diserahkan ke Git (Bab 15).
 docker volume create portainer_data
 ```
 > Penjelasan: Membuat penyimpanan permanen untuk data Portainer.
-2  
-# docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always \  
- -v /var/run/docker.sock:/var/run/docker.sock \  
- -v portainer_data:/data portainer/portainer-ce:lts  
-> Penjelasan: Menjalankan Portainer CE. --restart=always agar hidup kembali setelah reboot. Akses ke
-docker.sock dibutuhkan agar Portainer bisa mengelola Docker.  
+```
+docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data portainer/portainer-ce:lts
+```
+> Penjelasan: Menjalankan Portainer CE. --restart=always agar hidup kembali setelah reboot. Akses ke docker.sock dibutuhkan agar Portainer bisa mengelola Docker.  
 ```
 docker ps
 ```
