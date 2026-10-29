@@ -34,9 +34,9 @@ berikut. Catat hasilnya; ini akan dipakai untuk memilih disk dan ukuran VM.
 
 **POWERSHELL WINDOWS** | PowerShell di M710q
 
-1  
-PS&gt; Get-CimInstance Win32_Processor | Select  
-Name,NumberOfCores,NumberOfLogicalProcessors,VirtualizationFirmwareEnabled  
+```powershell
+Get-CimInstance Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors, VirtualizationFirmwareEnabled
+```
 > Penjelasan: Menampilkan CPU, jumlah core, dan apakah virtualisasi sudah aktif di BIOS (True atau False).
 ```
 Get-CimInstance Win32_PhysicalMemory | Select Capacity,Speed,Manufacturer
