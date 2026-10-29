@@ -28,10 +28,3 @@
 | 24 | Disk data besar (foto, musik) dikecilkan awal agar muat di NVMe | NVMe hanya 500 GB | Ukuran contoh 200/300 GiB |
 | 25 | Profil RAM hanya untuk 16 GB; dengan 32 GB mode hemat menyala bersamaan | Sisa RAM cukup | Selalu memakai profil |
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
-| 20 | Mesin asli: Lenovo ThinkCentre M710q; Proxmox dipasang langsung dari USB | Mesin sudah ada | Lab nested VMware, instal ke disk dulu |
-| 21 | Hapus Model A (VMware) dan Model C dari buku (Revisi 3) | Tidak diperlukan lagi; mengurangi kebingungan | Menyimpannya sebagai opsi |
-| 22 | RAM: pasang 16 GB cadangan jadi 32 GB (16+16); 8 GB disimpan | Dua slot SO-DIMM; 32 GB muat mode hemat | 16+8 = 24 GB |
-| 23 | NVMe 500 GB untuk sistem dan VM; HDD 2 TB untuk datastore PBS | Backup harus di perangkat fisik berbeda dari data | Semua di NVMe |
-| 24 | Disk data besar (foto, musik) dikecilkan awal agar muat di NVMe | NVMe hanya 500 GB | Ukuran contoh 200/300 GiB |
-| 25 | Profil RAM hanya untuk 16 GB; dengan 32 GB mode hemat menyala bersamaan | Sisa RAM cukup | Selalu memakai profil |
-| 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
