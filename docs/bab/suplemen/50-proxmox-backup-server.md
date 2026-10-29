@@ -1,6 +1,6 @@
 # Bab 50. Proxmox Backup Server
 
-> **Revisi 3.** Datastore PBS memakai HDD 2 TB (Bab 27.4); contoh ukuran 200 GiB di bawah hanya patokan awal.
+> **Revisi 3.** Datastore PBS direncanakan memakai salah satu dari dua HDD Seagate Surveillance 2 TB (Bab 27.4); contoh ukuran 200 GiB di bawah hanya patokan awal.
 
 PENEMPATAN - BARU - VM sendiri  
 Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 9100).  
