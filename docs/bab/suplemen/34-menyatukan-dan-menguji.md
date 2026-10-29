@@ -33,15 +33,15 @@ halaman Homepage.
 
 ```
 - Monitoring:
- - Uptime Kuma:
- href: http://192.168.88.20:3001
- description: Uptime semua layanan
- - Beszel:
- href: http://192.168.88.20:8090
- description: CPU, RAM, disk, suhu
- - Gotify:
- href: http://192.168.88.20:8070
- description: Notifikasi ke HP
+    - Uptime Kuma:
+        href: http://192.168.88.20:3001
+        description: Uptime semua layanan
+    - Beszel:
+        href: http://192.168.88.20:8090
+        description: CPU, RAM, disk, suhu
+    - Gotify:
+        href: http://192.168.88.20:8070
+        description: Notifikasi ke HP
 ```
 
 ## 34.3 Backup dan rutinitas bulanan
