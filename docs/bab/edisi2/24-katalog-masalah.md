@@ -17,100 +17,36 @@ masalah jaringan.
 
 ## 24.2 Tabel masalah
 
-Gejala Penyebab Solusi Bab  
-[Nyata] Tidak bisa buka https:/  
-/192.168.100.2:8006  
-IP Proxmox beda jaringan  
-dengan laptop  
-Ubah address/gateway di interfaces  
-dan hosts, reboot  
-9.3  
-[Nyata] Layar nano kosong Nama berkas  
-interface bukan  
-interfaces  
-Ctrl+X, buka  
-/etc/network/interfaces  
-9.3  
-[Nyata] apt update: Temporary  
-failure resolving  
-DNS kosong/salah Isi System &gt; DNS, ping deb.debian.org 9.4  
-[Nyata] Tidak menemukan menu  
-Repositories  
-Ada di bawah Updates  
-pada node  
-Node &gt; Updates &gt; Repositories 9.5  
-[Nyata] Refresh sangat lambat (9  
-KB/s)  
-Internet lambat/WiFi Kabel LAN, mirror terdekat, jam sepi 9.6  
-[Nyata] Perintah sudo tidak  
-terbaca  
-Sudah root, sudo tidak  
-terpasang  
-Hapus sudo; di VM Debian gunakan su - 1.7  
-[Nyata] ipconfig /release  
-memutus WiFi  
-IP dilepas tanpa diminta  
-kembali  
-ipconfig /renew 3.9  
-[Nyata] STB punya dua instalasi  
-Armbian  
-eMMC lama dan SD baru lsblk, findmnt /, putuskan satu 12.2  
-[Nyata] Double NAT / router di  
-belakang router lain  
-Salah urutan perangkat Ikuti Gambar 1.1 3.9  
-USB tidak muncul di boot menu Mode boot/Secure  
-Boot/penulisan USB  
-Rufus DD mode, sesuaikan GPT/MBR,  
-matikan Secure Boot  
-6.4  
-Layanan web Proxmox mati  
-setelah ganti IP  
-/etc/hosts masih IP  
-lama  
-Perbarui hosts, cek hostname  
---ip-address  
-9.3  
-Error 401 pada repository  
-enterprise  
-Repo berbayar aktif Disable enterprise, tambah no-subscription 9.5  
-Container tidak dapat IP Reservasi/bridge/DHCP Cek lease MikroTik; IP statis 10.5  
-VM tak bisa start: KVM tidak  
-tersedia  
-VT-x belum aktif Aktifkan VT-x di BIOS (Bab 27.5), cek /dev/kvm 11  
-Peringatan cdrom saat apt update Sumber apt installer  
-tersisa  
-Beri tanda # pada baris cdrom 11.5  
-Port 53 sudah dipakai systemd-resolved  
-stub  
-DNSStubListener=no, restart 12.3  
-Subnet Tailscale tidak terjangkau Rute belum disetujui /  
-forwarding mati  
-Setujui rute, ip_forward=1 12.4  
-Satu perangkat masih  
-menampilkan iklan  
-DNS sendiri/lease lama Matikan Secure DNS, renew, aturan firewall  
-opsional  
-13.10  
-Portainer timed out Admin awal telat dibuat docker restart portainer 14.4  
-Docker permission denied User bukan root/grup  
-docker  
-Jadi root atau tambah ke grup docker 14.4  
-Forgejo: clone SSH gagal Port 2222 tidak diset SSH_PORT = 2222 di app.ini 15  
-Nextcloud: untrusted domain Domain belum terdaftar occ config:system:set  
-trusted_domains  
-16.3  
-HAOS tidak boot Secure Boot/boot order efidisk pre-enrolled-keys=0, boot  
-order=scsi0  
-18  
-Dashboard: Host validation failed Host belum di  
-ALLOWED_HOSTS  
-Tambahkan di compose.yaml 19  
-k3s NotReady RAM kurang Naikkan RAM VM, matikan VM lain 20  
-Flux: permission denied (publickey) Deploy key tanpa izin tulis Tambahkan deploy key dengan write  
-access  
-21  
-Renovate tidak membuat PR Izin bot / versi latest Collaborator + pin versi image 22  
-Restore sukses tapi tanpa jaringan Nama kartu fisik beda Ubah bridge-ports, ifreload -a 23  
+| Gejala | Penyebab | Solusi | Rujukan |
+|---|---|---|---|
+| [Nyata] Tidak bisa membuka `https://192.168.100.2:8006` | IP Proxmox beda jaringan dengan laptop | Sesuaikan alamat/gateway di `interfaces` dan `hosts`; verifikasi dari konsol sebelum reboot | Bab 9.3 |
+| [Nyata] Layar nano kosong saat mengedit jaringan | Nama berkas salah | Keluar tanpa menyimpan, lalu buka `/etc/network/interfaces` | Bab 9.3 |
+| [Nyata] `apt update`: Temporary failure resolving | DNS kosong atau salah | Periksa System > DNS dan uji resolusi nama | Bab 9.4 |
+| [Nyata] Tidak menemukan menu Repositories | Menu berada di bawah Updates | Buka Node > Updates > Repositories | Bab 9.5 |
+| [Nyata] Refresh sangat lambat (9 KB/s) | Internet lambat atau uplink WiFi | Gunakan kabel LAN, mirror terdekat, atau waktu sepi | Bab 9.6 |
+| [Nyata] Perintah `sudo` tidak terbaca | Sudah root; sudo tidak dipasang | Jangan gunakan sudo; di Debian masuk root dengan `su -` | Bab 1.7 |
+| [Nyata] `ipconfig /release` memutus WiFi | IP dilepas tanpa diminta kembali | Jalankan `ipconfig /renew` | Bab 3.9 |
+| [Nyata] STB punya dua instalasi Armbian | Instalasi lama di eMMC dan baru di SD | Periksa `lsblk` dan `findmnt /`; tentukan satu media | Bab 12.2 |
+| [Nyata] Double NAT / router di belakang router lain | Urutan perangkat salah | Ikuti topologi jaringan terbaru | Bab 3.9 dan docs/02 |
+| USB tidak muncul di boot menu | Mode boot, Secure Boot, atau penulisan USB | Periksa mode penulisan USB dan pengaturan boot sesuai panduan M710q | Bab 6.4, 27.5 |
+| Layanan web Proxmox mati setelah ganti IP | `/etc/hosts` masih memuat IP lama | Perbarui `hosts`, lalu periksa hostname dan `pveproxy` | Bab 9.3 |
+| Error 401 pada repository | Repository enterprise aktif | Nonaktifkan enterprise dan aktifkan no-subscription sesuai panduan | Bab 9.5 |
+| Container tidak mendapat IP | Reservasi, bridge, atau DHCP bermasalah | Periksa lease MikroTik, bridge, dan alamat yang ditetapkan | Bab 10.5 |
+| VM gagal start: KVM tidak tersedia | VT-x belum aktif | Aktifkan VT-x di BIOS dan periksa `/dev/kvm` | Bab 11, 27.5 |
+| Peringatan cdrom saat `apt update` | Sumber instalasi masih tersisa | Nonaktifkan baris cdrom di sumber APT | Bab 11.5 |
+| Port 53 dipakai systemd-resolved | DNS stub memakai port yang dibutuhkan AdGuard | Atur `DNSStubListener=no`, lalu mulai ulang layanan terkait | Bab 12.3 |
+| Subnet Tailscale tidak terjangkau | Rute belum disetujui atau IP forwarding mati | Setujui rute dan periksa `ip_forward=1` | Bab 26 |
+| Satu perangkat masih menampilkan iklan | DNS sendiri atau lease lama | Periksa Secure DNS, perbarui lease, lalu evaluasi aturan firewall | Bab 13.10 |
+| Portainer timeout saat setup | Admin awal terlambat dibuat | Mulai ulang Portainer dan segera selesaikan setup | Bab 14.4 |
+| Docker permission denied | Pengguna bukan root atau tidak punya izin socket | Jalankan sebagai root; jika memakai grup docker, pahami dampak hak aksesnya | Bab 14.4 |
+| Forgejo: clone SSH gagal | Port SSH Git salah | Pastikan `SSH_PORT = 2222` di konfigurasi Forgejo | Bab 15 |
+| Nextcloud: untrusted domain | Domain belum terdaftar | Tambahkan domain tepercaya melalui `occ` | Bab 16.3 |
+| Home Assistant OS tidak boot | Secure Boot atau urutan boot salah | Periksa konfigurasi EFI dan urutan disk VM | Bab 18 |
+| Dashboard: Host validation failed | Host belum diizinkan | Tambahkan nama host pada `ALLOWED_HOSTS` | Bab 19 |
+| k3s NotReady | RAM kurang atau sumber daya terbatas | Periksa RAM dan matikan VM yang tidak dipakai | Bab 20 |
+| Flux: permission denied (publickey) | Deploy key tidak punya izin tulis | Tambahkan deploy key dengan izin yang diperlukan | Bab 21 |
+| Renovate tidak membuat PR | Izin bot atau image tidak dipatok | Periksa izin akun bot dan tag versi image | Bab 22 |
+| Restore sukses tetapi jaringan gagal | Nama kartu jaringan fisik berubah | Cocokkan `bridge-ports` dengan nama kartu aktual sebelum menerapkan konfigurasi | Bab 23 |
 
 ## 24.3 Cara meminta bantuan dengan efektif
 
