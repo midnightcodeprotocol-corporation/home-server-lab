@@ -21,14 +21,26 @@
           password: GANTI
 - Server:
     - Proxmox:
-        href: https://192.168.88.10:8006
+        href: https://proxmox.home.arpa
         description: Hypervisor (ThinkCentre M710q)
         ping: 192.168.88.10
     - Portainer:
-        href: https://192.168.88.20:9443
+        href: https://portainer.home.arpa
         description: Manajemen Docker
+    - Uptime Kuma:
+        href: https://kuma.home.arpa
+        description: Monitoring layanan
+    - Beszel:
+        href: https://beszel.home.arpa
+        description: Monitoring host dan container
+    - Gotify:
+        href: https://gotify.home.arpa
+        description: Notifikasi
+    - Homepage:
+        href: https://dash.home.arpa
+        description: Dashboard server
     - Forgejo:
-        href: http://192.168.88.23:3000
+        href: https://git.home.arpa
         description: Git pribadi
     - AdGuard kedua:
         href: http://192.168.88.11
@@ -36,8 +48,20 @@
         ping: 192.168.88.11
 - Aplikasi:
     - Nextcloud:
-        href: http://192.168.88.26:8080
+        href: https://nextcloud.home.arpa
         description: Cloud pribadi
+    - AFFiNE:
+        href: https://affine.home.arpa
+        description: Catatan dan dokumen
+    - n8n:
+        href: https://n8n.home.arpa
+        description: Otomasi alur kerja
+    - WordPress:
+        href: https://wp.home.arpa
+        description: Situs dan blog privat
+    - Situs statis:
+        href: https://web.home.arpa
+        description: Situs privat
     - Home Assistant:
         href: http://192.168.88.21:8123
         description: Otomasi rumah
