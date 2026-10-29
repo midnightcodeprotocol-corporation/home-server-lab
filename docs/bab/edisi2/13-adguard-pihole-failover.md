@@ -126,9 +126,10 @@ perangkat dan pengaturan per klien tidak lagi berguna.
 apt update && apt install -y curl
 ```
 > Penjelasan: Memasang curl (jika belum).
-2  
-# U=https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts  
- curl -s -S -L $U/install.sh | sh -s -- -v  
+```
+U=https://raw.githubusercontent.com/AdguardTeam/AdGuardHome/master/scripts
+curl -s -S -L "$U/install.sh" | sh -s -- -v
+```
 > Penjelasan: Memasang AdGuard Home di /opt/AdGuardHome.
 ```
 ss -tulpn | grep :53
