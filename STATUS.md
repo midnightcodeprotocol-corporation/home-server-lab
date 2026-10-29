@@ -27,6 +27,7 @@
 - Repo dirapikan: README diperluas dengan diagram jaringan dan status aktual vs target.
 - Duplikasi pada `docs/00-ide-awal.md` dan `docs/08-keputusan.md` dihapus; pohon repo di `docs/03-pohon.md` diselaraskan.
 - Konflik lama terkait Tailscale di STB HG680 ditandai dan diselaraskan dengan rancangan terbaru.
-- Contoh firewall Bab 51, blok instalasi Docker Bab 49, Caddyfile Bab 36, dan YAML Homepage Bab 34 dirapikan.
+- Contoh firewall Bab 51, blok instalasi Docker Bab 49, Caddyfile dan batas jaringan Docker Bab 36, YAML Homepage Bab 34, serta beberapa contoh perintah Bab 41–47 dirapikan.
+- Vaultwarden dan konektor Cloudflare diarahkan memakai tag image yang diverifikasi/dipatok; tag yang dipilih tetap perlu dicek saat implementasi.
 - Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru.
 - Belum ada perintah panduan yang dijalankan di M710q; audit materi lainnya masih berlangsung.
