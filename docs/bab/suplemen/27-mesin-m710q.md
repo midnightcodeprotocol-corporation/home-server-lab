@@ -11,7 +11,7 @@ Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat s
 | CPU | 64-bit dengan VT-x/AMD-V, 4 core disarankan | Core i5-6500T, 4 core / 4 thread, VT-x dan VT-d | Lulus |
 | RAM | 16 GB atau lebih | 16 GB terpasang; cadangan 16 GB dan 8 GB | Lulus (target 32 GB) |
 | Disk sistem | SSD 120 GB atau lebih | NVMe M.2 500 GB | Lulus |
-| Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB | Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat |
+| Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat; perlu enclosure bertenaga |
 | Jaringan | 1 port LAN kabel | 1 Gigabit Ethernet (Intel) | Lulus |
 
 Spesifikasi di atas adalah patokan umum model M710q; **cek label RAM, tipe slot, dan ketebalan disk pada unit Anda sendiri** sebelum membeli atau memasang.
@@ -104,7 +104,7 @@ HDMI jalan
 | Pustaka musik (VM 211) | NVMe atau HDD, 80-100 GiB | 80 GiB |
 | Datastore PBS (VM 212) | **HDD 2 TB** | 1-1,5 TB |
 
-**Memasang salah satu HDD.** Anda memiliki dua HDD Seagate Surveillance 2 TB; model dan ukuran fisik tiap unit belum dicatat, dan setidaknya satu belum diformat. M710q punya satu bay SATA 2,5". Periksa label masing-masing sebelum memilih: drive 3,5" tidak muat di bay ini dan memerlukan casing/dock USB bertenaga sendiri; drive 2,5" yang tebal (15 mm) biasanya juga tidak muat. Pilih paling banyak satu sebagai calon datastore PBS setelah kondisi dan koneksinya diverifikasi; peran unit kedua belum ditentukan. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat membuat datastore.
+**Menghubungkan salah satu HDD.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; model tiap unit belum dicatat dan setidaknya satu belum diformat. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi kedua HDD tidak muat di dalamnya. Gunakan enclosure/dock USB dua-bay dengan catu daya sendiri dan mode JBOD/individual agar Proxmox melihat kedua disk terpisah. Pilih paling banyak satu sebagai calon datastore PBS setelah kondisi dan koneksinya diverifikasi; peran unit kedua belum ditentukan. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat membuat datastore.
 
 > Disk tunggal bukan backup. Backup VM ke HDD 2 TB (Bab 50), ditambah satu salinan lagi di media lain (Bab 50.13).
 
