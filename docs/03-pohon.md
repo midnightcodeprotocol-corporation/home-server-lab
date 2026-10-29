@@ -12,7 +12,7 @@ IndiHome (WiFi)
         ├── ether4   STB 1 HG680  .253  AdGuard Home utama
         ├── TL-WR820N (AP)  .2  -> WiFi rumah -> HP, laptop, TV, dll.
         └── Switch LiteWave LS1005
-            ├── Proxmox  .10  (ThinkCentre M710q)  (ThinkCentre M710q)
+            ├── Proxmox  .10  (ThinkCentre M710q)
             │   ├── CT101 adguard2   .11
             │   ├── CT102 files      .12  (Samba)
             │   ├── CT103 ts-router
@@ -93,21 +93,31 @@ Urutan uji yang disarankan: Jaringan (Bab 3) -> Proxmox -> STB AdGuard -> DNS fa
 └── immich/       docker-compose.yml  docker-compose.override.yml  .env  postgres/   (foto di /srv/foto/library)
 ```
 
-## 4. Pohon repo ini
+## 4. Pohon repo
 
 ```
 home-server-lab/
-├── README.md
-├── .gitignore
+├── README.md                 ringkasan, arsitektur, dan navigasi
+├── AGENTS.md                 panduan kerja untuk asisten
+├── STATUS.md                 posisi proyek dan langkah berikutnya
+├── data/                     data perangkat dan guest (YAML)
 ├── docs/
-│   ├── 00-ide-awal.md            01-ide-akhir.md
-│   ├── 02-rangkaian-koneksi.md   03-pohon.md
-│   ├── 04-board.md               05-inventaris-perangkat.md
-│   ├── 06-dasar-konsep.md        07-port-dan-akses.md
-│   ├── 08-keputusan.md
-│   └── buku/   PDF Edisi 2 + Suplemen 1-9
-├── catatan/
-│   ├── belum-pasti.md   hasil-uji.md   kasus-nyata-lab.md
+│   ├── 00-10-*.md            konteks, arsitektur, jaringan, keputusan, status awal
+│   ├── 11-rencana-kerja-ai-ssh.md
+│   ├── bab/
+│   │   ├── edisi2/            Bab 1-24 dan lampiran
+│   │   ├── suplemen/          Bab 25-56 dan pengantar/penutup
+│   │   ├── REVISI-3.md
+│   │   └── arsip/             bila tersedia, materi historis
+│   └── arsip/                 dokumen lama
+├── catatan/                   hasil uji, belum pasti, kasus nyata
 └── konfigurasi/
-    ├── caddy/  firewall/  skrip/  contoh-env/
+    ├── server/                konfigurasi layanan
+    ├── gitops/                Flux, Kustomize, SOPS, Renovate
+    ├── caddy/                 reverse proxy
+    ├── firewall/              aturan jaringan
+    ├── skrip/                 otomasi host/layanan
+    └── contoh-env/            contoh variabel lingkungan
 ```
+
+Pohon ini menjelaskan **pengelompokan dokumentasi**, bukan bukti bahwa semua layanan sudah berjalan. Untuk kondisi aktual, rujuk `STATUS.md`; untuk daftar guest terstruktur, rujuk `data/guest.yaml`.
