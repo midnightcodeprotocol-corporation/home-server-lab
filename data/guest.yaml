@@ -8,7 +8,7 @@ host:
   ram_cadangan_gb: [16, 8]
   ram_target_gb: 32
   disk_sistem: NVMe 500 GB (ext4, local-lvm)
-  disk_data: HDD 2 TB (datastore PBS / backup)
+  disk_data: 2 x Seagate Surveillance HDD 2 TB (belum dipasang; peruntukan belum ditetapkan)
   docker_di_host: false
 templat:
   - {vmid: 9100, nama: tpl-debian-docker, catatan: "Debian 13 + Docker; tidak dinyalakan"}
