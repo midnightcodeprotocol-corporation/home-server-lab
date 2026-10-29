@@ -159,12 +159,11 @@ grep -n 2283 docker-compose.yml
 ```
 > Penjelasan: Mencari baris yang menerbitkan port 2283. Bentuknya biasanya 2283:2283 (dalam tanda kutip) pada
 layanan immich-server.  
-6  
-# sed -i "s/\"2283:2283\"/\"127.0.0.1:2283:2283\"/" docker-compose.yml && grep -n 2283  
-docker-compose.yml  
-> Penjelasan: Mengikat port ke 127.0.0.1 agar tidak terbuka di LAN (Tailscale Serve meneruskan ke sini). Bila hasil
-grep tidak berubah, bentuk barisnya berbeda; ubah dengan nano. Ulangi setelah mengunduh compose baru  
-saat pembaruan.  
+```
+sed -i 's/"2283:2283"/"127.0.0.1:2283:2283"/' docker-compose.yml
+grep -n 2283 docker-compose.yml
+```
+> Penjelasan: Mengikat port ke 127.0.0.1 agar tidak terbuka di LAN (Tailscale Serve meneruskan ke sini). Bila hasil grep tidak berubah, bentuk barisnya berbeda; ubah dengan nano. Ulangi setelah mengunduh compose baru saat pembaruan.  
 ```
 nano docker-compose.override.yml
 ```
