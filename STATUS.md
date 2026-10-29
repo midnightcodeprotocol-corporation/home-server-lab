@@ -5,7 +5,7 @@
 > Keadaan server di bawah ini terakhir diverifikasi pada 28 Oktober 2026. Pada 30 Oktober pengguna melaporkan memiliki dua HDD Seagate Surveillance 2 TB; unit belum diperiksa langsung. Tidak ada perubahan pada server.
 
 ## Posisi sekarang
-- Mesin asli sudah ada: **Lenovo ThinkCentre M710q** (i5-6500T, RAM 16 GB terpasang, NVMe 500 GB). RAM cadangan 16 GB dan 8 GB belum dipasang. Dua HDD Seagate Surveillance 2 TB belum dipasang ke server; model tiap unit belum dicatat dan setidaknya satu belum diformat.
+- Mesin asli sudah ada: **Lenovo ThinkCentre M710q** (i5-6500T, RAM 16 GB terpasang, NVMe 500 GB). RAM cadangan 16 GB dan 8 GB belum dipasang. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum dipasang ke server; model tiap unit belum dicatat, setidaknya satu belum diformat, dan keduanya perlu enclosure bertenaga.
 - Buku sudah direvisi ke **Revisi 3** (tanpa VMware dan tanpa instal-ke-disk-dulu). Lihat `docs/bab/REVISI-3.md`.
 - **Proxmox belum diinstal di M710q.** Jaringan rumah (MikroTik, AP, STB AdGuard) sudah jalan sejak Oktober 2026.
 - Tailscale **ditunda** sampai STB 2 tiba (bab 26 memakai CT103 di Proxmox sebagai gantinya; keputusan dapat ditinjau ulang).
@@ -18,7 +18,7 @@
 5. Keamanan dan Tailscale (Bab 25, 26), lalu lanjut sesuai `docs/04-board.md`.
 
 ## Masalah terbuka
-- Verifikasi model, ukuran fisik, dan kebutuhan daya kedua HDD; tentukan penempatan data/backup dan uji kesehatan sebelum dipakai (Bab 27.4).
+- Verifikasi model, kebutuhan daya enclosure, serta kesehatan kedua HDD; tentukan penempatan data/backup sebelum dipakai (Bab 27.4).
 - Ukuran disk data contoh (musik, foto, PBS) terlalu besar untuk NVMe 500 GB: Bab 27.4.
 - Nama menu BIOS Lenovo dan nama kartu LAN (`enp0s31f6` hanyalah contoh) harus dicocokkan di mesin.
 - Semua isi buku belum diuji: lihat `catatan/hasil-uji.md`.
