@@ -28,7 +28,8 @@
 - Duplikasi pada `docs/00-ide-awal.md` dan `docs/08-keputusan.md` dihapus; pohon repo di `docs/03-pohon.md` diselaraskan.
 - Konflik lama terkait Tailscale di STB HG680 ditandai dan diselaraskan dengan rancangan terbaru.
 - Contoh firewall Bab 51, blok instalasi Docker Bab 49, Caddyfile dan batas jaringan Docker Bab 36, YAML Homepage Bab 34, serta beberapa contoh perintah Bab 41–47 dirapikan.
-- Vaultwarden dan konektor Cloudflare diarahkan memakai tag image yang diverifikasi/dipatok; tag yang dipilih tetap perlu dicek saat implementasi.
+- Konfigurasi Vaultwarden dan Cloudflare Tunnel memakai variabel versi; nilai versi perlu diverifikasi dan diisi saat implementasi. Token Cloudflare tetap hanya disimpan lokal di `.env`.
 - Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru; blok perintah yang rusak di Bab 11–14, 16, 18, 21, 23–25, 27, 32, 37, 41–47, 49–55 telah dirapikan.
 - Katalog masalah Bab 24 diubah menjadi tabel Markdown; `AGENTS.md` diselaraskan dengan status Proxmox belum terpasang, status Tailscale, dan alur koordinasi SSH.
-- Belum ada perintah panduan yang dijalankan di M710q; audit materi lainnya masih berlangsung.
+- Audit statis repo dilanjutkan pada 30 Oktober: Compose Homepage diperbaiki, Cloudflared memakai variabel versi, Caddyfile operasional ditambahkan, stack Kuma/Gotify/Beszel disambungkan ke jaringan proxy, dan tautan Homepage memakai nama HTTPS Caddy. Contoh Bab 34 dan Bab 36 diselaraskan.
+- Audit ini hanya membaca dan memperbarui file GitHub. Tidak ada konfigurasi yang diterapkan atau diuji di server; nama versi image dan semua langkah tetap perlu diverifikasi saat pemasangan di M710q.
