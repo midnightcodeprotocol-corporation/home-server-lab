@@ -6,10 +6,7 @@ Alasan: Tailscale adalah pintu masuk dari luar. Bila digabung dengan Docker, keb
 lain. LXC ringan, hidup terpisah, dan nanti pindah ke STB 2.  
 Perubahan: Pada tabel 26.2, pilihan B (VM 192.168.88.20) tidak dipakai lagi; pakai C. Langkah di bawah sama; LXC  
 perlu perangkat /dev/net/tun (Edisi 2 Bab 13.8). Tailscale tetap tidak dipasang di host Proxmox.  
-Tailscale membuat jaringan privat antar perangkat Anda lewat internet tanpa membuka port di router. Edisi 2 Bab  
-12.4 sudah memasangnya di STB. Bab ini melengkapinya: memilih perangkat yang tepat, langkah di sisi server,  
-langkah di sisi laptop dan HP, kebijakan akses, DNS, dan cara membuktikan bahwa semuanya bekerja dari luar  
-rumah.  
+Tailscale membuat jaringan privat antarperangkat melalui internet tanpa membuka port di router. Bab ini menjelaskan rancangan akses jarak jauh, pemilihan subnet router, konfigurasi server dan klien, kebijakan akses, DNS, serta pengujian dari luar rumah. **Status proyek: Tailscale belum diterapkan; STB 1 tetap khusus AdGuard Home.**
 
 ## 26.1 Cara kerja dalam satu gambar
 
@@ -78,9 +75,7 @@ sekarang
 Sudah selalu hidup STB 1 seharusnya khusus AdGuard  
 agar DNS rumah stabil  
 CATATAN  
-Jalur yang dipakai buku ini: pilihan B sekarang, lalu pindah ke A saat STB 2 tiba (Suplemen 6), dengan C sebagai  
-cadangan. Dua perangkat boleh mengumumkan rute yang sama; Tailscale memakai yang hidup. Langkah di bawah  
-berlaku sama untuk A, B, dan C.  
+Rancangan proyek: gunakan CT103 sebagai subnet router bila akses Tailscale diperlukan sebelum STB 2 tersedia; setelah STB 2 siap, pindahkan peran utama ke STB 2 dan CT103 dapat dipertahankan sebagai cadangan. Saat ini Proxmox belum diinstal dan Tailscale belum berjalan, jadi jangan menjalankan langkah server sebelum host serta perangkat pilihan dikonfirmasi. Dua router dapat mengiklankan rute yang sama hanya setelah failover dikonfigurasi dan diuji.
 KEAMANAN  
 Tailscale tidak dipasang di host Proxmox. Host virtualisasi sebaiknya tidak memiliki jalan masuk tambahan; akses  
 ke Proxmox cukup lewat subnet router.  
