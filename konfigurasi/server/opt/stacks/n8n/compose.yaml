@@ -7,9 +7,9 @@ services:
       POSTGRES_USER: n8n
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: n8n
-      PGDATA: /var/lib/postgresql/data
+      PGDATA: /var/lib/postgresql/18/docker
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./db:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -h localhost -U n8n -d n8n"]
       interval: 5s
