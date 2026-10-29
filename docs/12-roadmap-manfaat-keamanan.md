@@ -49,6 +49,7 @@ Urutan awal yang masuk akal:
 
 ## Rujukan resmi
 
+- [Proxmox VE Administration Guide](https://pve.proxmox.com/pve-docs/pve-admin-guide.pdf)
 - [Tailscale: syntax kebijakan akses](https://tailscale.com/docs/reference/syntax/policy-file)
 - [Proxmox Backup Server: enkripsi dan sinkronisasi datastore](https://pbs.proxmox.com/docs/faq.html)
 - [Proxmox Backup Server: penyimpanan datastore](https://pbs.proxmox.com/docs/storage.html)
