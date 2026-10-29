@@ -1,6 +1,6 @@
 # 05 - Inventaris perangkat
 
-  Perangkat   Peran | Alamat / catatan |
+| Perangkat | Peran | Alamat / catatan |
 |---|---|---|
 | IndiHome | Sumber internet | Tidak ada kabel LAN yang bisa dipakai; uplink WiFi |
 | TP-Link TL-WR840N v6.20 | Penerima (mode WISP) | LAN 192.168.0.1 |
@@ -11,7 +11,7 @@
 | STB 2 | Tailscale subnet router (rencana) | Belum tiba; usulan 192.168.88.250 |
 | **Lenovo ThinkCentre M710q** | **Server Proxmox** | **192.168.88.10; Core i5-6500T (4 core/4 thread); RAM 16 GB terpasang; NVMe M.2 500 GB** |
 | RAM cadangan 16 GB dan 8 GB | Suku cadang / penambah RAM | Rencana: 16+16 = 32 GB; 8 GB disimpan (slot hanya dua) |
-| 2 × HDD Seagate Surveillance 2 TB | Calon disk data / backup; belum dialokasikan | Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat. Verifikasi ukuran fisik dan kebutuhan daya sebelum menentukan penempatan. |
+| 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Rencana awal memakai satu unit; peran data/backup belum ditetapkan | Enclosure yang tersedia single-bay; HDD kedua ditunda. Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat. |
 | Laptop (AMD Ryzen 3 4300U, RAM 19,4 GB) | Laptop admin | 192.168.88.252 via adaptor USB-LAN (ASIX); WinBox, browser, SSH |
 
 ## Perangkat lain yang dimiliki (belum berperan)
