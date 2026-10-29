@@ -123,11 +123,10 @@ crontab -e
 
 **TERMINAL (login sebagai root)** | VM Debian 13 (root)
 
-1  
-# docker exec -u www-data nextcloud \  
- php occ config:system:set trusted_domains 2 --value=nextcloud.lan  
-> Penjelasan: Menambah nama nextcloud.lan ke daftar domain tepercaya. Ulangi dengan angka 3, 4 untuk
-nama lain.  
+```
+docker exec -u www-data nextcloud php occ config:system:set trusted_domains 2 --value=nextcloud.lan
+```
+> Penjelasan: Menambah nama nextcloud.lan ke daftar domain tepercaya. Ulangi dengan angka 3, 4 untuk nama lain.  
 
 ## 16.4 Konfigurasi di MikroTik dan jaringan
 
