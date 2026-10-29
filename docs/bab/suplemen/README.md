@@ -2,6 +2,8 @@
 
 Diekstrak dari teks buku dan direvisi (Revisi 3: tanpa VMware dan tanpa instal-ke-disk-dulu; mesin asli ThinkCentre M710q).
 
+Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
+
 - [Bab 25. Keamanan Dasar Server](25-keamanan-dasar.md)
 - [Bab 26. Tailscale: Akses Aman dari Mana Saja](26-tailscale.md)
 - [Bab 27. Mesin Anda: Lenovo ThinkCentre M710q](27-mesin-m710q.md)
