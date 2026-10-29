@@ -189,11 +189,10 @@ dan penyimpanan
 
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
-1  
-# tar czf /root/pve-config-$(date +%F).tgz /etc/pve /etc/network/interfaces /etc/hosts  
-/etc/fstab  
-> Penjelasan: Mengarsipkan konfigurasi host (termasuk kunci enkripsi backup di /etc/pve/priv). Perlakukan sebagai
-rahasia.  
+```
+tar czf /root/pve-config-$(date +%F).tgz /etc/pve /etc/network/interfaces /etc/hosts /etc/fstab
+```
+> Penjelasan: Mengarsipkan konfigurasi host (termasuk kunci enkripsi backup di /etc/pve/priv). Perlakukan sebagai rahasia.  
 
 **POWERSHELL WINDOWS** | PowerShell (laptop)
 
