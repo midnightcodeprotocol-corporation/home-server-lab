@@ -32,4 +32,4 @@
 - Indeks Edisi 2 kini mengarahkan ke status dan peta guest terbaru; blok perintah yang rusak di Bab 11–14, 16, 18, 21, 23–25, 27, 32, 37, 41–47, 49–55 telah dirapikan.
 - Katalog masalah Bab 24 diubah menjadi tabel Markdown; `AGENTS.md` diselaraskan dengan status Proxmox belum terpasang, status Tailscale, dan alur koordinasi SSH.
 - Audit statis repo dilanjutkan pada 30 Oktober: Compose Homepage diperbaiki, Cloudflared memakai variabel versi, Caddyfile operasional ditambahkan, stack Kuma/Gotify/Beszel disambungkan ke jaringan proxy, dan tautan Homepage memakai nama HTTPS Caddy. Contoh Bab 34 dan Bab 36 diselaraskan.
-- Audit ini hanya membaca dan memperbarui file GitHub. Tidak ada konfigurasi yang diterapkan atau diuji di server; nama versi image dan semua langkah tetap perlu diverifikasi saat pemasangan di M710q.
+- Audit ini memperbarui dokumentasi dan konfigurasi repo GitHub serta salinan lokal `05-Local-REPO`. Tidak ada konfigurasi yang diterapkan atau diuji di server; nilai versi image dan langkah implementasi tetap perlu diverifikasi saat pemasangan di M710q.
