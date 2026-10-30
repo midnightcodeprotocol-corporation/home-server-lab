@@ -5,6 +5,7 @@
 > Keadaan server di bawah ini terakhir diverifikasi pada 28 Oktober 2026. Pada 30 Oktober pengguna melaporkan memiliki dua HDD Seagate Surveillance 2 TB; unit belum diperiksa langsung. Tidak ada perubahan pada server.
 
 ## Posisi sekarang
+- Buku utama **Edisi Terpadu 1.0** selesai disusun pada 30 Oktober 2026; sumber ada di `docs/panduan-lengkap-home-server-lab.md`, PDF lokal di `06-Book`. Langkah server di buku masih belum diuji karena Proxmox belum diinstal.
 - Mesin asli sudah ada: **Lenovo ThinkCentre M710q** (i5-6500T, RAM 16 GB terpasang, NVMe 500 GB). RAM cadangan 16 GB dan 8 GB belum dipasang. Ada dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci. Rencana sementara memakai satu unit melalui enclosure single-bay yang tersedia dan menunda unit kedua. Belum ada yang dipasang; model tiap unit belum dicatat dan setidaknya satu belum diformat.
 - Buku sudah direvisi ke **Revisi 3** (tanpa VMware dan tanpa instal-ke-disk-dulu). Lihat `docs/bab/REVISI-3.md`.
 - **Proxmox belum diinstal di M710q.** Jaringan rumah (MikroTik, AP, STB AdGuard) sudah jalan sejak Oktober 2026.
