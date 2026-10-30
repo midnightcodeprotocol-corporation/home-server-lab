@@ -804,12 +804,7 @@ docker compose logs --tail=100
 ```
 Log terbaru stack. Saring rahasia sebelum dibagikan.
 
-```bash
-df -h
-```
-Ruang filesystem.
-
-Jangan jalankan perintah destruktif dari internet tanpa memahami setiap opsi. Hati-hati khususnya `mkfs`, `wipefs`, `dd`, `rm -rf`, `docker compose down -v`, `qm destroy`, dan perubahan firewall/jaringan.
+Jangan menjalankan `mkfs`, `wipefs`, `dd`, `rm -rf`, `docker compose down -v`, `qm destroy`, atau mengubah firewall/jaringan sebelum dampak dan langkah pembatalannya jelas.
 
 ## Lampiran C. Glosarium singkat
 
