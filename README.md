@@ -13,7 +13,7 @@ Fakta server terakhir diverifikasi **28 Oktober 2026**; catatan proyek diperbaru
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, NVMe 500 GB. Modul RAM cadangan 16 GB dan 8 GB belum dipasang; targetnya 32 GB (16+16).
 - Ada **dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci**. Rencana sementara: mulai dengan satu unit melalui enclosure single-bay yang tersedia; HDD kedua ditunda. Model tiap unit belum dicatat, setidaknya satu belum diformat, dan belum ada yang dipasang ke server.
 - **Proxmox belum diinstal** di M710q. Langkah berikutnya: pasang RAM 16 GB, jalankan MemTest86, atur BIOS, lalu instal Proxmox.
-- Buku panduan Bab 1–56 sudah ditulis, tetapi **belum diuji di mesin asli**. Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
+- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap sudah digabung menjadi edisi 235 halaman, tetapi **belum diuji di mesin asli**. Sumber lengkap dan langkah build ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) dan [tools/build_handbook.py](tools/build_handbook.py). Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
 Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
@@ -90,7 +90,7 @@ Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara ada
 
 ## Mulai menjelajahi repo
 
-Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Terpadu 1.0](docs/panduan-lengkap-home-server-lab.md). PDF siap baca dan salinan sumber Markdown ada di folder lokal `06-Book`.
+Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/panduan-lengkap-home-server-lab.md). PDF 235 halaman dan salinan Markdown siap baca ada di folder lokal `06-Book`; buku 32 halaman diberi status panduan ringkas.
 
 1. Baca [tujuan awal](docs/00-ide-awal.md) dan [arsitektur target](docs/01-ide-akhir.md).
 2. Lihat [status dan langkah berikutnya](STATUS.md), lalu [urutan hari pertama di M710q](docs/09-mulai-di-m710q.md).
@@ -131,3 +131,5 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Terpadu 1.0](docs/p
 
 - **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
 - **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
+
+
