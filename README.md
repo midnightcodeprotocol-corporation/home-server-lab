@@ -90,6 +90,8 @@ Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara ada
 
 ## Mulai menjelajahi repo
 
+Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Terpadu 1.0](docs/panduan-lengkap-home-server-lab.md). PDF siap baca dan salinan sumber Markdown ada di folder lokal `06-Book`.
+
 1. Baca [tujuan awal](docs/00-ide-awal.md) dan [arsitektur target](docs/01-ide-akhir.md).
 2. Lihat [status dan langkah berikutnya](STATUS.md), lalu [urutan hari pertama di M710q](docs/09-mulai-di-m710q.md).
 3. Gunakan [board proyek](docs/04-board.md) untuk melihat fase dan backlog.
@@ -103,6 +105,7 @@ Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara ada
 | `docs/00-ide-awal.md` – `docs/10-konteks-proyek.md` | Tujuan, arsitektur, diagram jaringan, perangkat, konsep, port, keputusan, status awal, dan preferensi kerja |
 | `docs/11-rencana-kerja-ai-ssh.md` | Koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
 | [docs/12-roadmap-manfaat-keamanan.md](docs/12-roadmap-manfaat-keamanan.md) | Prioritas peningkatan kegunaan, keamanan, backup, pemantauan, dan segmentasi jaringan |
+| [docs/panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) | Sumber buku pemula terpadu, langkah kerja, diagram, checklist, perintah, serta syarat lulus tiap fase |
 | `docs/bab/edisi2/` | Instalasi Proxmox, jaringan, VM/LXC, Docker, Git, Home Assistant, dan dasar layanan |
 | `docs/bab/suplemen/` | Keamanan, Tailscale, M710q, monitoring, Caddy, web, aplikasi, penempatan, PBS, firewall, audit, foto, dan profil RAM |
 | `konfigurasi/` | Contoh konfigurasi server, GitOps, Caddy, firewall, skrip, dan contoh environment |
