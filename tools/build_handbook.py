@@ -25,7 +25,7 @@ from reportlab.platypus.tableofcontents import TableOfContents
 
 ROOT = Path(__file__).resolve().parents[1]
 EDITION = "Edisi Terpadu 2026.10"
-DATE = "30 Oktober 2026"
+DATE = "31 Oktober 2026"
 
 EDISI2_INDEX = ROOT / "docs/bab/edisi2/README.md"
 SUPPLEMENT_INDEX = ROOT / "docs/bab/suplemen/README.md"
@@ -71,11 +71,11 @@ def source_content() -> str:
 
     parts = ["""# Buku Panduan Lengkap Home Server Lab
 
-## Edisi Terpadu 2026.10 - 30 Oktober 2026
+## Edisi Terpadu 2026.10 - 31 Oktober 2026
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual:** jaringan rumah sudah berjalan; Proxmox belum dipasang. ThinkCentre M710q memakai RAM 16 GB dan NVMe 500 GB. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum dipasang; rencana awal menggunakan satu HDD melalui enclosure single-bay. Semua bagian yang bergantung pada server diberi label rencana sampai pengujian nyata dicatat.
+> **Status aktual:** jaringan rumah sudah berjalan; Proxmox belum dipasang. RAM M710q dilaporkan 1×16 GB + 1×8 GB (total yang diharapkan 24 GB); BIOS dan MemTest86 belum dikonfirmasi. SSD NVMe M.2 500 GB terpasang di slot 1, tetapi partisi dan isinya harus diperiksa sebelum instalasi. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum dipasang; rencana awal menggunakan satu HDD melalui enclosure single-bay. Semua bagian yang bergantung pada server diberi label rencana sampai pengujian nyata dicatat.
 
 ## Sebelum mulai
 
@@ -119,7 +119,7 @@ Koreksi audit Revisi 4 mengatur kebijakan Tailscale untuk grup admin, memperbaik
 | TP-Link TL-WR820N | Access Point | Mode AP di belakang MikroTik untuk WiFi rumah. |
 | TP-Link LiteWave LS1005 | Switch | Memperbanyak port LAN. |
 | STB HG680 (Armbian) | DNS utama + Tailscale | AdGuard Home dan Tailscale, selalu hidup, di luar Proxmox. |
-| Lenovo ThinkCentre M710q | Server Proxmox | Core i5-6500T, RAM 16 GB terpasang (cadangan 16 GB dan 8 GB; target 32 GB), NVMe 500 GB. |
+| Lenovo ThinkCentre M710q | Server Proxmox | Core i5-6500T; RAM dilaporkan 1×16 GB + 1×8 GB (24 GB, BIOS/MemTest belum diverifikasi); NVMe M.2 500 GB terpasang di slot 1, Proxmox belum diinstal. |
 | HDD 2 TB | Disk data / backup | Disk kedua (bay 2,5\" atau USB), dipakai untuk datastore backup. |
 
 """),
@@ -300,7 +300,7 @@ def cover():
             lines=["Proxmox VE / Lenovo ThinkCentre M710q","MikroTik / Debian / Docker / backup / keamanan",f"56 bab + lampiran + 9 panduan fase",f"{EDITION} / {DATE}"]
             c.setFillColor(colors.HexColor("#E3EDF3"));c.setFont("Vera",8)
             for i,line in enumerate(lines):c.drawString(14*mm,h-119*mm-i*8*mm,line)
-            c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 30 OKTOBER 2026")
+            c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 31 OKTOBER 2026")
             c.setFont("Vera",7.2)
             for i,line in enumerate(["Jaringan rumah berjalan. Proxmox belum dipasang.","Server, storage, Tailscale, dan aplikasi dalam bagian berikut", "adalah rencana hingga hasil uji nyata tercatat."]):c.drawString(19*mm,54*mm-i*5*mm,line)
     return [Spacer(1,4*mm),Cover(),PageBreak()]
