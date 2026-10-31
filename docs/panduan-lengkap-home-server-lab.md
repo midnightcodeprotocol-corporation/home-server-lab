@@ -2,6 +2,8 @@
 
 ## Edisi lengkap 2026
 
+Status perangkat diperbarui 31 Oktober 2026; PDF lokal tetap 235 halaman.
+
 Buku lengkap terdiri dari Bab 1–56 (hanya nomor yang memang ada di repo), lampiran, pengantar dan penutup fase, diagram, panduan perintah, keamanan, backup, pemecahan masalah, dan roadmap. Versi PDF siap baca berjumlah 235 halaman dan Markdown gabungan tersedia di folder lokal `06-Book/`. Generatornya adalah `tools/build_handbook.py`.
 
 - PDF lengkap: `06-Book/Panduan_Lengkap_Home_Server_Lab_Edisi_Lengkap_2026.pdf`
@@ -15,7 +17,7 @@ Buku lengkap menggantikan panduan ringkas 32 halaman sebagai rujukan utama. Edis
 
 ## Status dan batas penggunaan
 
-Jaringan rumah sudah berjalan, tetapi Proxmox belum dipasang pada ThinkCentre M710q. Storage, guest, layanan, backup, firewall host, Tailscale, dan prosedur pemulihan di buku adalah rencana hingga diterapkan serta diuji. Jangan anggap konfigurasi sebagai bukti operasional. Catat hasil nyata di [`catatan/hasil-uji.md`](../catatan/hasil-uji.md).
+Jaringan rumah sudah berjalan, tetapi Proxmox belum dipasang pada ThinkCentre M710q. RAM dilaporkan 16+8 GB (total yang diharapkan 24 GB; BIOS/MemTest86 belum dikonfirmasi), dan SSD NVMe M.2 500 GB terpasang pada slot 1. Periksa isi/partisi disk sebelum instalasi. Storage, guest, layanan, backup, firewall host, Tailscale, dan prosedur pemulihan di buku adalah rencana hingga diterapkan serta diuji. Jangan anggap konfigurasi sebagai bukti operasional. Catat hasil nyata di [`catatan/hasil-uji.md`](../catatan/hasil-uji.md).
 
 Jangan memasukkan kata sandi, token, private key, serial disk, atau rahasia ke buku maupun repo. Verifikasi versi perangkat lunak, alamat, jalur disk, dan nama antarmuka sebelum menjalankan perintah.
 
