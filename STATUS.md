@@ -9,7 +9,7 @@
 - NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1`, ukuran **476,9 GB** (kapasitas pemasaran 512 GB / sekitar 500 GB).
 - Setelah pembaruan dan reboot, kernel aktif **`7.0.14-26-pve`**. `systemctl --failed` melaporkan `0 loaded units listed`.
 - Storage Proxmox `local` (dir) dan `local-lvm` (lvmthin) aktif. `local-lvm` masih kosong pada saat diperiksa, dengan sekitar 348 GiB tersedia. Belum ada VM atau container yang dibuat.
-- Konfigurasi jaringan sementara: `vmbr0` pada `192.168.0.200/24`, gateway dan DNS `192.168.0.1`. Target jaringan rumah setelah kembali ke MikroTik: `192.168.88.0/24`; alamat rencana server `192.168.88.10` perlu diterapkan dan diuji saat berada di jaringan itu.
+- Komputer Windows pengguna `192.168.0.100` berhasil menjangkau TCP port 22 pada Proxmox `192.168.0.200` (`Test-NetConnection`, 31 Okt). Upaya SSH dari terminal Codex masih menunggu verifikasi fingerprint host dan autentikasi; belum ada perintah yang dijalankan di server melalui sesi ini.\n- Konfigurasi jaringan sementara: `vmbr0` pada `192.168.0.200/24`, gateway dan DNS `192.168.0.1`. Target jaringan rumah setelah kembali ke MikroTik: `192.168.88.0/24`; alamat rencana server `192.168.88.10` perlu diterapkan dan diuji saat berada di jaringan itu.
 - Dua HDD Seagate Surveillance 2 TB, 3,5 inci belum tersambung ke server. Pengguna menemukan enclosure single-bay lama, tetapi belum menguji apakah enclosure berfungsi; HDD berada di rumah. Belum ada backup server.
 - Buku lengkap 235 halaman tersedia. Uji panduan pada M710q baru dimulai; seluruh bab dan layanan belum diuji.
 
