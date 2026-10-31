@@ -7,12 +7,12 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Fakta server terakhir diverifikasi **28 Oktober 2026**; catatan proyek diperbarui **30 Oktober 2026** di [STATUS.md](STATUS.md).
+Jaringan rumah terakhir diverifikasi **28 Oktober 2026**; informasi perangkat terbaru dilaporkan pengguna pada **31 Oktober 2026** dan dicatat di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
-- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), RAM 16 GB terpasang, NVMe 500 GB. Modul RAM cadangan 16 GB dan 8 GB belum dipasang; targetnya 32 GB (16+16).
+- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread). RAM fisik yang dipasang sekarang diperkirakan 24 GB (1×16 GB + 1×8 GB); jumlah yang dikenali BIOS/OS dan hasil MemTest86 belum dicatat. SSD NVMe M.2 500 GB sudah dipasang di slot M.2 1; status partisi/format belum ditetapkan karena Proxmox belum diinstal.
 - Ada **dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci**. Rencana sementara: mulai dengan satu unit melalui enclosure single-bay yang tersedia; HDD kedua ditunda. Pengguna menyatakan kedua HDD aman; setidaknya satu belum diformat sehingga tidak muncul di Windows. Model tiap unit belum dicatat dan belum ada yang dipasang ke server.
-- **Proxmox belum diinstal** di M710q. Langkah berikutnya: pasang RAM 16 GB, jalankan MemTest86, atur BIOS, lalu instal Proxmox.
+- **Proxmox belum diinstal** di M710q. Langkah berikutnya: cek kapasitas RAM dan NVMe di BIOS, jalankan MemTest86, atur BIOS, lalu instal Proxmox.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap sudah digabung menjadi edisi 235 halaman, tetapi **belum diuji di mesin asli**. Sumber lengkap dan langkah build ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) dan [tools/build_handbook.py](tools/build_handbook.py). Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
@@ -80,7 +80,7 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 
 Peta ini adalah **rancangan**; VM/LXC belum dibuat karena Proxmox belum diinstal. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
-Pada RAM 16 GB, semua guest tidak dapat menyala bersamaan; buku merencanakan profil pemakaian. Mode hemat menggabungkan n8n, web, AFFiNE, dan musik di VM 206. Setelah RAM 32 GB, mode hemat menjadi pilihan utama, tetapi beban CPU 4 thread tetap perlu dipantau. Angka RAM masih perkiraan dan harus disesuaikan dari hasil pengukuran.
+Profil buku sebelumnya dirancang untuk RAM 16 GB dan 32 GB. Mesin sekarang diperkirakan memiliki 24 GB; gunakan profil konservatif dan konfirmasi hasil pemantauan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
 ## Penyimpanan dan backup
 
@@ -131,6 +131,7 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/
 
 - **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
 - **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
+
 
 
 
