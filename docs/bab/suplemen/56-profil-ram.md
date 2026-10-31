@@ -1,11 +1,11 @@
-# Bab 56. Profil Pemakaian RAM (16 GB dan 32 GB)
+# Bab 56. Profil Pemakaian RAM (16 GB, 24 GB, dan 32 GB)
 
-> **Revisi 3.** Mesin utama kini ada: **Lenovo ThinkCentre M710q, Core i5-6500T (4 core, 4 thread)**, RAM 16 GB terpasang, RAM cadangan 16 GB dan 8 GB belum dipasang. Bagian 56.1 sampai 56.6 menjelaskan profil untuk 16 GB. Bagian **56.7** (baru) menjelaskan 32 GB (16 + 16): semua layanan dapat menyala bersamaan dan profil menjadi opsional.
+> **Pembaruan 31 Oktober 2026.** M710q dilaporkan memakai **1×16 GB + 1×8 GB (total 24 GB)** setelah modul 8 GB pada slot pertama diganti dengan 16 GB. BIOS/OS dan MemTest86 belum dikonfirmasi. Bagian 56.1–56.6 adalah baseline konservatif 16 GB; 56.7 membahas opsi 32 GB; 56.8 memberi batas awal sementara untuk konfigurasi 24 GB. Jangan menganggap semua VM aman menyala bersamaan sebelum diukur.
 
 PENEMPATAN - HOST - mesin fisik  
 Tempat: Pengaturan di host Proxmox (skrip profil dan jadwal PBS). Tidak ada VM baru.  
 Aturan: Host tetap hanya menjalankan Proxmox; skrip kecil di /root bukan aplikasi.  
-RAM mesin utama saat ini 16 GB dan akan ditambah nanti. Semua VM di buku ini bila menyala bersamaan  
+Baseline konservatif 16 GB dipakai agar host tetap punya ruang untuk bekerja. Konfigurasi fisik terbaru dilaporkan 24 GB, tetapi harus diverifikasi di BIOS/Proxmox. Semua VM di buku ini bila menyala bersamaan  
 membutuhkan jauh lebih banyak (Suplemen 7 Bab 48.6 dan 56.6). Solusinya bukan memaksa semuanya  
 menyala, tetapi membagi VM menjadi profil: sekelompok VM yang menyala untuk satu keperluan, sementara  
 yang lain dimatikan.  
@@ -209,16 +209,16 @@ dan periksa free -m; (2) naikkan RAM VM yang terasa sempit (qm set ID --memory .
 lebih besar atau berhenti memakai skrip; (4) atur --onboot 1 untuk VM yang kini boleh menyala otomatis; (5)  
 perbarui batas ZFS bila perlu (56.1).
 
-## 56.7 Setelah RAM menjadi 32 GB (16 + 16)
+## 56.7 Jika RAM ditingkatkan menjadi 32 GB (16 + 16)
 
-Pasang modul cadangan 16 GB di slot kedua (Bab 27.1), uji MemTest86, lalu periksa dengan `free -m` di host (total sekitar 32.000 MB).
+Jika tersedia modul 16 GB yang kompatibel, ganti modul 8 GB dengan modul 16 GB (Bab 27.1), uji MemTest86, lalu periksa dengan `free -m` di host (total sekitar 32.000 MB). Ini rencana masa depan, bukan kondisi saat ini.
 
 | Konfigurasi | RAM VM (MB) | Sisa dari 32.768 MB |
 |---|---|---|
 | Mode hemat (apps menggantikan 206, 208, 209, 211) + HAOS + k3s | 24.320 sampai 25.344 | sekitar 7,4 sampai 8,4 GB (untuk host dan lonjakan) |
 | Terpisah penuh + HAOS + k3s | 27.392 sampai 28.416 | sekitar 4,3 sampai 5,4 GB (pas-pasan) |
 
-Rekomendasi: **mode hemat**, semua VM menyala bersamaan, tanpa skrip profil harian. Langkah:
+Mode hemat dapat dipertimbangkan setelah hasil pemantauan memastikan sisa RAM host cukup. Jangan menyalakan semua VM hanya karena kapasitas teoritis tampak cukup. Langkah penyalaan otomatis di bawah ini baru diterapkan setelah VM masing-masing diuji:
 
 1. Atur penyalaan otomatis untuk semua VM yang dipakai: `for id in 201 202 204 205 206 207 212 213 214; do qm set $id --onboot 1; done` (sesuaikan daftar dengan VM yang sudah dibuat; abaikan galat untuk nomor yang belum ada). Biarkan `203` (k3s) dan `210` (web-public) sesuai kebutuhan.
 2. PBS (VM 212) boleh menyala terus; cron `profil.sh backup` dan `profil.sh harian` di 56.5 tidak diperlukan lagi.
@@ -226,4 +226,11 @@ Rekomendasi: **mode hemat**, semua VM menyala bersamaan, tanpa skrip profil hari
 4. **Batas berikutnya adalah CPU**: i5-6500T hanya 4 thread. Jangan memberi banyak core ke setiap VM; mulai 1-2 core. Impor foto pertama di Immich dan machine learning akan memakan CPU lama; jalankan saat tidak sibuk.
 5. Pantau di Beszel (Bab 33): RAM terpakai, beban CPU, suhu, dan ruang NVMe/HDD. Naikkan RAM VM hanya bila terbukti perlu.
 
-Modul 8 GB cadangan disimpan sebagai suku cadang (slot hanya dua).
+## 56.8 Batas sementara untuk konfigurasi 24 GB (16 + 8)
+
+Kapasitas 24 GB dilaporkan dari susunan 16 GB + 8 GB, tetapi belum dicatat dari BIOS atau hasil MemTest86. Setelah instalasi Proxmox, konfirmasi kapasitas dengan `free -h` dan catat konsumsi host saat tidak ada VM aktif.
+
+Sampai ada hasil pengukuran, gunakan profil konservatif 16 GB di Bagian 56.1–56.5. Setelah itu, naikkan alokasi VM sedikit demi sedikit; jangan melebihi total alokasi 18 GB untuk VM yang aktif sebelum pemantauan membuktikan host tetap memiliki setidaknya 4–6 GB tersedia saat beban normal. Profil mode hemat yang menyalakan VM dengan total sekitar 19,2 GB atau lebih belum cocok untuk dijalankan serentak pada 24 GB tanpa pengukuran.
+
+Jika RAM tersedia terus rendah, ballooning/oom muncul, atau VM tersendat, matikan guest yang tidak diperlukan dan kembali ke profil 16 GB. Catat profil yang dipakai serta nilai RAM available di `catatan/hasil-uji.md`.
+
