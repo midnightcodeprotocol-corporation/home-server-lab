@@ -73,10 +73,11 @@ flowchart TB
 - **Belum dianggap ada sebelum satu uji pulih berhasil.**
 
 ## Mesin: Lenovo ThinkCentre M710q (Bab 27 dan 56)
-Core i5-6500T (4 core/4 thread), NVMe 500 GB, HDD 2 TB untuk backup. RAM 16 GB terpasang; dengan RAM cadangan menjadi **32 GB (16+16)**.
+Core i5-6500T (4 core/4 thread). SSD NVMe M.2 500 GB sudah dipasang di slot 1. RAM yang dilaporkan terpasang adalah **24 GB (1×16 + 1×8)**; jumlah BIOS/OS dan MemTest86 belum diverifikasi. Proxmox belum dipasang. HDD 2 TB direncanakan untuk data/backup.
 - Dengan 16 GB: lima profil pemakaian (harian, kerja, foto, backup, belajar) memakai `konfigurasi/skrip/profil.sh`.
-- Dengan 32 GB: mode hemat, semua VM menyala bersamaan (Bab 56.7). Batas berikutnya adalah CPU 4 thread.
+- Profil lama dibuat untuk 16 GB dan 32 GB. Dengan RAM yang diperkirakan 24 GB, mulai dari profil konservatif Bab 56 dan naikkan bertahap setelah pemantauan; CPU 4 thread tetap menjadi batas penting.
 
 ## Yang belum masuk target
 Suplemen 10-11: AMP + playit.gg, Ollama, OnlyOffice, TrueNAS, STB 2, update profil RAM saat RAM naik.
 Lihat `04-board.md`.
+
