@@ -1,7 +1,7 @@
 # Roadmap manfaat dan keamanan Home Server Lab
 
 **Status:** usulan bertahap, belum diterapkan di server.  
-**Kondisi saat ini:** jaringan rumah berjalan; Proxmox belum dipasang; ThinkCentre M710q memiliki RAM 16 GB dan NVMe 500 GB; dua HDD 3,5 inci belum dipasang. Karena enclosure yang tersedia single-bay, rencana awal memakai satu HDD dahulu.
+**Kondisi saat ini (31 Oktober 2026):** jaringan rumah berjalan; Proxmox belum dipasang; RAM M710q dilaporkan 24 GB (16+8), tetapi BIOS/MemTest86 belum dikonfirmasi; NVMe M.2 500 GB sudah terpasang di slot 1. Dua HDD 3,5 inci belum dipasang. Karena enclosure yang tersedia single-bay, rencana awal memakai satu HDD dahulu.
 
 ## Prinsip pelaksanaan
 
@@ -9,7 +9,7 @@
 2. Terapkan satu perubahan, uji dari sisi klien, catat hasilnya, lalu lanjut.
 3. Jangan membuka port administrasi ke internet. Pertahankan akses jarak jauh melalui Tailscale dengan kebijakan admin terbatas.
 4. Jangan menganggap RAID, snapshot, atau dua partisi pada mesin yang sama sebagai backup independen.
-5. Pilih layanan karena ada kebutuhan nyata; jangan menyalakan semua VM sekaligus pada CPU 4 thread dan RAM 16 GB.
+5. Pilih layanan karena ada kebutuhan nyata; jangan menyalakan semua VM sekaligus pada CPU 4 thread. Total RAM 24 GB masih perlu diverifikasi dan profil lama belum mencakup konfigurasi ini.
 
 ## Urutan prioritas
 
@@ -17,7 +17,7 @@
 |---|---|---|---|
 | **P0 — sekarang** | Aktifkan MFA/passkey pada akun GitHub dan Tailscale; simpan kode pemulihan secara offline. Tinjau pengguna yang diundang ke tailnet dan aturan port-forward/UPnP pada router. | Mengurangi risiko akun diambil alih dan akses internet tidak sengaja terbuka. | MFA aktif, pemulihan akun tersedia, tidak ada akses publik yang tidak disengaja. |
 | **P0 — sekarang** | Cadangkan konfigurasi MikroTik secara terenkripsi di tempat aman, simpan versi RouterOS dan prosedur restore. Jangan commit backup router ke GitHub. | Mempercepat pemulihan jika konfigurasi rusak atau router diganti. | File backup berada di luar router, dienkripsi, dan lokasinya tercatat tanpa menyimpan kata sandi di repo. |
-| **P1 — sebelum layanan** | Pasang RAM 16 GB cadangan hanya setelah cocok, jalankan MemTest86, cek BIOS dan kondisi NVMe. Instal Proxmox langsung di M710q setelah memastikan target disk dengan benar. | Fondasi yang stabil dan kapasitas lebih baik untuk VM. | MemTest lulus, backup data penting PC aman, Proxmox bisa diakses hanya dari jaringan admin. |
+| **P1 — sebelum layanan** | Verifikasi RAM 16+8 GB di BIOS, jalankan MemTest86, dan cek BIOS serta model/kondisi NVMe. Periksa isi NVMe dan cadangkan data yang perlu disimpan. Instal Proxmox langsung di M710q hanya setelah target disk dipastikan. | Fondasi stabil tanpa menghapus disk yang salah. | BIOS mengenali RAM/NVMe; MemTest lulus; data penting aman; Proxmox bisa diakses hanya dari jaringan admin. |
 | **P1 — setelah Proxmox** | Buat akun admin bernama sendiri dengan MFA; batasi SSH dan UI Proxmox melalui firewall untuk perangkat admin. Aktifkan notifikasi tugas backup dan kegagalan storage. | Mengurangi penggunaan root sehari-hari dan mempercepat deteksi masalah. | Akses admin diuji dari laptop; port administrasi tidak dapat dijangkau dari internet atau guest biasa. |
 | **P2 — storage dan backup** | Mulai dengan satu HDD melalui enclosure yang tersedia. Catat model/serial secara lokal, periksa kesehatan SMART jika enclosure mendukungnya, lalu putuskan apakah disk untuk data atau datastore PBS. Jangan format sebelum disk dan targetnya teridentifikasi. | Memakai kapasitas yang sudah dimiliki tanpa membeli enclosure kedua dulu. | Model/health dicatat, disk terpasang stabil, peruntukan dan sistem berkas dipilih, data yang ada dipastikan aman. |
 | **P2 — storage dan backup** | Siapkan backup VM, enkripsi sisi klien, jadwal verifikasi, dan uji restore VM/file. Simpan satu salinan tambahan di media terpisah; gunakan HDD kedua sebagai media terpisah/offline setelah enclosure tersedia. | Melindungi dari salah hapus, kerusakan disk, dan kegagalan host. | Restore sampel berhasil; salinan tambahan tidak selalu terhubung dan kunci enkripsi punya salinan pemulihan aman. |
@@ -29,7 +29,7 @@
 
 ## Pilihan layanan dengan kapasitas sekarang
 
-Pada 16 GB RAM, jalankan hanya layanan inti dan satu kebutuhan utama. Setelah RAM 32 GB, tambah layanan dengan memantau CPU, RAM, disk, dan suhu. Kubernetes/k3s, Immich machine learning, dan beberapa VM sekaligus sebaiknya menunggu sampai ada kebutuhan yang jelas serta hasil pemantauan menunjukkan kapasitas cukup.
+Sampai hasil BIOS dan MemTest86 dicatat, perlakukan RAM sebagai belum terverifikasi. Profil buku yang ada dirancang untuk 16 GB dan 32 GB; untuk konfigurasi 24 GB, mulai dari profil konservatif 16 GB lalu tambah beban bertahap sambil memantau RAM tersedia, CPU, disk, dan suhu. Kubernetes/k3s, Immich machine learning, dan banyak VM serentak menunggu sampai hasil pemantauan membuktikan kapasitas cukup.
 
 Urutan awal yang masuk akal:
 
@@ -55,3 +55,4 @@ Urutan awal yang masuk akal:
 - [Proxmox Backup Server: penyimpanan datastore](https://pbs.proxmox.com/docs/storage.html)
 - [MikroTik RouterOS: backup dan restore](https://help.mikrotik.com/docs/spaces/ROS/pages/40992852/Backup)
 - [MikroTik RouterOS: ekspor konfigurasi](https://help.mikrotik.com/docs/spaces/ROS/pages/328155/Configuration%2BManagement)
+
