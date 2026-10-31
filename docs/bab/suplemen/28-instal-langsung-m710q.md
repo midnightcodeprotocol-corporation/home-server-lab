@@ -1,6 +1,6 @@
 # Bab 28. Instal Langsung di Lenovo ThinkCentre M710q
 
-> **Revisi 3.** Bab ini adalah panduan instalasi langsung di **Lenovo ThinkCentre M710q**. Nilai khusus mesin ini: disk sistem NVMe 500 GB (biasanya `nvme0n1`), kartu jaringan Intel (biasanya bernama `enp0s31f6`; periksa dengan `ip -br link`), BIOS dimasuki dengan F1, menu boot F12. Pasang RAM tambahan (Bab 27.1) dan uji MemTest86 **sebelum** menginstal.
+> **Pembaruan 31 Oktober 2026.** Bab ini adalah panduan instalasi langsung di **Lenovo ThinkCentre M710q**. SSD NVMe M.2 500 GB sudah terpasang di slot 1. RAM dilaporkan 16+8 GB (24 GB total), tetapi harus dikonfirmasi di BIOS dan lulus MemTest86 **sebelum** menginstal. Periksa isi/partisi NVMe dan cadangkan data penting sebelum memilih disk target. Kartu jaringan Intel biasanya bernama `enp0s31f6` (periksa dengan `ip -br link`); BIOS F1, menu boot F12.
 
 PENEMPATAN - HOST - mesin fisik  
 Tempat: Langsung di ThinkCentre M710q (host Proxmox), bukan di dalam VM.  
@@ -178,3 +178,4 @@ IP, gateway, atau interface salah Ikuti Edisi 2 Bab 9.3: periksa
 /etc/network/interfaces dan /etc/hosts  
 Mesin kembali ke installer terus USB belum dicabut Cabut USB dan restart  
 Tidak mau boot tanpa keyboard BIOS menahan karena error keyboard Matikan Halt on keyboard error di BIOS
+
