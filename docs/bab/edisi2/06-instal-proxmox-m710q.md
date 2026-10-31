@@ -7,7 +7,7 @@
 | Kebutuhan | Mesin Anda (M710q) | Catatan |
 |---|---|---|
 | CPU | Intel Core i5-6500T (4 core, 4 thread, 35 W), mendukung VT-x dan VT-d | Cukup untuk Proxmox; thread terbatas, jangan memberi banyak core ke tiap VM |
-| RAM | 16 GB terpasang; cadangan 16 GB dan 8 GB belum dipasang | Dua slot SO-DIMM DDR4. Rencana: 16 + 16 = 32 GB (Bab 27.1) |
+| RAM | Dilaporkan 16 GB + 8 GB (total diharapkan 24 GB) | Verifikasi BIOS dan MemTest86 sebelum instalasi; lihat Bab 27.1–27.3 |
 | Disk sistem | SSD NVMe M.2 500 GB | Proxmox dan disk VM |
 | Disk data / backup | HDD 2 TB | Dipasang sebagai disk kedua (bay 2,5" atau USB, Bab 27.4) |
 | Jaringan | 1 port Gigabit Ethernet | Kabel ke MikroTik; jangan memakai WiFi |
@@ -64,3 +64,4 @@ Penyebab: Mode boot tidak cocok (GPT/MBR vs UEFI/Legacy), Secure Boot aktif, ata
 dengan benar.  
 Solusi: Tulis ulang dengan Rufus (DD mode), ganti skema partisi sesuai mode BIOS, matikan Secure Boot,  
 dan pilih entri USB yang berawalan UEFI.
+
