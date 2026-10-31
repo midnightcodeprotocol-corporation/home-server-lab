@@ -4,10 +4,10 @@ host:
   mesin: Lenovo ThinkCentre M710q (Core i5-6500T, 4 core/4 thread)
   ip: 192.168.88.10
   web: https://192.168.88.10:8006
-  ram_terpasang_gb: 16
-  ram_cadangan_gb: [16, 8]
-  ram_target_gb: 32
-  disk_sistem: NVMe 500 GB (ext4, local-lvm)
+  ram_terpasang_gb: 24
+  ram_konfigurasi_gb: [16, 8]
+  ram_status: "dilaporkan terpasang; verifikasi BIOS dan MemTest86 belum dicatat"
+  disk_sistem: NVMe M.2 500 GB (terpasang pada slot M.2 1; Proxmox/partisi belum ada)
   disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (rencana awal pakai satu melalui enclosure single-bay; unit kedua ditunda; belum dipasang)
   docker_di_host: false
 templat:
@@ -34,3 +34,5 @@ guest:
 perangkat_luar_proxmox:
   - {nama: stb-1, ip: 192.168.88.253, isi: "AdGuard Home utama (HG680, Armbian, eMMC)"}
   - {nama: stb-2, ip: 192.168.88.250, isi: "Tailscale subnet router (rencana, belum tiba)"}
+
+
