@@ -274,9 +274,8 @@ Edisi 2 membuat VM 201 dengan 4096 MB; 2048 MB
 adalah sasaran setelah Forgejo dan Nextcloud pindah  
 [BELUM PASTI]  
 PERINGATAN  
-Mesin utama (ThinkCentre M710q, i5-6500T) saat ini 16 GB dan menjadi 32 GB bila RAM cadangan 16 GB dipasang (Bab 27.1).  
-Dengan 16 GB tidak semua VM bisa menyala bersamaan, jadi VM dibagi menjadi profil pemakaian; dengan 32 GB mode hemat dapat menyala  
-bersamaan (Suplemen 9 Bab 56 dan 56.7).  
+Mesin utama (ThinkCentre M710q, i5-6500T) dilaporkan memakai RAM 24 GB (16+8) per 31 Oktober 2026; BIOS dan MemTest86 belum dikonfirmasi (Bab 27.1).  
+Profil pemakaian lama disusun untuk 16 GB dan 32 GB. Pada 24 GB, gunakan baseline konservatif dan tambah beban bertahap sesuai Bab 56.8; jangan menyalakan semua VM sekaligus tanpa pemantauan.  
 Bila memakai mode hemat Perubahan  
 n8n, web, music, affine menjadi VM 206 "apps"  
 (192.168.88.25)  
@@ -373,3 +372,4 @@ docker compose up -d
 ss -tlnp | grep -E ":(80|3002)\b"
 ```
 > Penjelasan: Port 3002 dipakai Homepage; port 80 harus bebas untuk Caddy.
+
