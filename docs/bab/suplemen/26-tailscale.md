@@ -75,7 +75,7 @@ sekarang
 Sudah selalu hidup STB 1 seharusnya khusus AdGuard  
 agar DNS rumah stabil  
 CATATAN  
-Rancangan proyek: gunakan CT103 sebagai subnet router bila akses Tailscale diperlukan sebelum STB 2 tersedia; setelah STB 2 siap, pindahkan peran utama ke STB 2 dan CT103 dapat dipertahankan sebagai cadangan. Saat ini Proxmox belum diinstal dan Tailscale belum berjalan, jadi jangan menjalankan langkah server sebelum host serta perangkat pilihan dikonfirmasi. Dua router dapat mengiklankan rute yang sama hanya setelah failover dikonfigurasi dan diuji.
+Rancangan proyek: gunakan CT103 sebagai subnet router bila akses Tailscale diperlukan sebelum STB 2 tersedia; setelah STB 2 siap, pindahkan peran utama ke STB 2 dan CT103 dapat dipertahankan sebagai cadangan. Proxmox kini sudah berjalan, tetapi CT103 dan Tailscale belum dibuat. Pastikan jaringan host/guest final dan perangkat pilihan sebelum menerapkan langkah server. Dua router dapat mengiklankan rute yang sama hanya setelah failover dikonfigurasi dan diuji.
 KEAMANAN  
 Tailscale tidak dipasang di host Proxmox. Host virtualisasi sebaiknya tidak memiliki jalan masuk tambahan; akses  
 ke Proxmox cukup lewat subnet router.  

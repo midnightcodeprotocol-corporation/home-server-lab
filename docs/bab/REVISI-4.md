@@ -13,4 +13,4 @@
 
 ## Batas verifikasi
 
-Perbaikan ini diperiksa secara statis. Server Proxmox belum terpasang, sehingga Compose, kebijakan Tailscale, firewall Proxmox, dan pemulihan backup belum diuji pada mesin nyata. Catat hasil pengujian pada `catatan/hasil-uji.md`.
+Pada saat audit 30 Oktober 2026, Proxmox belum terpasang. Perbaikan ini diperiksa secara statis; Compose, kebijakan Tailscale, firewall Proxmox, dan pemulihan backup belum diuji pada mesin nyata ketika itu. Untuk progres setelah tanggal audit, lihat [Revisi 5](REVISI-5.md) dan `catatan/hasil-uji.md`.

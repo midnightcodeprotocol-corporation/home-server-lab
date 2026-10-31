@@ -1,18 +1,21 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 30 Oktober 2026.
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 31 Oktober 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian dari nol di mesin asli (ThinkCentre M710q)**, satu bab satu langkah, urut buku. Langkah pertama: `docs/09-mulai-di-m710q.md`
+- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**, satu langkah per giliran. Proxmox sudah terpasang dan diperbarui; berikutnya buat template VM dan CT dasar sesuai `docs/09-mulai-di-m710q.md`.
 
 ## Siap berikutnya (Backlog Fase A, urut)
-- [ ] Verifikasi RAM 24 GB yang dilaporkan (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
+- [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
-- [ ] USB bootable, hash ISO, instal Proxmox (Bab 6, 8, 28)
-- [ ] Bab 9: jaringan, DNS, repository, update
-- [ ] Bab 30: sensor, SMART, Wake-on-LAN dari STB
-- [ ] Setelah model dan kondisi diverifikasi, siapkan satu HDD Seagate Surveillance 2 TB, 3,5 inci lewat enclosure single-bay; tentukan peruntukannya sebelum diformat (Bab 27.4, 9.9)
-- [ ] Bab 10-11: LXC pertama, VM Debian 13, templat
+- [x] Instal Proxmox pada M710q dan boot pertama
+- [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
+- [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH TCP 22 dari Windows sudah terjangkau pada jaringan sementara
+- [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
+- [ ] Buat template VM 9100 dan CT 9200 sebelum guest layanan, lalu clone dengan nama/IP/resource unik (Bab 49)
+- [ ] Bab 30: sensor dan Wake-on-LAN dari STB
+- [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
+- [ ] Bab 10-11: buat LXC dan VM aplikasi dari template
 - [ ] Bab 13: AdGuard kedua + failover DNS
 - [ ] Bab 14: Docker dan Portainer
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
@@ -80,4 +83,3 @@ Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-
 
 ## Aturan kerja sesi pengujian
 Satu langkah, konfirmasi hasil, baru lanjut. Catat setiap penyimpangan. Jangan menebak nilai RAM / ID / IP; cek `data/guest.yaml` dan Bab 48.3. Perintah tanpa `sudo`. Sisi server dan sisi klien (Windows, Android, iPhone).
-

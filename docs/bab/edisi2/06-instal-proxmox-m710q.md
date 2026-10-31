@@ -2,20 +2,22 @@
 
 > **Revisi 3.** Bab ini sekarang khusus untuk **Lenovo ThinkCentre M710q**. Model A (VMware) dan Model C (instal ke disk dulu) dihapus.
 
+> **Status mesin (31 Oktober 2026):** Proxmox sudah terpasang dan diperbarui. Host sementara berada di `192.168.0.200/24`; `192.168.88.10` adalah alamat target saat kembali ke MikroTik. RAM fisik 16+8 GB dilaporkan Linux sebagai 23 GiB; BIOS/MemTest86 belum diperiksa. Dua HDD 3,5 inci belum terpasang dan memerlukan enclosure berdaya sendiri; enclosure lama belum diuji.
+
 ## 6.1 Perangkat yang dibutuhkan
 
 | Kebutuhan | Mesin Anda (M710q) | Catatan |
 |---|---|---|
 | CPU | Intel Core i5-6500T (4 core, 4 thread, 35 W), mendukung VT-x dan VT-d | Cukup untuk Proxmox; thread terbatas, jangan memberi banyak core ke tiap VM |
-| RAM | Dilaporkan 16 GB + 8 GB (total diharapkan 24 GB) | Verifikasi BIOS dan MemTest86 sebelum instalasi; lihat Bab 27.1–27.3 |
+| RAM | 16 GB + 8 GB (total fisik 24 GB) | Proxmox melaporkan 23 GiB; BIOS dan MemTest86 belum diperiksa. Lihat Bab 27.1–27.3 |
 | Disk sistem | SSD NVMe M.2 500 GB | Proxmox dan disk VM |
-| Disk data / backup | HDD 2 TB | Dipasang sebagai disk kedua (bay 2,5" atau USB, Bab 27.4) |
+| Disk data / backup | Dua HDD 3,5 inci Seagate Surveillance 2 TB | Belum tersambung; gunakan enclosure eksternal berdaya sendiri. Enclosure single-bay belum diuji; lihat Bab 27.4 |
 | Jaringan | 1 port Gigabit Ethernet | Kabel ke MikroTik; jangan memakai WiFi |
 | Saat instalasi | Monitor, keyboard, flashdisk 8 GB | Setelah itu dikelola lewat web |
 
 ## 6.2 Pengaturan BIOS/UEFI
 
-Lengkapnya ada di **Bab 27.5**. Ringkasnya: aktifkan Intel Virtualization Technology (VT-x) dan VT-d, UEFI, matikan Secure Boot, SATA AHCI, Wake on LAN aktif, After Power Loss = Power On. Masuk BIOS dengan **F1** saat logo Lenovo muncul; menu boot sekali pakai dengan **F12**.
+Lengkapnya ada di **Bab 27.5**. Ringkasnya: Intel Virtualization Technology (VT-x) wajib untuk VM; VT-d opsional dan hanya diperlukan untuk passthrough perangkat PCI. Gunakan UEFI, matikan Secure Boot, SATA AHCI, Wake on LAN aktif, After Power Loss = Power On. Masuk BIOS dengan **F1** saat logo Lenovo muncul; menu boot sekali pakai dengan **F12**.
 
 ## 6.3 Membuat USB bootable
 
@@ -64,4 +66,3 @@ Penyebab: Mode boot tidak cocok (GPT/MBR vs UEFI/Legacy), Secure Boot aktif, ata
 dengan benar.  
 Solusi: Tulis ulang dengan Rufus (DD mode), ganti skema partisi sesuai mode BIOS, matikan Secure Boot,  
 dan pilih entri USB yang berawalan UEFI.
-

@@ -3,38 +3,35 @@
 **Terakhir diperbarui:** 31 Oktober 2026
 
 ## Posisi sekarang
-- Jaringan rumah memakai MikroTik `192.168.88.1`, STB AdGuard `192.168.88.253`, dan perangkat lain sesuai inventaris. Server saat ini **belum tersambung ke jaringan MikroTik** karena pengguna sedang berada di lokasi lain.
-- Lenovo ThinkCentre M710q menjalankan Proxmox VE. CPU Intel Core i5-6500T (4 core/4 thread).
-- RAM terpasang 16 GB + 8 GB. Linux Proxmox melaporkan **23 GiB** total; pemeriksaan BIOS dan MemTest86 belum dicatat.
-- NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1`, ukuran **476,9 GB** (kapasitas pemasaran 512 GB / sekitar 500 GB).
-- Setelah pembaruan dan reboot, kernel aktif **`7.0.14-26-pve`**. `systemctl --failed` melaporkan `0 loaded units listed`.
-- Storage Proxmox `local` (dir) dan `local-lvm` (lvmthin) aktif. `local-lvm` masih kosong pada saat diperiksa, dengan sekitar 348 GiB tersedia. Belum ada VM atau container yang dibuat.
-- Komputer Windows pengguna `192.168.0.100` berhasil menjangkau TCP port 22 pada Proxmox `192.168.0.200` (`Test-NetConnection`, 31 Okt). Fingerprint host cocok dan sudah dikonfirmasi. SSH dari terminal Codex mencapai autentikasi tetapi ditolak karena belum ada kunci/identitas yang terdaftar (`Permission denied (publickey,password)`); belum ada perintah yang dijalankan di server.\n- Konfigurasi jaringan sementara: `vmbr0` pada `192.168.0.200/24`, gateway dan DNS `192.168.0.1`. Target jaringan rumah setelah kembali ke MikroTik: `192.168.88.0/24`; alamat rencana server `192.168.88.10` perlu diterapkan dan diuji saat berada di jaringan itu.
-- Dua HDD Seagate Surveillance 2 TB, 3,5 inci belum tersambung ke server. Pengguna menemukan enclosure single-bay lama, tetapi belum menguji apakah enclosure berfungsi; HDD berada di rumah. Belum ada backup server.
-- Buku lengkap 235 halaman tersedia. Uji panduan pada M710q baru dimulai; seluruh bab dan layanan belum diuji.
-
-## Progres dan kendala yang sudah ditangani
-- `apt-get update` awal gagal mengambil Debian/Proxmox karena DNS menunjuk ke `192.168.88.253`, yang tidak terjangkau dari jaringan sementara `192.168.0.0/24`. Akses internet berdasarkan alamat IP tetap berhasil.
-- DNS host diganti ke `192.168.0.1`; `getent hosts deb.debian.org` kemudian berhasil.
-- `apt-get -o Acquire::ForceIPv4=true update` berhasil mengambil indeks Debian Trixie dan Proxmox.
-- Pembaruan melalui menu Proxmox selesai: 193 paket diperbarui, 2 paket baru dipasang, 0 paket dihapus. Setelah reboot, kernel baru aktif dan tidak ada unit systemd gagal.
+- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. Server masih memakai jaringan sementara `192.168.0.200/24` sampai kembali tersambung ke MikroTik.
+- Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
+- RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.
+- NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` berukuran **476,9 GB**; Proxmox berjalan.
+- Dua HDD Seagate Surveillance 2 TB, 3,5 inci belum dipasang. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
+- Proxmox selesai diperbarui dan reboot: kernel `7.0.14-26-pve`; `systemctl --failed` melaporkan nol unit gagal. Storage `local` dan `local-lvm` aktif; belum ada VM/LXC, template, Tailscale, PBS, atau backup.
+- VT-x/KVM aktif setelah perbaikan BIOS tanpa monitor melalui `thinklmi`; setelah reboot `lscpu` menunjukkan `Virtualization: VT-x` dan `/dev/kvm` tersedia. VT-d tetap `Disabled`.
+- Windows `192.168.0.100` berhasil menjangkau TCP 22 pada host `192.168.0.200`. Fingerprint ED25519 cocok; autentikasi SSH dari Codex belum ada, dan tidak ada perintah host dijalankan lewat Codex.
+- Buku dan catatan lokal diselaraskan dengan progres terverifikasi sampai 31 Oktober: Revisi 5 mencatat kasus thinklmi dan menempatkan template VM 9100 serta CT 9200 setelah update host dan pemeriksaan KVM, sebelum guest layanan. Template dan layanan belum dibuat atau diuji.
 
 ## Langkah berikutnya
-1. Saat kembali di rumah, sambungkan server ke MikroTik dan verifikasi akses web/SSH pada jaringan rumah. Terapkan alamat server yang direncanakan hanya setelah rute, gateway, DNS, serta pemakaian NIC dipastikan.
-2. Sebelum VM/LXC diberi alamat statis, putuskan skema alamat final; sementara ini DHCP lebih mudah bila guest dibuat di jaringan sementara.
-3. Uji enclosure single-bay dengan satu HDD. Identifikasi model, serial, ukuran, partisi, dan kondisi disk sebelum memformat atau mengubah apa pun.
-4. Tentukan apakah satu HDD akan menjadi storage data atau tujuan backup. Uji backup dan pemulihan sebelum menganggap backup tersedia.
-5. Setelah jaringan dan storage dasar diputuskan, buat guest awal di `local-lvm`; jangan mengalokasikan seluruh kapasitas NVMe.
-6. Catat hasil bab yang benar-benar diuji di `catatan/hasil-uji.md`. BIOS/MemTest86, firewall, layanan, dan pemulihan masih perlu diuji.
+1. Sesudah update Proxmox dan verifikasi KVM, buat template VM 9100 dan CT 9200 sesuai Bab 49; kemudian clone guest dengan nama/IP/resource unik.
+2. Saat kembali di rumah, pindahkan host ke MikroTik dan tetapkan jaringan/IP manajemen final.
+3. Uji enclosure single-bay dan satu HDD. Identifikasi disk sebelum memformat atau menentukan peran data/backup.
+4. Verifikasi BIOS/MemTest86, sensor, firewall, dan hasil uji per bab di `catatan/hasil-uji.md`.
 
-## Hal yang masih perlu diperiksa
-- BIOS dan MemTest86 untuk RAM 16+8 GB.
-- Isi lengkap `/etc/network/interfaces` dan port fisik yang benar-benar digunakan. Catatan sebelumnya menunjukkan `vmbr0` menjembatani `enp0s31f6` dan `eno1`; jangan mengubahnya dari jauh sebelum topologi kabel diketahui.
-- Migrasi dari jaringan sementara `192.168.0.0/24` ke MikroTik `192.168.88.0/24`.
-- Enclosure belum diuji; HDD belum terlihat oleh Proxmox, belum ada uji SMART, dan peran kedua HDD belum ditetapkan.
-- Belum ada VM/LXC, backup, Tailscale, PBS, atau layanan proyek yang berjalan pada host ini.
+## Masalah terbuka
+- BIOS/MemTest86 RAM masih belum diperiksa.
+- Jaringan host sementara `192.168.0.200/24`; rencana alamat rumah `192.168.88.10` belum diterapkan.
+- Enclosure belum diuji; HDD belum terlihat oleh Proxmox, dan belum ada backup server.
+- Template VM 9100 dan CT 9200 belum dibuat.
+- Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.
+- Guest layanan, firewall host, backup, dan pemulihan belum diuji pada M710q.
 
 ## Catatan sesi terakhir
 - 30 Okt: buku lengkap disusun dari 75 sumber bab/lampiran/fase; PDF lengkap 235 halaman, ringkasan 32 halaman dipisahkan, dan edisi 300 halaman diarsipkan.
-- 31 Okt: Proxmox berhasil diperbarui dan reboot. Pemeriksaan menunjukkan RAM 23 GiB, NVMe Samsung 476,9 GB, storage `local` dan `local-lvm` aktif, serta tidak ada unit gagal.
-- 31 Okt: pengguna menjelaskan bahwa jaringan `192.168.0.0/24` hanya sementara sampai kembali ke MikroTik. Enclosure lama ditemukan, belum diuji, dan akan diperiksa setelah tiba di rumah.
+- 31 Okt: pengguna mengonfirmasi mini PC sudah tiba; RAM 8 GB × 2 awalnya, modul pertama diganti dengan 16 GB, sehingga kapasitas fisik diperkirakan 24 GB (16+8). SSD NVMe M.2 500 GB dipasang di slot M.2 1.
+- 31 Okt: apt update awal gagal akibat DNS lama `192.168.88.253` tidak terjangkau dari jaringan sementara. DNS diubah ke `192.168.0.1`, update IPv4 berhasil, lalu GUI dist-upgrade selesai.
+- 31 Okt: kernel `7.0.14-26-pve` aktif, tidak ada unit systemd gagal; RAM 23 GiB dan NVMe Samsung 476,9 GB terdeteksi.
+- 31 Okt: VM gagal start karena VT-x mati; pengguna mengaktifkan VT-x lewat thinklmi tanpa monitor. Setelah reboot, `Virtualization: VT-x` dan `/dev/kvm` terverifikasi. VT-d tetap Disabled; lihat `docs/bab/REVISI-5.md`.
+- 31 Okt: koneksi SSH Windows ke port 22 lulus dan fingerprint host cocok; autentikasi Codex belum disiapkan.
+- 31 Okt: langkah berikut yang diminta pengguna adalah template VM dan CT tepat setelah update Proxmox; enclosure lama ditemukan tetapi belum diuji.

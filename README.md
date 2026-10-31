@@ -7,13 +7,13 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Jaringan rumah terakhir diverifikasi **28 Oktober 2026**. Progres server Proxmox dan pemeriksaan awal pada **31 Oktober 2026** dicatat di [STATUS.md](STATUS.md). Server masih memakai jaringan sementara sampai disambungkan kembali ke MikroTik.
+Jaringan rumah terakhir diverifikasi **28 Oktober 2026**. Proxmox dipasang dan diperbarui pada **31 Oktober 2026**; host saat ini memakai jaringan sementara sampai kembali tersambung ke MikroTik. Rincian ada di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
-- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM 16 GB + 8 GB terpasang; Linux melaporkan 23 GiB, sedangkan BIOS/MemTest86 belum diperiksa. NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` dengan ukuran 476,9 GB. Kernel aktif `7.0.14-26-pve`; pemeriksaan pascareboot menemukan 0 unit systemd gagal.
-- Ada **dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci**. Keduanya belum tersambung ke server; enclosure single-bay lama baru ditemukan dan belum diuji. HDD dan enclosure berada di rumah. Setidaknya satu HDD belum diformat; model tiap unit belum dicatat.
-- Pembaruan Proxmox selesai melalui GUI dan host sudah reboot. `local` serta `local-lvm` aktif; belum ada VM/LXC atau backup. Jaringan host sementara `192.168.0.200/24`, gateway/DNS `192.168.0.1`, sampai server kembali ke MikroTik. Lihat catatan gangguan DNS yang sudah diselesaikan dan hasil pemeriksaan di [catatan/hasil-uji.md](catatan/hasil-uji.md).
-- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap sudah digabung menjadi edisi 235 halaman. Pengujian pada mesin asli baru mencakup pemeriksaan awal Proxmox; bab layanan dan pemulihan **belum diuji**. Sumber lengkap dan langkah build ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) dan [tools/build_handbook.py](tools/build_handbook.py). Catat hasil dan kendala di [catatan/hasil-uji.md](catatan/hasil-uji.md).
+- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
+- **Penyimpanan:** dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum disambungkan. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
+- **Langkah server:** Proxmox sudah diperbarui; `local` dan `local-lvm` aktif. VT-x/KVM lulus pemeriksaan setelah perbaikan lewat `thinklmi`. Belum ada VM/LXC, template, backup, atau layanan proyek. Berikutnya: buat template VM 9100 dan CT 9200 sebelum membuat guest layanan.
+- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Pemeriksaan host Proxmox dan KVM sudah tercatat; template, layanan, jaringan rumah, dan pemulihan **belum diuji**. Sumber lengkap dan build ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md), [tools/build_handbook.py](tools/build_handbook.py), dan [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
 Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
@@ -76,17 +76,18 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | VM 210 | `.29` | Situs statis publik opsional; akses melalui tunnel keluar |
 | VM 212 / 211 | `.30 / .31` | Proxmox Backup Server / Navidrome |
 | VM 213 / 214 | `.32 / .33` | Pocket ID / Immich |
-| VM 9100 | — | Templat Debian 13 + Docker, tidak dinyalakan |
+| VM 9100 | — | Rencana template Debian 13 + Docker; belum dibuat |
+| CT 9200 | — | Rencana template Debian 13 unprivileged untuk layanan Linux ringan; belum dibuat |
 
-Peta ini adalah **rancangan**; Proxmox sudah terpasang, tetapi VM/LXC belum dibuat. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Peta guest ini adalah **rancangan**; Proxmox berjalan, tetapi VM/LXC belum dibuat. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
-Profil buku sebelumnya dirancang untuk RAM 16 GB dan 32 GB. Mesin sekarang diperkirakan memiliki 24 GB; gunakan profil konservatif dan konfirmasi hasil pemantauan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
+Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
 ## Penyimpanan dan backup
 
-Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara adalah menguji satu HDD 3,5 inci melalui enclosure single-bay lama yang baru ditemukan; fungsi enclosure belum diuji dan HDD berada di rumah. Peran storage (termasuk datastore PBS) belum diputuskan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
+Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara adalah menguji satu HDD 3,5 inci melalui enclosure single-bay lama yang ditemukan; enclosure belum diuji dan HDD kedua ditunda. Peran storage (termasuk datastore PBS) belum diputuskan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
 
-**Keadaan saat ini:** Proxmox berjalan di NVMe; kedua HDD belum tersambung, enclosure belum diuji, PBS belum dipasang, dan belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
+**Keadaan saat ini:** kedua HDD belum tersambung; enclosure belum diuji; PBS belum dipasang; belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
 
 ## Mulai menjelajahi repo
 
@@ -130,8 +131,8 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/
 ## Riwayat revisi
 
 - **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
-- **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).\n- **Pembaruan status (31 Oktober 2026):** Proxmox di M710q diperbarui dan reboot; catatan status, DNS sementara, hasil kernel/layanan, RAM/NVMe, dan kondisi enclosure diselaraskan.
-
+- **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
+- **Revisi 5 (31 Oktober 2026):** mencatat kasus KVM/VT-x yang diperbaiki lewat thinklmi pada M710q tanpa monitor, serta menempatkan pembuatan template VM 9100 dan CT 9200 setelah update Proxmox dan sebelum guest layanan.
 
 
 

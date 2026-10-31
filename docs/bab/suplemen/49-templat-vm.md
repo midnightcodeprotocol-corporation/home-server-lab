@@ -1,4 +1,4 @@
-# Bab 49. Templat VM Debian + Docker dan Cara Membuat VM Baru
+# Bab 49. Template VM Debian + Docker, Template CT Debian, dan Cara Mengklon Guest
 
 PENEMPATAN - BARU - VM 9100 (templat), lalu klon per layanan  
 Tempat: VM 9100 tpl-debian-docker di host Proxmox. Templat tidak pernah dinyalakan setelah jadi; ia hanya  
@@ -7,16 +7,13 @@ Alasan: Satu sumber yang sama untuk semua VM Docker: cepat, seragam, dan pembaru
 ada. Setiap layanan lalu mendapat salinan penuh yang berdiri sendiri.  
 Tidak termasuk: Tailscale (setiap node harus punya identitas sendiri) dan layanan apa pun.  
 
+Bab ini menyiapkan dua sumber dasar yang bisa dipakai berulang: VM 9100 untuk aplikasi yang memakai Docker, dan CT 9200 untuk layanan Linux ringan tanpa Docker. Siapkan keduanya sesudah update host dan sebelum membuat guest aplikasi. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
+
+**Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 9100 dan CT 9200 dibuat sekali; jangan buat ulang jika ID tersebut sudah dipakai.
+
 ## 49.1 Rencana: dari mana templat dibuat
 
-Keadaan Anda Yang dilakukan  
-VM Debian dari Edisi 2 masih bersih (belum ada  
-layanan)  
-Jadikan VM itu templat setelah 49.2 dan 49.3, lalu buat docker-core dari  
-templat  
-VM Debian sudah berisi layanan Suplemen 3 dan 4 Biarkan menjadi VM 201 docker-core (ganti ID bila perlu) dan buat  
-templat dari instalasi Debian baru di 49.2  
-Belum ada VM Debian Ikuti 49.2 dari awal  
+Saat ini belum ada VM Debian atau guest lain pada host, jadi ikuti langkah 49.2 dari awal untuk membuat VM 9100. Jika ID 9100 sudah dipakai, pilih ID template lain dan ubah semua perintah clone agar mengacu ke ID tersebut. Jangan mengubah VM layanan yang sudah berisi data menjadi template.
 
 ## 49.2 Membuat dan mengisi VM dasar
 
@@ -115,8 +112,7 @@ VM tidak bisa dinyalakan, hanya disalin.
 
 ## 49.4 Penyiapan awal setiap VM hasil klon
 
-Prosedur ini dipakai oleh semua bab yang membuat VM baru (kotak penempatan menyebut "Bab 49.4"). Contoh  
-di bawah untuk VM 205 vault; ganti ID, nama, dan IP sesuai peta 48.3.  
+Prosedur ini dipakai oleh semua bab yang membuat VM baru (kotak penempatan menyebut "Bab 49.4"). Contoh di bawah untuk VM 205 vault; ganti ID, nama, dan IP sesuai peta 48.3. Saat server masih di jaringan sementara, biarkan jaringan clone memakai DHCP dan jangan membuat reservasi MikroTik atau menetapkan IP `192.168.88.x`. Setelah host tersambung kembali ke MikroTik, ikuti langkah reservasi alamat di bawah.
 
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
@@ -153,8 +149,7 @@ dpkg-reconfigure openssh-server
 ```
 > Penjelasan: Membuat kunci host SSH baru dan menyalakan ulang SSH. Wajib, karena kunci templat sudah
 dihapus (49.3).  
-Alamat tetap lewat MikroTik (DNS tetap otomatis dari DHCP, sehingga tetap menunjuk AdGuard). Dari Terminal  
-di WinBox atau SSH ke MikroTik:  
+Setelah host dan VM tersambung ke MikroTik, alamat tetap lewat reservasi DHCP MikroTik (DNS otomatis dari DHCP, sehingga menunjuk AdGuard). Dari Terminal di WinBox atau SSH ke MikroTik:
 
 **TERMINAL MIKROTIK** | Terminal WinBox atau SSH ke 192.168.88.1
 
@@ -203,3 +198,83 @@ Sama seperti Android
 CATATAN  
 Aplikasi pihak ketiga untuk Proxmox ada di toko aplikasi, tetapi tidak dibahas di sini karena kebijakan buku ini  
 memakai alat resmi dan peramban.
+
+## 49.6 Template CT Debian dasar dan cara mengklon
+
+### Bedakan template unduhan dan template CT
+
+Proxmox memakai arsip OS CT saat membuat container baru. Arsip unduhan itu belum menjadi CT yang siap diklon. Bagian ini membuat satu CT dasar bernama `tpl-debian-lxc`, memasang pembaruan dan alat umum, lalu mengubah CT itu menjadi template Proxmox.
+
+Gunakan CT untuk layanan Linux ringan tanpa Docker. Layanan yang memakai Docker tetap ditempatkan di VM Debian. Template CT memakai mode unprivileged sebagai pilihan awal. Jangan memasang layanan, Tailscale, kunci, token, atau data pribadi ke template.
+
+### A. Unduh arsip Debian
+
+Di web Proxmox pilih storage `local` > CT Templates > Templates. Cari Debian 13/Trixie standard amd64 terbaru yang tersedia, lalu unduh. Nama berkas dapat berubah mengikuti rilis.
+
+### B. Buat CT dasar
+
+1. Pilih Create CT. Gunakan CTID `9200` dan hostname `tpl-debian-lxc`.
+2. Pilih template Debian yang baru diunduh.
+3. Pilih storage `local-lvm` untuk disk root 8 GiB.
+4. Pertahankan unprivileged container. Berikan 1 core dan RAM 512 MiB sebagai baseline.
+5. Hubungkan ke bridge `vmbr0` dengan IPv4 DHCP. Jangan menanam IP layanan pada template.
+6. Selesaikan wizard, nyalakan CT, lalu buka Console.
+
+Jika server masih di jaringan sementara, DHCP membuat template bisa diperbarui tanpa memakai IP rumah yang belum terhubung. IP final diatur pada clone setelah MikroTik aktif.
+
+### C. Perbarui sistem dasar
+
+**TERMINAL CT DASAR** | Console CT 9200, login root
+
+```
+apt update && apt full-upgrade -y
+```
+> Penjelasan: Memasang pembaruan dan perbaikan keamanan dasar.
+
+```
+apt install -y ca-certificates curl nano
+```
+> Penjelasan: Memasang alat umum minimum. Paket aplikasi dipasang nanti pada clone yang sesuai.
+
+```
+poweroff
+```
+> Penjelasan: Matikan CT sebelum mengubahnya menjadi template.
+
+### D. Jadikan CT sebagai template
+
+Pastikan CT 9200 berhenti. Di UI pilih CT 9200 > More > Convert to template. Alternatif pada shell host Proxmox:
+
+**TERMINAL HOST PROXMOX** | Shell node sebagai root
+
+```
+pct template 9200
+```
+> Penjelasan: Mengunci CT dasar sebagai sumber clone. Jangan menyalakan atau memasang aplikasi langsung pada template.
+
+### E. Klon untuk layanan
+
+Contoh membuat CT 101 untuk AdGuard kedua. Jalankan setelah host tersambung ke jaringan rumah dan pastikan IP `.11` belum digunakan:
+
+```
+pct clone 9200 101 --full 1
+```
+> Penjelasan: Membuat salinan penuh yang berdiri sendiri dari template CT 9200.
+
+```
+pct set 101 --hostname adguard2 --cores 1 --memory 512 --net0 name=eth0,bridge=vmbr0,ip=192.168.88.11/24,gw=192.168.88.1
+```
+> Penjelasan: Mengatur nama, resource, dan jaringan clone. Ganti CTID, hostname, CPU/RAM, dan IP sesuai peta guest.
+
+```
+pct start 101
+pct exec 101 -- hostname
+pct exec 101 -- ip -4 -br address
+```
+> Penjelasan: Menyalakan CT dan memeriksa hostname serta IP sebelum memasang aplikasi.
+
+Untuk CT 102 Samba, ulangi proses clone dengan CTID `102`, nama `files`, dan IP `192.168.88.12`. Jangan memakai alamat `192.168.88.x` ketika host masih di jaringan sementara; gunakan DHCP atau tunggu sampai MikroTik tersambung.
+
+### Catatan pembaruan template
+
+Template tidak menerima pembaruan otomatis setelah dibuat. Untuk baseline baru, perbarui dan uji clone sementara, lalu buat template versi baru. Setiap clone perlu identitas SSH, hostname, alamat jaringan, dan resource yang unik.

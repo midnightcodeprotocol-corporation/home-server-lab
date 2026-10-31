@@ -2,12 +2,12 @@
 
 Isi setiap kali satu bab selesai diuji. Tulis pesan error persis dan bab yang perlu direvisi.
 
-Status: **pengujian bab lengkap masih berlangsung**. Pemeriksaan awal host Proxmox di M710q sudah berhasil dan dicatat di bawah. Hasil uji sebelumnya di lab VMware ada di `kasus-nyata-lab.md`; catatan itu hanya menjadi riwayat.
+Status: **pengujian panduan di ThinkCentre M710q sedang berlangsung**. Pemeriksaan dasar host dan KVM sudah berhasil. Hasil uji sebelumnya di lab VMware ada di `kasus-nyata-lab.md` dan tidak membuktikan instalasi pada mesin ini.
 
 | Fase | Bagian / Bab | Tanggal | Lulus? | Catatan / error | Revisi buku |
 |---|---|---|---|---|---|
 | 1 | Keamanan dan Tailscale (25-26) | | | | |
-| 2 | Mesin M710q: RAM, BIOS, instal Proxmox (6, 8, 9, 27, 28, 30) | 31 Okt 2026 | Parsial | Proxmox terpasang dan diperbarui; cek host lulus. BIOS/MemTest dan keseluruhan bab belum diuji. Detail di bawah. |
+| 2 | Mesin M710q: RAM, BIOS, instal Proxmox (6, 8, 9, 27, 28, 30) | 31 Okt 2026 | Parsial | Proxmox update/reboot dan KVM lulus; BIOS/MemTest, jaringan rumah, HDD, template, serta layanan belum diuji. | Revisi 5 |
 | 3 | Monitoring (31-34) | | | | |
 | 4 | Caddy dan sertifikat lokal (35-38) | | | | |
 | 5 | Web, WordPress, n8n, tunnel (39-43) | | | | |
@@ -29,26 +29,25 @@ Butir [BELUM PASTI] terjawab: <ya/tidak, jawabannya>
 Penyimpangan dari buku: <catat>
 ```
 
-## Pemeriksaan awal host Proxmox — 31 Oktober 2026
+## Kasus nyata: VT-x/KVM dan BIOS Lenovo tanpa monitor - 31 Oktober 2026
 
-### Hasil yang berhasil
-- `uname -r` setelah reboot: `7.0.14-26-pve`.
-- `systemctl --failed`: `0 loaded units listed`.
-- `free -h`: Mem total `23Gi`, tersedia `21Gi`; swap `8.0Gi`.
-- `lsblk -d -o NAME,SIZE,MODEL,TRAN`: `nvme0n1 476.9G SAMSUNG MZALQ512HALU-000L2 nvme`.
-- `pvesm status`: `local` dan `local-lvm` aktif; local-lvm belum terpakai.
-- Pembaruan melalui GUI selesai; ringkasan apt: 193 paket upgraded, 2 paket baru, 0 paket dihapus.
+Bab terkait: 8, 11, 24, 27.5. Hasil: **gagal, kemudian diperbaiki**; perubahan panduan tercatat di `docs/bab/REVISI-5.md`.
 
-### Gangguan DNS saat update pertama
-Jaringan host saat itu sementara, bukan MikroTik:
-- Host: `vmbr0 = 192.168.0.200/24`; gateway `192.168.0.1`.
-- `/etc/resolv.conf` sebelumnya menunjuk ke `192.168.88.253`, sehingga nama Debian/Proxmox tidak ter-resolve dari jaringan sementara.
-- `ping 1.1.1.1` berhasil, tetapi `getent hosts deb.debian.org` awalnya tidak mengembalikan alamat.
-- DNS diubah ke `192.168.0.1`; resolusi nama berhasil. `apt-get -o Acquire::ForceIPv4=true update` kemudian berhasil mengunduh indeks Debian Trixie dan Proxmox.
-- Pengguna mengonfirmasi alamat `192.168.0.0/24` hanya untuk sementara sampai server kembali tersambung ke MikroTik. Jangan menyimpulkan ini sebagai perubahan jaringan rumah.
+- Pesan saat VM start: `TASK ERROR: KVM virtualisation configured, but not available. Either disable in VM configuration or enable in BIOS.`
+- Sebelum perbaikan, `lscpu | grep -i virtualization` kosong dan `/dev/kvm` tidak ada.
+- Pengguna tidak memiliki monitor untuk membuka BIOS lokal. Host menyediakan direktori `thinklmi` di `/sys/class/firmware-attributes/`.
+- Atribut yang terlihat: `Intel(R) Virtualization Technology` dan `VT-d`. Nilai awal VT-x `Disabled`; pilihan valid `Disabled;Enabled`.
+- Pengguna mengaktifkan hanya Intel Virtualization Technology melalui `thinklmi`, lalu reboot. `VT-d` sengaja tetap `Disabled` karena PCI passthrough belum dibutuhkan.
+- Setelah reboot, `lscpu | grep -i virtualization` menampilkan `Virtualization: VT-x`; `/dev/kvm` ada (`crw-rw---- 1 root kvm 10, 232 ...`).
+- Ketidakpastian: output `save_settings` tidak dicatat. Perubahan terbukti bertahan setelah reboot pada unit ini, tetapi kebutuhan `save_settings` di unit/BIOS lain belum dipastikan. Lihat `catatan/belum-pasti.md`.
 
-### Catatan perangkat dan pekerjaan tersisa
-- RAM terpasang 16 GB + 8 GB; Linux melaporkan 23 GiB. Ini mengonfirmasi OS melihat kapasitas yang diharapkan, tetapi BIOS dan MemTest86 belum diperiksa.
-- NVMe Samsung terdeteksi pada 476,9 GB. Dua HDD 2 TB belum tersambung.
-- Pengguna menemukan enclosure single-bay lama; fungsi enclosure belum diuji. Enclosure dan HDD akan diuji setelah pengguna tiba di rumah.
-- Belum ada VM/LXC atau backup. Penggunaan local-lvm untuk guest dimungkinkan, tetapi konfigurasi guest dan alamat jaringan final belum dibuat.
+## Pemeriksaan host Proxmox dan DNS update - 31 Oktober 2026
+
+- Kernel aktif setelah pembaruan dan reboot: `7.0.14-26-pve`; `systemctl --failed` menghasilkan `0 loaded units listed`.
+- `free -h`: RAM total `23Gi`, tersedia `21Gi`, swap `8Gi`. BIOS dan MemTest86 belum dicek.
+- `lsblk`: `nvme0n1 476.9G SAMSUNG MZALQ512HALU-000L2 nvme`.
+- `pvesm status`: `local` dan `local-lvm` aktif; local-lvm saat diperiksa belum digunakan.
+- Jaringan sementara: `vmbr0` `192.168.0.200/24`, gateway `192.168.0.1`. DNS awal `192.168.88.253` tidak terjangkau dari subnet tersebut; ping ke `1.1.1.1` berhasil, tetapi resolusi nama gagal. Setelah DNS host diubah ke `192.168.0.1`, `getent hosts deb.debian.org` berhasil dan `apt-get -o Acquire::ForceIPv4=true update` sukses. Upgrade melalui GUI selesai (193 paket diperbarui, 2 paket baru, 0 dihapus).
+- Keluaran jaringan aktual yang dikirim pengguna menunjukkan port `enp0s31f6` dan `eno1`; konfigurasi `vmbr0` menjembatani keduanya, dengan alamat host di bridge. Percakapan Gemini tentang perpindahan sistem dan nama interface ditinjau; rekomendasi generik yang belum diverifikasi tidak diterapkan.
+- Windows `192.168.0.100` mencapai TCP 22 pada Proxmox `192.168.0.200`. Fingerprint ED25519 cocok; SSH Codex belum terautentikasi dan belum menjalankan perintah pada host.
+- Belum dibuat VM/LXC, template VM 9100 atau CT 9200. Enclosure single-bay lama ditemukan tetapi belum diuji; HDD belum tersambung.

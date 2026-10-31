@@ -372,4 +372,3 @@ docker compose up -d
 ss -tlnp | grep -E ":(80|3002)\b"
 ```
 > Penjelasan: Port 3002 dipakai Homepage; port 80 harus bebas untuk Caddy.
-

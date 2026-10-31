@@ -1,7 +1,7 @@
 # Roadmap manfaat dan keamanan Home Server Lab
 
 **Status:** usulan bertahap, belum diterapkan di server.  
-**Kondisi saat ini (31 Oktober 2026):** jaringan rumah berjalan; Proxmox belum dipasang; RAM M710q dilaporkan 24 GB (16+8), tetapi BIOS/MemTest86 belum dikonfirmasi; NVMe M.2 500 GB sudah terpasang di slot 1. Dua HDD 3,5 inci belum dipasang. Karena enclosure yang tersedia single-bay, rencana awal memakai satu HDD dahulu.
+**Kondisi saat ini (31 Oktober 2026):** Proxmox berjalan pada M710q, kernel `7.0.14-26-pve`; Linux melaporkan 23 GiB RAM dari konfigurasi 16+8 GB; BIOS/MemTest86 belum dikonfirmasi. NVMe Samsung 476,9 GB terdeteksi dan VT-x/KVM aktif. Jaringan server sementara `192.168.0.200/24`, belum kembali ke MikroTik. Dua HDD 3,5 inci belum dipasang; enclosure lama ditemukan tetapi belum diuji.
 
 ## Prinsip pelaksanaan
 
@@ -55,4 +55,3 @@ Urutan awal yang masuk akal:
 - [Proxmox Backup Server: penyimpanan datastore](https://pbs.proxmox.com/docs/storage.html)
 - [MikroTik RouterOS: backup dan restore](https://help.mikrotik.com/docs/spaces/ROS/pages/40992852/Backup)
 - [MikroTik RouterOS: ekspor konfigurasi](https://help.mikrotik.com/docs/spaces/ROS/pages/328155/Configuration%2BManagement)
-

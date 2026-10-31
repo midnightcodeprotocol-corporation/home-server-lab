@@ -30,4 +30,3 @@ PERINGATAN
 Urutan penting. Kerjakan Bab 54 sebelum Bab 55, dan tetapkan nama tailnet Anda dulu. Passkey terikat ke nama  
 alamat Pocket ID; bila nama berubah setelah passkey terdaftar, semua passkey harus didaftar ulang. Hal yang belum  
 bisa saya pastikan ditandai [BELUM PASTI].
-

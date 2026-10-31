@@ -22,4 +22,3 @@
 | 5 | HDD 2 TB terbaca sebagai disk data/backup | |
 | 6 | Wake-on-LAN dari STB menyalakan mesin | |
 | 7 | Bab 25 dan 26 (keamanan dan Tailscale) dikerjakan di mesin ini | |
-

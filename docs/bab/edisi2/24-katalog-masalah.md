@@ -21,6 +21,7 @@ masalah jaringan.
 |---|---|---|---|
 | [Nyata] Tidak bisa membuka `https://192.168.100.2:8006` | IP Proxmox beda jaringan dengan laptop | Sesuaikan alamat/gateway di `interfaces` dan `hosts`; verifikasi dari konsol sebelum reboot | Bab 9.3 |
 | [Nyata] Layar nano kosong saat mengedit jaringan | Nama berkas salah | Keluar tanpa menyimpan, lalu buka `/etc/network/interfaces` | Bab 9.3 |
+| [Nyata] Setelah pindah jaringan, Proxmox tidak bisa dijangkau / DNS APT gagal | Interface bridge, alamat, gateway, atau DNS tidak sesuai jaringan aktif | Kumpulkan `ip -br link`, `ip -br address`, `ip route`, dan `/etc/resolv.conf`; cocokkan `bridge-ports` dengan interface Ethernet yang benar dan gunakan gateway/DNS dari subnet aktif. Jangan menyalin `bridge-ports all` atau alamat jaringan lama tanpa verifikasi | Bab 9.1, 9.3-9.4 |
 | [Nyata] `apt update`: Temporary failure resolving | DNS kosong atau salah | Periksa System > DNS dan uji resolusi nama | Bab 9.4 |
 | [Nyata] Tidak menemukan menu Repositories | Menu berada di bawah Updates | Buka Node > Updates > Repositories | Bab 9.5 |
 | [Nyata] Refresh sangat lambat (9 KB/s) | Internet lambat atau uplink WiFi | Gunakan kabel LAN, mirror terdekat, atau waktu sepi | Bab 9.6 |
@@ -32,7 +33,7 @@ masalah jaringan.
 | Layanan web Proxmox mati setelah ganti IP | `/etc/hosts` masih memuat IP lama | Perbarui `hosts`, lalu periksa hostname dan `pveproxy` | Bab 9.3 |
 | Error 401 pada repository | Repository enterprise aktif | Nonaktifkan enterprise dan aktifkan no-subscription sesuai panduan | Bab 9.5 |
 | Container tidak mendapat IP | Reservasi, bridge, atau DHCP bermasalah | Periksa lease MikroTik, bridge, dan alamat yang ditetapkan | Bab 10.5 |
-| VM gagal start: KVM tidak tersedia | VT-x belum aktif | Aktifkan VT-x di BIOS dan periksa `/dev/kvm` | Bab 11, 27.5 |
+| VM gagal start: KVM tidak tersedia | VT-x belum aktif | Aktifkan VT-x di BIOS; tanpa monitor, lihat thinklmi jika tersedia. Verifikasi `lscpu` dan `/dev/kvm` | Bab 11, 27.5 |
 | Peringatan cdrom saat `apt update` | Sumber instalasi masih tersisa | Nonaktifkan baris cdrom di sumber APT | Bab 11.5 |
 | Port 53 dipakai systemd-resolved | DNS stub memakai port yang dibutuhkan AdGuard | Atur `DNSStubListener=no`, lalu mulai ulang layanan terkait | Bab 12.3 |
 | Subnet Tailscale tidak terjangkau | Rute belum disetujui atau IP forwarding mati | Setujui rute dan periksa `ip_forward=1` | Bab 26 |

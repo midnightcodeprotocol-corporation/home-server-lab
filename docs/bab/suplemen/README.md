@@ -2,7 +2,7 @@
 
 Diekstrak dari teks buku dan direvisi (Revisi 3: tanpa VMware dan tanpa instal-ke-disk-dulu; mesin asli ThinkCentre M710q).
 
-Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
+Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md). Hasil uji Proxmox, KVM/VT-x tanpa monitor, dan alur template VM/CT ada di [Revisi 5](../REVISI-5.md).
 
 - [Bab 25. Keamanan Dasar Server](25-keamanan-dasar.md)
 - [Bab 26. Tailscale: Akses Aman dari Mana Saja](26-tailscale.md)
@@ -28,7 +28,7 @@ Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
 - [Bab 46. AFFiNE: Catatan dan Dokumen Bergaya Notion](46-affine.md)
 - [Bab 47. Nextcloud dan Kalender Pribadi](47-nextcloud-kalender.md)
 - [Bab 48. Peta Penempatan: Siapa Tinggal di Mana](48-peta-penempatan.md)
-- [Bab 49. Templat VM Debian + Docker dan Cara Membuat VM Baru](49-templat-vm.md)
+- [Bab 49. Template VM Debian + Docker, Template CT Debian, dan Cara Mengklon Guest](49-templat-vm.md)
 - [Bab 50. Proxmox Backup Server](50-proxmox-backup-server.md)
 - [Bab 51. Firewall Proxmox antar-guest](51-firewall-proxmox.md)
 - [Bab 52. Audit Keamanan](52-audit-keamanan.md)
@@ -54,4 +54,3 @@ Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
 - [Bagian 8. Navidrome: Streaming Musik Pribadi: Uji, Masalah Umum, Lembar Pembaruan, Syarat Lulus Fase 8](bagian-8-99-penutup.md)
 - [Bagian 9. SSO dengan Pocket ID dan Immich (pengantar)](bagian-9-00-pengantar.md)
 - [Bagian 9. SSO dengan Pocket ID dan Immich: Uji, Masalah Umum, Lembar Pembaruan, Syarat Lulus Fase 9](bagian-9-99-penutup.md)
-

@@ -27,7 +27,7 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 ## 2. Fakta kunci (jangan dilanggar)
 
 - Pengguna **pemula**, berbahasa Indonesia, laptop Windows, HP Android (instruksi harus mencakup **Android dan iPhone**).
-- Server target: **Lenovo ThinkCentre M710q**, Core i5-6500T (4 core/4 thread). Per 31 Oktober 2026, pengguna melaporkan RAM fisik 1×16 GB + 1×8 GB (total diharapkan 24 GB); BIOS/OS dan MemTest86 belum dikonfirmasi. SSD NVMe M.2 500 GB sudah terpasang di slot M.2 1; partisi/isi harus diperiksa sebelum instalasi. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum dipasang; rencana sementara memakai satu unit melalui enclosure single-bay yang tersedia dan menunda unit kedua. **Proxmox belum diinstal**; rencana pemasangan langsung di M710q. Jangan menyebut rencana sebagai keadaan yang sudah berjalan. **Tidak ada VMware** dan tidak ada "instal ke disk dulu" (dihapus di Revisi 3).
+- Server: **Lenovo ThinkCentre M710q**, Core i5-6500T (4 core/4 thread). Per 31 Oktober 2026, Proxmox sudah dipasang, diperbarui dan reboot; kernel aktif `7.0.14-26-pve`, tanpa unit systemd gagal. RAM 16+8 GB terpasang dan Linux melaporkan 23 GiB; BIOS/MemTest86 belum diverifikasi. NVMe Samsung MZALQ512HALU-000L2 terlihat sebesar 476,9 GB. VT-x/KVM aktif setelah perbaikan lewat thinklmi tanpa monitor; VT-d tetap Disabled. Jaringan host sementara `192.168.0.200/24`, belum kembali ke MikroTik; alamat rumah `.88.10` masih target. Dua HDD Seagate Surveillance 2 TB belum tersambung; enclosure single-bay lama ditemukan tetapi belum diuji. VM/LXC dan template belum dibuat. **Tidak ada VMware** dan tidak ada "instal ke disk dulu" (dihapus di Revisi 3).
 - Jaringan: IndiHome (WiFi) -> TL-WR840N (WISP) -> MikroTik RB750GL `192.168.88.1/24` -> AP TL-WR820N, STB, Proxmox `.10`, VM `.20-.33`. AdGuard utama di STB HG680 `.253` (di luar Proxmox).
 - Akses jarak jauh untuk administrasi dan layanan privat **direncanakan lewat Tailscale**; saat ini Tailscale belum diterapkan. Tidak ada port forwarding. `tailscale funnel` tidak dipakai. Cloudflare Tunnel hanya opsi untuk menerbitkan situs statis dari VM 210.
 - Satu layanan = satu VM/LXC (kecuali kelompok ringan di `docker-core`). Setiap bab pemasangan dibuka dengan **Kotak Penempatan**.
@@ -67,4 +67,3 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 4. Bila ada keputusan baru, tambahkan ke `docs/08-keputusan.md`.
 5. Bila isi bab berubah, ubah berkas di `docs/bab/` dan catat di `docs/bab/REVISI-3.md` (atau buat `REVISI-4.md`).
 6. Pesan commit: `bab X: hasil uji` atau `status: tanggal`.
-

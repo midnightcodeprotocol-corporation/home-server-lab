@@ -9,7 +9,7 @@
 | TP-Link LiteWave LS1005 | Switch | Opsional, memperbanyak port |
 | STB HG680 (Amlogic S905x) | AdGuard Home utama | 192.168.88.253; Armbian v25.05.0 (ophub, Linux 6.1) di eMMC |
 | STB 2 | Tailscale subnet router (rencana) | Belum tiba; usulan 192.168.88.250 |
-| **Lenovo ThinkCentre M710q** | **Server Proxmox** | **192.168.88.10; Core i5-6500T (4 core/4 thread); RAM terpasang diperkirakan 24 GB (1×16 + 1×8, verifikasi BIOS/MemTest belum dicatat); NVMe M.2 500 GB terpasang di slot 1, Proxmox belum diinstal** |
+| **Lenovo ThinkCentre M710q** | **Server Proxmox** | **Target rumah `192.168.88.10`; sementara `192.168.0.200`; Core i5-6500T (4 core/4 thread); Linux melaporkan 23 GiB RAM (BIOS/MemTest belum dicatat); NVMe Samsung MZALQ512HALU-000L2 terdeteksi 476,9 GB; Proxmox berjalan, kernel `7.0.14-26-pve`; VT-x/KVM aktif** |
 | RAM M710q | Konfigurasi fisik dilaporkan 1×16 GB + 1×8 GB | Total yang diharapkan 24 GB; pastikan kapasitas terbaca dan lulus MemTest86 |
 | 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Rencana awal memakai satu unit; peran data/backup belum ditetapkan | Enclosure yang tersedia single-bay; HDD kedua ditunda. Belum dipasang; model tiap unit belum dicatat; setidaknya satu belum diformat. |
 | Laptop (AMD Ryzen 3 4300U, RAM 19,4 GB) | Laptop admin | 192.168.88.252 via adaptor USB-LAN (ASIX); WinBox, browser, SSH |
@@ -25,5 +25,4 @@ Modem kedua untuk failover internet, TP-Link MR3020 (cetak dari mana saja), UPS 
 
 ## Catatan kelistrikan
 Banyak adaptor TP-Link terpisah; ada ide catu daya DC terpusat (12 V masuk; keluaran 5/12/24 V) yang rancangannya masih perlu ditinjau sebelum dibuat.
-
 

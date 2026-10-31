@@ -6,13 +6,15 @@ host:
   web: https://192.168.88.10:8006
   ram_terpasang_gb: 24
   ram_konfigurasi_gb: [16, 8]
-  ram_status: "dilaporkan terpasang; verifikasi BIOS dan MemTest86 belum dicatat"
-  disk_sistem: NVMe M.2 500 GB (terpasang pada slot M.2 1; Proxmox/partisi belum ada)
-  disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (rencana awal pakai satu melalui enclosure single-bay; unit kedua ditunda; belum dipasang)
+  ram_status: "Linux Proxmox melaporkan 23 GiB; VT-x/KVM aktif; verifikasi BIOS dan MemTest86 belum dicatat"
+  disk_sistem: NVMe Samsung MZALQ512HALU-000L2 476.9 GB; Proxmox berjalan
+  ip_sementara: 192.168.0.200
+  disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda)
   docker_di_host: false
 templat:
-  - {vmid: 9100, nama: tpl-debian-docker, catatan: "Debian 13 + Docker; tidak dinyalakan"}
+  - {vmid: 9100, nama: tpl-debian-docker, jenis: vm, catatan: "rencana template Debian 13 + Docker; belum dibuat; setelah jadi tidak dinyalakan"}
   - {vmid: 9000, nama: debian13-template, catatan: "cloud-init, untuk VM k3s"}
+  - {vmid: 9200, nama: tpl-debian-lxc, jenis: lxc, catatan: "rencana template Debian 13 unprivileged untuk CT ringan; belum dibuat"}
 guest:
   - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}
@@ -34,5 +36,4 @@ guest:
 perangkat_luar_proxmox:
   - {nama: stb-1, ip: 192.168.88.253, isi: "AdGuard Home utama (HG680, Armbian, eMMC)"}
   - {nama: stb-2, ip: 192.168.88.250, isi: "Tailscale subnet router (rencana, belum tiba)"}
-
 

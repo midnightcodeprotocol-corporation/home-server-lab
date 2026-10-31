@@ -178,4 +178,3 @@ IP, gateway, atau interface salah Ikuti Edisi 2 Bab 9.3: periksa
 /etc/network/interfaces dan /etc/hosts  
 Mesin kembali ke installer terus USB belum dicabut Cabut USB dan restart  
 Tidak mau boot tanpa keyboard BIOS menahan karena error keyboard Matikan Halt on keyboard error di BIOS
-

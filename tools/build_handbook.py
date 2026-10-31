@@ -75,7 +75,7 @@ def source_content() -> str:
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual:** jaringan rumah sudah berjalan; Proxmox belum dipasang. RAM M710q dilaporkan 1×16 GB + 1×8 GB (total yang diharapkan 24 GB); BIOS dan MemTest86 belum dikonfirmasi. SSD NVMe M.2 500 GB terpasang di slot 1, tetapi partisi dan isinya harus diperiksa sebelum instalasi. Dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum dipasang; rencana awal menggunakan satu HDD melalui enclosure single-bay. Semua bagian yang bergantung pada server diberi label rencana sampai pengujian nyata dicatat.
+> **Status aktual (31 Oktober 2026):** Proxmox berjalan dan sudah diperbarui pada ThinkCentre M710q. Kernel aktif `7.0.14-26-pve`; RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template VM/CT, layanan, HDD, dan backup belum dibuat atau diuji.
 
 ## Sebelum mulai
 
@@ -90,11 +90,11 @@ Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC,
 
 [[ILUSTRASI:JARINGAN]]
 
-Garis dan kotak menjelaskan jaringan rumah yang dicatat sudah berjalan dan host Proxmox yang masih direncanakan. Jangan membuka panel admin ke internet. Akses Tailscale dan aplikasi privat belum aktif sampai dikonfigurasi dan diuji.
+Garis dan kotak menjelaskan jaringan rumah yang sudah berjalan dan status host Proxmox. Host saat ini berada di jaringan sementara `192.168.0.200/24`; `192.168.88.10` adalah alamat target setelah disambungkan ke MikroTik. Jangan membuka panel admin ke internet. Akses Tailscale dan aplikasi privat belum aktif sampai dikonfigurasi dan diuji.
 
 ## Koreksi keamanan dan versi terbaru
 
-Koreksi audit Revisi 4 mengatur kebijakan Tailscale untuk grup admin, memperbaiki jalur data PostgreSQL 18 pada n8n, mematikan pendaftaran Vaultwarden secara default, dan memperluas `.gitignore`. Baca [catatan Revisi 4](docs/bab/REVISI-4.md). Nilai email Tailscale pada contoh masih placeholder dan wajib diganti sebelum kebijakan diterapkan.
+Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 menambahkan hasil Proxmox terbaru: DNS dan update berhasil, KVM/VT-x diperbaiki melalui `thinklmi`, serta alur template VM/CT ditempatkan setelah update host. Baca [Revisi 4](docs/bab/REVISI-4.md) dan [Revisi 5](docs/bab/REVISI-5.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
 
 ## Daftar isi
 
@@ -119,7 +119,7 @@ Koreksi audit Revisi 4 mengatur kebijakan Tailscale untuk grup admin, memperbaik
 | TP-Link TL-WR820N | Access Point | Mode AP di belakang MikroTik untuk WiFi rumah. |
 | TP-Link LiteWave LS1005 | Switch | Memperbanyak port LAN. |
 | STB HG680 (Armbian) | DNS utama + Tailscale | AdGuard Home dan Tailscale, selalu hidup, di luar Proxmox. |
-| Lenovo ThinkCentre M710q | Server Proxmox | Core i5-6500T; RAM dilaporkan 1×16 GB + 1×8 GB (24 GB, BIOS/MemTest belum diverifikasi); NVMe M.2 500 GB terpasang di slot 1, Proxmox belum diinstal. |
+| Lenovo ThinkCentre M710q | Server Proxmox | Core i5-6500T; RAM 16+8 GB (Linux melaporkan 23 GiB; BIOS/MemTest belum diverifikasi); NVMe Samsung 476,9 GB; Proxmox berjalan, VT-x/KVM aktif. |
 | HDD 2 TB | Disk data / backup | Disk kedua (bay 2,5\" atau USB), dipakai untuk datastore backup. |
 
 """),
@@ -178,7 +178,7 @@ Sumber roadmap lengkap: `docs/12-roadmap-manfaat-keamanan.md`.
 
 ## Penutup: server dianggap siap setelah diuji
 
-Proxmox belum dipasang. Backup, firewall, layanan, Tailscale, dan instruksi pemulihan dalam buku belum dibuktikan di mesin ini. Catat uji aktual, versi, kendala, dan hasil restore sebelum menandai pekerjaan selesai. Repo menjadi catatan utama untuk perubahan konfigurasi.
+Proxmox sudah dipasang dan diperbarui. Backup, firewall, layanan, Tailscale, dan instruksi pemulihan dalam buku belum dibuktikan di mesin ini. Template VM/CT menjadi langkah pertama setelah update host dan pemeriksaan KVM. Catat uji aktual, versi, kendala, dan hasil restore sebelum menandai pekerjaan selesai. Repo menjadi catatan utama untuk perubahan konfigurasi.
 """)
     return "\n".join(parts)
 
@@ -237,10 +237,10 @@ class Diagram(Flowable):
             a=math.atan2(y2-y1,x2-x1);c.line(x2,y2,x2-4*math.cos(a-.45),y2-4*math.sin(a-.45));c.line(x2,y2,x2-4*math.cos(a+.45),y2-4*math.sin(a+.45))
             if label:c.setFont("Vera",5.8);c.drawCentredString((x1+x2)/2,(y1+y2)/2+4,label)
         if self.kind=="JARINGAN":
-            items=[("Internet","IndiHome"),("WISP","TL-WR840N"),("Router","MikroTik\n.88.1"),("LAN","AP + switch"),("DNS","STB AdGuard\n.88.253"),("Host target","M710q / PVE\n.88.10")];bw=23*mm;gap=(w-16*mm-6*bw)/5;x0=8*mm;y=(h-18*mm)/2
+            items=[("Internet","IndiHome"),("WISP","TL-WR840N"),("Router","MikroTik\n.88.1"),("LAN","AP + switch"),("DNS","STB AdGuard\n.88.253"),("Host PVE","sementara .0.200\ntarget .88.10")];bw=23*mm;gap=(w-16*mm-6*bw)/5;x0=8*mm;y=(h-18*mm)/2
             for i,(a,b) in enumerate(items):box(x0+i*(bw+gap),y,bw,18*mm,a,b, GREEN if i<5 else AMBER)
             for i in range(5):arrow(x0+i*(bw+gap)+bw,y+9*mm,x0+(i+1)*(bw+gap),y+9*mm)
-            c.setFont("Vera",6);c.setFillColor(INK);c.drawCentredString(w/2,5,"Internet -> jaringan rumah yang berjalan -> server Proxmox yang direncanakan")
+            c.setFont("Vera",6);c.setFillColor(INK);c.drawCentredString(w/2,5,"Internet -> jaringan rumah -> host Proxmox sementara .0.200, target rumah .88.10")
         elif self.kind=="BACKUP":
             xs=[8*mm,62*mm,116*mm]; labels=[("Guest","data kerja"),("Backup","PBS / disk"),("Salinan lain","offline / lokasi lain")]
             for x,(a,b) in zip(xs,labels):box(x,h/2-9*mm,40*mm,18*mm,a,b,GREEN)
@@ -302,7 +302,7 @@ def cover():
             for i,line in enumerate(lines):c.drawString(14*mm,h-119*mm-i*8*mm,line)
             c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 31 OKTOBER 2026")
             c.setFont("Vera",7.2)
-            for i,line in enumerate(["Jaringan rumah berjalan. Proxmox belum dipasang.","Server, storage, Tailscale, dan aplikasi dalam bagian berikut", "adalah rencana hingga hasil uji nyata tercatat."]):c.drawString(19*mm,54*mm-i*5*mm,line)
+            for i,line in enumerate(["Proxmox berjalan; kernel 7.0.14-26-pve.","Template, HDD, backup, dan layanan belum dibuat.", "Alamat host sementara .0.200 sampai kembali ke MikroTik."]):c.drawString(19*mm,54*mm-i*5*mm,line)
     return [Spacer(1,4*mm),Cover(),PageBreak()]
 
 def parse_md(path:Path):
@@ -346,8 +346,14 @@ def parse_text(text:str,include_toc:bool=True):
             continue
         if s.startswith(">"):
             qs=[]
-            while i<len(lines) and lines[i].strip().startswith(">"):
-                qs.append(lines[i].strip().lstrip("> "));i+=1
+            while i<len(lines):
+                quote_line=lines[i].strip()
+                if quote_line.startswith(">"):
+                    qs.append(quote_line.lstrip("> "));i+=1;continue
+                if not quote_line or quote_line.startswith(("#","```","|","[[")) or re.match(r"^[-*] |^\d+[.)]\s",quote_line):
+                    break
+                # Markdown permits wrapped continuation lines in a blockquote.
+                qs.append(quote_line);i+=1
             content=" ".join(qs); color=RED if any(x in content.lower() for x in ("perhatian","peringatan","bahaya","jangan")) else (AMBER if "belum pasti" in content.lower() else PALE)
             st=ParagraphStyle("Callout",parent=styles["QuoteID"],backColor=color,borderColor=GRID,borderWidth=.4,borderPadding=6)
             story.append(Paragraph(inline(content),st));continue
@@ -389,7 +395,7 @@ def parse_text(text:str,include_toc:bool=True):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--pdf",type=Path);ap.add_argument("--markdown",type=Path);args=ap.parse_args()
-    book_md=source_content();md_path=args.markdown or ROOT/"docs/panduan-lengkap-home-server-lab.md";md_path.parent.mkdir(parents=True,exist_ok=True);md_path.write_text(book_md,encoding="utf-8")
+    book_md="\n".join(line.rstrip() for line in source_content().splitlines())+"\n";md_path=args.markdown or ROOT/"docs/panduan-lengkap-home-server-lab.md";md_path.parent.mkdir(parents=True,exist_ok=True);md_path.write_text(book_md,encoding="utf-8")
     pdf_path=args.pdf or ROOT.parent/"06-Book/Panduan_Lengkap_Home_Server_Lab_Edisi_Lengkap_2026.pdf";pdf_path.parent.mkdir(parents=True,exist_ok=True)
     mdtext=md_path.read_text(encoding="utf-8")
     front,body=mdtext.split("## Daftar isi",1)
@@ -399,5 +405,4 @@ def main():
     print(f"Source chapters: {len(parse_index(EDISI2_INDEX))+len(parse_index(SUPPLEMENT_INDEX))}; PDF: {pdf_path}; pages: {doc.page}")
 
 if __name__=="__main__":main()
-
 

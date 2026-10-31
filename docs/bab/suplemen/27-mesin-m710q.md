@@ -8,10 +8,10 @@ Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat s
 
 | Komponen | Kebutuhan | M710q Anda | Status |
 |---|---|---|---|
-| CPU | 64-bit dengan VT-x/AMD-V, 4 core disarankan | Core i5-6500T, 4 core / 4 thread, VT-x dan VT-d | Lulus |
-| RAM | 16 GB atau lebih | Dilaporkan 1×16 GB + 1×8 GB (24 GB) | Belum diverifikasi di BIOS; MemTest86 belum dilaporkan |
-| Disk sistem | SSD 120 GB atau lebih | NVMe M.2 500 GB, terpasang di slot 1 | Terpasang; Proxmox belum diinstal dan isi/partisi harus diperiksa |
-| Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Rencana awal memakai satu unit melalui enclosure single-bay yang tersedia; HDD kedua ditunda |
+| CPU | 64-bit dengan VT-x/AMD-V, 4 core disarankan | Core i5-6500T, 4 core / 4 thread | VT-x/KVM aktif setelah perbaikan; VT-d Disabled |
+| RAM | 16 GB atau lebih | 16 GB + 8 GB (24 GB fisik) | Linux melaporkan 23 GiB; BIOS/MemTest86 belum diperiksa |
+| Disk sistem | SSD 120 GB atau lebih | NVMe Samsung MZALQ512HALU-000L2 | Proxmox berjalan; terdeteksi sebesar 476,9 GB |
+| Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Belum tersambung; enclosure single-bay lama ditemukan tetapi belum diuji; HDD kedua ditunda |
 | Jaringan | 1 port LAN kabel | 1 Gigabit Ethernet (Intel) | Lulus |
 
 Spesifikasi di atas adalah patokan umum model M710q; **cek label RAM, tipe slot, dan ketebalan disk pada unit Anda sendiri** sebelum membeli atau memasang.
@@ -24,7 +24,7 @@ Spesifikasi di atas adalah patokan umum model M710q; **cek label RAM, tipe slot,
 | **16 GB + 8 GB (konfigurasi saat ini)** | **24 GB** | Diharapkan terpasang; periksa BIOS dan uji MemTest86. Gunakan profil konservatif sambil memantau beban. |
 | 16 GB + 16 GB | 32 GB | Opsi peningkatan di masa depan; tetap ukur beban nyata, jangan anggap semua VM aman menyala bersamaan. |
 
-RAM sudah dilaporkan diganti: modul pertama 8 GB diganti dengan 16 GB, sementara modul 8 GB lainnya tetap terpasang. Jadi total yang diharapkan adalah 24 GB. Pastikan angka tersebut terlihat di BIOS, kemudian jalankan **MemTest86 dari USB sampai 1-2 putaran penuh tanpa error** sebelum instalasi; RAM bermasalah dapat merusak VM secara diam-diam.
+RAM sudah dilaporkan diganti: modul pertama 8 GB diganti dengan 16 GB, sementara modul 8 GB lainnya tetap terpasang. Jadi total fisiknya 24 GB; Proxmox melaporkan 23 GiB yang dapat digunakan. BIOS dan MemTest86 belum diperiksa. Jalankan **MemTest86 dari USB sampai 1-2 putaran penuh tanpa error** sebelum menaruh beban kerja penting; RAM bermasalah dapat merusak VM secara diam-diam.
 
 ## 27.2 Memeriksa spesifikasi dari Windows
 
@@ -90,8 +90,8 @@ HDMI jalan
 
 | Disk | Peran | Sistem berkas | Catatan |
 |---|---|---|---|
-| NVMe M.2 500 GB (slot 1) | Target sistem Proxmox + disk VM (local-lvm) | ext4 direncanakan (bawaan installer) | SSD sudah terpasang; periksa model, isi, dan partisi sebelum instalasi. Proxmox belum diinstal. |
-| HDD Seagate Surveillance 2 TB (unit 1) | Calon disk data / datastore PBS | ext4 (Directory) | Rencana awal memakai satu unit lewat enclosure single-bay; pilih setelah model dan kondisi diverifikasi |
+| NVMe Samsung MZALQ512HALU-000L2 (476,9 GB) | Sistem Proxmox + disk VM (local-lvm) | ext4 | Proxmox sudah berjalan; `local` dan `local-lvm` aktif |
+| HDD Seagate Surveillance 2 TB (unit 1) | Calon disk data / datastore PBS | Belum dipilih | Belum tersambung; enclosure lama ditemukan tetapi belum diuji. Identifikasi model/kondisi sebelum dipakai |
 | HDD Seagate Surveillance 2 TB (unit 2) | Ditunda | — | Enclosure yang tersedia hanya single-bay; peran unit ini belum ditentukan |
 
 **Anggaran ruang NVMe 500 GB.** Disk VM dibuat tipis (thin), jadi ruang terpakai mengikuti isi, bukan ukuran yang diminta. Tetap hitung: sekitar 10-15 VM dengan sistem 4-8 GB aktual, ditambah image Docker dan data aplikasi. Contoh di bab layanan memakai disk data besar (musik 200 GiB di Bab 53, foto 300 GiB di Bab 55, datastore PBS 200 GiB di Bab 50). **Jangan menaruh semuanya di NVMe.** Saran:
@@ -103,7 +103,7 @@ HDMI jalan
 | Pustaka musik (VM 211) | NVMe atau HDD, 80-100 GiB | 80 GiB |
 | Datastore PBS (VM 212) | **HDD 2 TB** | 1-1,5 TB |
 
-**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; pengguna menyatakan HDD aman, dan setidaknya satu belum diformat sehingga tidak muncul di Windows. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi keduanya perlu terhubung dari luar. Enclosure yang tersedia single-bay; rencana sementara memakai satu HDD dahulu dan menunda yang kedua. Pastikan enclosure memiliki catu daya sendiri. Pilih peruntukan disk setelah model dan kondisi diverifikasi. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat menyiapkan storage.
+**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; keduanya dinyatakan aman. Satu HDD belum diformat sehingga sebelumnya tidak muncul di Windows. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi HDD 3,5 inci akan dipakai melalui koneksi luar. Enclosure yang tersedia single-bay dan belum diuji; rencana sementara memakai satu HDD dahulu dan menunda yang kedua. Pastikan enclosure memiliki catu daya sendiri. Pilih peruntukan disk setelah model dan kondisi diverifikasi. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat menyiapkan storage.
 
 > Disk tunggal bukan backup. Backup VM ke HDD 2 TB (Bab 50), ditambah satu salinan lagi di media lain (Bab 50.13).
 
@@ -114,7 +114,7 @@ Masuk BIOS: tekan **F1** berulang saat logo Lenovo muncul. Menu boot sekali paka
 | Pengaturan | Nilai | Mengapa |
 |---|---|---|
 | Intel Virtualization Technology (VT-x) | Enabled | Wajib agar VM berjalan dengan akselerasi KVM |
-| Intel VT-d | Enabled | Untuk passthrough PCI di masa depan (opsional) |
+| Intel VT-d | Opsional; saat ini Disabled | Hanya diperlukan untuk kebutuhan passthrough perangkat PCI tertentu |
 | SATA Controller Mode | AHCI | Agar disk 2,5" terbaca; NVMe tidak terpengaruh |
 | Boot Mode | UEFI (CSM/Legacy dimatikan) | Instalasi bersih dan boot stabil |
 | Secure Boot | Disabled | Mengurangi masalah saat instalasi |
@@ -127,3 +127,44 @@ Masuk BIOS: tekan **F1** berulang saat logo Lenovo muncul. Menu boot sekali paka
 
 Nama menu persis berbeda antar versi BIOS (mis. "Power > Automatic Power On" untuk Wake on LAN dan After Power Loss). Bila ragu, cari kata kunci "Virtualization", "Wake", dan "Power Loss". Memperbarui BIOS lewat situs dukungan Lenovo disarankan sebelum instalasi.
 
+### BIOS Lenovo tanpa layar: gunakan thinklmi hanya bila tersedia
+
+Kasus nyata pada M710q (31 Oktober 2026): VM gagal dinyalakan karena VT-x mati, dan pengguna tidak memiliki monitor untuk masuk BIOS. Host memiliki `/sys/class/firmware-attributes/thinklmi`, sehingga nilai Intel Virtualization Technology bisa diaktifkan lewat antarmuka firmware Linux. Dukungan ini bergantung pada model, BIOS, kernel, dan driver; jangan menganggap folder `thinklmi` tersedia pada setiap mesin.
+
+> **Peringatan:** perubahan firmware berisiko membuat mesin tidak dapat boot. Gunakan hanya jika benar-benar perlu dan siapkan akses lokal/pemulihan. Jangan ubah atribut selain VT-x. Jangan mengirim password BIOS ke chat. Jika folder/atribut tidak ada, jangan membuatnya; gunakan monitor dan F1 atau dokumentasi Lenovo.
+
+**TERMINAL HOST PROXMOX** | Shell host, sebagai root
+
+```
+ls /sys/class/firmware-attributes/
+```
+> Penjelasan: Pastikan keluaran memuat `thinklmi`. Jika tidak ada, berhenti dan gunakan cara BIOS biasa.
+
+```
+ls "/sys/class/firmware-attributes/thinklmi/attributes"
+```
+> Penjelasan: Cari nama atribut virtualization yang memang ada pada mesin. Jangan menyalin nama dari model lain bila tidak cocok.
+
+```
+cat "/sys/class/firmware-attributes/thinklmi/attributes/Intel(R) Virtualization Technology/current_value"
+cat "/sys/class/firmware-attributes/thinklmi/attributes/Intel(R) Virtualization Technology/possible_values"
+```
+> Penjelasan: Pastikan atribut yang dipilih adalah Intel Virtualization Technology dan `Enabled` tercantum sebagai nilai yang diizinkan. Pada unit yang diuji, nilai awal `Disabled` dan pilihan `Disabled;Enabled`.
+
+```
+echo "Enabled" > "/sys/class/firmware-attributes/thinklmi/attributes/Intel(R) Virtualization Technology/current_value"
+```
+> Penjelasan: Mengubah hanya VT-x ke Enabled. Pada unit pengguna, perubahan bertahan setelah reboot; kebutuhan menulis `save_settings` belum dipastikan dan bukan bagian langkah ini.
+
+```
+reboot
+```
+> Penjelasan: Nyalakan ulang agar firmware menerapkan perubahan. Pastikan akses web/SSH tersedia kembali.
+
+```
+lscpu | grep -i virtualization
+ls -l /dev/kvm
+```
+> Penjelasan: Hasil pada unit yang diuji adalah `Virtualization: VT-x` dan perangkat `/dev/kvm` tersedia. Jika tidak, jangan mulai membuat VM; cek BIOS/firmware secara lokal.
+
+Intel VT-d boleh tetap `Disabled` sampai benar-benar ada kebutuhan passthrough PCI; VT-x diperlukan untuk akselerasi VM KVM.

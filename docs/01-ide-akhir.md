@@ -73,11 +73,10 @@ flowchart TB
 - **Belum dianggap ada sebelum satu uji pulih berhasil.**
 
 ## Mesin: Lenovo ThinkCentre M710q (Bab 27 dan 56)
-Core i5-6500T (4 core/4 thread). SSD NVMe M.2 500 GB sudah dipasang di slot 1. RAM yang dilaporkan terpasang adalah **24 GB (1×16 + 1×8)**; jumlah BIOS/OS dan MemTest86 belum diverifikasi. Proxmox belum dipasang. HDD 2 TB direncanakan untuk data/backup.
+Core i5-6500T (4 core/4 thread). Proxmox sudah berjalan dan diperbarui; kernel aktif `7.0.14-26-pve`. NVMe Samsung terdeteksi sebesar 476,9 GB. RAM 16+8 GB terpasang dan Linux melaporkan 23 GiB; BIOS/MemTest86 belum diverifikasi. VT-x/KVM aktif. Host sementara memakai `192.168.0.200/24`; alamat `.88.10` adalah target setelah kembali tersambung ke MikroTik. HDD 2 TB belum tersambung dan enclosure single-bay belum diuji.
 - Dengan 16 GB: lima profil pemakaian (harian, kerja, foto, backup, belajar) memakai `konfigurasi/skrip/profil.sh`.
 - Profil lama dibuat untuk 16 GB dan 32 GB. Dengan RAM yang diperkirakan 24 GB, mulai dari profil konservatif Bab 56 dan naikkan bertahap setelah pemantauan; CPU 4 thread tetap menjadi batas penting.
 
 ## Yang belum masuk target
 Suplemen 10-11: AMP + playit.gg, Ollama, OnlyOffice, TrueNAS, STB 2, update profil RAM saat RAM naik.
 Lihat `04-board.md`.
-

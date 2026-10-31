@@ -1,8 +1,11 @@
 # Bab 9. Konfigurasi Awal Proxmox di Jaringan MikroTik
 
+> **Periksa jaringan yang sedang dipakai sebelum menyalin alamat di bab ini.** Host saat ini sementara berada di `192.168.0.200/24` dengan gateway dan DNS `192.168.0.1`. Alamat `192.168.88.10`, gateway `.88.1`, dan DNS AdGuard `.88.253` baru dipakai setelah host kembali ke MikroTik. Jangan memakai gateway atau DNS dari subnet lain; sesuaikan juga `/etc/hosts` saat mengganti alamat host.
+
 ## 9.1 Memastikan koneksi jaringan
 
 Dari konsol atau Shell Proxmox, uji koneksi bertahap: gateway, internet, lalu DNS.  
+Pada jaringan sementara, gunakan `192.168.0.1` sebagai gateway; contoh `.88.1` di bawah berlaku ketika server terhubung ke MikroTik.
 
 **TERMINAL (login sebagai root)** | Shell Proxmox
 
@@ -183,6 +186,19 @@ reboot
 ```
 > Penjelasan: Dibutuhkan bila kernel diperbarui. Tunggu 1 sampai 2 menit lalu buka web lagi.
 Atau lewat web: Updates &gt; Refresh (harus berakhir TASK OK), lalu Upgrade.  
+Setelah pembaruan dan reboot, **sebelum membuat template atau guest**, verifikasi akselerasi KVM:
+
+```
+lscpu | grep -i virtualization
+```
+> Penjelasan: Pada M710q harus menampilkan `Virtualization: VT-x`. Jika tidak ada baris, VT-x mungkin mati di BIOS; lihat Bab 27.5.
+
+```
+ls -l /dev/kvm
+```
+> Penjelasan: Perangkat KVM harus ada. Bila tidak ada, jangan lanjut membuat template VM; selesaikan pemeriksaan VT-x dahulu.
+
+Jika `apt update` gagal dengan `Temporary failure resolving`, periksa DNS dan kecocokan jaringan host sebelum melanjutkan. Contoh jaringan sementara `192.168.0.0/24` dicatat pada STATUS dan Bab 24. Jangan gunakan DNS rumah yang tidak terjangkau dari jaringan aktif.
 TIPS  
 Jika unduhan lambat (9 KB/s pada kasus nyata): pakai kabel LAN, update di jam sepi, atau ganti URIs: di  
 /etc/apt/sources.list.d/debian.sources ke mirror Debian terdekat dari daftar resmi mirror. Baris Ign:  

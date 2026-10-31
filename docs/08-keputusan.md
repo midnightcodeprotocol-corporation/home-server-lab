@@ -28,4 +28,3 @@
 | 24 | Disk data besar (foto, musik) dikecilkan awal agar muat di NVMe | NVMe hanya 500 GB | Ukuran contoh 200/300 GiB |
 | 25 | Gunakan baseline profil 16 GB sampai konfigurasi aktual diverifikasi. RAM yang dilaporkan sekarang 24 GB; Bab 56.8 menambah batas konservatif sementara. Opsi 32 GB tetap bersyarat pengukuran | Menjaga ruang bagi host dan mencegah OOM | Menganggap alokasi VM teoritis sama dengan RAM aman untuk VM |
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
-

@@ -233,4 +233,3 @@ Kapasitas 24 GB dilaporkan dari susunan 16 GB + 8 GB, tetapi belum dicatat dari 
 Sampai ada hasil pengukuran, gunakan profil konservatif 16 GB di Bagian 56.1–56.5. Setelah itu, naikkan alokasi VM sedikit demi sedikit; jangan melebihi total alokasi 18 GB untuk VM yang aktif sebelum pemantauan membuktikan host tetap memiliki setidaknya 4–6 GB tersedia saat beban normal. Profil mode hemat yang menyalakan VM dengan total sekitar 19,2 GB atau lebih belum cocok untuk dijalankan serentak pada 24 GB tanpa pengukuran.
 
 Jika RAM tersedia terus rendah, ballooning/oom muncul, atau VM tersendat, matikan guest yang tidak diperlukan dan kembali ke profil 16 GB. Catat profil yang dipakai serta nilai RAM available di `catatan/hasil-uji.md`.
-

@@ -243,8 +243,8 @@ Image cloud tidak berisi qemu-guest-agent secara bawaan. Setelah VM hidup, jalan
 qemu-guest-agent seperti di 11.4.  
 KASUS NYATA - VM tidak mau start: KVM tidak tersedia  
 Gejala: Task Start gagal; pesan KVM virtualisation dikonfigurasi tetapi tidak tersedia.  
-Penyebab: VT-x belum aktif di BIOS.  
-Solusi: Aktifkan Intel Virtualization Technology di BIOS (Bab 27.5), lalu nyalakan VM. Cek ls -l /dev/kvm.  
+Penyebab: Pada M710q yang diuji, VT-x belum aktif di BIOS.
+Solusi: Aktifkan Intel Virtualization Technology dengan BIOS lokal atau metode thinklmi bila atribut tersedia (Bab 27.5). Reboot, lalu pastikan `lscpu | grep -i virtualization` menunjukkan VT-x dan `/dev/kvm` ada sebelum menyalakan VM lagi.
 KASUS NYATA - VM Debian sangat lambat  
 Gejala: Instalasi atau boot memakan puluhan menit.  
 Penyebab: RAM host penuh (swap) atau terlalu banyak VM menyala bersamaan.  

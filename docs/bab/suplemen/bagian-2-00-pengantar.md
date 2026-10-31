@@ -19,4 +19,3 @@ Urutan: Bab 27, Bab 6 (USB), Bab 8 dan 28 (instalasi), Bab 9 (konfigurasi awal),
 | 192.168.88.10 | Proxmox (ThinkCentre M710q) |
 | 192.168.88.20 | VM Debian 13 (docker-core) |
 | 192.168.88.253 | STB HG680 (AdGuard); juga pengirim Wake-on-LAN (Bab 30.5) |
-

@@ -11,8 +11,8 @@ perangkat:
   - {nama: TP-Link TL-WR820N, peran: "Access Point (DHCP mati)", ip: 192.168.88.2}
   - {nama: TP-Link LiteWave LS1005, peran: "switch"}
   - {nama: STB HG680 (Armbian v25.05.0, eMMC), peran: "AdGuard Home utama", ip: 192.168.88.253}
-  - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, cpu: "i5-6500T", ram_gb_terpasang_diharapkan: 24, ram_konfigurasi_gb: [16, 8], ram_verifikasi: "Linux Proxmox melaporkan 23 GiB; BIOS/MemTest belum dicatat", nvme_gb: 500, nvme_slot: 1, nvme_status: "terdeteksi sebagai nvme0n1, Samsung MZALQ512HALU-000L2, 476.9 GB; Proxmox berjalan", ip_sementara: "192.168.0.200/24", ip_rencana_rumah: "192.168.88.10"}
-  - {nama: "HDD Seagate Surveillance 2 TB (2 unit, 3.5 inci)", peran: "2 unit belum dipasang; model tiap unit belum dicatat; enclosure single-bay lama ditemukan tetapi belum diuji; HDD berada di rumah; rencana uji satu unit dahulu; setidaknya satu belum diformat"}
+  - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, ip_sementara: 192.168.0.200, cpu: "i5-6500T", ram_gb_terpasang: 24, ram_konfigurasi_gb: [16, 8], ram_status: "Linux melaporkan 23 GiB; BIOS/MemTest belum dicatat", virtualisasi: "VT-x/KVM aktif; VT-d Disabled", nvme_model: "Samsung MZALQ512HALU-000L2", nvme_terdeteksi_gb: 476.9, nvme_slot: 1, proxmox_kernel: "7.0.14-26-pve", proxmox_status: "berjalan dan sudah diperbarui; belum ada VM/LXC/template"}
+  - {nama: "HDD Seagate Surveillance 2 TB (2 unit, 3.5 inci)", peran: "belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda; model tiap HDD belum dicatat; setidaknya satu belum diformat"}
   - {nama: "Laptop AMD Ryzen 3 4300U (RAM 19,4 GB)", peran: "laptop admin", ip: 192.168.88.252, catatan: "kabel via adaptor USB-LAN (ASIX)"}
 lain_dimiliki:
   - Ubiquiti UniFi U6 Lite
@@ -25,5 +25,4 @@ rencana:
   - Modem kedua untuk failover internet
   - TP-Link MR3020 (cetak dari mana saja)
   - UPS kecil dan monitor listrik
-
 

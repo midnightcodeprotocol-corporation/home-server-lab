@@ -55,3 +55,9 @@ Dikumpulkan dari tabel penutup tiap bagian. Centang dan catat hasilnya setelah d
 - [ ] Cadangan latar belakang Android/iOS
 - [ ] Sumber aplikasi Immich di Android
 - [ ] Batas ZFS ARC pada instalasi
+
+## BIOS tanpa layar (thinklmi) - kasus 31 Okt 2026
+- [ ] Apakah atribut `save_settings` perlu diatur agar perubahan BIOS via thinklmi tersimpan pada semua unit M710q/versi BIOS. Pada unit pengguna, VT-x Enabled bertahan setelah reboot.
+- [ ] Perilaku pada unit dengan supervisor password; jangan minta atau mencatat kata sandinya.
+- [ ] Apakah nama atribut `Intel(R) Virtualization Technology` sama pada semua revisi BIOS M710q.
+- [ ] Versi BIOS M710q pengguna belum dicatat.
