@@ -62,6 +62,6 @@ Perbarui `STATUS.md`, `catatan/hasil-uji.md`, dan `docs/04-board.md` bila sesi m
 
 Codex dan Claude tidak saling mengirim status atau mengunci SSH secara otomatis. Pengguna menjadi koordinator: tentukan satu operator aktif, minta operator selesai atau berhenti, lalu berikan catatan serah-terima kepada asisten berikutnya. Jangan membiarkan dua sesi menjalankan perubahan pada host secara bersamaan.
 
-## Status awal proyek ini
+## Status host saat ini — 31 Oktober 2026
 
-Menurut `STATUS.md`, Proxmox belum dipasang di ThinkCentre M710q. Karena itu, bila sesi SSH Proxmox dimulai sebelum instalasi, pastikan host tujuan memang sudah ada dan status repo telah diperbarui. Jangan menganggap IP, akun, konfigurasi, atau hasil yang tertulis di buku sudah sesuai keadaan aktual tanpa pemeriksaan.
+Proxmox sudah berjalan di ThinkCentre M710q. Kernel aktif `7.0.14-26-pve`; pemeriksaan awal tidak menemukan unit systemd gagal. Host sementara memakai `192.168.0.200/24` karena belum tersambung kembali ke jaringan MikroTik `192.168.88.0/24`. Alamat target rumah `192.168.88.10` belum diterapkan. Enclosure single-bay lama sudah ditemukan tetapi belum diuji; HDD belum tersambung. Sebelum SSH, pastikan komputer yang memulai koneksi punya rute ke jaringan host. Jangan membuka SSH dari internet atau mengirim kata sandi/private key di chat. Perbarui status ini setelah perubahan jaringan atau storage.
