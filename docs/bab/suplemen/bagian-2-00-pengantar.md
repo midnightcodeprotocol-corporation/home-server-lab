@@ -4,7 +4,7 @@ Bagian ini memasang Proxmox VE di **Lenovo ThinkCentre M710q**. Model A (VMware)
 
 | Bab | Isi | Hasil akhir |
 |---|---|---|
-| 27. Mesin M710q | Spesifikasi, rencana RAM 16+16 GB, rencana disk NVMe + HDD, BIOS | Mesin siap diinstal |
+| 27. Mesin M710q | Spesifikasi aktual, RAM yang dilaporkan 16+8 GB (24 GB), NVMe terpasang, BIOS | Mesin siap diinstal setelah RAM/disk diverifikasi dan MemTest lulus |
 | 28. Instal langsung | Unduh dan verifikasi ISO, USB bootable, boot, layar installer, masalah umum | Proxmox hidup di 192.168.88.10:8006 |
 | 29. (dihapus) | Penanda | - |
 | 30. Pasca-instalasi | BIOS, sensor, SMART, Wake-on-LAN, pemulihan backup, keamanan | Server stabil, bisa dinyalakan dari STB |
@@ -19,3 +19,4 @@ Urutan: Bab 27, Bab 6 (USB), Bab 8 dan 28 (instalasi), Bab 9 (konfigurasi awal),
 | 192.168.88.10 | Proxmox (ThinkCentre M710q) |
 | 192.168.88.20 | VM Debian 13 (docker-core) |
 | 192.168.88.253 | STB HG680 (AdGuard); juga pengirim Wake-on-LAN (Bab 30.5) |
+
