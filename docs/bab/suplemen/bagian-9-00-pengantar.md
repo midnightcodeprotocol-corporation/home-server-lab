@@ -4,7 +4,7 @@ Bagian 9. SSO dengan Pocket ID dan Immich
 Asal: Suplemen 9. Bab 54-56.  
 Suplemen 9 menambah dua layanan dan satu panduan pengaturan. Pocket ID adalah satu pintu masuk (SSO)  
 berbasis passkey, tanpa kata sandi. Immich adalah pengganti Google Photos yang menyimpan foto dan video di  
-server Anda sendiri. Karena RAM mesin utama saat ini 16 GB, bab terakhir menyusun profil pemakaian agar  
+server Anda sendiri. RAM yang dilaporkan saat ini 24 GB (16+8), tetapi belum diverifikasi di BIOS/MemTest86; bab terakhir menyusun profil pemakaian agar  
 tidak semua VM menyala bersamaan.  
 Bab Isi Hasil akhir  
 54. SSO dengan Pocket ID VM sso, Tailscale Serve, server, passkey di  
@@ -30,3 +30,4 @@ PERINGATAN
 Urutan penting. Kerjakan Bab 54 sebelum Bab 55, dan tetapkan nama tailnet Anda dulu. Passkey terikat ke nama  
 alamat Pocket ID; bila nama berubah setelah passkey terdaftar, semua passkey harus didaftar ulang. Hal yang belum  
 bisa saya pastikan ditandai [BELUM PASTI].
+
