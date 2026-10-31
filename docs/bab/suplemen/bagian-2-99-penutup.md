@@ -15,10 +15,11 @@
 
 | No | Poin | Ya / Tidak |
 |---|---|---|
-| 1 | RAM terpasang dan lulus MemTest86 (16 atau 32 GB) | |
+| 1 | RAM yang terpasang dikenali BIOS dan lulus MemTest86 (24 GB dilaporkan; konfirmasi aktual) | |
 | 2 | BIOS diatur (VT-x, VT-d, UEFI, Secure Boot mati, AHCI, WoL, After Power Loss) | |
 | 3 | Proxmox terpasang di NVMe dan web terbuka di 192.168.88.10:8006 | |
 | 4 | `sensors` dan `smartctl -H /dev/nvme0` menampilkan data | |
 | 5 | HDD 2 TB terbaca sebagai disk data/backup | |
 | 6 | Wake-on-LAN dari STB menyalakan mesin | |
 | 7 | Bab 25 dan 26 (keamanan dan Tailscale) dikerjakan di mesin ini | |
+
