@@ -35,7 +35,7 @@ Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
 - [Bab 53. Navidrome: Streaming Musik Pribadi](53-navidrome.md)
 - [Bab 54. SSO dengan Pocket ID](54-sso-pocket-id.md)
 - [Bab 55. Immich: Foto dan Video Pribadi](55-immich.md)
-- [Bab 56. Profil Pemakaian RAM (16 GB dan 32 GB)](56-profil-ram.md)
+- [Bab 56. Profil Pemakaian RAM (16 GB, 24 GB, dan 32 GB)](56-profil-ram.md)
 - [Bagian 1. Keamanan dan Akses Jarak Jauh (pengantar)](bagian-1-00-pengantar.md)
 - [Bagian 1. Keamanan dan Akses Jarak Jauh: Lembar Pembaruan, Glosarium, Syarat Lulus Fase 1](bagian-1-99-penutup.md)
 - [Bagian 2. Proxmox di Mesin Asli (ThinkCentre M710q) (pengantar)](bagian-2-00-pengantar.md)
@@ -54,3 +54,4 @@ Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md).
 - [Bagian 8. Navidrome: Streaming Musik Pribadi: Uji, Masalah Umum, Lembar Pembaruan, Syarat Lulus Fase 8](bagian-8-99-penutup.md)
 - [Bagian 9. SSO dengan Pocket ID dan Immich (pengantar)](bagian-9-00-pengantar.md)
 - [Bagian 9. SSO dengan Pocket ID dan Immich: Uji, Masalah Umum, Lembar Pembaruan, Syarat Lulus Fase 9](bagian-9-99-penutup.md)
+
