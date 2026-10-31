@@ -6,7 +6,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 30 Okto
 - [ ] **Fase A: pengujian dari nol di mesin asli (ThinkCentre M710q)**, satu bab satu langkah, urut buku. Langkah pertama: `docs/09-mulai-di-m710q.md`
 
 ## Siap berikutnya (Backlog Fase A, urut)
-- [ ] Pasang RAM 16 GB cadangan (total 32 GB), MemTest86 (Bab 27.1, 27.3)
+- [ ] Verifikasi RAM 24 GB yang dilaporkan (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [ ] USB bootable, hash ISO, instal Proxmox (Bab 6, 8, 28)
 - [ ] Bab 9: jaringan, DNS, repository, update
@@ -46,7 +46,7 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 
 ## Ditunda / menunggu
 - [ ] Tailscale subnet router di STB 2 (belum tiba; alamat usulan .250); sementara CT103 di Proxmox (Bab 26)
-- [ ] Penambahan RAM: pasang modul cadangan (Bab 27.1)
+- [x] RAM 16 GB + 8 GB dipasang; total yang diharapkan 24 GB, verifikasi BIOS/MemTest86 masih perlu dilakukan
 - [ ] HDD kedua ditunda; enclosure yang tersedia single-bay. Rencana awal memakai satu unit lebih dahulu
 
 ## Fase lanjutan (rencana)
@@ -60,7 +60,7 @@ Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-
 - [ ] Katalog layanan kecil (tiap layanan VM/LXC sendiri + kotak penempatan)
 
 **Fase D. Penyempurnaan setelah instalasi di M710q**
-- [ ] RAM 32 GB dipasang dan diuji
+- [ ] Evaluasi penambahan RAM setelah kapasitas 24 GB diverifikasi dan beban layanan diukur
 - [ ] OnlyOffice
 - [ ] Tailscale subnet router dipindah ke STB 2
 - [ ] Perbarui profil RAM Bab 56 sesuai pemakaian nyata
@@ -80,3 +80,4 @@ Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-
 
 ## Aturan kerja sesi pengujian
 Satu langkah, konfirmasi hasil, baru lanjut. Catat setiap penyimpangan. Jangan menebak nilai RAM / ID / IP; cek `data/guest.yaml` dan Bab 48.3. Perintah tanpa `sudo`. Sisi server dan sisi klien (Windows, Android, iPhone).
+
