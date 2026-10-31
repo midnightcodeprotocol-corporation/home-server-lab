@@ -23,8 +23,9 @@
 | 19 | Memigrasi satu layanan per langkah, uji, baru lanjut | Hindari kesalahan berantai | Pindah massal |
 | 20 | Mesin asli: Lenovo ThinkCentre M710q; Proxmox dipasang langsung dari USB | Mesin sudah ada | Lab nested VMware, instal ke disk dulu |
 | 21 | Hapus Model A (VMware) dan Model C dari buku (Revisi 3) | Tidak diperlukan lagi; mengurangi kebingungan | Menyimpannya sebagai opsi |
-| 22 | RAM: pasang 16 GB cadangan jadi 32 GB (16+16); 8 GB disimpan | Dua slot SO-DIMM; 32 GB muat mode hemat | 16+8 = 24 GB |
+| 22 | RAM saat ini dilaporkan 16+8 GB (24 GB); verifikasi BIOS/MemTest86. 32 GB dapat dipertimbangkan nanti setelah kebutuhan dan kompatibilitas dipastikan | Modul 8 GB pertama diganti dengan 16 GB; konfigurasi 24 GB sekarang tersedia secara fisik | Menganggap jumlah terpasang sudah dikenali atau langsung menyalakan semua VM |
 | 23 | NVMe 500 GB untuk sistem dan VM; HDD 2 TB untuk datastore PBS | Backup harus di perangkat fisik berbeda dari data | Semua di NVMe |
 | 24 | Disk data besar (foto, musik) dikecilkan awal agar muat di NVMe | NVMe hanya 500 GB | Ukuran contoh 200/300 GiB |
-| 25 | Profil RAM hanya untuk 16 GB; dengan 32 GB mode hemat menyala bersamaan | Sisa RAM cukup | Selalu memakai profil |
+| 25 | Gunakan baseline profil 16 GB sampai konfigurasi aktual diverifikasi. RAM yang dilaporkan sekarang 24 GB; Bab 56.8 menambah batas konservatif sementara. Opsi 32 GB tetap bersyarat pengukuran | Menjaga ruang bagi host dan mencegah OOM | Menganggap alokasi VM teoritis sama dengan RAM aman untuk VM |
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
+
