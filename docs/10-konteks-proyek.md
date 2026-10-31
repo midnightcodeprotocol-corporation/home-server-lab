@@ -27,6 +27,7 @@ Ringkasan agar AI atau orang baru langsung paham. Tanggal 2026.
 | 23-27 Okt | Pengujian lab VMware: bridged gagal (layanan `vmnetbridge` error 1060), Windows diinstal ulang, VMnet0 Bridged ke adaptor USB-LAN berhasil, lalu VM gagal menyala karena Hyper-V/Virtual Machine Platform aktif (dimatikan) |
 | 24 Okt | Lembar Revisi 1 (errata E1-E6 dan kasus nyata) ditambahkan ke PDF |
 | 28 Okt | **Mesin asli tiba: Lenovo ThinkCentre M710q.** Model A (VMware) dan Model C dihapus dari buku (Revisi 3). Repo GitHub dibuat sebagai basis pengetahuan lengkap |
+| 31 Okt | RAM bawaan 8 GB × 2; modul pertama diganti dengan 16 GB sehingga kapasitas terpasang diperkirakan 24 GB (16+8). NVMe M.2 500 GB dipasang di slot 1. Verifikasi BIOS/MemTest86 dan instalasi Proxmox belum dicatat |
 
 ## Pelajaran dari lab VMware (sudah dihentikan)
 Lab nested VMware memakan banyak waktu karena adaptor bridged, Hyper-V, dan instalasi VMware rusak sebagian. Detailnya ada di `catatan/kasus-nyata-lab.md`. Tidak diperlukan lagi karena Proxmox dipasang langsung di mesin asli.
@@ -44,3 +45,4 @@ Lab nested VMware memakan banyak waktu karena adaptor bridged, Hyper-V, dan inst
 10. Panel surya
 
 Ide lain: VM gaming PC (GPU passthrough), CubeCoders AMP + playit.gg, Ollama, Wake-on-LAN dari STB.
+
