@@ -5,7 +5,7 @@ Urutan hari pertama. Rujukan bab ada di kolom kanan.
 | Urut | Tindakan | Bab |
 |---|---|---|
 | 1 | Cadangkan data penting dari NVMe (bila ada isinya). Lepas HDD 2 TB selama instalasi | 6.1 |
-| 2 | Pasang RAM 16 GB cadangan di slot kedua (total 32 GB). Simpan 8 GB sebagai suku cadang | 27.1 |
+| 2 | Periksa di BIOS bahwa dua modul RAM terbaca (diharapkan total 24 GB dari 16+8); catat slot/kapasitas dan jalankan MemTest86 | 27.1, 27.3 |
 | 3 | Jalankan MemTest86 dari USB sampai 1-2 putaran tanpa error | 27.3 |
 | 4 | Perbarui BIOS Lenovo (opsional), atur BIOS: VT-x, VT-d, UEFI, Secure Boot mati, AHCI, Wake on LAN, After Power Loss, Enhanced Power Saving mati | 27.5 |
 | 5 | Unduh ISO Proxmox VE, cek SHA256 | 28.3 |
@@ -31,3 +31,5 @@ Catat hasil tiap baris di `catatan/hasil-uji.md`. Berhenti dan laporkan pesan er
 | Total RAM terbaca | `free -m` | |
 | Suhu CPU diam | `sensors` | |
 | Kesehatan NVMe | `smartctl -H /dev/nvme0` | |
+
+
