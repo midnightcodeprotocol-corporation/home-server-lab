@@ -29,7 +29,7 @@ MikroTik RB750GL Router utama Gateway, DHCP, dan firewall jaringan rumah
 TP-Link TL-WR820N Access Point Mode AP di belakang MikroTik untuk WiFi rumah.  
 TP-Link LiteWave LS1005 Switch Memperbanyak port LAN.  
 STB HG680 (Armbian) DNS utama + Tailscale AdGuard Home dan Tailscale, selalu hidup, di luar Proxmox.  
-Lenovo ThinkCentre M710q Server Proxmox Core i5-6500T, RAM 16 GB terpasang (cadangan 16 GB dan 8 GB; target 32 GB), NVMe 500 GB.  
+Lenovo ThinkCentre M710q Server Proxmox Core i5-6500T; RAM dilaporkan 1×16 GB + 1×8 GB (24 GB, verifikasi BIOS/MemTest belum dicatat); NVMe M.2 500 GB terpasang di slot 1, Proxmox belum diinstal.  
 HDD 2 TB Disk data / backup Disk kedua (bay 2,5" atau USB), dipakai untuk datastore backup.  
 
 ## 1.3 Prinsip: yang kritis dipisah dari yang bereksperimen
@@ -206,3 +206,4 @@ Shell di web Proxmox Buka https://IP:8006 &gt; pilih node &gt; menu Shell Ctrl+S
 SSH dari PowerShell Ketik ssh root@192.168.88.10 Klik kanan  
 PuTTY Host = IP, port 22, Open Klik kanan  
 Layar dan keyboard fisik server Hanya untuk instalasi, darurat, atau sebelum IP jadi Tidak ada
+
