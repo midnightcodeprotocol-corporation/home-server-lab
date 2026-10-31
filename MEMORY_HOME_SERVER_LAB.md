@@ -192,7 +192,9 @@ Catatan: file `/areas/home-server.md` level akun (di luar project) tidak diekspo
 - [stated] phone is Android, but wants setup steps for both Android and iPhone in the book (2026-10-18)
 - [stated] asked (2026-10-25) whether the real server can also host a VM that works as a gaming PC (GPU passthrough); idea only, no decision yet
 
-## 8. Pembaruan perangkat per 2026-10-31
+## 8. Snapshot perangkat saat tiba, sebelum instalasi — 2026-10-31
+
+Catatan pada bagian ini menggambarkan kondisi sebelum Proxmox dipasang. Progres terbaru ada di bagian 9.
 
 - [stated] Mini PC Lenovo ThinkCentre M710q sudah tiba/tersedia. RAM awalnya 16 GB sebagai 2×8 GB; modul pertama diganti dengan 16 GB, sehingga total fisik yang diharapkan sekarang 24 GB (16+8). Kapasitas yang dikenali BIOS/OS dan hasil MemTest86 belum dikonfirmasi.
 - [stated] SSD NVMe M.2 500 GB sudah dipasang di slot M.2 1. Proxmox belum diinstal; periksa isi dan partisi disk sebelum memilihnya sebagai target instalasi.
