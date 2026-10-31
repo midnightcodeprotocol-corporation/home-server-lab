@@ -196,3 +196,13 @@ Catatan: file `/areas/home-server.md` level akun (di luar project) tidak diekspo
 
 - [stated] Mini PC Lenovo ThinkCentre M710q sudah tiba/tersedia. RAM awalnya 16 GB sebagai 2×8 GB; modul pertama diganti dengan 16 GB, sehingga total fisik yang diharapkan sekarang 24 GB (16+8). Kapasitas yang dikenali BIOS/OS dan hasil MemTest86 belum dikonfirmasi.
 - [stated] SSD NVMe M.2 500 GB sudah dipasang di slot M.2 1. Proxmox belum diinstal; periksa isi dan partisi disk sebelum memilihnya sebagai target instalasi.
+
+
+## 9. Progres server fisik setelah Proxmox dipasang — 2026-10-31
+
+- [stated] Proxmox sudah berjalan pada Lenovo ThinkCentre M710q dan pembaruan melalui menu Proxmox selesai (2026-10-31). Setelah reboot, `uname -r` menunjukkan `7.0.14-26-pve`; `systemctl --failed` menunjukkan `0 loaded units listed`.
+- [stated] RAM fisik terpasang adalah 16 GB + 8 GB; `free -h` pada Proxmox melaporkan 23 GiB total. BIOS dan MemTest86 belum diperiksa, jadi tes memori masih terbuka.
+- [stated] `lsblk` menunjukkan NVMe `nvme0n1`, model Samsung MZALQ512HALU-000L2, 476.9G. Storage `local` dan `local-lvm` aktif; belum ada VM/container dibuat dan local-lvm masih kosong.
+- [stated] Saat pembaruan pertama, host sementara memakai `192.168.0.200/24`, gateway `192.168.0.1`, sedangkan DNS lama menunjuk ke `192.168.88.253`. IP publik dapat diping tetapi DNS gagal. Setelah DNS host disesuaikan ke `192.168.0.1`, `getent hosts deb.debian.org` berhasil dan `apt-get -o Acquire::ForceIPv4=true update` sukses. Pengguna menegaskan jaringan `192.168.0.0/24` hanya sementara sampai server kembali ke MikroTik.
+- [stated] Pengguna menemukan enclosure HDD single-bay lama, tetapi belum menguji fungsinya. Enclosure dan kedua HDD Seagate Surveillance 2 TB berada di rumah; pengguna akan mengujinya setelah tiba di rumah. Belum ada HDD terlihat pada Proxmox, belum ada backup, dan format disk belum boleh dilakukan sebelum identifikasi.
+- [stated] Rencana selanjutnya: setelah kembali ke rumah, sambungkan server ke MikroTik dan pastikan alamat manajemen stabil; uji enclosure dan satu HDD; tentukan storage/backup; lalu buat VM/LXC dengan disk guest di local-lvm bila sesuai.
