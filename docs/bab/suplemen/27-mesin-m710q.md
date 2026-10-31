@@ -9,8 +9,8 @@ Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat s
 | Komponen | Kebutuhan | M710q Anda | Status |
 |---|---|---|---|
 | CPU | 64-bit dengan VT-x/AMD-V, 4 core disarankan | Core i5-6500T, 4 core / 4 thread, VT-x dan VT-d | Lulus |
-| RAM | 16 GB atau lebih | 16 GB terpasang; cadangan 16 GB dan 8 GB | Lulus (target 32 GB) |
-| Disk sistem | SSD 120 GB atau lebih | NVMe M.2 500 GB | Lulus |
+| RAM | 16 GB atau lebih | Dilaporkan 1×16 GB + 1×8 GB (24 GB) | Belum diverifikasi di BIOS; MemTest86 belum dilaporkan |
+| Disk sistem | SSD 120 GB atau lebih | NVMe M.2 500 GB, terpasang di slot 1 | Terpasang; Proxmox belum diinstal dan isi/partisi harus diperiksa |
 | Disk data / backup | HDD/SSD terpisah | 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Rencana awal memakai satu unit melalui enclosure single-bay yang tersedia; HDD kedua ditunda |
 | Jaringan | 1 port LAN kabel | 1 Gigabit Ethernet (Intel) | Lulus |
 
@@ -20,12 +20,11 @@ Spesifikasi di atas adalah patokan umum model M710q; **cek label RAM, tipe slot,
 
 | Pilihan | Total | Catatan |
 |---|---|---|
-| 16 GB terpasang saja | 16 GB | Memakai profil pemakaian (Bab 56) |
-| **16 GB terpasang + 16 GB cadangan** | **32 GB** | Disarankan. Dua slot penuh; semua VM bisa menyala bersamaan (Bab 56.7) |
-| 16 GB + 8 GB | 24 GB | Jalan, tetapi tidak simetris dan lebih sempit |
-| 8 GB cadangan | - | Simpan sebagai suku cadang; slot hanya dua |
+| 16 GB | 16 GB | Profil konservatif Bab 56 |
+| **16 GB + 8 GB (konfigurasi saat ini)** | **24 GB** | Diharapkan terpasang; periksa BIOS dan uji MemTest86. Gunakan profil konservatif sambil memantau beban. |
+| 16 GB + 16 GB | 32 GB | Opsi peningkatan di masa depan; tetap ukur beban nyata, jangan anggap semua VM aman menyala bersamaan. |
 
-Langkah memasang RAM: matikan mesin, cabut kabel daya, buka penutup, ganti/tambah modul SO-DIMM sampai klik, pasang penutup. Gunakan modul dengan jenis dan kecepatan yang sama bila bisa. Setelah terpasang, jalankan **MemTest86 dari USB sampai 1-2 putaran penuh tanpa error** sebelum instalasi; RAM bermasalah merusak VM secara diam-diam.
+RAM sudah dilaporkan diganti: modul pertama 8 GB diganti dengan 16 GB, sementara modul 8 GB lainnya tetap terpasang. Jadi total yang diharapkan adalah 24 GB. Pastikan angka tersebut terlihat di BIOS, kemudian jalankan **MemTest86 dari USB sampai 1-2 putaran penuh tanpa error** sebelum instalasi; RAM bermasalah dapat merusak VM secara diam-diam.
 
 ## 27.2 Memeriksa spesifikasi dari Windows
 
@@ -91,7 +90,7 @@ HDMI jalan
 
 | Disk | Peran | Sistem berkas | Catatan |
 |---|---|---|---|
-| NVMe M.2 500 GB | Sistem Proxmox + disk VM (local-lvm) | **ext4** (bawaan installer) | RAM 16-32 GB; ZFS tidak dipakai (satu disk, tanpa mirror) |
+| NVMe M.2 500 GB (slot 1) | Target sistem Proxmox + disk VM (local-lvm) | ext4 direncanakan (bawaan installer) | SSD sudah terpasang; periksa model, isi, dan partisi sebelum instalasi. Proxmox belum diinstal. |
 | HDD Seagate Surveillance 2 TB (unit 1) | Calon disk data / datastore PBS | ext4 (Directory) | Rencana awal memakai satu unit lewat enclosure single-bay; pilih setelah model dan kondisi diverifikasi |
 | HDD Seagate Surveillance 2 TB (unit 2) | Ditunda | — | Enclosure yang tersedia hanya single-bay; peran unit ini belum ditentukan |
 
@@ -104,7 +103,7 @@ HDMI jalan
 | Pustaka musik (VM 211) | NVMe atau HDD, 80-100 GiB | 80 GiB |
 | Datastore PBS (VM 212) | **HDD 2 TB** | 1-1,5 TB |
 
-**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; model tiap unit belum dicatat dan setidaknya satu belum diformat. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi keduanya perlu terhubung dari luar. Enclosure yang tersedia single-bay; rencana sementara memakai satu HDD dahulu dan menunda yang kedua. Pastikan enclosure memiliki catu daya sendiri. Pilih peruntukan disk setelah model dan kondisi diverifikasi. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat menyiapkan storage.
+**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; pengguna menyatakan HDD aman, dan setidaknya satu belum diformat sehingga tidak muncul di Windows. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi keduanya perlu terhubung dari luar. Enclosure yang tersedia single-bay; rencana sementara memakai satu HDD dahulu dan menunda yang kedua. Pastikan enclosure memiliki catu daya sendiri. Pilih peruntukan disk setelah model dan kondisi diverifikasi. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat menyiapkan storage.
 
 > Disk tunggal bukan backup. Backup VM ke HDD 2 TB (Bab 50), ditambah satu salinan lagi di media lain (Bab 50.13).
 
@@ -127,3 +126,4 @@ Masuk BIOS: tekan **F1** berulang saat logo Lenovo muncul. Menu boot sekali paka
 | Supervisor password | Isi (opsional) | Mencegah perubahan BIOS oleh orang lain; simpan di Vaultwarden |
 
 Nama menu persis berbeda antar versi BIOS (mis. "Power > Automatic Power On" untuk Wake on LAN dan After Power Loss). Bila ragu, cari kata kunci "Virtualization", "Wake", dan "Power Loss". Memperbarui BIOS lewat situs dukungan Lenovo disarankan sebelum instalasi.
+
