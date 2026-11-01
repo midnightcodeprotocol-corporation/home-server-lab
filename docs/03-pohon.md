@@ -30,7 +30,7 @@ IndiHome (WiFi)
             │   ├── VM 211 music       .31
             │   ├── VM 213 sso         .32
             │   ├── VM 214 immich      .33
-            │   └── VM 9100 tpl-debian-docker (templat) | 9000 templat cloud-init (k3s)
+            │   └── VM 200 Template-VM (templat) | 9000 templat cloud-init (k3s)
             └── STB 2 .250 (usulan, belum tiba)  Tailscale subnet router
 ```
 
@@ -45,7 +45,7 @@ Internet (IndiHome)
         ├── DNS: AdGuard STB 1 (+ CT101 sebagai failover)
         │   └── DNS rewrite *.home.arpa -> 192.168.88.20
         ├── Proxmox host (Bab 8-9, 25)
-        │   ├── Templat VM 9100 (Bab 49)
+        │   ├── Templat VM 200 (Bab 49)
         │   │   └── semua VM layanan
         │   ├── Firewall antar-guest (Bab 51)  <- IPSet admin, MikroTik reservasi laptop
         │   └── PBS VM 212 (Bab 50)  <- disk fisik kedua

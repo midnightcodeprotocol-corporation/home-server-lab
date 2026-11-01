@@ -1,7 +1,7 @@
 # Bab 43. Opsional: Situs Statis Publik dengan Cloudflare Tunnel
 
 PENEMPATAN - BARU - VM sendiri, paling terisolasi  
-Tempat: VM 210 web-public (192.168.88.29): qm clone 9100 210 --name web-public --full 1.  
+Tempat: VM 210 web-public (192.168.88.29): qm clone 200 210 --name web-public --full 1.  
 Alasan: Satu-satunya yang menghadap internet. Bila dibobol, penyerang tidak boleh punya jalan ke LAN: firewall  
 Proxmox memblokir keluar ke LAN (Bab 51.4).  
 Tidak boleh: Digabung dengan layanan lain, termasuk situs statis privat di VM 209.  
@@ -48,9 +48,9 @@ https://....trycloudflare.com; buka dari HP dengan data seluler. Hentikan dengan
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 210 --name web-public --full 1
+qm clone 200 210 --name web-public --full 1
 ```
-> Penjelasan: Membuat VM 210 sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 210 sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 210 --memory 768 --cores 1
 ```

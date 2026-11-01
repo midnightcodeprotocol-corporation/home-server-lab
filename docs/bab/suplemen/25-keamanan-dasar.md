@@ -2,7 +2,7 @@
 
 PENEMPATAN - SEMUA GUEST  
 Tempat: Dikerjakan di setiap VM/LXC dan di host Proxmox, sesuai bagian bab. VM baru mewarisinya dari templat  
-VM 9100 (Suplemen 7 Bab 49).  
+VM 200 (Suplemen 7 Bab 49).  
 Perhatian: UFW di dalam VM tidak mengatur port yang dipublikasikan oleh Docker. Pemisah antar-VM yang bisa  
 diandalkan adalah firewall Proxmox (Suplemen 7 Bab 51).  
 Bab ini membuat server rumah lebih sulit dimasuki dan lebih mudah dipulihkan. Tujuannya bukan keamanan  

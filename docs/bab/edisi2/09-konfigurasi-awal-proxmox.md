@@ -222,7 +222,7 @@ Node &gt; Disks Disk fisik dan pembuatan LVM, LVM-Thin, Directory, ZFS.
 
 • Matikan dengan benar: node &gt; Shutdown di web, atau poweroff di Shell. Jangan menekan tombol power lama atau mencabut kabel daya  
 saat VM berjalan.  
-• Penomoran: LXC 100-199, VM 200-299, template 9000 ke atas. Catat di Lampiran B.  
+• Penomoran proyek: CT 100 untuk template dan CT 101+ untuk layanan; VM 200 untuk template dan VM 201+ untuk layanan. VM 9000 tetap dicadangkan untuk template cloud-init. Catat di Lampiran B.  
 • Ambil snapshot Proxmox (VM &gt; Snapshots) pada titik penting: sebelum upgrade, sebelum eksperimen besar.  
 • Snapshot bukan backup. Jangan menumpuk banyak snapshot karena disk membengkak dan VM  
 melambat.  

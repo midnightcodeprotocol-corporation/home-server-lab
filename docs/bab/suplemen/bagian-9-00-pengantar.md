@@ -22,7 +22,7 @@ Semua layanan bisa
 dipakai bergantian tanpa  
 kehabisan RAM  
 Prasyarat  
-• Templat VM 9100 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443  
+• Templat VM 200 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443  
 (Suplemen 6 Bab 44.3).  
 • Vaultwarden (Suplemen 6) untuk menyimpan kunci dan kata sandi yang dibuat di sini.  
 • Perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak Penempatan.  

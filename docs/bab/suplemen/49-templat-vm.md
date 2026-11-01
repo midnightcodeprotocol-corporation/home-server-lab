@@ -1,32 +1,32 @@
-# Bab 49. Template VM Debian + Docker, Template CT Debian, dan Cara Mengklon Guest
+# Bab 49. Template VM Debian dan CT Debian serta Cara Mengklon Guest
 
-PENEMPATAN - BARU - VM 9100 (templat), lalu klon per layanan  
-Tempat: VM 9100 tpl-debian-docker di host Proxmox. Templat tidak pernah dinyalakan setelah jadi; ia hanya  
+PENEMPATAN - BARU - VM 200 (templat), lalu klon per layanan  
+Tempat: VM 200 Template-VM di host Proxmox. Templat tidak pernah dinyalakan setelah jadi; ia hanya  
 disalin.  
 Alasan: Satu sumber yang sama untuk semua VM Docker: cepat, seragam, dan pembaruan keamanan dasar sudah  
 ada. Setiap layanan lalu mendapat salinan penuh yang berdiri sendiri.  
 Tidak termasuk: Tailscale (setiap node harus punya identitas sendiri) dan layanan apa pun.  
 
-Bab ini menyiapkan dua sumber dasar yang bisa dipakai berulang: VM 9100 untuk aplikasi yang memakai Docker, dan CT 9200 untuk layanan Linux ringan tanpa Docker. Siapkan keduanya sesudah update host dan sebelum membuat guest aplikasi. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
+Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. Paket dasar VM 200 belum dicatat; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
 
-**Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 9100 dan CT 9200 dibuat sekali; jangan buat ulang jika ID tersebut sudah dipakai.
+**Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 200 dan CT 100 sudah tercatat dibuat; jangan buat ulang jika ID tersebut masih ada.
 
 ## 49.1 Rencana: dari mana templat dibuat
 
-Saat ini belum ada VM Debian atau guest lain pada host, jadi ikuti langkah 49.2 dari awal untuk membuat VM 9100. Jika ID 9100 sudah dipakai, pilih ID template lain dan ubah semua perintah clone agar mengacu ke ID tersebut. Jangan mengubah VM layanan yang sudah berisi data menjadi template.
+Template yang sudah tampak pada UI adalah VM 200 `Template-VM` dan CT 100 `Template-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
 
 ## 49.2 Membuat dan mengisi VM dasar
 
 Pemasangan Debian secara rinci ada di Edisi 2 (Debian 13, ISO netinst, tanpa lingkungan desktop). Ringkasnya  
 di Proxmox:  
-1. Di web Proxmox klik Create VM. VM ID 9100, Name tpl-debian-docker. Pada OS pilih ISO Debian 13 netinst.  
+1. Di web Proxmox klik Create VM. VM ID 200, Name Template-VM. Pada OS pilih ISO Debian 13 netinst.  
 2. System: biarkan bawaan dan centang QEMU Agent. Disks: Bus SCSI, ukuran 24 GiB (Debian + Docker dan  
 layanan kecil; data besar nanti pakai disk kedua). CPU 2 inti. Memory 2048.  
 3. Network: bridge vmbr0, model VirtIO. Selesaikan, jalankan, dan pasang Debian lewat konsol: hanya SSH  
 server dan standard system utilities yang dipilih.  
 4. Setelah masuk sebagai root (su -), lanjutkan di bawah.  
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root (setelah su -)
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root (setelah su -)
 
 ```
 apt update && apt upgrade -y
@@ -64,7 +64,7 @@ Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 ```
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
 apt update
@@ -91,7 +91,7 @@ klon memberi identitasnya sendiri.
 
 ## 49.3 Membersihkan dan menjadikan templat
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
 apt clean && rm -f /etc/ssh/ssh_host_*
@@ -106,7 +106,7 @@ truncate -s 0 /etc/machine-id
 history -c && poweroff
 ```
 > Penjelasan: Menghapus riwayat sesi dan mematikan VM.
-1. Di Proxmox klik kanan VM 9100 &gt; Convert to template (atau di shell host: qm template 9100). Setelah ini  
+1. Di Proxmox klik kanan VM 200 &gt; Convert to template (atau di shell host: qm template 200). Setelah ini  
 VM tidak bisa dinyalakan, hanya disalin.  
 2. Opsional: di Options templat, matikan Start at boot.  
 
@@ -117,7 +117,7 @@ Prosedur ini dipakai oleh semua bab yang membuat VM baru (kotak penempatan menye
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 205 --name vault --full 1
+qm clone 200 205 --name vault --full 1
 ```
 > Penjelasan: Salinan penuh (bukan terkait) sehingga VM berdiri sendiri dan templat bisa dihapus tanpa
 merusaknya.  
@@ -203,7 +203,7 @@ memakai alat resmi dan peramban.
 
 ### Bedakan template unduhan dan template CT
 
-Proxmox memakai arsip OS CT saat membuat container baru. Arsip unduhan itu belum menjadi CT yang siap diklon. Bagian ini membuat satu CT dasar bernama `tpl-debian-lxc`, memasang pembaruan dan alat umum, lalu mengubah CT itu menjadi template Proxmox.
+Proxmox memakai arsip OS CT saat membuat container baru. Arsip unduhan itu belum menjadi CT yang siap diklon. Bagian ini membuat satu CT dasar bernama `Template-CT`, memasang pembaruan dan alat umum, lalu mengubah CT itu menjadi template Proxmox.
 
 Gunakan CT untuk layanan Linux ringan tanpa Docker. Layanan yang memakai Docker tetap ditempatkan di VM Debian. Template CT memakai mode unprivileged sebagai pilihan awal. Jangan memasang layanan, Tailscale, kunci, token, atau data pribadi ke template.
 
@@ -213,7 +213,7 @@ Di web Proxmox pilih storage `local` > CT Templates > Templates. Cari Debian 13/
 
 ### B. Buat CT dasar
 
-1. Pilih Create CT. Gunakan CTID `9200` dan hostname `tpl-debian-lxc`.
+1. Pilih Create CT. Gunakan CTID `100` dan hostname `Template-CT`.
 2. Pilih template Debian yang baru diunduh.
 3. Pilih storage `local-lvm` untuk disk root 8 GiB.
 4. Pertahankan unprivileged container. Berikan 1 core dan RAM 512 MiB sebagai baseline.
@@ -224,7 +224,7 @@ Jika server masih di jaringan sementara, DHCP membuat template bisa diperbarui t
 
 ### C. Perbarui sistem dasar
 
-**TERMINAL CT DASAR** | Console CT 9200, login root
+**TERMINAL CT DASAR** | Console CT 100, login root
 
 ```
 apt update && apt full-upgrade -y
@@ -243,12 +243,12 @@ poweroff
 
 ### D. Jadikan CT sebagai template
 
-Pastikan CT 9200 berhenti. Di UI pilih CT 9200 > More > Convert to template. Alternatif pada shell host Proxmox:
+Pastikan CT 100 berhenti. Di UI pilih CT 100 > More > Convert to template. Alternatif pada shell host Proxmox:
 
 **TERMINAL HOST PROXMOX** | Shell node sebagai root
 
 ```
-pct template 9200
+pct template 100
 ```
 > Penjelasan: Mengunci CT dasar sebagai sumber clone. Jangan menyalakan atau memasang aplikasi langsung pada template.
 
@@ -257,9 +257,9 @@ pct template 9200
 Contoh membuat CT 101 untuk AdGuard kedua. Jalankan setelah host tersambung ke jaringan rumah dan pastikan IP `.11` belum digunakan:
 
 ```
-pct clone 9200 101 --full 1
+pct clone 100 101 --full 1
 ```
-> Penjelasan: Membuat salinan penuh yang berdiri sendiri dari template CT 9200.
+> Penjelasan: Membuat salinan penuh yang berdiri sendiri dari template CT 100.
 
 ```
 pct set 101 --hostname adguard2 --cores 1 --memory 512 --net0 name=eth0,bridge=vmbr0,ip=192.168.88.11/24,gw=192.168.88.1

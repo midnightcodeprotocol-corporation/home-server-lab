@@ -7,7 +7,7 @@ Status: **pengujian panduan di ThinkCentre M710q sedang berlangsung**. Pemeriksa
 | Fase | Bagian / Bab | Tanggal | Lulus? | Catatan / error | Revisi buku |
 |---|---|---|---|---|---|
 | 1 | Keamanan dan Tailscale (25-26) | | | | |
-| 2 | Mesin M710q: RAM, BIOS, instal Proxmox (6, 8, 9, 27, 28, 30) | 31 Okt 2026 | Parsial | Proxmox update/reboot dan KVM lulus; BIOS/MemTest, jaringan rumah, HDD, template, serta layanan belum diuji. | Revisi 5 |
+| 2 | Mesin M710q: RAM, BIOS, instal Proxmox (6, 8, 9, 27, 28, 30) | 31 Okt–1 Nov 2026 | Parsial | Proxmox update/reboot, KVM, dan pembuatan template lulus secara tampilan; BIOS/MemTest, jaringan rumah, HDD, clone, serta layanan belum diuji. | Revisi 5–6 |
 | 3 | Monitoring (31-34) | | | | |
 | 4 | Caddy dan sertifikat lokal (35-38) | | | | |
 | 5 | Web, WordPress, n8n, tunnel (39-43) | | | | |
@@ -50,4 +50,11 @@ Bab terkait: 8, 11, 24, 27.5. Hasil: **gagal, kemudian diperbaiki**; perubahan p
 - Jaringan sementara: `vmbr0` `192.168.0.200/24`, gateway `192.168.0.1`. DNS awal `192.168.88.253` tidak terjangkau dari subnet tersebut; ping ke `1.1.1.1` berhasil, tetapi resolusi nama gagal. Setelah DNS host diubah ke `192.168.0.1`, `getent hosts deb.debian.org` berhasil dan `apt-get -o Acquire::ForceIPv4=true update` sukses. Upgrade melalui GUI selesai (193 paket diperbarui, 2 paket baru, 0 dihapus).
 - Keluaran jaringan aktual yang dikirim pengguna menunjukkan port `enp0s31f6` dan `eno1`; konfigurasi `vmbr0` menjembatani keduanya, dengan alamat host di bridge. Percakapan Gemini tentang perpindahan sistem dan nama interface ditinjau; rekomendasi generik yang belum diverifikasi tidak diterapkan.
 - Windows `192.168.0.100` mencapai TCP 22 pada Proxmox `192.168.0.200`. Fingerprint ED25519 cocok; SSH Codex belum terautentikasi dan belum menjalankan perintah pada host.
-- Belum dibuat VM/LXC, template VM 9100 atau CT 9200. Enclosure single-bay lama ditemukan tetapi belum diuji; HDD belum tersambung.
+- Pada 31 Oktober, VM/LXC dan template VM 200 atau CT 100 belum dibuat. Enclosure single-bay lama ditemukan tetapi belum diuji; HDD belum tersambung.
+
+## Template Debian 13 - 1 November 2026
+
+- Tangkapan layar Proxmox VE 9.2.24 menunjukkan VM 200 `Template-VM` dan CT 100 `Template-CT` pada node `pve`.
+- Pengguna mengonfirmasi kedua template memakai Debian 13. CT 100 menampilkan 1 CPU, RAM 512 MiB, swap 512 MiB, dan disk boot 8 GiB.
+- Paket tambahan pada VM 200 belum dicatat. Guest layanan dan uji clone belum dilaporkan.
+- URL Proxmox yang terlihat masih memakai host sementara `192.168.0.200`; perpindahan jaringan ke MikroTik belum diterapkan.

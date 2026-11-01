@@ -81,7 +81,7 @@ Bab 44.3
 Suplemen 4, Bab 36.6 Caddyfile bertambah: affine dan nextcloud sebagai reverse_proxy  
 ke IP:port VM masing-masing (Vaultwarden tidak lewat Caddy)  
 Bab 46, 47  
-Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 9100, dan firewall Proxmox  
+Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 200, dan firewall Proxmox  
 yang membatasi port 3010, 8080  
 Suplemen 7  
 Suplemen 3, Bab 32 Monitor Uptime Kuma baru untuk affine dan nextcloud (Ignore  

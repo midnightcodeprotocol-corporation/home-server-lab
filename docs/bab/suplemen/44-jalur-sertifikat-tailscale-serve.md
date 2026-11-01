@@ -1,7 +1,7 @@
 # Bab 44. Jalur Sertifikat per Aplikasi dan Tailscale Serve
 
 PENEMPATAN - BARU - VM vault dibuat di bab ini  
-Tempat: VM 205 vault (192.168.88.24), dibuat di Bab 44.3 dengan qm clone 9100 205 --name vault --full 1. Node  
+Tempat: VM 205 vault (192.168.88.24), dibuat di Bab 44.3 dengan qm clone 200 205 --name vault --full 1. Node  
 tailnet lab-vault ada di dalamnya; tidak ada lagi node untuk docker-core.  
 Alasan: Setiap VM yang memakai Tailscale Serve mendapat nama .ts.net sendiri di port 443; tidak perlu port 8443,  
 8444, dan seterusnya.  
@@ -81,9 +81,9 @@ mengumumkan rute. Buat VM-nya dulu:
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 205 --name vault --full 1
+qm clone 200 205 --name vault --full 1
 ```
-> Penjelasan: Membuat VM 205 bernama vault sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 205 bernama vault sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 205 --memory 1024 --cores 1
 ```

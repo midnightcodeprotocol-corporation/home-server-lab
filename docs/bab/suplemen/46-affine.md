@@ -1,7 +1,7 @@
 # Bab 46. AFFiNE: Catatan dan Dokumen Bergaya Notion
 
 PENEMPATAN - BARU - VM sendiri  
-Tempat: VM 206 affine (192.168.88.25): qm clone 9100 206 --name affine --full 1.  
+Tempat: VM 206 affine (192.168.88.25): qm clone 200 206 --name affine --full 1.  
 Alasan: Berisi PostgreSQL, Redis, dan unggahan sendiri; siklus pembaruan berbeda dari layanan lain.  
 Mode hemat: Inilah VM 206 yang berganti nama menjadi apps dan menampung n8n serta web.  
 AFFiNE adalah aplikasi catatan, dokumen, dan papan tulis. Server self-host terdiri dari empat bagian menurut  
@@ -17,9 +17,9 @@ langkah membandingkan dengan berkas compose resmi dari rilis terbaru sebelum men
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 206 --name affine --full 1
+qm clone 200 206 --name affine --full 1
 ```
-> Penjelasan: Membuat VM 206 bernama affine sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 206 bernama affine sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 206 --memory 2048 --cores 2
 ```

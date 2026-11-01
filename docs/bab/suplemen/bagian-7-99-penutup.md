@@ -4,7 +4,7 @@ Uji, Masalah Umum, dan Lembar Pembaruan
 Uji menyeluruh  
 No Uji Hasil yang diharapkan  
 1 qm list di host Terlihat VM 201-212 (sesuai yang sudah dibuat) dan  
-templat 9100  
+templat 200  
 2 Satu VM baru dari templat (Bab 49.4) Nama host, kunci SSH, dan IP unik; ping DNS dan  
 internet berhasil  
 3 Backup pertama ke pbs-home TASK OK untuk setiap VM; ukuran datastore  
@@ -76,7 +76,7 @@ Suplemen 6 (Revisi 2) Vaultwarden di VM 205 (lab-vault, port 443), AFFiNE di VM 
 Nextcloud di VM 207  
 Bab 48.4  
 Edisi 2 VM Debian pertama menjadi docker-core atau sumber templat  
-9100  
+200  
 Bab 49.1  
 Backup (Edisi 2 Bab 23) Backup tingkat VM oleh PBS menjadi lapisan utama; dump logis  
 tetap sebagai lapisan kedua  
@@ -104,7 +104,7 @@ log sshd
 9 Versi lynis di Debian lynis show version  
 Syarat lulus Fase 7  
 No Poin Ya / Tidak  
-1 Templat VM 9100 ada; setiap VM layanan dibuat dari templat dengan kunci SSH dan IP sendiri  
+1 Templat VM 200 ada; setiap VM layanan dibuat dari templat dengan kunci SSH dan IP sendiri  
 2 Setiap layanan berada di guest sesuai peta 48.3 (atau sesuai mode hemat yang dicatat)  
 3 PBS berjalan; backup harian ke store1 sukses; datastore di disk fisik terpisah  
 4 Satu uji pulih berhasil; kunci enkripsi tersimpan di dua tempat terpisah  

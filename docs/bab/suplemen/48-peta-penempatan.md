@@ -74,15 +74,16 @@ CT103 ts-router
 LXC, Tailscale (nanti STB 2)  
 STB 1 .253  
 AdGuard Home (perangkat sendiri)  
-VM 9100 tpl  
-templat Debian + Docker (mati)  
+VM 200 Template-VM  
+template VM Debian 13; paket dasar belum diverifikasi  
+CT 100 Template-CT  
+template CT Debian 13; dasar 1 CPU/512 MiB/512 MiB swap/8 GiB  
 Gambar 48.1 - Host Proxmox dengan guest terpisah (VM 202 HAOS, 203 k3s, CT101 dan CT102 dari Edisi 2 tidak digambar); STB 1  
 dan CT103 di luar kelompok VM Docker.  
 VMID Nama Jenis IP Isi Bab  
-9100 tpl-debian-docker VM (templat) - Debian 13 + Docker + agen tamu; tidak  
-pernah dinyalakan (beda dari templat  
-cloud-init 9000 Edisi 2)  
+200 Template-VM VM (templat) - Debian 13; paket dasar belum dicatat (beda dari templat cloud-init 9000 Edisi 2)  
 49  
+100 Template-CT LXC (templat) - Debian 13; 1 CPU, 512 MiB RAM, 512 MiB swap, disk 8 GiB 49  
 201 docker-core VM .20 Caddy (gerbang HTTPS), Portainer,  
 Gotify, Uptime Kuma, Beszel hub,  
 Homepage, adguardhome-sync  
@@ -183,7 +184,7 @@ Bab Layanan Guest Yang berubah dari teks asli
 Edisi 2 AdGuard Home STB 1 (.253) Tidak ada: sengaja di luar Proxmox  
 Edisi 2 Debian + Docker, Portainer,  
 Homepage, adguardhome-sync  
-VM 201 (templat 9100  
+VM 201 (templat 200  
 dibuat di Bab 49)  
 VM Debian pertama menjadi  
 docker-core atau sumber templat  
@@ -291,7 +292,7 @@ Firewall (Bab 51) Aturan untuk 206 menggabungkan port 3010, 5678, 8081, 8082 dar
 Di awal setiap bab pemasangan Anda akan melihat kotak ungu seperti di bawah. Ia menjawab satu pertanyaan:  
 buat guest baru, atau gabung ke yang sudah ada?  
 PENEMPATAN - BARU - VM sendiri  
-Tempat: VM 208 n8n (192.168.88.27): qm clone 9100 208 --name n8n --full 1.  
+Tempat: VM 208 n8n (192.168.88.27): qm clone 200 208 --name n8n --full 1.  
 Alasan: Satu kalimat mengapa dipisah atau digabung.  
 Mode hemat: Bila ada, guest mana yang boleh menampungnya bersama layanan lain.  
 Label di kotak Artinya  
@@ -313,7 +314,7 @@ Bab 15.2 sampai 15.5
 VM Debian di 192.168.88.20; Server  
 Domain, Base URL, dan alamat clone  
 memakai .20  
-VM 204 git (192.168.88.23) dari templat 9100 (Bab  
+VM 204 git (192.168.88.23) dari templat 200 (Bab  
 49.4). Compose dan folder /opt/stacks/forgejo  
 sama. Base URL http://192.168.88.23:3000/, clone  
 ssh://git@192.168.88.23:2222/USER/homelab.git  
@@ -346,14 +347,14 @@ Nama .lan Edisi 2 boleh tetap berdampingan
 dengan \*.home.arpa  
 Bab 11.2 (VM 201) Memory 4096 MiB Boleh diturunkan ke 2048 MB setelah Forgejo dan  
 Nextcloud tidak lagi di VM 201 [BELUM PASTI]  
-Bab 11.7 (templat 9000) Templat cloud-init untuk VM k3s Tetap untuk VM 203. Templat 9100 (Bab 49)  
+Bab 11.7 (templat 9000) Templat cloud-init untuk VM k3s Tetap untuk VM 203. Templat 200 (Bab 49)  
 terpisah, untuk VM layanan  
 Bab 13.4  
 (adguardhome-sync)  
 Jalan di VM 201 Tidak berubah  
 Lampiran B Rencana IP dan ID Edisi 2 Tidak ada ID atau IP yang diubah; ditambah VM  
 204 sampai 212, alamat .23 sampai .31, dan  
-templat 9100 (tabel 48.3)  
+templat 200 (tabel 48.3)  
 PERINGATAN  
 Homepage memakai port 3002, bukan 3001: Uptime Kuma (Suplemen 3 Bab 31) sudah memakai 3001 di VM 201,  
 sehingga dua layanan tidak bisa berbagi port itu sebelum Caddy dipasang.  

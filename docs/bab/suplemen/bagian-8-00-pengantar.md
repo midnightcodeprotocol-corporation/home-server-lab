@@ -12,7 +12,7 @@ Pustaka musik dapat
 diputar dari semua  
 perangkat  
 Prasyarat  
-• Templat VM 9100 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443  
+• Templat VM 200 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443  
 (Suplemen 6 Bab 44.3).  
 • Perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak Penempatan.  
 CATATAN  

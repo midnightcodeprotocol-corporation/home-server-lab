@@ -1,10 +1,10 @@
 # Buku Panduan Lengkap Home Server Lab
 
-## Edisi Terpadu 2026.10 - 31 Oktober 2026
+## Edisi Terpadu 2026.11 - 1 November 2026
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual (31 Oktober 2026):** Proxmox berjalan dan sudah diperbarui pada ThinkCentre M710q. Kernel aktif `7.0.14-26-pve`; RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template VM/CT, layanan, HDD, dan backup belum dibuat atau diuji.
+> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat; guest layanan, backup, dan HDD belum dibuat atau diuji.
 
 ## Sebelum mulai
 
@@ -23,7 +23,7 @@ Garis dan kotak menjelaskan jaringan rumah yang sudah berjalan dan status host P
 
 ## Koreksi keamanan dan versi terbaru
 
-Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 menambahkan hasil Proxmox terbaru: DNS dan update berhasil, KVM/VT-x diperbaiki melalui `thinklmi`, serta alur template VM/CT ditempatkan setelah update host. Baca [Revisi 4](docs/bab/REVISI-4.md) dan [Revisi 5](docs/bab/REVISI-5.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
+Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 mencatat DNS/update, KVM/VT-x, dan diagnosis jaringan. Revisi 6 mencatat template Debian 13 VM 200 dan CT 100 serta persiapan perpindahan host ke MikroTik. Baca [Revisi 4](docs/bab/REVISI-4.md), [Revisi 5](docs/bab/REVISI-5.md), dan [Revisi 6](docs/bab/REVISI-6.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
 
 ## Daftar isi
 
@@ -1115,7 +1115,7 @@ Node &gt; Disks Disk fisik dan pembuatan LVM, LVM-Thin, Directory, ZFS.
 
 • Matikan dengan benar: node &gt; Shutdown di web, atau poweroff di Shell. Jangan menekan tombol power lama atau mencabut kabel daya
 saat VM berjalan.
-• Penomoran: LXC 100-199, VM 200-299, template 9000 ke atas. Catat di Lampiran B.
+• Penomoran proyek: CT 100 untuk template dan CT 101+ untuk layanan; VM 200 untuk template dan VM 201+ untuk layanan. VM 9000 tetap dicadangkan untuk template cloud-init. Catat di Lampiran B.
 • Ambil snapshot Proxmox (VM &gt; Snapshots) pada titik penting: sebelum upgrade, sebelum eksperimen besar.
 • Snapshot bukan backup. Jangan menumpuk banyak snapshot karena disk membengkak dan VM
 melambat.
@@ -3939,7 +3939,7 @@ menguji sesi baru, dan siapkan jalur darurat (Bab 25.2) sebelum mulai.
 
 PENEMPATAN - SEMUA GUEST
 Tempat: Dikerjakan di setiap VM/LXC dan di host Proxmox, sesuai bagian bab. VM baru mewarisinya dari templat
-VM 9100 (Suplemen 7 Bab 49).
+VM 200 (Suplemen 7 Bab 49).
 Perhatian: UFW di dalam VM tidak mengatur port yang dipublikasikan oleh Docker. Pemisah antar-VM yang bisa
 diandalkan adalah firewall Proxmox (Suplemen 7 Bab 51).
 Bab ini membuat server rumah lebih sulit dimasuki dan lebih mudah dipulihkan. Tujuannya bukan keamanan
@@ -5153,7 +5153,7 @@ Urutan: Bab 27, Bab 6 (USB), Bab 8 dan 28 (instalasi), Bab 9 (konfigurasi awal),
 
 # Bab 27. Mesin Anda: Lenovo ThinkCentre M710q
 
-PENEMPATAN - TIDAK ADA GUEST. Tempat: bab ini tentang mesin fisik. Belum ada VM/LXC.
+PENEMPATAN - HOST FISIK. Template Debian 13 VM 200 dan CT 100 sudah ada; belum ada guest layanan yang dilaporkan. Bab ini fokus pada perangkat keras M710q.
 
 Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat spesifikasi, rencana RAM dan disk, dan pengaturan BIOS-nya. Menu BIOS bisa berbeda antar versi; nama di bawah adalah patokan, cocokkan dengan layar Anda.
 
@@ -5525,7 +5525,7 @@ PENEMPATAN - HOST. Tempat: pengaturan setelah instalasi dilakukan di host Proxmo
 | 6 | Wake-on-LAN dari STB | Bab 30.5 |
 | 7 | Pasang HDD 2 TB sebagai disk data/backup | Bab 27.4 |
 | 8 | Keamanan (akun admin, 2FA, SSH kunci, firewall) dan Tailscale | Bab 25 dan 26 |
-| 9 | Templat VM 9100 dan layanan | Bab 49 dan seterusnya |
+| 9 | Templat VM 200 dan layanan | Bab 49 dan seterusnya |
 | 10 | PBS dan backup terjadwal, uji pulih | Bab 50 |
 
 ## 30.2 Pengaturan dasar mesin asli
@@ -7169,7 +7169,7 @@ Prasyarat
 • Caddy dan jaringan Docker proxy dari Suplemen 4 (Bab 36) sudah berjalan; Gotify dan Uptime Kuma dari
 Suplemen 3.
 • Sertifikat akar Caddy terpasang di perangkat (Suplemen 4 Bab 37) bila ingin gembok tanpa peringatan.
-• VM 208 n8n, 209 web, dan 210 web-public dibuat dari templat VM 9100 (Suplemen 7 Bab 48-49). Caddy tetap
+• VM 208 n8n, 209 web, dan 210 web-public dibuat dari templat VM 200 (Suplemen 7 Bab 48-49). Caddy tetap
 di VM 201 docker-core.
 • Semua perintah dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak
 Penempatan di awal tiap bab.
@@ -7282,7 +7282,7 @@ docker ps --format "table {{.Names}}\t{{.Status}}"
 # Bab 40. Situs Web Statis dengan Caddy
 
 PENEMPATAN - GABUNG - ke VM web
-Tempat: VM 209 web (192.168.88.28). Dibuat dari templat VM 9100: qm clone 9100 209 --name web --full 1
+Tempat: VM 209 web (192.168.88.28). Dibuat dari templat VM 200: qm clone 200 209 --name web --full 1
 (Suplemen 7 Bab 49).
 Alasan: Situs statis dan WordPress sama-sama konten web privat dengan data kecil, jadi boleh serumah. Caddy di
 docker-core hanya meneruskan ke VM ini.
@@ -7297,9 +7297,9 @@ menampung WordPress (Bab 41).
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 209 --name web --full 1
+qm clone 200 209 --name web --full 1
 ```
-> Penjelasan: Membuat VM 209 bernama web sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 209 bernama web sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 209 --memory 1536 --cores 2
 ```
@@ -7638,7 +7638,7 @@ unggahan) ikut dibackup bersama folder lain.
 # Bab 42. n8n: Otomasi Alur Kerja
 
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 208 n8n (192.168.88.27): qm clone 9100 208 --name n8n --full 1.
+Tempat: VM 208 n8n (192.168.88.27): qm clone 200 208 --name n8n --full 1.
 Alasan: n8n menyimpan kredensial ke layanan lain. Dipisahkan agar kebobolan di aplikasi web atau catatan tidak
 membuka kunci n8n, dan sebaliknya.
 Mode hemat: Boleh digabung ke VM 206 (apps).
@@ -7655,9 +7655,9 @@ container privileged setara akses root ke host. Hanya n8n dan Postgres yang dipa
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 208 --name n8n --full 1
+qm clone 200 208 --name n8n --full 1
 ```
-> Penjelasan: Membuat VM 208 bernama n8n sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 208 bernama n8n sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 208 --memory 1536 --cores 2
 ```
@@ -7931,7 +7931,7 @@ docker compose pull && docker compose up -d
 # Bab 43. Opsional: Situs Statis Publik dengan Cloudflare Tunnel
 
 PENEMPATAN - BARU - VM sendiri, paling terisolasi
-Tempat: VM 210 web-public (192.168.88.29): qm clone 9100 210 --name web-public --full 1.
+Tempat: VM 210 web-public (192.168.88.29): qm clone 200 210 --name web-public --full 1.
 Alasan: Satu-satunya yang menghadap internet. Bila dibobol, penyerang tidak boleh punya jalan ke LAN: firewall
 Proxmox memblokir keluar ke LAN (Bab 51.4).
 Tidak boleh: Digabung dengan layanan lain, termasuk situs statis privat di VM 209.
@@ -7978,9 +7978,9 @@ https://....trycloudflare.com; buka dari HP dengan data seluler. Hentikan dengan
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 210 --name web-public --full 1
+qm clone 200 210 --name web-public --full 1
 ```
-> Penjelasan: Membuat VM 210 sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 210 sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 210 --memory 768 --cores 1
 ```
@@ -8105,7 +8105,7 @@ memasang apa pun. Ini berbeda dari jalur privat yang memakai CA lokal Caddy.
 # Bab 44. Jalur Sertifikat per Aplikasi dan Tailscale Serve
 
 PENEMPATAN - BARU - VM vault dibuat di bab ini
-Tempat: VM 205 vault (192.168.88.24), dibuat di Bab 44.3 dengan qm clone 9100 205 --name vault --full 1. Node
+Tempat: VM 205 vault (192.168.88.24), dibuat di Bab 44.3 dengan qm clone 200 205 --name vault --full 1. Node
 tailnet lab-vault ada di dalamnya; tidak ada lagi node untuk docker-core.
 Alasan: Setiap VM yang memakai Tailscale Serve mendapat nama .ts.net sendiri di port 443; tidak perlu port 8443,
 8444, dan seterusnya.
@@ -8185,9 +8185,9 @@ mengumumkan rute. Buat VM-nya dulu:
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 205 --name vault --full 1
+qm clone 200 205 --name vault --full 1
 ```
-> Penjelasan: Membuat VM 205 bernama vault sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 205 bernama vault sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 205 --memory 1024 --cores 1
 ```
@@ -8333,7 +8333,7 @@ Bab 40.3
 Suplemen 4, Bab 36.6 Caddyfile bertambah: web, wp, n8n sebagai reverse_proxy ke
 IP:port VM masing-masing
 Bab 40, 41, 42
-Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 9100, dan firewall Proxmox
+Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 200, dan firewall Proxmox
 yang membatasi port 8081, 8082, 5678
 Suplemen 7
 Suplemen 3, Bab 32 Tambah monitor Uptime Kuma untuk tiga alamat baru (Ignore
@@ -8414,7 +8414,7 @@ Prasyarat
 • Caddy, jaringan Docker proxy, dan sertifikat akar terpasang di perangkat (Suplemen 4); struktur /opt/stacks
 (Suplemen 3).
 • Tailscale dengan router-vm (Suplemen 1 Bab 26) dan kebijakan jaringan yang sudah Anda ubah di Bab 26.6.
-• VM 205 vault, 206 affine, dan 207 nextcloud dibuat dari templat VM 9100 (Suplemen 7 Bab 48-49). Caddy
+• VM 205 vault, 206 affine, dan 207 nextcloud dibuat dari templat VM 200 (Suplemen 7 Bab 48-49). Caddy
 tetap di VM 201 docker-core.
 • Semua perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak
 Penempatan di awal tiap bab.
@@ -8591,7 +8591,7 @@ aman karena berkas yang tidak terenkripsi berisi semua kata sandi dalam teks bia
 # Bab 46. AFFiNE: Catatan dan Dokumen Bergaya Notion
 
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 206 affine (192.168.88.25): qm clone 9100 206 --name affine --full 1.
+Tempat: VM 206 affine (192.168.88.25): qm clone 200 206 --name affine --full 1.
 Alasan: Berisi PostgreSQL, Redis, dan unggahan sendiri; siklus pembaruan berbeda dari layanan lain.
 Mode hemat: Inilah VM 206 yang berganti nama menjadi apps dan menampung n8n serta web.
 AFFiNE adalah aplikasi catatan, dokumen, dan papan tulis. Server self-host terdiri dari empat bagian menurut
@@ -8607,9 +8607,9 @@ langkah membandingkan dengan berkas compose resmi dari rilis terbaru sebelum men
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 206 --name affine --full 1
+qm clone 200 206 --name affine --full 1
 ```
-> Penjelasan: Membuat VM 206 bernama affine sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 206 bernama affine sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 206 --memory 2048 --cores 2
 ```
@@ -8857,7 +8857,7 @@ semua klien ke alamat baru.
 # Bab 47. Nextcloud dan Kalender Pribadi
 
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 207 nextcloud (192.168.88.26): qm clone 9100 207 --name nextcloud --full 1.
+Tempat: VM 207 nextcloud (192.168.88.26): qm clone 200 207 --name nextcloud --full 1.
 Alasan: Akan tumbuh menjadi penyimpanan berkas (NAS) dengan disk besar; pembaruannya harus satu mayor demi
 satu mayor; datanya perlu backup tersendiri.
 Tidak boleh: Digabung dengan layanan lain.
@@ -8875,9 +8875,9 @@ yang didukung saat ini di Docker Hub (nextcloud) atau halaman rilis Nextcloud, l
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 207 --name nextcloud --full 1
+qm clone 200 207 --name nextcloud --full 1
 ```
-> Penjelasan: Membuat VM 207 bernama nextcloud sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab
+> Penjelasan: Membuat VM 207 bernama nextcloud sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab
 49).
 ```
 qm set 207 --memory 2048 --cores 2
@@ -9235,7 +9235,7 @@ Bab 44.3
 Suplemen 4, Bab 36.6 Caddyfile bertambah: affine dan nextcloud sebagai reverse_proxy
 ke IP:port VM masing-masing (Vaultwarden tidak lewat Caddy)
 Bab 46, 47
-Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 9100, dan firewall Proxmox
+Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 200, dan firewall Proxmox
 yang membatasi port 3010, 8080
 Suplemen 7
 Suplemen 3, Bab 32 Monitor Uptime Kuma baru untuk affine dan nextcloud (Ignore
@@ -9323,7 +9323,7 @@ terbuka
 52. Audit keamanan Skrip audit baca-saja, Lynis, SSH kunci, laporan Daftar temuan dan keputusan
 risiko
 Urutan kerja yang disarankan
-1. Baca Bab 48 lalu kerjakan Bab 49 (membuat templat VM 9100).
+1. Baca Bab 48 lalu kerjakan Bab 49 (membuat templat VM 200).
 2. Pasang layanan menurut Kotak Penempatan di Suplemen 3, 4, 5, 6 (Revisi 2), masing-masing di guest yang
 ditunjuk.
 3. Kerjakan Bab 50 setelah ada guest yang berisi data, lalu Bab 51, terakhir Bab 52.
@@ -9414,15 +9414,16 @@ CT103 ts-router
 LXC, Tailscale (nanti STB 2)
 STB 1 .253
 AdGuard Home (perangkat sendiri)
-VM 9100 tpl
-templat Debian + Docker (mati)
+VM 200 Template-VM
+template VM Debian 13; paket dasar belum diverifikasi
+CT 100 Template-CT
+template CT Debian 13; dasar 1 CPU/512 MiB/512 MiB swap/8 GiB
 Gambar 48.1 - Host Proxmox dengan guest terpisah (VM 202 HAOS, 203 k3s, CT101 dan CT102 dari Edisi 2 tidak digambar); STB 1
 dan CT103 di luar kelompok VM Docker.
 VMID Nama Jenis IP Isi Bab
-9100 tpl-debian-docker VM (templat) - Debian 13 + Docker + agen tamu; tidak
-pernah dinyalakan (beda dari templat
-cloud-init 9000 Edisi 2)
+200 Template-VM VM (templat) - Debian 13; paket dasar belum dicatat (beda dari templat cloud-init 9000 Edisi 2)
 49
+100 Template-CT LXC (templat) - Debian 13; 1 CPU, 512 MiB RAM, 512 MiB swap, disk 8 GiB 49
 201 docker-core VM .20 Caddy (gerbang HTTPS), Portainer,
 Gotify, Uptime Kuma, Beszel hub,
 Homepage, adguardhome-sync
@@ -9523,7 +9524,7 @@ Bab Layanan Guest Yang berubah dari teks asli
 Edisi 2 AdGuard Home STB 1 (.253) Tidak ada: sengaja di luar Proxmox
 Edisi 2 Debian + Docker, Portainer,
 Homepage, adguardhome-sync
-VM 201 (templat 9100
+VM 201 (templat 200
 dibuat di Bab 49)
 VM Debian pertama menjadi
 docker-core atau sumber templat
@@ -9631,7 +9632,7 @@ Firewall (Bab 51) Aturan untuk 206 menggabungkan port 3010, 5678, 8081, 8082 dar
 Di awal setiap bab pemasangan Anda akan melihat kotak ungu seperti di bawah. Ia menjawab satu pertanyaan:
 buat guest baru, atau gabung ke yang sudah ada?
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 208 n8n (192.168.88.27): qm clone 9100 208 --name n8n --full 1.
+Tempat: VM 208 n8n (192.168.88.27): qm clone 200 208 --name n8n --full 1.
 Alasan: Satu kalimat mengapa dipisah atau digabung.
 Mode hemat: Bila ada, guest mana yang boleh menampungnya bersama layanan lain.
 Label di kotak Artinya
@@ -9653,7 +9654,7 @@ Bab 15.2 sampai 15.5
 VM Debian di 192.168.88.20; Server
 Domain, Base URL, dan alamat clone
 memakai .20
-VM 204 git (192.168.88.23) dari templat 9100 (Bab
+VM 204 git (192.168.88.23) dari templat 200 (Bab
 49.4). Compose dan folder /opt/stacks/forgejo
 sama. Base URL http://192.168.88.23:3000/, clone
 ssh://git@192.168.88.23:2222/USER/homelab.git
@@ -9686,14 +9687,14 @@ Nama .lan Edisi 2 boleh tetap berdampingan
 dengan \*.home.arpa
 Bab 11.2 (VM 201) Memory 4096 MiB Boleh diturunkan ke 2048 MB setelah Forgejo dan
 Nextcloud tidak lagi di VM 201 [BELUM PASTI]
-Bab 11.7 (templat 9000) Templat cloud-init untuk VM k3s Tetap untuk VM 203. Templat 9100 (Bab 49)
+Bab 11.7 (templat 9000) Templat cloud-init untuk VM k3s Tetap untuk VM 203. Templat 200 (Bab 49)
 terpisah, untuk VM layanan
 Bab 13.4
 (adguardhome-sync)
 Jalan di VM 201 Tidak berubah
 Lampiran B Rencana IP dan ID Edisi 2 Tidak ada ID atau IP yang diubah; ditambah VM
 204 sampai 212, alamat .23 sampai .31, dan
-templat 9100 (tabel 48.3)
+templat 200 (tabel 48.3)
 PERINGATAN
 Homepage memakai port 3002, bukan 3001: Uptime Kuma (Suplemen 3 Bab 31) sudah memakai 3001 di VM 201,
 sehingga dua layanan tidak bisa berbagi port itu sebelum Caddy dipasang.
@@ -9716,35 +9717,35 @@ ss -tlnp | grep -E ":(80|3002)\b"
 
 <!-- SOURCE: docs/bab/suplemen/49-templat-vm.md -->
 
-# Bab 49. Template VM Debian + Docker, Template CT Debian, dan Cara Mengklon Guest
+# Bab 49. Template VM Debian dan CT Debian serta Cara Mengklon Guest
 
-PENEMPATAN - BARU - VM 9100 (templat), lalu klon per layanan
-Tempat: VM 9100 tpl-debian-docker di host Proxmox. Templat tidak pernah dinyalakan setelah jadi; ia hanya
+PENEMPATAN - BARU - VM 200 (templat), lalu klon per layanan
+Tempat: VM 200 Template-VM di host Proxmox. Templat tidak pernah dinyalakan setelah jadi; ia hanya
 disalin.
 Alasan: Satu sumber yang sama untuk semua VM Docker: cepat, seragam, dan pembaruan keamanan dasar sudah
 ada. Setiap layanan lalu mendapat salinan penuh yang berdiri sendiri.
 Tidak termasuk: Tailscale (setiap node harus punya identitas sendiri) dan layanan apa pun.
 
-Bab ini menyiapkan dua sumber dasar yang bisa dipakai berulang: VM 9100 untuk aplikasi yang memakai Docker, dan CT 9200 untuk layanan Linux ringan tanpa Docker. Siapkan keduanya sesudah update host dan sebelum membuat guest aplikasi. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
+Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. Paket dasar VM 200 belum dicatat; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
 
-**Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 9100 dan CT 9200 dibuat sekali; jangan buat ulang jika ID tersebut sudah dipakai.
+**Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 200 dan CT 100 sudah tercatat dibuat; jangan buat ulang jika ID tersebut masih ada.
 
 ## 49.1 Rencana: dari mana templat dibuat
 
-Saat ini belum ada VM Debian atau guest lain pada host, jadi ikuti langkah 49.2 dari awal untuk membuat VM 9100. Jika ID 9100 sudah dipakai, pilih ID template lain dan ubah semua perintah clone agar mengacu ke ID tersebut. Jangan mengubah VM layanan yang sudah berisi data menjadi template.
+Template yang sudah tampak pada UI adalah VM 200 `Template-VM` dan CT 100 `Template-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
 
 ## 49.2 Membuat dan mengisi VM dasar
 
 Pemasangan Debian secara rinci ada di Edisi 2 (Debian 13, ISO netinst, tanpa lingkungan desktop). Ringkasnya
 di Proxmox:
-1. Di web Proxmox klik Create VM. VM ID 9100, Name tpl-debian-docker. Pada OS pilih ISO Debian 13 netinst.
+1. Di web Proxmox klik Create VM. VM ID 200, Name Template-VM. Pada OS pilih ISO Debian 13 netinst.
 2. System: biarkan bawaan dan centang QEMU Agent. Disks: Bus SCSI, ukuran 24 GiB (Debian + Docker dan
 layanan kecil; data besar nanti pakai disk kedua). CPU 2 inti. Memory 2048.
 3. Network: bridge vmbr0, model VirtIO. Selesaikan, jalankan, dan pasang Debian lewat konsol: hanya SSH
 server dan standard system utilities yang dipilih.
 4. Setelah masuk sebagai root (su -), lanjutkan di bawah.
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root (setelah su -)
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root (setelah su -)
 
 ```
 apt update && apt upgrade -y
@@ -9782,7 +9783,7 @@ Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 ```
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
 apt update
@@ -9809,7 +9810,7 @@ klon memberi identitasnya sendiri.
 
 ## 49.3 Membersihkan dan menjadikan templat
 
-**TERMINAL VM TEMPLAT** | VM 9100, sebagai root
+**TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
 apt clean && rm -f /etc/ssh/ssh_host_*
@@ -9824,7 +9825,7 @@ truncate -s 0 /etc/machine-id
 history -c && poweroff
 ```
 > Penjelasan: Menghapus riwayat sesi dan mematikan VM.
-1. Di Proxmox klik kanan VM 9100 &gt; Convert to template (atau di shell host: qm template 9100). Setelah ini
+1. Di Proxmox klik kanan VM 200 &gt; Convert to template (atau di shell host: qm template 200). Setelah ini
 VM tidak bisa dinyalakan, hanya disalin.
 2. Opsional: di Options templat, matikan Start at boot.
 
@@ -9835,7 +9836,7 @@ Prosedur ini dipakai oleh semua bab yang membuat VM baru (kotak penempatan menye
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 205 --name vault --full 1
+qm clone 200 205 --name vault --full 1
 ```
 > Penjelasan: Salinan penuh (bukan terkait) sehingga VM berdiri sendiri dan templat bisa dihapus tanpa
 merusaknya.
@@ -9921,7 +9922,7 @@ memakai alat resmi dan peramban.
 
 ### Bedakan template unduhan dan template CT
 
-Proxmox memakai arsip OS CT saat membuat container baru. Arsip unduhan itu belum menjadi CT yang siap diklon. Bagian ini membuat satu CT dasar bernama `tpl-debian-lxc`, memasang pembaruan dan alat umum, lalu mengubah CT itu menjadi template Proxmox.
+Proxmox memakai arsip OS CT saat membuat container baru. Arsip unduhan itu belum menjadi CT yang siap diklon. Bagian ini membuat satu CT dasar bernama `Template-CT`, memasang pembaruan dan alat umum, lalu mengubah CT itu menjadi template Proxmox.
 
 Gunakan CT untuk layanan Linux ringan tanpa Docker. Layanan yang memakai Docker tetap ditempatkan di VM Debian. Template CT memakai mode unprivileged sebagai pilihan awal. Jangan memasang layanan, Tailscale, kunci, token, atau data pribadi ke template.
 
@@ -9931,7 +9932,7 @@ Di web Proxmox pilih storage `local` > CT Templates > Templates. Cari Debian 13/
 
 ### B. Buat CT dasar
 
-1. Pilih Create CT. Gunakan CTID `9200` dan hostname `tpl-debian-lxc`.
+1. Pilih Create CT. Gunakan CTID `100` dan hostname `Template-CT`.
 2. Pilih template Debian yang baru diunduh.
 3. Pilih storage `local-lvm` untuk disk root 8 GiB.
 4. Pertahankan unprivileged container. Berikan 1 core dan RAM 512 MiB sebagai baseline.
@@ -9942,7 +9943,7 @@ Jika server masih di jaringan sementara, DHCP membuat template bisa diperbarui t
 
 ### C. Perbarui sistem dasar
 
-**TERMINAL CT DASAR** | Console CT 9200, login root
+**TERMINAL CT DASAR** | Console CT 100, login root
 
 ```
 apt update && apt full-upgrade -y
@@ -9961,12 +9962,12 @@ poweroff
 
 ### D. Jadikan CT sebagai template
 
-Pastikan CT 9200 berhenti. Di UI pilih CT 9200 > More > Convert to template. Alternatif pada shell host Proxmox:
+Pastikan CT 100 berhenti. Di UI pilih CT 100 > More > Convert to template. Alternatif pada shell host Proxmox:
 
 **TERMINAL HOST PROXMOX** | Shell node sebagai root
 
 ```
-pct template 9200
+pct template 100
 ```
 > Penjelasan: Mengunci CT dasar sebagai sumber clone. Jangan menyalakan atau memasang aplikasi langsung pada template.
 
@@ -9975,9 +9976,9 @@ pct template 9200
 Contoh membuat CT 101 untuk AdGuard kedua. Jalankan setelah host tersambung ke jaringan rumah dan pastikan IP `.11` belum digunakan:
 
 ```
-pct clone 9200 101 --full 1
+pct clone 100 101 --full 1
 ```
-> Penjelasan: Membuat salinan penuh yang berdiri sendiri dari template CT 9200.
+> Penjelasan: Membuat salinan penuh yang berdiri sendiri dari template CT 100.
 
 ```
 pct set 101 --hostname adguard2 --cores 1 --memory 512 --net0 name=eth0,bridge=vmbr0,ip=192.168.88.11/24,gw=192.168.88.1
@@ -10005,7 +10006,7 @@ Template tidak menerima pembaruan otomatis setelah dibuat. Untuk baseline baru, 
 > **Revisi 3.** Datastore PBS direncanakan memakai salah satu dari dua HDD Seagate Surveillance 2 TB (Bab 27.4); contoh ukuran 200 GiB di bawah hanya patokan awal.
 
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 9100).
+Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 200).
 Alasan: Server backup harus terpisah dari yang dicadangkan. Dokumentasi PBS menyebut server atau VM khusus;
 memasang PBS di host Proxmox hanya sebuah opsi dan tidak dipakai di sini agar host tetap polos.
 Tidak boleh: Digabung dengan layanan lain, dan tidak ikut dicadangkan oleh jobnya sendiri.
@@ -10138,7 +10139,7 @@ di riwayat shell; antarmuka web lebih aman untuk langkah ini.
 2. Datacenter &gt; Backup &gt; Add: Node pve, Storage pbs-home, Schedule 02:00 (setiap hari), Selection mode
 Include selected VMs: 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214 (disk pustaka musik
 VM 211 ditandai backup=0 di Bab 53.1; disk foto VM 214 ikut backup, Bab 55.8). Jangan mencentang 212
-(pbs) dan 9100 (templat). Mode Snapshot.
+(pbs) dan 200 (templat). Mode Snapshot.
 3. Tab Retention: centang Keep all backups (penghapusan dilakukan di PBS).
 4. Pilih job &gt; Run now. Lihat tab Tasks: setiap VM harus selesai dengan TASK OK.
 Backup tingkat VM (snapshot) melindungi seluruh isi VM. Dump logis yang dibuat di bab lama (pg_dump, tar)
@@ -10716,7 +10717,7 @@ Uji, Masalah Umum, dan Lembar Pembaruan
 Uji menyeluruh
 No Uji Hasil yang diharapkan
 1 qm list di host Terlihat VM 201-212 (sesuai yang sudah dibuat) dan
-templat 9100
+templat 200
 2 Satu VM baru dari templat (Bab 49.4) Nama host, kunci SSH, dan IP unik; ping DNS dan
 internet berhasil
 3 Backup pertama ke pbs-home TASK OK untuk setiap VM; ukuran datastore
@@ -10788,7 +10789,7 @@ Suplemen 6 (Revisi 2) Vaultwarden di VM 205 (lab-vault, port 443), AFFiNE di VM 
 Nextcloud di VM 207
 Bab 48.4
 Edisi 2 VM Debian pertama menjadi docker-core atau sumber templat
-9100
+200
 Bab 49.1
 Backup (Edisi 2 Bab 23) Backup tingkat VM oleh PBS menjadi lapisan utama; dump logis
 tetap sebagai lapisan kedua
@@ -10816,7 +10817,7 @@ log sshd
 9 Versi lynis di Debian lynis show version
 Syarat lulus Fase 7
 No Poin Ya / Tidak
-1 Templat VM 9100 ada; setiap VM layanan dibuat dari templat dengan kunci SSH dan IP sendiri
+1 Templat VM 200 ada; setiap VM layanan dibuat dari templat dengan kunci SSH dan IP sendiri
 2 Setiap layanan berada di guest sesuai peta 48.3 (atau sesuai mode hemat yang dicatat)
 3 PBS berjalan; backup harian ke store1 sukses; datastore di disk fisik terpisah
 4 Satu uji pulih berhasil; kunci enkripsi tersimpan di dua tempat terpisah
@@ -10845,7 +10846,7 @@ Pustaka musik dapat
 diputar dari semua
 perangkat
 Prasyarat
-• Templat VM 9100 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443
+• Templat VM 200 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443
 (Suplemen 6 Bab 44.3).
 • Perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak Penempatan.
 CATATAN
@@ -10861,7 +10862,7 @@ seperti Spotify tidak ada. Hal yang belum bisa saya pastikan ditandai [BELUM PAS
 > **Revisi 3.** Disk contoh (musik 200 GiB) harus disesuaikan dengan NVMe 500 GB. Lihat Bab 27.4: kecilkan ukuran awal, dan taruh backup di HDD 2 TB.
 
 PENEMPATAN - BARU - VM sendiri (dan disk data terpisah)
-Tempat: VM 211 music (192.168.88.31): qm clone 9100 211 --name music --full 1, ditambah disk data kedua untuk
+Tempat: VM 211 music (192.168.88.31): qm clone 200 211 --name music --full 1, ditambah disk data kedua untuk
 pustaka musik.
 Alasan: Pustaka musik tumbuh besar dan berganti-ganti; Navidrome ringan tetapi datanya berbeda sifat dari layanan
 lain, dan backup disk musiknya diperlakukan terpisah (backup=0).
@@ -10899,9 +10900,9 @@ dari backup. Hapus opsi backup=0 di 53.1 atau salin pustaka ke disk USB secara b
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 211 --name music --full 1
+qm clone 200 211 --name music --full 1
 ```
-> Penjelasan: Membuat VM 211 bernama music sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 211 bernama music sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 211 --memory 1024 --cores 2 --onboot 1
 ```
@@ -11212,7 +11213,7 @@ Semua layanan bisa
 dipakai bergantian tanpa
 kehabisan RAM
 Prasyarat
-• Templat VM 9100 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443
+• Templat VM 200 (Suplemen 7 Bab 49) dan tailnet dengan HTTPS Certificates aktif serta entri grants tcp:443
 (Suplemen 6 Bab 44.3).
 • Vaultwarden (Suplemen 6) untuk menyimpan kunci dan kata sandi yang dibuat di sini.
 • Perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak Penempatan.
@@ -11227,7 +11228,7 @@ bisa saya pastikan ditandai [BELUM PASTI].
 # Bab 54. SSO dengan Pocket ID
 
 PENEMPATAN - BARU - VM sendiri
-Tempat: VM 213 sso (192.168.88.32): qm clone 9100 213 --name sso --full 1. Node tailnet lab-sso ada di
+Tempat: VM 213 sso (192.168.88.32): qm clone 200 213 --name sso --full 1. Node tailnet lab-sso ada di
 dalamnya.
 Alasan: Penyedia SSO memegang kunci masuk ke layanan lain. Bila digabung dengan aplikasi, kebobolan aplikasi itu
 membuka semua pintu; sebaliknya, VM ini kecil, jarang berubah, dan hanya menjalankan Pocket ID.
@@ -11264,9 +11265,9 @@ cara pemulihan (54.5).
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 213 --name sso --full 1
+qm clone 200 213 --name sso --full 1
 ```
-> Penjelasan: Membuat VM 213 bernama sso sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 213 bernama sso sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 213 --memory 1024 --cores 1 --onboot 1
 ```
@@ -11485,7 +11486,7 @@ VM dilakukan PBS tiap malam. Jangan mengubah APP_URL atau ENCRYPTION_KEY saat me
 > **Revisi 3.** Disk contoh (foto 300 GiB) harus disesuaikan dengan NVMe 500 GB. Lihat Bab 27.4: kecilkan ukuran awal, dan taruh backup di HDD 2 TB.
 
 PENEMPATAN - BARU - VM sendiri (dan disk foto terpisah)
-Tempat: VM 214 immich (192.168.88.33): qm clone 9100 214 --name immich --full 1, ditambah disk data kedua
+Tempat: VM 214 immich (192.168.88.33): qm clone 200 214 --name immich --full 1, ditambah disk data kedua
 untuk foto. Node tailnet lab-immich.
 Alasan: Dokumentasi Immich menyarankan VM penuh (Docker di LXC tidak direkomendasikan) dan RAM sekitar 6
 GB; database vektor, machine learning, dan foto pribadi yang besar membuatnya layak sendirian.
@@ -11531,9 +11532,9 @@ datastore PBS cukup besar (55.1) dan simpan satu salinan lagi di disk lain di lu
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 214 --name immich --full 1
+qm clone 200 214 --name immich --full 1
 ```
-> Penjelasan: Membuat VM 214 bernama immich sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab
+> Penjelasan: Membuat VM 214 bernama immich sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab
 49).
 ```
 qm set 214 --memory 6144 --cores 2 --onboot 0

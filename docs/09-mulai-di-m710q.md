@@ -14,13 +14,13 @@ Urutan hari pertama. Rujukan bab ada di kolom kanan.
 | 8 | Boot dari USB (F12), instal ke NVMe, sistem berkas ext4 | 8, 28 |
 | 9 | Cabut USB, boot pertama, buka https://192.168.88.10:8006 | 28.7 |
 | 10 | Pengaturan awal: DNS, repository no-subscription, update | 9.4-9.6 |
-| 11 | Setelah update: buat template VM 9100 dan template CT 9200 sebagai sumber guest berulang | 49.2-49.4, 49.6 |
+| 11 | Template Debian 13 VM 200 dan CT 100 sudah dibuat (1 Nov); periksa paket dasar VM sebelum mengkloning guest layanan | 49.2-49.4, 49.6 |
 | 12 | Sensor dan Wake-on-LAN dari STB | 30.4-30.5 |
 | 13 | Saat enclosure tersedia: uji satu HDD 3,5 inci, identifikasi disk, lalu tentukan storage; jangan format sebelum verifikasi | 27.4, 9.9 |
 | 14 | Keamanan dasar dan Tailscale | 25, 26 |
 | 15 | Buat guest aplikasi dengan clone template; atur nama, IP, RAM/CPU, lalu pasang aplikasi | 49.4, 49.6 dan bab aplikasi |
 
-> Template disiapkan sekali setelah host diperbarui. Gunakan VM 9100 untuk guest berbasis VM/Docker dan CT 9200 untuk layanan Linux ringan tanpa Docker. Setiap clone harus memiliki nama, alamat jaringan, identitas SSH, dan resource sendiri. Jika host masih berada di jaringan sementara, gunakan DHCP; tetapkan IP akhir setelah tersambung ke MikroTik.
+> Template disiapkan sekali setelah host diperbarui. VM 200 dan CT 100 sudah dibuat. Gunakan VM 200 untuk guest berbasis VM/Docker dan CT 100 untuk layanan Linux ringan tanpa Docker, setelah memastikan template memuat paket yang diperlukan. Setiap clone harus memiliki nama, alamat jaringan, identitas SSH, dan resource sendiri. Jika host masih berada di jaringan sementara, gunakan DHCP; tetapkan IP akhir setelah tersambung ke MikroTik.
 
 Catat hasil tiap baris di `catatan/hasil-uji.md`. Berhenti dan laporkan pesan error persis bila ada yang gagal.
 

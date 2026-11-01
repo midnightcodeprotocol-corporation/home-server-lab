@@ -27,7 +27,7 @@ Prasyarat
 • Caddy, jaringan Docker proxy, dan sertifikat akar terpasang di perangkat (Suplemen 4); struktur /opt/stacks  
 (Suplemen 3).  
 • Tailscale dengan router-vm (Suplemen 1 Bab 26) dan kebijakan jaringan yang sudah Anda ubah di Bab 26.6.  
-• VM 205 vault, 206 affine, dan 207 nextcloud dibuat dari templat VM 9100 (Suplemen 7 Bab 48-49). Caddy  
+• VM 205 vault, 206 affine, dan 207 nextcloud dibuat dari templat VM 200 (Suplemen 7 Bab 48-49). Caddy  
 tetap di VM 201 docker-core.  
 • Semua perintah server dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak  
 Penempatan di awal tiap bab.  

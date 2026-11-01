@@ -24,8 +24,8 @@ from reportlab.platypus import (BaseDocTemplate, CondPageBreak, Flowable, Frame,
 from reportlab.platypus.tableofcontents import TableOfContents
 
 ROOT = Path(__file__).resolve().parents[1]
-EDITION = "Edisi Terpadu 2026.10"
-DATE = "31 Oktober 2026"
+EDITION = "Edisi Terpadu 2026.11"
+DATE = "1 November 2026"
 
 EDISI2_INDEX = ROOT / "docs/bab/edisi2/README.md"
 SUPPLEMENT_INDEX = ROOT / "docs/bab/suplemen/README.md"
@@ -71,11 +71,11 @@ def source_content() -> str:
 
     parts = ["""# Buku Panduan Lengkap Home Server Lab
 
-## Edisi Terpadu 2026.10 - 31 Oktober 2026
+## Edisi Terpadu 2026.11 - 1 November 2026
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual (31 Oktober 2026):** Proxmox berjalan dan sudah diperbarui pada ThinkCentre M710q. Kernel aktif `7.0.14-26-pve`; RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template VM/CT, layanan, HDD, dan backup belum dibuat atau diuji.
+> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat; guest layanan, backup, dan HDD belum dibuat atau diuji.
 
 ## Sebelum mulai
 
@@ -94,7 +94,7 @@ Garis dan kotak menjelaskan jaringan rumah yang sudah berjalan dan status host P
 
 ## Koreksi keamanan dan versi terbaru
 
-Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 menambahkan hasil Proxmox terbaru: DNS dan update berhasil, KVM/VT-x diperbaiki melalui `thinklmi`, serta alur template VM/CT ditempatkan setelah update host. Baca [Revisi 4](docs/bab/REVISI-4.md) dan [Revisi 5](docs/bab/REVISI-5.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
+Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 mencatat DNS/update, KVM/VT-x, dan diagnosis jaringan. Revisi 6 mencatat template Debian 13 VM 200 dan CT 100 serta persiapan perpindahan host ke MikroTik. Baca [Revisi 4](docs/bab/REVISI-4.md), [Revisi 5](docs/bab/REVISI-5.md), dan [Revisi 6](docs/bab/REVISI-6.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
 
 ## Daftar isi
 
@@ -281,7 +281,7 @@ def add_page_header(canvas,doc):
 
 class FullDoc(BaseDocTemplate):
     def __init__(self,path):
-        super().__init__(str(path),pagesize=A4,leftMargin=24*mm,rightMargin=22*mm,topMargin=20*mm,bottomMargin=21*mm,title="Buku Panduan Lengkap Home Server Lab - Edisi Terpadu 2026.10",author="Home Server Lab")
+        super().__init__(str(path),pagesize=A4,leftMargin=24*mm,rightMargin=22*mm,topMargin=20*mm,bottomMargin=21*mm,title="Buku Panduan Lengkap Home Server Lab - Edisi Terpadu 2026.11",author="Home Server Lab")
         frame=Frame(self.leftMargin,self.bottomMargin,self.width,self.height,leftPadding=0,rightPadding=0,topPadding=0,bottomPadding=0,id="main")
         self.addPageTemplates(PageTemplate(id="all",frames=frame,onPage=add_page_header))
     def afterFlowable(self,f):
@@ -300,9 +300,9 @@ def cover():
             lines=["Proxmox VE / Lenovo ThinkCentre M710q","MikroTik / Debian / Docker / backup / keamanan",f"56 bab + lampiran + 9 panduan fase",f"{EDITION} / {DATE}"]
             c.setFillColor(colors.HexColor("#E3EDF3"));c.setFont("Vera",8)
             for i,line in enumerate(lines):c.drawString(14*mm,h-119*mm-i*8*mm,line)
-            c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 31 OKTOBER 2026")
+            c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 1 NOVEMBER 2026")
             c.setFont("Vera",7.2)
-            for i,line in enumerate(["Proxmox berjalan; kernel 7.0.14-26-pve.","Template, HDD, backup, dan layanan belum dibuat.", "Alamat host sementara .0.200 sampai kembali ke MikroTik."]):c.drawString(19*mm,54*mm-i*5*mm,line)
+            for i,line in enumerate(["Proxmox VE 9.2.24; kernel 7.0.14-26-pve.","Template Debian 13 VM 200 dan CT 100 sudah dibuat.", "Alamat host sementara .0.200 sampai kembali ke MikroTik."]):c.drawString(19*mm,54*mm-i*5*mm,line)
     return [Spacer(1,4*mm),Cover(),PageBreak()]
 
 def parse_md(path:Path):
@@ -395,7 +395,7 @@ def parse_text(text:str,include_toc:bool=True):
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--pdf",type=Path);ap.add_argument("--markdown",type=Path);args=ap.parse_args()
-    book_md="\n".join(line.rstrip() for line in source_content().splitlines())+"\n";md_path=args.markdown or ROOT/"docs/panduan-lengkap-home-server-lab.md";md_path.parent.mkdir(parents=True,exist_ok=True);md_path.write_text(book_md,encoding="utf-8")
+    book_md="\n".join(line.rstrip() for line in source_content().splitlines())+"\n";md_path=args.markdown or ROOT/"docs/panduan-lengkap-home-server-lab.md";md_path.parent.mkdir(parents=True,exist_ok=True);md_path.write_text(book_md,encoding="utf-8",newline="\r\n")
     pdf_path=args.pdf or ROOT.parent/"06-Book/Panduan_Lengkap_Home_Server_Lab_Edisi_Lengkap_2026.pdf";pdf_path.parent.mkdir(parents=True,exist_ok=True)
     mdtext=md_path.read_text(encoding="utf-8")
     front,body=mdtext.split("## Daftar isi",1)

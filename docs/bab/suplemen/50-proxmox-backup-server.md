@@ -3,7 +3,7 @@
 > **Revisi 3.** Datastore PBS direncanakan memakai salah satu dari dua HDD Seagate Surveillance 2 TB (Bab 27.4); contoh ukuran 200 GiB di bawah hanya patokan awal.
 
 PENEMPATAN - BARU - VM sendiri  
-Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 9100).  
+Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 200).  
 Alasan: Server backup harus terpisah dari yang dicadangkan. Dokumentasi PBS menyebut server atau VM khusus;  
 memasang PBS di host Proxmox hanya sebuah opsi dan tidak dipakai di sini agar host tetap polos.  
 Tidak boleh: Digabung dengan layanan lain, dan tidak ikut dicadangkan oleh jobnya sendiri.  
@@ -136,7 +136,7 @@ di riwayat shell; antarmuka web lebih aman untuk langkah ini.
 2. Datacenter &gt; Backup &gt; Add: Node pve, Storage pbs-home, Schedule 02:00 (setiap hari), Selection mode  
 Include selected VMs: 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 213, 214 (disk pustaka musik  
 VM 211 ditandai backup=0 di Bab 53.1; disk foto VM 214 ikut backup, Bab 55.8). Jangan mencentang 212  
-(pbs) dan 9100 (templat). Mode Snapshot.  
+(pbs) dan 200 (templat). Mode Snapshot.  
 3. Tab Retention: centang Keep all backups (penghapusan dilakukan di PBS).  
 4. Pilih job &gt; Run now. Lihat tab Tasks: setiap VM harus selesai dengan TASK OK.  
 Backup tingkat VM (snapshot) melindungi seluruh isi VM. Dump logis yang dibuat di bab lama (pg_dump, tar)  

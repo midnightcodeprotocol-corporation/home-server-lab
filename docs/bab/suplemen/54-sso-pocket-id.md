@@ -1,7 +1,7 @@
 # Bab 54. SSO dengan Pocket ID
 
 PENEMPATAN - BARU - VM sendiri  
-Tempat: VM 213 sso (192.168.88.32): qm clone 9100 213 --name sso --full 1. Node tailnet lab-sso ada di  
+Tempat: VM 213 sso (192.168.88.32): qm clone 200 213 --name sso --full 1. Node tailnet lab-sso ada di  
 dalamnya.  
 Alasan: Penyedia SSO memegang kunci masuk ke layanan lain. Bila digabung dengan aplikasi, kebobolan aplikasi itu  
 membuka semua pintu; sebaliknya, VM ini kecil, jarang berubah, dan hanya menjalankan Pocket ID.  
@@ -38,9 +38,9 @@ cara pemulihan (54.5).
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 213 --name sso --full 1
+qm clone 200 213 --name sso --full 1
 ```
-> Penjelasan: Membuat VM 213 bernama sso sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 213 bernama sso sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 213 --memory 1024 --cores 1 --onboot 1
 ```

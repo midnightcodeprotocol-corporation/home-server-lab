@@ -3,7 +3,7 @@
 > **Revisi 3.** Disk contoh (foto 300 GiB) harus disesuaikan dengan NVMe 500 GB. Lihat Bab 27.4: kecilkan ukuran awal, dan taruh backup di HDD 2 TB.
 
 PENEMPATAN - BARU - VM sendiri (dan disk foto terpisah)  
-Tempat: VM 214 immich (192.168.88.33): qm clone 9100 214 --name immich --full 1, ditambah disk data kedua  
+Tempat: VM 214 immich (192.168.88.33): qm clone 200 214 --name immich --full 1, ditambah disk data kedua  
 untuk foto. Node tailnet lab-immich.  
 Alasan: Dokumentasi Immich menyarankan VM penuh (Docker di LXC tidak direkomendasikan) dan RAM sekitar 6  
 GB; database vektor, machine learning, dan foto pribadi yang besar membuatnya layak sendirian.  
@@ -49,9 +49,9 @@ datastore PBS cukup besar (55.1) dan simpan satu salinan lagi di disk lain di lu
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 214 --name immich --full 1
+qm clone 200 214 --name immich --full 1
 ```
-> Penjelasan: Membuat VM 214 bernama immich sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab
+> Penjelasan: Membuat VM 214 bernama immich sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab
 49).  
 ```
 qm set 214 --memory 6144 --cores 2 --onboot 0

@@ -3,7 +3,7 @@
 > **Revisi 3.** Disk contoh (musik 200 GiB) harus disesuaikan dengan NVMe 500 GB. Lihat Bab 27.4: kecilkan ukuran awal, dan taruh backup di HDD 2 TB.
 
 PENEMPATAN - BARU - VM sendiri (dan disk data terpisah)  
-Tempat: VM 211 music (192.168.88.31): qm clone 9100 211 --name music --full 1, ditambah disk data kedua untuk  
+Tempat: VM 211 music (192.168.88.31): qm clone 200 211 --name music --full 1, ditambah disk data kedua untuk  
 pustaka musik.  
 Alasan: Pustaka musik tumbuh besar dan berganti-ganti; Navidrome ringan tetapi datanya berbeda sifat dari layanan  
 lain, dan backup disk musiknya diperlakukan terpisah (backup=0).  
@@ -41,9 +41,9 @@ dari backup. Hapus opsi backup=0 di 53.1 atau salin pustaka ke disk USB secara b
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 211 --name music --full 1
+qm clone 200 211 --name music --full 1
 ```
-> Penjelasan: Membuat VM 211 bernama music sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 211 bernama music sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 211 --memory 1024 --cores 2 --onboot 1
 ```

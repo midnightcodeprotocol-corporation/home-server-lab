@@ -79,7 +79,7 @@ Bab 40.3
 Suplemen 4, Bab 36.6 Caddyfile bertambah: web, wp, n8n sebagai reverse_proxy ke  
 IP:port VM masing-masing  
 Bab 40, 41, 42  
-Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 9100, dan firewall Proxmox  
+Suplemen 7, Bab 48-51 Peta penempatan VM, templat VM 200, dan firewall Proxmox  
 yang membatasi port 8081, 8082, 5678  
 Suplemen 7  
 Suplemen 3, Bab 32 Tambah monitor Uptime Kuma untuk tiga alamat baru (Ignore  

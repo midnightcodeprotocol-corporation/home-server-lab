@@ -1,6 +1,6 @@
 # Bab 27. Mesin Anda: Lenovo ThinkCentre M710q
 
-PENEMPATAN - TIDAK ADA GUEST. Tempat: bab ini tentang mesin fisik. Belum ada VM/LXC.
+PENEMPATAN - HOST FISIK. Template Debian 13 VM 200 dan CT 100 sudah ada; belum ada guest layanan yang dilaporkan. Bab ini fokus pada perangkat keras M710q.
 
 Mesin server Anda adalah **Lenovo ThinkCentre M710q (Tiny)**. Bab ini mencatat spesifikasi, rencana RAM dan disk, dan pengaturan BIOS-nya. Menu BIOS bisa berbeda antar versi; nama di bawah adalah patokan, cocokkan dengan layar Anda.
 

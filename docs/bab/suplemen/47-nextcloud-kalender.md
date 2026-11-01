@@ -1,7 +1,7 @@
 # Bab 47. Nextcloud dan Kalender Pribadi
 
 PENEMPATAN - BARU - VM sendiri  
-Tempat: VM 207 nextcloud (192.168.88.26): qm clone 9100 207 --name nextcloud --full 1.  
+Tempat: VM 207 nextcloud (192.168.88.26): qm clone 200 207 --name nextcloud --full 1.  
 Alasan: Akan tumbuh menjadi penyimpanan berkas (NAS) dengan disk besar; pembaruannya harus satu mayor demi  
 satu mayor; datanya perlu backup tersendiri.  
 Tidak boleh: Digabung dengan layanan lain.  
@@ -19,9 +19,9 @@ yang didukung saat ini di Docker Hub (nextcloud) atau halaman rilis Nextcloud, l
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 207 --name nextcloud --full 1
+qm clone 200 207 --name nextcloud --full 1
 ```
-> Penjelasan: Membuat VM 207 bernama nextcloud sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab
+> Penjelasan: Membuat VM 207 bernama nextcloud sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab
 49).  
 ```
 qm set 207 --memory 2048 --cores 2

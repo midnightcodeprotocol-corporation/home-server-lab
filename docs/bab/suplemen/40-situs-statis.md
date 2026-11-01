@@ -1,7 +1,7 @@
 # Bab 40. Situs Web Statis dengan Caddy
 
 PENEMPATAN - GABUNG - ke VM web  
-Tempat: VM 209 web (192.168.88.28). Dibuat dari templat VM 9100: qm clone 9100 209 --name web --full 1  
+Tempat: VM 209 web (192.168.88.28). Dibuat dari templat VM 200: qm clone 200 209 --name web --full 1  
 (Suplemen 7 Bab 49).  
 Alasan: Situs statis dan WordPress sama-sama konten web privat dengan data kecil, jadi boleh serumah. Caddy di  
 docker-core hanya meneruskan ke VM ini.  
@@ -16,9 +16,9 @@ menampung WordPress (Bab 41).
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```
-qm clone 9100 209 --name web --full 1
+qm clone 200 209 --name web --full 1
 ```
-> Penjelasan: Membuat VM 209 bernama web sebagai salinan penuh dari templat VM 9100 (Suplemen 7 Bab 49).
+> Penjelasan: Membuat VM 209 bernama web sebagai salinan penuh dari templat VM 200 (Suplemen 7 Bab 49).
 ```
 qm set 209 --memory 1536 --cores 2
 ```

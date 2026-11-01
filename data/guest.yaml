@@ -12,9 +12,9 @@ host:
   disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda)
   docker_di_host: false
 templat:
-  - {vmid: 9100, nama: tpl-debian-docker, jenis: vm, catatan: "rencana template Debian 13 + Docker; belum dibuat; setelah jadi tidak dinyalakan"}
-  - {vmid: 9000, nama: debian13-template, catatan: "cloud-init, untuk VM k3s"}
-  - {vmid: 9200, nama: tpl-debian-lxc, jenis: lxc, catatan: "rencana template Debian 13 unprivileged untuk CT ringan; belum dibuat"}
+  - {vmid: 200, nama: Template-VM, jenis: vm, status: "dibuat; terlihat di UI Proxmox 1 Nov 2026", os: "Debian 13", paket_dan_konfigurasi: "belum dicatat", catatan: "template dasar VM; jangan dinyalakan langsung, clone untuk guest layanan"}
+  - {vmid: 9000, nama: debian13-template, jenis: vm, status: "rencana template cloud-init untuk VM k3s; keberadaan aktual belum diverifikasi"}
+  - {vmid: 100, nama: Template-CT, jenis: lxc, status: "dibuat; terlihat di UI Proxmox 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, catatan: "template dasar CT; jangan menyalakan langsung, clone untuk guest layanan"}
 guest:
   - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}

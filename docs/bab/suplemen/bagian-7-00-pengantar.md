@@ -29,7 +29,7 @@ terbuka
 52. Audit keamanan Skrip audit baca-saja, Lynis, SSH kunci, laporan Daftar temuan dan keputusan  
 risiko  
 Urutan kerja yang disarankan  
-1. Baca Bab 48 lalu kerjakan Bab 49 (membuat templat VM 9100).  
+1. Baca Bab 48 lalu kerjakan Bab 49 (membuat templat VM 200).  
 2. Pasang layanan menurut Kotak Penempatan di Suplemen 3, 4, 5, 6 (Revisi 2), masing-masing di guest yang  
 ditunjuk.  
 3. Kerjakan Bab 50 setelah ada guest yang berisi data, lalu Bab 51, terakhir Bab 52.  

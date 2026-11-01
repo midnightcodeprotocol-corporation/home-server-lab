@@ -14,7 +14,7 @@ PENEMPATAN - HOST. Tempat: pengaturan setelah instalasi dilakukan di host Proxmo
 | 6 | Wake-on-LAN dari STB | Bab 30.5 |
 | 7 | Pasang HDD 2 TB sebagai disk data/backup | Bab 27.4 |
 | 8 | Keamanan (akun admin, 2FA, SSH kunci, firewall) dan Tailscale | Bab 25 dan 26 |
-| 9 | Templat VM 9100 dan layanan | Bab 49 dan seterusnya |
+| 9 | Templat VM 200 dan layanan | Bab 49 dan seterusnya |
 | 10 | PBS dan backup terjadwal, uji pulih | Bab 50 |
 
 ## 30.2 Pengaturan dasar mesin asli

@@ -26,7 +26,7 @@ Prasyarat
 • Caddy dan jaringan Docker proxy dari Suplemen 4 (Bab 36) sudah berjalan; Gotify dan Uptime Kuma dari  
 Suplemen 3.  
 • Sertifikat akar Caddy terpasang di perangkat (Suplemen 4 Bab 37) bila ingin gembok tanpa peringatan.  
-• VM 208 n8n, 209 web, dan 210 web-public dibuat dari templat VM 9100 (Suplemen 7 Bab 48-49). Caddy tetap  
+• VM 208 n8n, 209 web, dan 210 web-public dibuat dari templat VM 200 (Suplemen 7 Bab 48-49). Caddy tetap  
 di VM 201 docker-core.  
 • Semua perintah dijalankan sebagai root setelah su - (tanpa sudo), di guest yang ditunjuk Kotak  
 Penempatan di awal tiap bab.  

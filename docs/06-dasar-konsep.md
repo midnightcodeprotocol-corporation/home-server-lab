@@ -28,7 +28,7 @@ Dari yang paling dasar. Rujukan: Bab 1.5 dan Lampiran D buku.
 | VT-x / AMD-V | Fitur CPU untuk virtualisasi (wajib di BIOS) |
 | Hyper-V | Hypervisor Windows; bentrok dengan VMware bila aktif |
 | ISO | Salinan DVD instalasi |
-| Templat | VM sumber untuk diklon (9100 untuk layanan, 9000 cloud-init untuk k3s) |
+| Templat | VM sumber untuk diklon (200 untuk layanan, 9000 cloud-init untuk k3s) |
 | Snapshot | Titik simpan kondisi VM, **bukan backup** |
 | vzdump / PBS | Backup bawaan Proxmox / server backup terdeduplikasi |
 
@@ -60,7 +60,7 @@ Tiga salinan, dua media, satu di luar lokasi. Satu mesin saja belum memenuhi; sa
 
 ## Kebiasaan baik
 - Matikan server dengan benar, jangan cabut HDD saat VM jalan.
-- Penomoran: LXC 100-199, VM 200-299, templat 9000+.
+- Penomoran proyek: CT 100 untuk template dan CT 101+ untuk layanan; VM 200 untuk template dan VM 201+ untuk layanan. VM 9000 tetap dicadangkan untuk template cloud-init.
 - Snapshot sebelum eksperimen besar; jangan menumpuk banyak snapshot.
 - Pin versi image Docker (bukan `latest`) dan biarkan Renovate mengusulkan pembaruan.
 - Rahasia di `.env` berizin 600; tidak pernah di Git.

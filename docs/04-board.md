@@ -1,9 +1,9 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 31 Oktober 2026.
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**, satu langkah per giliran. Proxmox sudah terpasang dan diperbarui; berikutnya buat template VM dan CT dasar sesuai `docs/09-mulai-di-m710q.md`.
+- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**, satu langkah per giliran. Proxmox sudah diperbarui dan template VM 200/CT 100 dibuat; berikutnya sambungkan host ke MikroTik, verifikasi IP, lalu uji clone.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -12,7 +12,8 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 31 Okto
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
 - [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH TCP 22 dari Windows sudah terjangkau pada jaringan sementara
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
-- [ ] Buat template VM 9100 dan CT 9200 sebelum guest layanan, lalu clone dengan nama/IP/resource unik (Bab 49)
+- [x] Buat template Debian 13: VM 200 `Template-VM` dan CT 100 `Template-CT` (1 CPU, 512 MiB RAM, 8 GiB disk CT) tampak di Proxmox; paket dasar VM masih perlu dicatat (Bab 49)
+- [ ] Setelah jaringan host pindah ke MikroTik, buat dan verifikasi clone guest pertama dengan nama/IP/resource unik (Bab 49)
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
 - [ ] Bab 10-11: buat LXC dan VM aplikasi dari template
@@ -24,7 +25,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 31 Okto
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE, Nextcloud
-- [ ] Suplemen 7 (Bab 48-52): peta, templat 9100, PBS, firewall, audit
+- [ ] Suplemen 7 (Bab 48-52): peta, templat 200, PBS, firewall, audit
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
