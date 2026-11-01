@@ -32,7 +32,7 @@ guest:
   - {vmid: 213, nama: sso, jenis: vm, ip: 192.168.88.32, ram_mb: 1024, isi: "Pocket ID", akses: "Tailscale Serve lab-sso"}
   - {vmid: 214, nama: immich, jenis: vm, ip: 192.168.88.33, ram_mb: 6144, isi: "Immich", akses: "Tailscale Serve lab-immich"}
   - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_sementara: 192.168.0.106, status: "running; AdGuard Home v0.107.79 terpasang; service disabled sampai jaringan final siap", cpu: 1, ram_mb: 512, isi: "AdGuard Home kedua (failover DNS)"}
-  - {vmid: 104, nama: docker-services, jenis: lxc, ip: null, ip_sementara: 192.168.0.104, status: "running; Debian 13 unprivileged + nesting; 4 vCPU, RAM 8192 MiB, swap 1024 MiB, disk 64 GiB; Docker aktif; Portainer CE berjalan pada TCP 9443; alamat DHCP sementara", cpu: 4, ram_mb: 8192, isi: "Portainer, Tailscale, Jellyfin, Grafana, Immich, Home Assistant Container (bertahap); Prometheus tidak dipasang sesuai keputusan pengguna", akses: "Portainer HTTPS 9443; alamat final menunggu MikroTik"}
+  - {vmid: 104, nama: docker-services, jenis: lxc, ip: null, ip_sementara: 192.168.0.104, status: "running; Debian 13 unprivileged + nesting; 4 vCPU, RAM 8192 MiB, swap 1024 MiB, disk 64 GiB; Docker aktif; Portainer CE berjalan pada TCP 9443; 192.168.0.104 adalah lease terakhir sebelum pindah LAN dan perlu dicek/renew", cpu: 4, ram_mb: 8192, isi: "Portainer, Tailscale, Jellyfin, Grafana, Immich, Home Assistant Container (bertahap); Prometheus tidak dipasang sesuai keputusan pengguna", akses: "Portainer HTTPS 9443; alamat final menunggu MikroTik"}
   - {vmid: 102, nama: files, jenis: lxc, ip: 192.168.88.12, isi: "Samba", port: [445]}
   - {vmid: 103, nama: ts-router, jenis: lxc, ip: null, isi: "Tailscale subnet router (nanti STB 2)"}
 perangkat_luar_proxmox:

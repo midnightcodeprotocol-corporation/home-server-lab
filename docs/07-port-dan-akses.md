@@ -6,7 +6,7 @@
 | MikroTik | .1 | 80 (WebFig), WinBox | LAN | langsung |
 | TL-WR820N (AP) | .2 | 80 | LAN | langsung |
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
-| Proxmox host (M710q) | .10 | 8006, 22 | LAN + IPSet admin | `proxmox.home.arpa` |
+| Proxmox host (M710q) | `192.168.88.10` (config diarahkan; verifikasi MikroTik menunggu) | 8006, 22 | LAN + IPSet admin | `proxmox.home.arpa` |
 | CT101 adguard2 | .11 | 80, 53 | LAN | `adguard2.lan` |
 | CT104 docker-services | DHCP sementara `192.168.0.104`; IP final belum ditetapkan | 9443 (Portainer HTTPS) | LAN sementara | `https://192.168.0.104:9443` (sertifikat awal self-signed) |
 | CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |

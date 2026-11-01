@@ -3,14 +3,14 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Dijeda atas permintaan pengguna (1 November 2026).** CT101, CT104, dan VM201 hidup di jaringan sementara. CT104 menampung Docker/Portainer; akun admin Portainer belum dibuat. Lanjutkan hanya setelah pengguna meminta.
+- [ ] **Fase A: persiapan jaringan rumah.** Host diarahkan ke MikroTik (`192.168.88.10`, gateway `.88.1`, DNS `.88.253`) dan konfigurasi telah di-apply; sambungan fisik serta akses WebUI dari LAN rumah masih menunggu pengujian.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
-- [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH kunci publik Codex berhasil; audit baca-saja dilakukan pada jaringan sementara
+- [ ] Uji host saat tersambung ke MikroTik: buka `https://192.168.88.10:8006`, pastikan gateway/DNS, dan perbarui lease guest yang masih memakai subnet sementara. SSH kunci publik Codex berhasil; audit baca-saja sebelumnya dilakukan pada jaringan sementara.
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.

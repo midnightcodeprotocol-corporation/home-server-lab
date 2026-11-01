@@ -119,4 +119,11 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Langkah yang belum diuji: login Portainer dari browser klien, wizard admin, Tailscale/TUN, Jellyfin, Grafana, Immich, Home Assistant Container, jaringan final MikroTik, penyimpanan HDD, dan backup.
 - Arahan pengguna: Prometheus tidak perlu dipasang. Grafana tidak mengumpulkan metrik sendiri; status Grafana/datasource masih perlu dipastikan.
 - Referensi instalasi: [Dokumentasi Portainer CE Docker](https://docs.portainer.io/start/install-ce/server/docker/linux), [Docker Debian](https://docs.docker.com/engine/install/debian/).
+
+## Persiapan pindah Proxmox ke MikroTik — 1 November 2026
+
+- Sebelum perubahan, `ip -br link` dan `bridge link` menunjukkan NIC fisik `enp0s31f6` menjadi port `vmbr0`; `eno1` tidak ada di daftar antarmuka. Cadangan konfigurasi dibuat sebagai `/etc/network/interfaces.before-mikrotik` dan `/etc/resolv.conf.before-mikrotik`.
+- `/etc/network/interfaces` diarahkan ke `192.168.88.10/24`, gateway `192.168.88.1`, bridge hanya `enp0s31f6`; stanza `eno1` yang tidak ada dihapus. `/etc/resolv.conf` diarahkan ke DNS AdGuard `192.168.88.253`; `/etc/hosts` sudah mengarahkan `pve.lab.local` dan `pve` ke `192.168.88.10`.
+- `ifquery vmbr0` berhasil menampilkan stanza dengan alamat, gateway, dan port bridge yang benar. `ifreload -a` dijalankan sesuai dokumentasi Proxmox. Sesi shell WebUI lama di `192.168.0.200` berhenti merespons setelah perubahan alamat; keadaan runtime di alamat baru belum dapat diuji dari jaringan sementara.
+- Di rumah, sambungkan `enp0s31f6` ke port LAN MikroTik lalu buka `https://192.168.88.10:8006`. Pastikan CT/VM memperoleh lease jaringan `192.168.88.x`; jika masih menyimpan alamat `192.168.0.x`, perbarui lease atau mulai ulang guest. Alamat DNS `.253` dan gateway `.1` mengikuti rencana jaringan yang sudah ada dan belum diuji ulang pada sesi ini.
 - Pengguna meminta progres dijeda pada 1 November 2026. Commit progres lokal `18bbce2` belum terunggah; `git push origin main` gagal dengan pesan persis `fatal: unable to access 'https://github.com/midnightcodeprotocol-corporation/home-server-lab.git/': Could not resolve host: github.com`. Tidak ada pemasangan layanan lanjutan setelah jeda.
