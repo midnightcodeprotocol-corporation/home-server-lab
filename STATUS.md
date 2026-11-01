@@ -12,13 +12,13 @@
 - VT-x/KVM aktif setelah perbaikan BIOS tanpa monitor melalui `thinklmi`; setelah reboot `lscpu` menunjukkan `Virtualization: VT-x` dan `/dev/kvm` tersedia. VT-d tetap `Disabled`.
 - SSH dari Codex ke `root@192.168.0.200` berhasil dengan kunci ed25519 yang dikelola pengguna; fingerprint host cocok. Pemeriksaan Proxmox baca-saja berhasil. Kunci privat dan isi `authorized_keys` tidak disimpan di repo.
 - Audit clone menemukan host key SSH dan machine ID ikut tersalin pada template lama. Template CT 100 dan VM 200 sudah diganti dengan baseline bersih dan diuji melalui clone; seluruh clone/kandidat sementara telah dihapus. Inventaris final hanya memiliki CT 100 dan VM 200 sebagai template, keduanya berhenti.
-- Guest layanan pertama dibuat dari template dan menyala: CT 101 `adguard2` (1 core, 512 MiB, DHCP `192.168.0.106`) dan VM 201 `docker-core` (2 core, 2048 MiB, disk 32 GiB, DHCP `192.168.0.107`). Keduanya masih di router sementara; AdGuard dan Docker belum dipasang. IP target `.11` dan `.20` belum diterapkan.
+- Guest layanan pertama dibuat dari template dan menyala: CT 101 `adguard2` (1 core, 512 MiB, DHCP `192.168.0.106`) dan VM 201 `docker-core` (2 core, 2048 MiB, disk 32 GiB, DHCP `192.168.0.107`). AdGuard Home v0.107.79 terpasang tetapi service disabled; Docker CE 29.9.2 dan Compose 5.6.1 terpasang dan daemon aktif, tanpa container aplikasi. IP target `.11` dan `.20` menunggu MikroTik.
 - SSH baca-saja 1 November mengonfirmasi host masih memakai `192.168.0.200/24`, default gateway `192.168.0.1`, dan DNS `192.168.0.1`. Proxmox masih dibuka melalui router sementara. Konfigurasi rumah yang dituju: `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`; perpindahan ke MikroTik belum diterapkan.
 
 ## Langkah berikutnya
 1. Siapkan perubahan jaringan host dari subnet sementara ke MikroTik; pastikan `192.168.88.10` tidak bentrok, lalu sambungkan kabel dan verifikasi panel/DNS.
 2. Pindahkan host ke MikroTik, pastikan DHCP reservation untuk MAC CT101/VM201 mengarah ke `.11`/`.20`, lalu periksa ulang akses.
-3. Pasang AdGuard Home pada CT101 dan mulai VM201 mengikuti Bab 14 serta suplemen Docker; aktifkan layanan setelah IP final stabil.
+3. Setelah IP final stabil, jalankan wizard AdGuard pada CT101 dan buat akun admin; pasang Portainer pada VM201 lalu atur kredensial admin sendiri.
 4. Uji enclosure single-bay dan satu HDD. Identifikasi disk sebelum memformat atau menentukan peran data/backup.
 5. Verifikasi BIOS/MemTest86, sensor, firewall, backup, dan hasil uji per bab di `catatan/hasil-uji.md`.
 
@@ -26,7 +26,7 @@
 - BIOS/MemTest86 RAM masih belum diperiksa.
 - Jaringan host sementara `192.168.0.200/24`; rencana alamat rumah `192.168.88.10` belum diterapkan.
 - Enclosure belum diuji; HDD belum terlihat oleh Proxmox, dan belum ada backup server.
-- Paket tambahan di VM 200 belum dicatat. Enclosure dan HDD belum diuji. Aplikasi pada CT101/VM201, firewall layanan, backup, dan pemulihan belum disiapkan.
+- Paket tambahan di VM 200 belum dicatat. Enclosure dan HDD belum diuji. AdGuard belum dikonfigurasi; Portainer/Caddy dan stack layanan belum dipasang. Firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.
 - Firewall guest, backup, dan pemulihan belum diuji pada M710q.
 
@@ -41,3 +41,4 @@
 - 1 Nov: tangkapan layar Proxmox VE 9.2.24 menunjukkan CT 100 `Template-CT` dan VM 200 `Template-VM`. CT 100: 1 CPU, RAM 512 MiB, swap 512 MiB, disk 8 GiB. Host masih di `192.168.0.200`; persiapan menuju MikroTik `192.168.88.0/24` berlanjut. Buku edisi Terpadu 2026.11 dibangun ulang 259 halaman dengan renderer dan aset ilustrasi/tabel yang terpelihara di `tools/book_builder/`.
 - 1 Nov: pengguna mengonfirmasi VM 200 dan CT 100 memakai Debian 13; paket VM belum dicatat. Clone menemukan host key SSH dan machine ID VM yang ikut tersalin. Template CT 100 dan VM 200 diperbaiki, diuji melalui clone, lalu seluruh guest uji dihapus; inventaris kembali hanya berisi dua template.
 - 1 Nov: dibuat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih. Keduanya boot dengan DHCP router sementara; host key SSH CT baru, QEMU Guest Agent VM aktif, dan hostname VM diubah sesuai plan. Aplikasi belum dipasang; IP final menunggu MikroTik.
+- 1 Nov: dependensi curl terpasang; AdGuard Home v0.107.79 dipasang dari rilis resmi pada CT101 lalu servicenya dinonaktifkan sementara agar wizard admin tidak terbuka di jaringan sementara. Docker CE 29.9.2 dan Compose v5.6.1 dipasang dari repository resmi pada VM201; daemon aktif dan belum ada container aplikasi.

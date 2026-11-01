@@ -17,8 +17,8 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
-- [ ] Bab 13: pasang AdGuard kedua pada CT101 dan siapkan failover DNS setelah IP MikroTik aktif
-- [ ] Bab 14: siapkan Docker dan Portainer pada VM201 setelah alamat `.20` stabil
+- [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
+- [ ] Bab 14: Docker CE/Compose sudah aktif di VM201; pasang dan amankan Portainer setelah alamat `.20` stabil
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal

@@ -17,7 +17,7 @@ templat:
   - {vmid: 200, nama: Template-VM, jenis: vm, status: "template aktif, stopped; SSH host key dibersihkan; machine ID VM direset dan diuji melalui clone 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "QEMU Guest Agent aktif; paket lainnya belum dicatat"}
   - {vmid: 100, nama: Template-CT, jenis: lxc, status: "template aktif, stopped; SSH host key dibersihkan; keunikan identitas clone diuji 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, storage: "local-lvm", unprivileged: true, nesting: true, bridge: "vmbr0", firewall: true, ipv4: "DHCP"}
 guest:
-  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ip_sementara: 192.168.0.107, status: "running; clone dari VM 200; hostname dan QEMU Guest Agent diperiksa; aplikasi belum dipasang", cpu: 2, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
+  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ip_sementara: 192.168.0.107, status: "running; Docker CE 29.9.2 dan Compose 5.6.1 aktif; belum ada container aplikasi", cpu: 2, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}
   - {vmid: 203, nama: k3s, jenis: vm, ip: 192.168.88.22, ram_mb: 3072, isi: "k3s + Flux", port: [6443]}
   - {vmid: 204, nama: git, jenis: vm, ip: 192.168.88.23, ram_mb: 1024, isi: "Forgejo + Renovate", port: [3000, 2222]}
@@ -31,7 +31,7 @@ guest:
   - {vmid: 212, nama: pbs, jenis: vm, ip: 192.168.88.30, ram_mb: 2048, isi: "Proxmox Backup Server", port: [8007]}
   - {vmid: 213, nama: sso, jenis: vm, ip: 192.168.88.32, ram_mb: 1024, isi: "Pocket ID", akses: "Tailscale Serve lab-sso"}
   - {vmid: 214, nama: immich, jenis: vm, ip: 192.168.88.33, ram_mb: 6144, isi: "Immich", akses: "Tailscale Serve lab-immich"}
-  - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_sementara: 192.168.0.106, status: "running; clone dari CT 100; DHCP sementara; AdGuard belum dipasang", cpu: 1, ram_mb: 512, isi: "AdGuard Home kedua (failover DNS)"}
+  - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_sementara: 192.168.0.106, status: "running; AdGuard Home v0.107.79 terpasang; service disabled sampai jaringan final siap", cpu: 1, ram_mb: 512, isi: "AdGuard Home kedua (failover DNS)"}
   - {vmid: 102, nama: files, jenis: lxc, ip: 192.168.88.12, isi: "Samba", port: [445]}
   - {vmid: 103, nama: ts-router, jenis: lxc, ip: null, isi: "Tailscale subnet router (nanti STB 2)"}
 perangkat_luar_proxmox:

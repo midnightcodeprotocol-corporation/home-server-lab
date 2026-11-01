@@ -91,4 +91,11 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - CT 101 `adguard2` berhasil dibuat dari CT 100, menyala, memakai 1 core, RAM 512 MiB, swap 512 MiB, disk 8 GiB, dan mendapat DHCP sementara `192.168.0.106/24`.
 - VM 201 `docker-core` berhasil dibuat dari VM 200, menyala, memakai 2 core, RAM 2048 MiB, disk 32 GiB, QEMU Guest Agent aktif, dan mendapat DHCP sementara `192.168.0.107/24`.
 - Hostname CT adalah `adguard2`; hostname VM disesuaikan dari `debian-docker` menjadi `docker-core`. Kedua guest berada di router sementara `192.168.0.0/24`; target rumah `.11` dan `.20` belum digunakan.
-- Aplikasi AdGuard Home, Docker, serta stack layanan belum dipasang. Lanjutkan setelah host tersambung ke MikroTik dan reservasi alamat dibuat untuk MAC kedua guest.
+- Pada saat kedua guest pertama selesai dibuat, AdGuard Home dan Docker belum dipasang. Kelanjutannya dicatat di bagian fondasi layanan di bawah.
+
+## Fondasi layanan CT101 dan VM201 — 1 November 2026
+
+- CT101: dependensi `curl` terpasang; installer resmi AdGuard Home memasang rilis `v0.107.79` pada `/opt/AdGuardHome`. Unit `AdGuardHome` dibuat, lalu dinonaktifkan dan dihentikan agar wizard konfigurasi tanpa admin belum terbuka pada jaringan sementara.
+- VM201: Docker Engine CE `29.9.2`, containerd `2.4.2`, Buildx `0.38.1`, dan Compose plugin `5.6.1` terpasang dari repository resmi Docker untuk Debian 13. Service Docker aktif; belum ada container aplikasi.
+- `apt-get update` berhasil pada kedua guest melalui router sementara. CT sempat menampilkan peringatan locale `en_US.UTF-8` belum tersedia; tidak menghalangi instalasi dan perlu dibereskan saat hardening Debian.
+- Link sumber instalasi: [Docker Engine Debian](https://docs.docker.com/engine/install/debian/) dan [AdGuard Home resmi](https://github.com/AdguardTeam/AdGuardHome).
