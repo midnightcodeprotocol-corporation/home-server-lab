@@ -7,11 +7,11 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox sudah diarahkan ke `.3`, tetapi resolusi dari host belum diuji. Rincian ada di [STATUS.md](STATUS.md).
+Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox diarahkan ke `.3`; `getent hosts deb.debian.org` menghasilkan jawaban IPv6, uji IPv4 masih menunggu. Rincian ada di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
-- **Penyimpanan:** dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum disambungkan. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
+- **Penyimpanan:** HDD pertama terdeteksi di Proxmox sebagai 2 TB NTFS dengan S.M.A.R.T. PASSED; HDD kedua menunggu enclosure.
 - **Langkah server:** CT 101 `adguard2` dan VM 201 `docker-core` sudah dibuat dan berjalan dari template bersih. CT101 mendapat DHCP router sementara `192.168.0.106`; VM201 mendapat `192.168.0.102` setelah reboot (alamat dinamis). Alamat rumah `.11` dan `.20` belum ditetapkan. AdGuard Home v0.107.79 terpasang tetapi servicenya dinonaktifkan sampai jaringan final siap. Docker CE dan Compose v5.6.1 aktif di VM201; belum ada container aplikasi. Pesan AF_VSOCK ditangani dengan mematikan socket SSH vsock opsional; SSH TCP tetap aktif.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.

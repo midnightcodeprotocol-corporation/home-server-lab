@@ -143,3 +143,9 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - `Disks > Disks`: NVMe sistem `/dev/nvme0n1` berukuran 512.11 GB dengan partisi EFI dan LVM. HDD terdeteksi sebagai `/dev/sda`, model Seagate `ST2000VX008-2E3164`, ukuran 2.00 TB, S.M.A.R.T. `PASSED`; memiliki partisi `/dev/sda1` berjenis NTFS.
 - Tidak ada initialize, wipe, format, mount, atau pembuatan storage yang dijalankan. Isi partisi NTFS dan peran disk belum diperiksa/diputuskan. HDD kedua menunggu enclosure lain.
 - Koreksi topologi pengguna: Proxmox ke switch port 3; switch port 1 ke MikroTik ether4. MikroTik ether2 kosong dan direncanakan untuk WAN modem cadangan; belum dikonfigurasi.
+
+## Uji resolusi DNS host Proxmox — 1 November 2026
+
+- Pengguna menjalankan `getent hosts deb.debian.org` pada shell root Proxmox setelah mengarahkan DNS host ke `192.168.88.3`.
+- Perintah berhasil mengembalikan empat alamat IPv6 AAAA untuk `debian.map.fastlydns.net` / `deb.debian.org`; resolusi IPv6 lulus.
+- Record IPv4 dan akses internet dari host belum diuji.
