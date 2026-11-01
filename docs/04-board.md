@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. CT101 dan VM201 sudah dibuat dari template dan hidup di jaringan sementara. Berikutnya pindahkan host ke MikroTik dan pastikan IP final.
+- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. CT101, CT104, dan VM201 hidup di jaringan sementara. CT104 menampung Docker/Portainer dan rencana layanan; alamat final menunggu MikroTik.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -18,7 +18,9 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
-- [ ] Bab 14: Docker CE/Compose sudah aktif di VM201; pasang dan amankan Portainer setelah alamat `.20` stabil
+- [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
+- [ ] Selesaikan akun admin Portainer CT104 sendiri, lalu buat layanan secara bertahap: Tailscale, Jellyfin, Grafana, Immich, Home Assistant Container
+- [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal

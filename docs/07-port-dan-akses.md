@@ -8,6 +8,7 @@
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
 | Proxmox host (M710q) | .10 | 8006, 22 | LAN + IPSet admin | `proxmox.home.arpa` |
 | CT101 adguard2 | .11 | 80, 53 | LAN | `adguard2.lan` |
+| CT104 docker-services | DHCP sementara `192.168.0.104`; IP final belum ditetapkan | 9443 (Portainer HTTPS) | LAN sementara | `https://192.168.0.104:9443` (sertifikat awal self-signed) |
 | CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |
 | VM 201 docker-core | .20 | 80, 443 (Caddy) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |

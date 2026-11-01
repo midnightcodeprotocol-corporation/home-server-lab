@@ -7,12 +7,12 @@
 | 3 | AdGuard Home, bukan Pi-hole | Ringan, DoH/DoT bawaan, aturan per klien | Pi-hole (tetap valid) |
 | 4 | Dua DNS di DHCP (Opsi 1), bukan dnsdist | Tanpa titik gagal tunggal baru | Balancer sebagai satu-satunya DNS |
 | 5 | Debian 13 untuk semua VM, perintah tanpa sudo | Konsisten; sudo tidak terpasang bila root diberi password | Ubuntu, sudo |
-| 6 | Docker di VM, bukan LXC | Lebih stabil; saran dokumentasi Proxmox | Docker di LXC, image OCI (tech preview) |
+| 6 | Docker pada CT unprivileged 104 dengan nesting, sesuai persetujuan pengguna | Mengurangi jumlah VM dan memanfaatkan RAM/CPU; menerima isolasi lebih rendah dibanding VM | VM khusus untuk Docker |
 | 7 | Akses luar hanya lewat Tailscale | Privasi; tanpa port forwarding | Port forwarding, VPN lain |
 | 8 | Tailscale subnet router di LXC CT103 (nanti STB 2); STB 1 khusus AdGuard | Stabilitas DNS rumah | Tailscale di STB 1 atau di VM Docker |
 | 9 | Caddy dengan CA lokal (Jalur 1) untuk layanan privat | Gratis, tanpa domain | Domain berbayar (Jalur 2, opsional) |
 | 10 | Tailscale Serve untuk layanan yang aplikasi HP-nya menolak CA lokal | Sertifikat tepercaya | Pasang CA di tiap aplikasi |
-| 11 | Satu VM per layanan, kecuali kelompok ringan | Batasi dampak kebobolan, backup per layanan | Semua di satu VM Docker |
+| 11 | Kelompok layanan ringan pada CT104; gunakan VM hanya untuk aplikasi yang memang memerlukan VM | Hemat sumber daya; nesting disetujui dengan memahami trade-off isolasi | Satu VM per aplikasi |
 | 12 | Mode hemat: n8n, web, AFFiNE, musik di VM 206 `apps` | Hemat RAM | Terpisah penuh |
 | 13 | PBS di VM terpisah, datastore di disk fisik berbeda, enkripsi aktif | Backup terpisah dari yang dicadangkan | PBS di host |
 | 14 | Disk foto Immich **ikut** backup | Foto tidak bisa dibuat ulang | `backup=0` dan hanya backup bawaan Immich |
@@ -28,3 +28,4 @@
 | 24 | Disk data besar (foto, musik) dikecilkan awal agar muat di NVMe | NVMe hanya 500 GB | Ukuran contoh 200/300 GiB |
 | 25 | Gunakan baseline profil 16 GB sampai konfigurasi aktual diverifikasi. RAM yang dilaporkan sekarang 24 GB; Bab 56.8 menambah batas konservatif sementara. Opsi 32 GB tetap bersyarat pengukuran | Menjaga ruang bagi host dan mencegah OOM | Menganggap alokasi VM teoritis sama dengan RAM aman untuk VM |
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
+| 27 | Prometheus tidak dipasang pada tahap ini sesuai arahan pengguna; status Grafana dan datasource diperiksa terpisah | Menghindari layanan yang tidak diminta; Grafana tetap memerlukan datasource untuk visualisasi | Menganggap Grafana sendiri mengumpulkan metrik |

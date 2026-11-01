@@ -13,20 +13,23 @@
 - SSH dari Codex ke `root@192.168.0.200` berhasil dengan kunci ed25519 yang dikelola pengguna; fingerprint host cocok. Pemeriksaan Proxmox baca-saja berhasil. Kunci privat dan isi `authorized_keys` tidak disimpan di repo.
 - Audit clone menemukan host key SSH dan machine ID ikut tersalin pada template lama. Template CT 100 dan VM 200 sudah diganti dengan baseline bersih dan diuji melalui clone; seluruh clone/kandidat audit dihapus. Setelah itu CT101 dan VM201 dibuat sebagai guest layanan pertama.
 - Guest layanan pertama dibuat dari template dan menyala: CT 101 `adguard2` (1 core, 512 MiB, DHCP `192.168.0.106`) dan VM 201 `docker-core` (2 core, 2048 MiB, disk 32 GiB; DHCP terakhir `192.168.0.102` setelah reboot). AdGuard Home v0.107.79 terpasang tetapi service disabled; Docker CE 29.9.2 dan Compose 5.6.1 terpasang dan daemon aktif, tanpa container aplikasi. IP target `.11` dan `.20` menunggu MikroTik.
+- CT 104 `docker-services` dibuat dari template: Debian 13 unprivileged + nesting, 4 vCPU, RAM 8 GiB, swap 1 GiB, rootfs 64 GiB, DHCP sementara `192.168.0.104`. Docker Debian `26.1.5+dfsg1-9+deb13u1` dan Docker Compose `2.26.1-4` aktif. Portainer CE container berjalan pada HTTPS TCP 9443; wizard admin belum diselesaikan pengguna.
+- Rencana layanan terbaru: Tailscale, Jellyfin, Portainer, Grafana, Immich, dan Home Assistant Container ditempatkan di CT104 secara bertahap. Prometheus dikeluarkan dari rencana pemasangan. Grafana/datasource yang sudah ada belum diverifikasi; Grafana memerlukan sumber data terpisah untuk menampilkan metrik.
 - SSH baca-saja 1 November mengonfirmasi host masih memakai `192.168.0.200/24`, default gateway `192.168.0.1`, dan DNS `192.168.0.1`. Proxmox masih dibuka melalui router sementara. Konfigurasi rumah yang dituju: `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`; perpindahan ke MikroTik belum diterapkan.
 
 ## Langkah berikutnya
-1. Siapkan perubahan jaringan host dari subnet sementara ke MikroTik; pastikan `192.168.88.10` tidak bentrok, lalu sambungkan kabel dan verifikasi panel/DNS.
-2. Pindahkan host ke MikroTik, pastikan DHCP reservation untuk MAC CT101/VM201 mengarah ke `.11`/`.20`, lalu periksa ulang akses.
-3. Setelah IP final stabil, jalankan wizard AdGuard pada CT101 dan buat akun admin; pasang Portainer pada VM201 lalu atur kredensial admin sendiri.
-4. Uji enclosure single-bay dan satu HDD. Identifikasi disk sebelum memformat atau menentukan peran data/backup.
-5. Verifikasi BIOS/MemTest86, sensor, firewall, backup, dan hasil uji per bab di `catatan/hasil-uji.md`.
+1. Buka Portainer di `https://192.168.0.104:9443` dari LAN sementara dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
+2. Buat DHCP reservation/IP final CT104 di MikroTik sebelum jaringan rumah menjadi rujukan; semua IP `.0.x` saat ini bersifat sementara.
+3. Lanjutkan pemasangan layanan di CT104 satu per satu. Tailscale hanya paket dahulu sampai kebutuhan akses TUN dan autentikasi dibahas; siapkan Jellyfin, Grafana bila belum tersedia, Immich, dan Home Assistant Container.
+4. Prometheus tidak dipasang sesuai arahan pengguna. Grafana perlu datasource (misalnya Beszel atau alternatif yang dipilih) sebelum menampilkan metrik.
+5. Uji enclosure single-bay dan satu HDD. Identifikasi disk sebelum memformat atau menentukan peran data/backup.
+6. Verifikasi BIOS/MemTest86, sensor, firewall, backup, dan hasil uji per bab di `catatan/hasil-uji.md`.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
 - Jaringan host sementara `192.168.0.200/24`; rencana alamat rumah `192.168.88.10` belum diterapkan.
 - Enclosure belum diuji; HDD belum terlihat oleh Proxmox, dan belum ada backup server.
-- Paket tambahan di VM 200 belum dicatat. Enclosure dan HDD belum diuji. AdGuard belum dikonfigurasi; Portainer/Caddy dan stack layanan belum dipasang. Firewall layanan, backup, dan pemulihan belum disiapkan.
+- Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard belum dikonfigurasi. IP final MikroTik, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.
 - Firewall guest, backup, dan pemulihan belum diuji pada M710q.
 
@@ -43,3 +46,4 @@
 - 1 Nov: dibuat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih. Keduanya boot dengan DHCP router sementara; host key SSH CT baru, QEMU Guest Agent VM aktif, dan hostname VM diubah sesuai plan. Aplikasi belum dipasang; IP final menunggu MikroTik.
 - 1 Nov: dependensi curl terpasang; AdGuard Home v0.107.79 dipasang dari rilis resmi pada CT101 lalu servicenya dinonaktifkan sementara agar wizard admin tidak terbuka di jaringan sementara. Docker CE 29.9.2 dan Compose v5.6.1 dipasang dari repository resmi pada VM201; daemon aktif dan belum ada container aplikasi.
 - 1 Nov: setelah tangkapan layar menunjukkan pesan AF_VSOCK berulang, ditemukan systemd 257.13 pada Debian 13. `systemd.ssh_auto=no` diterapkan ke GRUB VM201 karena socket SSH vsock/Unix opsional tidak digunakan. VM reboot bersih; hostname `docker-core`, SSH TCP, Docker, dan jaringan terverifikasi. Pesan AF_VSOCK tidak muncul pada boot baru. DHCP VM berubah dari `.107` ke `.102`; alamat masih dinamis.
+- 1 Nov: sesuai arahan untuk mengurangi jumlah VM, dibuat CT104 `docker-services` sebagai CT unprivileged dengan nesting (telah disetujui pengguna), 4 vCPU, RAM 8 GiB, swap 1 GiB, rootfs 64 GiB, DHCP sementara `192.168.0.104`. Docker Debian dan Compose aktif; Portainer CE `lts` berjalan dan memublikasikan TCP 9443. Setup akun admin masih menunggu pengguna. Prometheus tidak dipasang; status Grafana/datasource belum diverifikasi.

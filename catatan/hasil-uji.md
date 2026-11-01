@@ -109,3 +109,13 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Pasca-boot: hostname VM `docker-core`, SSH dan Docker `active`, Docker belum memiliki container, serta log boot tidak berisi pesan AF_VSOCK tersebut. CT101 juga tetap aktif; AdGuard tetap disabled.
 - IP VM melalui DHCP sementara berubah dari `192.168.0.107` menjadi `192.168.0.102` setelah reboot. Jangan gunakan alamat ini sebagai IP tetap; tunggu reservasi DHCP MikroTik `.20`.
 - Rujukan: [systemd-ssh-generator](https://www.freedesktop.org/software/systemd/man/latest/systemd-ssh-generator.html), [laporan Debian #1137216](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1137216).
+
+## Docker host CT104 dan Portainer — 1 November 2026
+
+- CT104 `docker-services` diklon penuh dari CT100. Konfigurasi terverifikasi: Debian 13, unprivileged, nesting aktif, 4 vCPU, RAM 8192 MiB, swap 1024 MiB, rootfs 64 GiB, DHCP sementara `192.168.0.104/24`; CT menyala dan `onboot` aktif.
+- `apt-get update` berhasil. Paket Debian `docker.io` (`26.1.5+dfsg1-9+deb13u1`), `docker-compose` (`2.26.1-4`), `curl`, dan `ca-certificates` dipasang. `systemctl is-active docker` menghasilkan `active`; `docker-compose --version` mengonfirmasi `2.26.1-4`.
+- Portainer Community Edition image `portainer/portainer-ce:lts` berjalan pada CT104 dengan pemetaan `0.0.0.0:9443->9443/tcp`. `docker ps` mengonfirmasi status `Up`; wizard akun administrator belum diselesaikan.
+- Satu percobaan awal `docker run` gagal karena tanda `:` terkirim sebagai `;` oleh input terminal, menghasilkan `"docker run" requires at least 1 argument` dan `-bash: 9443: command not found`. Perintah diketik ulang dengan benar; container Portainer kemudian berjalan. Tidak ada data yang terhapus.
+- Langkah yang belum diuji: login Portainer dari browser klien, wizard admin, Tailscale/TUN, Jellyfin, Grafana, Immich, Home Assistant Container, jaringan final MikroTik, penyimpanan HDD, dan backup.
+- Arahan pengguna: Prometheus tidak perlu dipasang. Grafana tidak mengumpulkan metrik sendiri; status Grafana/datasource masih perlu dipastikan.
+- Referensi instalasi: [Dokumentasi Portainer CE Docker](https://docs.portainer.io/start/install-ce/server/docker/linux), [Docker Debian](https://docs.docker.com/engine/install/debian/).
