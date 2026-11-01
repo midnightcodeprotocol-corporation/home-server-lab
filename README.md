@@ -12,7 +12,7 @@ Jaringan rumah terakhir diverifikasi **28 Oktober 2026**. Proxmox dipasang dan d
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
 - **Penyimpanan:** dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum disambungkan. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
-- **Langkah server:** Proxmox VE 9.2.24 sudah diperbarui; kernel 7.0.14-26-pve; storage lokal aktif. Audit clone menemukan host key SSH dan machine ID ikut tersalin. Perbaikan sudah diterapkan pada template CT 100 dan VM 200; clone uji lulus boot, DHCP, DNS, SSH, dan identitas unik. Semua guest uji telah dihapus. Host masih memakai router sementara; guest layanan, backup, dan pemulihan belum dibuat atau diuji.
+- **Langkah server:** Template CT 100 dan VM 200 sudah diperbaiki setelah audit menemukan host key SSH dan machine ID ikut tersalin. Guest pertama kini dibuat dari template: CT 101 `adguard2` (512 MiB) dan VM 201 `docker-core` (2 GiB, 2 core). Keduanya hidup di jaringan router sementara melalui DHCP (`192.168.0.106` dan `.107`); alamat rumah `.11` dan `.20` belum ditetapkan. Aplikasi AdGuard/Docker belum dipasang.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
@@ -66,9 +66,9 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | Guest | Alamat | Peran target |
 |---|---:|---|
 | Host Proxmox | `192.168.88.10` | Hypervisor M710q |
-| CT101 / CT102 | `.11 / .12` | AdGuard kedua / Samba |
+| CT101 / CT102 | `.11 / .12` | AdGuard kedua / Samba; CT101 sudah dibuat, IP final menunggu MikroTik |
 | CT103 | Belum ditetapkan | Tailscale subnet router sementara |
-| VM 201 | `.20` | Caddy, Portainer, Gotify, Uptime Kuma, Beszel, Homepage |
+| VM 201 | `.20` | Caddy, Portainer, Gotify, Uptime Kuma, Beszel, Homepage; VM sudah dibuat, aplikasi belum dipasang |
 | VM 202 / 203 | `.21 / .22` | Home Assistant OS / k3s + Flux |
 | VM 204 / 205 | `.23 / .24` | Forgejo + Renovate / Vaultwarden |
 | VM 206 / 207 | `.25 / .26` | AFFiNE / Nextcloud |
@@ -79,7 +79,7 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
 | CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
-Peta guest layanan ini adalah **rancangan**; guest layanan belum dibuat. Clone uji sementara telah dihapus sehingga ID layanan rencana kembali tersedia. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Peta layanan adalah rancangan bertahap: CT101 dan VM201 sudah dibuat dan menyala di jaringan sementara; layanan berikutnya menunggu host tersambung ke MikroTik. Belum ada aplikasi layanan yang dipasang. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
 Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
@@ -134,3 +134,4 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/
 - **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
 - **Revisi 6 (1 November 2026):** mencatat template Debian 13 VM/CT dan persiapan jaringan MikroTik.
 - **Revisi 7 (1 November 2026):** mencatat identitas yang ikut tersalin, perbaikan template CT 100/VM 200, hasil clone, dan pembersihan guest uji.
+- **Revisi 8 (1 November 2026):** membuat CT 101 `adguard2` dan VM 201 `docker-core` dari template. Keduanya berjalan dengan DHCP router sementara; IP akhir dan pemasangan aplikasi menunggu MikroTik. Lihat [catatan Revisi 8](docs/bab/REVISI-8.md).

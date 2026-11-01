@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. Template CT 100 dan VM 200 sudah diperbaiki dan clone test lulus. Berikutnya sambungkan host ke MikroTik dan verifikasi alamat manajemen.
+- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. CT101 dan VM201 sudah dibuat dari template dan hidup di jaringan sementara. Berikutnya pindahkan host ke MikroTik dan pastikan IP final.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -16,9 +16,9 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
-- [ ] Bab 10-11: buat LXC dan VM aplikasi dari template
-- [ ] Bab 13: AdGuard kedua + failover DNS
-- [ ] Bab 14: Docker dan Portainer
+- [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
+- [ ] Bab 13: pasang AdGuard kedua pada CT101 dan siapkan failover DNS setelah IP MikroTik aktif
+- [ ] Bab 14: siapkan Docker dan Portainer pada VM201 setelah alamat `.20` stabil
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
