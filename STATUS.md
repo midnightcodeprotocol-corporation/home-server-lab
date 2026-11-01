@@ -3,8 +3,8 @@
 **Terakhir diperbarui:** 1 November 2026
 
 ## Posisi sekarang
-- **Status pekerjaan:** konektivitas dasar ke MikroTik diverifikasi; pemasangan layanan tetap dijeda sampai guest dan DNS host diperiksa. Perubahan progres tersimpan lokal tetapi belum tersinkron ke GitHub karena `git push` gagal me-resolve `github.com` (`Could not resolve host: github.com`).
-- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; `perintah `getent hosts` dan `getent ahostsv4` berhasil mengembalikan alamat IPv6 dan IPv4. Koneksi host ke repositori paket belum diuji. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
+- **Status pekerjaan:** konektivitas dasar ke MikroTik diverifikasi; diagnosis akses repo Proxmox sedang berjalan. Pemasangan layanan tetap dijeda. Perubahan progres tersimpan lokal tetapi belum tersinkron ke GitHub karena `git push` gagal me-resolve `github.com` (`Could not resolve host: github.com`).
+- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; `getent hosts` dan `getent ahostsv4` berhasil mengembalikan alamat IPv6 dan IPv4. Repo Debian/security berhasil diakses oleh APT, tetapi repo Proxmox gagal pada HTTP port 80 dan HTTPS port 443; penyebab/rute belum diketahui. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
 - Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
 - RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.
 - NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` berukuran **476,9 GB**; Proxmox berjalan.
@@ -21,7 +21,7 @@
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Uji koneksi HTTPS baca-saja ke endpoint repo Proxmox; jangan ubah source apt sampai hasilnya jelas.
+1. Uji HTTPS IPv4 ke `deb.debian.org` dan periksa rute host menuju `117.120.5.231`; jangan ubah source apt sampai penyebab akses repo Proxmox lebih jelas.
 2. Buka `https://192.168.88.10:8006` dan pastikan guest CT101, CT104, VM201 mendapat alamat LAN rumah; alamat guest final belum boleh diasumsikan.
 3. Pastikan DHCP MikroTik hanya membagikan DNS yang sudah aktif. AdGuard CT101 `.11` belum diverifikasi aktif; jangan jadikan DNS cadangan sampai diuji.
 4. Buat DHCP reservation/IP final CT104 di MikroTik, lalu buka Portainer di HTTPS port 9443 dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
@@ -31,7 +31,7 @@
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
-- Resolusi IPv4 dan IPv6 DNS host berhasil; repo Debian/security dapat diakses, tetapi repo Proxmox HTTP port 80 tidak terjangkau; penyebab belum diketahui. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
+- Resolusi IPv4 dan IPv6 DNS host berhasil; repo Debian/security dapat diakses, tetapi repo Proxmox pada HTTP port 80 maupun HTTPS port 443 tidak terjangkau. Rute/penyebab belum diketahui. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
 - HDD unit 1 terlihat tetapi belum mounted/dikonfigurasi; isi partisi NTFS dan peran storage belum diputuskan. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard CT101 belum diaktifkan/dikonfigurasi; AdGuard utama STB `.3` sudah merespons kueri DNS langsung. Konektivitas jaringan rumah belum diverifikasi, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.

@@ -163,4 +163,6 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Repo Debian trixie dan trixie-security dapat diakses (`Hit`/`Get`).
 - Repo Proxmox `http://download.proxmox.com/debian/pve trixie InRelease` gagal setelah tiga kali percobaan. Pesan persis: `Could not connect to download.proxmox.com:80 (117.120.5.231). - connect (113: No route to host)`.
 - APT melaporkan `Fetched 90.7 kB in 9s (10.6 kB/s)`, `Reading package lists... Done`, serta warning bahwa indeks repo Proxmox gagal diperoleh dan indeks lama/yang ada dipakai. Jadi pembaruan indeks hanya parsial; belum ada upgrade atau instalasi paket.
-- Langkah diagnosis berikutnya adalah menguji koneksi HTTPS ke endpoint InRelease tanpa mengubah source apt.
+- Pengguna menguji `curl -4 -I --connect-timeout 10 https://download.proxmox.com/debian/pve/dists/trixie/InRelease`; hasil: `curl: (7) Failed to connect to download.proxmox.com port 443 after 682 ms: Could not connect to server`.
+- HTTP port 80 dan HTTPS port 443 ke host Proxmox gagal, sementara repositori Debian pada update APT berhasil. DNS IPv4 sudah terbukti; penyebab spesifik/rute belum diketahui. Tidak ada konfigurasi apt atau jaringan yang diubah.
+- Langkah diagnosis berikutnya: uji HTTPS IPv4 ke `deb.debian.org` dan periksa rute kernel menuju `117.120.5.231` sebelum memutuskan perubahan apa pun.
