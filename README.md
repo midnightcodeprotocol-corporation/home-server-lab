@@ -12,8 +12,8 @@ Jaringan rumah terakhir diverifikasi **28 Oktober 2026**. Proxmox dipasang dan d
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
 - **Penyimpanan:** dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci belum disambungkan. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
-- **Langkah server:** Proxmox VE 9.2.24 sudah diperbarui; kernel `7.0.14-26-pve`; `local` dan `local-lvm` aktif. VT-x/KVM lulus pemeriksaan setelah perbaikan lewat `thinklmi`. Template Debian 13 VM 200 dan CT 100 diverifikasi lewat SSH. Nama yang tercatat pada host adalah `Tamplate-VM` dan `Tamplate-CT` (kemungkinan typo). VM 200: 1 vCPU, RAM 2 GiB, disk 32 GiB, QEMU Agent aktif di konfigurasi; paket di guest belum diperiksa. CT 100: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Guest layanan, backup, dan pemulihan belum dibuat atau diuji.
-- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Status template dan rencana jaringan diperbarui; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
+- **Langkah server:** Proxmox VE 9.2.24 sudah diperbarui; kernel 7.0.14-26-pve; storage lokal aktif. Audit clone menemukan host key SSH dan machine ID ikut tersalin. Perbaikan sudah diterapkan pada template CT 100 dan VM 200; clone uji lulus boot, DHCP, DNS, SSH, dan identitas unik. Semua guest uji telah dihapus. Host masih memakai router sementara; guest layanan, backup, dan pemulihan belum dibuat atau diuji.
+- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
 
 Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
@@ -76,10 +76,10 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | VM 210 | `.29` | Situs statis publik opsional; akses melalui tunnel keluar |
 | VM 212 / 211 | `.30 / .31` | Proxmox Backup Server / Navidrome |
 | VM 213 / 214 | `.32 / .33` | Pocket ID / Immich |
-| VM 200 | — | `Tamplate-VM` (kemungkinan typo); Debian 13, template, 1 vCPU/2 GiB/32 GiB. Paket guest belum diperiksa |
-| CT 100 | — | `Tamplate-CT` (kemungkinan typo); Debian 13, unprivileged, 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, DHCP |
+| VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
+| CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
-Peta guest layanan ini adalah **rancangan**; template sudah dibuat tetapi guest layanan belum. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Peta guest layanan ini adalah **rancangan**; guest layanan belum dibuat. Clone uji sementara telah dihapus sehingga ID layanan rencana kembali tersedia. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
 Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
@@ -132,4 +132,5 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/
 
 - **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
 - **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
-- **Revisi 6 (1 November 2026):** mencatat template yang sudah dibuat (VM 200 dan CT 100), status Proxmox VE 9.2.24, dan penyesuaian jaringan rumah yang masih menunggu perpindahan host ke MikroTik.
+- **Revisi 6 (1 November 2026):** mencatat template Debian 13 VM/CT dan persiapan jaringan MikroTik.
+- **Revisi 7 (1 November 2026):** mencatat identitas yang ikut tersalin, perbaikan template CT 100/VM 200, hasil clone, dan pembersihan guest uji.

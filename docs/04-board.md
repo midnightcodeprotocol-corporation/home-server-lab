@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**, satu langkah per giliran. Proxmox sudah diperbarui dan template VM 200/CT 100 dibuat; berikutnya sambungkan host ke MikroTik, verifikasi IP, lalu uji clone.
+- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. Template CT 100 dan VM 200 sudah diperbaiki dan clone test lulus. Berikutnya sambungkan host ke MikroTik dan verifikasi alamat manajemen.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -12,8 +12,8 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
 - [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH kunci publik Codex berhasil; audit baca-saja dilakukan pada jaringan sementara
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
-- [x] Buat template Debian 13 VM 200 dan CT 100; SSH memverifikasi konfigurasi (Bab 49). VM 200: 1 vCPU/2 GiB/32 GiB; CT 100: 1 vCPU/512 MiB/8 GiB, unprivileged + nesting. Nama aktual `Tamplate-*` kemungkinan typo. Paket guest VM belum diperiksa.
-- [ ] Setelah jaringan host pindah ke MikroTik, buat dan verifikasi clone guest pertama dengan nama/IP/resource unik (Bab 49)
+- [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
+- [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
 - [ ] Bab 10-11: buat LXC dan VM aplikasi dari template

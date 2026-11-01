@@ -72,3 +72,16 @@ Hasil: **SSH berhasil; audit baca-saja lulus.** Pengguna menambahkan kunci publi
 - Storage `local` dan `local-lvm` aktif; penggunaan `local-lvm` sekitar 1.09% pada saat audit. HDD belum tersambung.
 
 Tidak ada perubahan konfigurasi Proxmox yang dijalankan oleh Codex pada sesi ini. Nama `Tamplate-*` belum diperbaiki.
+
+## Audit identitas template dan uji clone - 1 November 2026
+
+Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 100 dan VM 200 sudah diperbaiki.**
+
+- Clone awal CT 991 dari CT 100 dan VM 990/201 dari VM 200 menampilkan fingerprint ED25519 yang sama dengan template. Ini menunjukkan host key ikut tersalin.
+- Perbaikan memasang drop-in ssh.service yang membuat ssh-keygen -A berjalan sebelum sshd -t.
+- VM memiliki dua file machine ID, /etc/machine-id dan /var/lib/dbus/machine-id. Mengosongkan file pertama saja tidak cukup. Setelah keduanya dikosongkan dan path D-Bus dijadikan symlink, Debian menghasilkan machine ID unik saat boot.
+- CT 102: boot lulus, DHCP 192.168.0.105/24, gateway 192.168.0.1, DNS deb.debian.org berhasil, SSH aktif, fingerprint baru.
+- VM 204: Debian 13, boot lulus, DHCP 192.168.0.106/24, DNS berhasil, QEMU Guest Agent dan SSH aktif, fingerprint serta machine ID baru.
+- Uji memakai router sementara 192.168.0.0/24. CT 102, VM 204, dan seluruh salinan perantara kemudian dihapus.
+- Template CT 100 dan VM 200 dibuat ulang dari salinan bersih, dikembalikan ke ID semula, dan diverifikasi stopped/template=1. Tidak ada guest uji yang tersisa.
+- Paket VM, jaringan MikroTik, guest layanan, backup, dan HDD belum diuji.

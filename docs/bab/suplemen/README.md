@@ -2,7 +2,7 @@
 
 Diekstrak dari teks buku dan direvisi (Revisi 3: tanpa VMware dan tanpa instal-ke-disk-dulu; mesin asli ThinkCentre M710q).
 
-Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md). Hasil uji Proxmox, KVM/VT-x tanpa monitor, dan diagnosis jaringan ada di [Revisi 5](../REVISI-5.md). ID template Debian 13 aktual dan progres jaringan host tercatat di [Revisi 6](../REVISI-6.md).
+Koreksi konfigurasi dan keamanan terbaru tercatat di [Revisi 4](../REVISI-4.md). Hasil uji Proxmox, KVM/VT-x tanpa monitor, dan diagnosis jaringan ada di [Revisi 5](../REVISI-5.md). ID template Debian 13 aktual dan progres jaringan host tercatat di [Revisi 6](../REVISI-6.md). Audit kunci host, machine ID, dan clone langsung dicatat di [Revisi 7](../REVISI-7.md).
 
 - [Bab 25. Keamanan Dasar Server](25-keamanan-dasar.md)
 - [Bab 26. Tailscale: Akses Aman dari Mana Saja](26-tailscale.md)

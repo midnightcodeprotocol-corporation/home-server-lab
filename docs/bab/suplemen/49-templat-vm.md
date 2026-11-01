@@ -28,7 +28,6 @@ server dan standard system utilities yang dipilih.
 
 **TERMINAL VM TEMPLAT** | VM 200, sebagai root (setelah su -)
 
-```
 apt update && apt upgrade -y
 ```
 > Penjelasan: Memperbarui paket dasar.
@@ -94,14 +93,26 @@ klon memberi identitasnya sendiri.
 **TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
-apt clean && rm -f /etc/ssh/ssh_host_*
+apt clean
+mkdir -p /etc/systemd/system/ssh.service.d
+cat > /etc/systemd/system/ssh.service.d/10-generate-host-keys.conf <<'EOF'
+[Service]
+ExecStartPre=
+ExecStartPre=/usr/bin/ssh-keygen -A
+ExecStartPre=/usr/sbin/sshd -t
+EOF
+systemctl daemon-reload
+rm -f /etc/ssh/ssh_host_*
 ```
-> Penjelasan: Membersihkan cache paket dan menghapus kunci host SSH agar setiap klon membuat kuncinya
-sendiri (tanpa ini semua VM berbagi satu identitas SSH).  
+> Penjelasan: Membersihkan cache dan kunci lama. Drop-in menjalankan ssh-keygen -A sebelum sshd -t,
+sebab urutan bawaan Debian memeriksa konfigurasi lebih dulu dan SSH gagal jika belum ada kunci host.
 ```
 truncate -s 0 /etc/machine-id
+rm -f /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id
 ```
-> Penjelasan: Mengosongkan ID mesin; systemd membuat yang baru pada boot pertama setiap klon.
+> Penjelasan: Mengosongkan identitas mesin dan menyatukan jalur D-Bus sebagai symlink. Debian membuat
+machine ID baru pada boot pertama clone. Jangan tinggalkan salinan ID lama di template.
 ```
 history -c && poweroff
 ```
@@ -145,10 +156,12 @@ nano /etc/hosts
 ```
 > Penjelasan: Ganti nama lama pada baris 127.0.1.1 menjadi vault.
 ```
-dpkg-reconfigure openssh-server
+systemctl status ssh --no-pager
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
+cat /etc/machine-id
 ```
-> Penjelasan: Membuat kunci host SSH baru dan menyalakan ulang SSH. Wajib, karena kunci templat sudah
-dihapus (49.3).  
+> Penjelasan: Pastikan SSH aktif, fingerprint kunci host dibuat, dan machine ID terisi. Keduanya harus
+berbeda dari template maupun VM lain.
 Setelah host dan VM tersambung ke MikroTik, alamat tetap lewat reservasi DHCP MikroTik (DNS otomatis dari DHCP, sehingga menunjuk AdGuard). Dari Terminal di WinBox atau SSH ke MikroTik:
 
 **TERMINAL MIKROTIK** | Terminal WinBox atau SSH ke 192.168.88.1
@@ -232,14 +245,28 @@ apt update && apt full-upgrade -y
 > Penjelasan: Memasang pembaruan dan perbaikan keamanan dasar.
 
 ```
-apt install -y ca-certificates curl nano
+apt install -y ca-certificates curl nano openssh-server
 ```
-> Penjelasan: Memasang alat umum minimum. Paket aplikasi dipasang nanti pada clone yang sesuai.
+> Penjelasan: Memasang alat umum minimum termasuk server SSH agar prosedur pembuatan kunci host
+berlaku pada setiap clone.
 
 ```
+mkdir -p /etc/systemd/system/ssh.service.d
+cat > /etc/systemd/system/ssh.service.d/10-generate-host-keys.conf <<'EOF'
+[Service]
+ExecStartPre=
+ExecStartPre=/usr/bin/ssh-keygen -A
+ExecStartPre=/usr/sbin/sshd -t
+EOF
+systemctl daemon-reload
+rm -f /etc/ssh/ssh_host_*
+truncate -s 0 /etc/machine-id
+rm -f /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id
 poweroff
 ```
-> Penjelasan: Matikan CT sebelum mengubahnya menjadi template.
+> Penjelasan: Pasang generator host key, hapus kunci dan ID lama, lalu matikan CT. Clone test kami
+memastikan kunci SSH baru muncul saat CT hasil clone boot.
 
 ### D. Jadikan CT sebagai template
 

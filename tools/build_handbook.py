@@ -75,7 +75,7 @@ def source_content() -> str:
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24`, gateway/DNS `192.168.0.1`, sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat dan diverifikasi melalui SSH. Nama aktual `Tamplate-VM`/`Tamplate-CT` (kemungkinan typo). VM: 1 vCPU, 2 GiB RAM, disk 32 GiB, QEMU Agent aktif pada konfigurasi. CT: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Paket VM, guest layanan, backup, HDD, dan clone belum diuji.
+> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan pada ThinkCentre M710q dengan kernel 7.0.14-26-pve. RAM 16+8 GB terbaca Linux sebagai 23 GiB; BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif; NVMe Samsung 476,9 GB. Jaringan host sementara 192.168.0.200/24, gateway/DNS 192.168.0.1. Template Debian 13 CT 100 dan VM 200 telah diperbaiki setelah ditemukan host key SSH dan machine ID yang ikut tersalin. Clone uji lulus boot, DHCP, DNS, SSH, dan identitas baru; semua guest uji telah dihapus. Paket VM, guest layanan, backup, HDD, dan jaringan MikroTik belum diuji.
 
 ## Sebelum mulai
 
@@ -94,7 +94,6 @@ Garis dan kotak menjelaskan jaringan rumah yang sudah berjalan dan status host P
 
 ## Koreksi keamanan dan versi terbaru
 
-Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 mencatat DNS/update, KVM/VT-x, dan diagnosis jaringan. Revisi 6 mencatat template Debian 13 VM 200 dan CT 100 serta persiapan perpindahan host ke MikroTik. Baca [Revisi 4](docs/bab/REVISI-4.md), [Revisi 5](docs/bab/REVISI-5.md), dan [Revisi 6](docs/bab/REVISI-6.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
 
 ## Daftar isi
 
@@ -302,7 +301,7 @@ def cover():
             for i,line in enumerate(lines):c.drawString(14*mm,h-119*mm-i*8*mm,line)
             c.setFillColor(AMBER);c.roundRect(14*mm,35*mm,w-28*mm,39*mm,3*mm,fill=1,stroke=0);c.setFillColor(NAVY);c.setFont("Vera-Bold",8);c.drawString(19*mm,63*mm,"STATUS PROYEK PER 1 NOVEMBER 2026")
             c.setFont("Vera",7.2)
-            for i,line in enumerate(["Proxmox VE 9.2.24; kernel 7.0.14-26-pve.","Template Debian 13 VM 200 dan CT 100 sudah dibuat.", "Nama aktual Tamplate-VM/Tamplate-CT; VM 2 GiB/32 GiB, CT 512 MiB/8 GiB.", "Host sementara .0.200; gateway/DNS .0.1."]):c.drawString(19*mm,54*mm-i*5*mm,line)
+            for i,line in enumerate(["Proxmox VE 9.2.24; kernel 7.0.14-26-pve.","Template CT 100/VM 200 diperbaiki; clone lulus.", "Identitas SSH dan machine ID unik sudah diuji.", "Host sementara .0.200; gateway/DNS .0.1."]):c.drawString(19*mm,54*mm-i*5*mm,line)
     return [Spacer(1,4*mm),Cover(),PageBreak()]
 
 def parse_md(path:Path):

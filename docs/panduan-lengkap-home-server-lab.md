@@ -4,7 +4,7 @@
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24`, gateway/DNS `192.168.0.1`, sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat dan diverifikasi melalui SSH. Nama aktual `Tamplate-VM`/`Tamplate-CT` (kemungkinan typo). VM: 1 vCPU, 2 GiB RAM, disk 32 GiB, QEMU Agent aktif pada konfigurasi. CT: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Paket VM, guest layanan, backup, HDD, dan clone belum diuji.
+> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan pada ThinkCentre M710q dengan kernel 7.0.14-26-pve. RAM 16+8 GB terbaca Linux sebagai 23 GiB; BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif; NVMe Samsung 476,9 GB. Jaringan host sementara 192.168.0.200/24, gateway/DNS 192.168.0.1. Template Debian 13 CT 100 dan VM 200 telah diperbaiki setelah ditemukan host key SSH dan machine ID yang ikut tersalin. Clone uji lulus boot, DHCP, DNS, SSH, dan identitas baru; semua guest uji telah dihapus. Paket VM, guest layanan, backup, HDD, dan jaringan MikroTik belum diuji.
 
 ## Sebelum mulai
 
@@ -23,7 +23,6 @@ Garis dan kotak menjelaskan jaringan rumah yang sudah berjalan dan status host P
 
 ## Koreksi keamanan dan versi terbaru
 
-Revisi 4 mencatat koreksi Tailscale, PostgreSQL pada n8n, pendaftaran Vaultwarden, dan `.gitignore`. Revisi 5 mencatat DNS/update, KVM/VT-x, dan diagnosis jaringan. Revisi 6 mencatat template Debian 13 VM 200 dan CT 100 serta persiapan perpindahan host ke MikroTik. Baca [Revisi 4](docs/bab/REVISI-4.md), [Revisi 5](docs/bab/REVISI-5.md), dan [Revisi 6](docs/bab/REVISI-6.md). Contoh email Tailscale tetap placeholder dan harus diganti sebelum menerapkan kebijakan.
 
 ## Daftar isi
 
@@ -9747,7 +9746,6 @@ server dan standard system utilities yang dipilih.
 
 **TERMINAL VM TEMPLAT** | VM 200, sebagai root (setelah su -)
 
-```
 apt update && apt upgrade -y
 ```
 > Penjelasan: Memperbarui paket dasar.
@@ -9813,14 +9811,26 @@ klon memberi identitasnya sendiri.
 **TERMINAL VM TEMPLAT** | VM 200, sebagai root
 
 ```
-apt clean && rm -f /etc/ssh/ssh_host_*
+apt clean
+mkdir -p /etc/systemd/system/ssh.service.d
+cat > /etc/systemd/system/ssh.service.d/10-generate-host-keys.conf <<'EOF'
+[Service]
+ExecStartPre=
+ExecStartPre=/usr/bin/ssh-keygen -A
+ExecStartPre=/usr/sbin/sshd -t
+EOF
+systemctl daemon-reload
+rm -f /etc/ssh/ssh_host_*
 ```
-> Penjelasan: Membersihkan cache paket dan menghapus kunci host SSH agar setiap klon membuat kuncinya
-sendiri (tanpa ini semua VM berbagi satu identitas SSH).
+> Penjelasan: Membersihkan cache dan kunci lama. Drop-in menjalankan ssh-keygen -A sebelum sshd -t,
+sebab urutan bawaan Debian memeriksa konfigurasi lebih dulu dan SSH gagal jika belum ada kunci host.
 ```
 truncate -s 0 /etc/machine-id
+rm -f /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id
 ```
-> Penjelasan: Mengosongkan ID mesin; systemd membuat yang baru pada boot pertama setiap klon.
+> Penjelasan: Mengosongkan identitas mesin dan menyatukan jalur D-Bus sebagai symlink. Debian membuat
+machine ID baru pada boot pertama clone. Jangan tinggalkan salinan ID lama di template.
 ```
 history -c && poweroff
 ```
@@ -9864,10 +9874,12 @@ nano /etc/hosts
 ```
 > Penjelasan: Ganti nama lama pada baris 127.0.1.1 menjadi vault.
 ```
-dpkg-reconfigure openssh-server
+systemctl status ssh --no-pager
+ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub
+cat /etc/machine-id
 ```
-> Penjelasan: Membuat kunci host SSH baru dan menyalakan ulang SSH. Wajib, karena kunci templat sudah
-dihapus (49.3).
+> Penjelasan: Pastikan SSH aktif, fingerprint kunci host dibuat, dan machine ID terisi. Keduanya harus
+berbeda dari template maupun VM lain.
 Setelah host dan VM tersambung ke MikroTik, alamat tetap lewat reservasi DHCP MikroTik (DNS otomatis dari DHCP, sehingga menunjuk AdGuard). Dari Terminal di WinBox atau SSH ke MikroTik:
 
 **TERMINAL MIKROTIK** | Terminal WinBox atau SSH ke 192.168.88.1
@@ -9951,14 +9963,28 @@ apt update && apt full-upgrade -y
 > Penjelasan: Memasang pembaruan dan perbaikan keamanan dasar.
 
 ```
-apt install -y ca-certificates curl nano
+apt install -y ca-certificates curl nano openssh-server
 ```
-> Penjelasan: Memasang alat umum minimum. Paket aplikasi dipasang nanti pada clone yang sesuai.
+> Penjelasan: Memasang alat umum minimum termasuk server SSH agar prosedur pembuatan kunci host
+berlaku pada setiap clone.
 
 ```
+mkdir -p /etc/systemd/system/ssh.service.d
+cat > /etc/systemd/system/ssh.service.d/10-generate-host-keys.conf <<'EOF'
+[Service]
+ExecStartPre=
+ExecStartPre=/usr/bin/ssh-keygen -A
+ExecStartPre=/usr/sbin/sshd -t
+EOF
+systemctl daemon-reload
+rm -f /etc/ssh/ssh_host_*
+truncate -s 0 /etc/machine-id
+rm -f /var/lib/dbus/machine-id
+ln -s /etc/machine-id /var/lib/dbus/machine-id
 poweroff
 ```
-> Penjelasan: Matikan CT sebelum mengubahnya menjadi template.
+> Penjelasan: Pasang generator host key, hapus kunci dan ID lama, lalu matikan CT. Clone test kami
+memastikan kunci SSH baru muncul saat CT hasil clone boot.
 
 ### D. Jadikan CT sebagai template
 
