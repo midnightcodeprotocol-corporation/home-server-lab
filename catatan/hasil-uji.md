@@ -165,4 +165,5 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - APT melaporkan `Fetched 90.7 kB in 9s (10.6 kB/s)`, `Reading package lists... Done`, serta warning bahwa indeks repo Proxmox gagal diperoleh dan indeks lama/yang ada dipakai. Jadi pembaruan indeks hanya parsial; belum ada upgrade atau instalasi paket.
 - Pengguna menguji `curl -4 -I --connect-timeout 10 https://download.proxmox.com/debian/pve/dists/trixie/InRelease`; hasil: `curl: (7) Failed to connect to download.proxmox.com port 443 after 682 ms: Could not connect to server`.
 - HTTP port 80 dan HTTPS port 443 ke host Proxmox gagal, sementara repositori Debian pada update APT berhasil. DNS IPv4 sudah terbukti; penyebab spesifik/rute belum diketahui. Tidak ada konfigurasi apt atau jaringan yang diubah.
-- Langkah diagnosis berikutnya: uji HTTPS IPv4 ke `deb.debian.org` dan periksa rute kernel menuju `117.120.5.231` sebelum memutuskan perubahan apa pun.
+- Pengguna menguji `curl -4 -I --connect-timeout 10 https://deb.debian.org`; server membalas `HTTP/2 200` melalui cache SIN. HTTPS IPv4 umum dari Proxmox berfungsi.
+- Ini mempersempit masalah ke akses tujuan/rute repo Proxmox, tetapi belum menentukan penyebabnya. Langkah berikutnya periksa rute kernel menuju `117.120.5.231` dengan `ip route get`; belum ada konfigurasi jaringan/apt yang diubah.
