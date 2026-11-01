@@ -7,7 +7,7 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox diarahkan ke `.3`; `getent hosts deb.debian.org` menghasilkan jawaban IPv6, uji IPv4 masih menunggu. Rincian ada di [STATUS.md](STATUS.md).
+Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox diarahkan ke `.3`; `getent hosts` dan `getent ahostsv4 deb.debian.org` berhasil untuk IPv6 dan IPv4; akses repository masih menunggu uji. Rincian ada di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.

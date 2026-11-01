@@ -4,7 +4,7 @@
 
 ## Posisi sekarang
 - **Status pekerjaan:** konektivitas dasar ke MikroTik diverifikasi; pemasangan layanan tetap dijeda sampai guest dan DNS host diperiksa. Perubahan progres tersimpan lokal tetapi belum tersinkron ke GitHub karena `git push` gagal me-resolve `github.com` (`Could not resolve host: github.com`).
-- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; `getent hosts deb.debian.org` berhasil mengembalikan alamat IPv6 (AAAA). Resolusi IPv4 dan akses internet host belum diuji. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
+- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; `perintah `getent hosts` dan `getent ahostsv4` berhasil mengembalikan alamat IPv6 dan IPv4. Koneksi host ke repositori paket belum diuji. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
 - Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
 - RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.
 - NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` berukuran **476,9 GB**; Proxmox berjalan.
@@ -16,12 +16,12 @@
 - Guest layanan pertama dibuat dari template dan menyala: CT 101 `adguard2` dan VM 201 `docker-core`. Lease terakhir sebelum pindah jaringan masing-masing `192.168.0.106` dan `192.168.0.102`; alamat mereka setelah tersambung ke MikroTik belum diperiksa. AdGuard Home v0.107.79 terpasang tetapi service disabled; Docker CE 29.9.2 dan Compose 5.6.1 terpasang dan daemon aktif, tanpa container aplikasi. Target CT101 `.11` dan VM201 `.20` belum terverifikasi sebagai alamat aktual.
 - CT 104 `docker-services` dibuat dari template: Debian 13 unprivileged + nesting, 4 vCPU, RAM 8 GiB, swap 1 GiB, rootfs 64 GiB, DHCP sementara `192.168.0.104`. Docker Debian `26.1.5+dfsg1-9+deb13u1` dan Docker Compose `2.26.1-4` aktif. Portainer CE container berjalan pada HTTPS TCP 9443; wizard admin belum diselesaikan pengguna.
 - Rencana layanan terbaru: Tailscale, Jellyfin, Portainer, Grafana, Immich, dan Home Assistant Container ditempatkan di CT104 secara bertahap. Prometheus dikeluarkan dari rencana pemasangan. Grafana/datasource yang sudah ada belum diverifikasi; Grafana memerlukan sumber data terpisah untuk menampilkan metrik.
-- Konfigurasi jaringan aktif disiapkan untuk MikroTik. Port fisik `enp0s31f6` menjadi anggota `vmbr0`; host `.10` terjangkau dengan ping 16/16 dari MikroTik; kabel host ke switch port 3, switch port 1 ke MikroTik ether4. Proxmox DNS diarahkan ke `.3`; resolusi IPv6 DNS lulus melalui `getent hosts deb.debian.org`; resolusi IPv4 masih perlu dilakukan.
+- Konfigurasi jaringan aktif disiapkan untuk MikroTik. Port fisik `enp0s31f6` menjadi anggota `vmbr0`; host `.10` terjangkau dengan ping 16/16 dari MikroTik; kabel host ke switch port 3, switch port 1 ke MikroTik ether4. Proxmox DNS diarahkan ke `.3`; resolusi IPv6 dan IPv4 DNS lulus melalui `getent hosts` dan `getent ahostsv4`; akses repository belum diuji.
 
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Pastikan resolusi DNS IPv4 dari Proxmox setelah jawaban AAAA berhasil.
+1. Jalankan `apt-get -o Acquire::ForceIPv4=true update` untuk memeriksa akses repository IPv4 tanpa memasang atau meng-upgrade paket.
 2. Buka `https://192.168.88.10:8006` dan pastikan guest CT101, CT104, VM201 mendapat alamat LAN rumah; alamat guest final belum boleh diasumsikan.
 3. Pastikan DHCP MikroTik hanya membagikan DNS yang sudah aktif. AdGuard CT101 `.11` belum diverifikasi aktif; jangan jadikan DNS cadangan sampai diuji.
 4. Buat DHCP reservation/IP final CT104 di MikroTik, lalu buka Portainer di HTTPS port 9443 dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
@@ -31,7 +31,7 @@
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
-- Resolusi IPv6 DNS host berhasil; cek record IPv4 dan akses internet host masih tertunda. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
+- Resolusi IPv4 dan IPv6 DNS host berhasil; akses repository internet host masih tertunda. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
 - HDD unit 1 terlihat tetapi belum mounted/dikonfigurasi; isi partisi NTFS dan peran storage belum diputuskan. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard CT101 belum diaktifkan/dikonfigurasi; AdGuard utama STB `.3` sudah merespons kueri DNS langsung. Konektivitas jaringan rumah belum diverifikasi, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.

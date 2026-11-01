@@ -149,3 +149,9 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Pengguna menjalankan `getent hosts deb.debian.org` pada shell root Proxmox setelah mengarahkan DNS host ke `192.168.88.3`.
 - Perintah berhasil mengembalikan empat alamat IPv6 AAAA untuk `debian.map.fastlydns.net` / `deb.debian.org`; resolusi IPv6 lulus.
 - Record IPv4 dan akses internet dari host belum diuji.
+
+## Uji record DNS IPv4 Proxmox — 1 November 2026
+
+- Pengguna menjalankan `getent ahostsv4 deb.debian.org` pada shell root Proxmox.
+- Perintah mengembalikan empat alamat IPv4 `151.101.66.132`, `151.101.130.132`, `151.101.194.132`, dan `151.101.2.132` (Fastly); resolusi A/IPv4 lulus.
+- Akses koneksi keluar Proxmox ke repositori paket belum diuji. Langkah berikutnya `apt-get -o Acquire::ForceIPv4=true update` hanya memperbarui daftar paket.
