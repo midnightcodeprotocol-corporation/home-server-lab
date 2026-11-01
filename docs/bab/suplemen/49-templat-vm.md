@@ -125,6 +125,8 @@ VM tidak bisa dinyalakan, hanya disalin.
 
 Prosedur ini dipakai oleh semua bab yang membuat VM baru (kotak penempatan menyebut "Bab 49.4"). Contoh di bawah untuk VM 205 vault; ganti ID, nama, dan IP sesuai peta 48.3. Saat server masih di jaringan sementara, biarkan jaringan clone memakai DHCP dan jangan membuat reservasi MikroTik atau menetapkan IP `192.168.88.x`. Setelah host tersambung kembali ke MikroTik, ikuti langkah reservasi alamat di bawah.
 
+**Pilih Full Clone untuk guest layanan permanen.** Clone ini memiliki disk independen sehingga lebih mudah dipindah dan dipelihara. Linked Clone lebih hemat ruang untuk guest uji sementara, tetapi tetap membutuhkan disk dasar/template dan tidak boleh diperlakukan sebagai salinan mandiri. `local-lvm` mendukung linked clone, tetapi contoh proyek ini memakai Full Clone untuk layanan.
+
 **TERMINAL HOST PROXMOX** | Shell node Proxmox (host), sebagai root
 
 ```

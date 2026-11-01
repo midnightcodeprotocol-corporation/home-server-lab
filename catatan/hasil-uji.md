@@ -97,5 +97,15 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 
 - CT101: dependensi `curl` terpasang; installer resmi AdGuard Home memasang rilis `v0.107.79` pada `/opt/AdGuardHome`. Unit `AdGuardHome` dibuat, lalu dinonaktifkan dan dihentikan agar wizard konfigurasi tanpa admin belum terbuka pada jaringan sementara.
 - VM201: Docker Engine CE `29.9.2`, containerd `2.4.2`, Buildx `0.38.1`, dan Compose plugin `5.6.1` terpasang dari repository resmi Docker untuk Debian 13. Service Docker aktif; belum ada container aplikasi.
-- `apt-get update` berhasil pada kedua guest melalui router sementara. CT sempat menampilkan peringatan locale `en_US.UTF-8` belum tersedia; tidak menghalangi instalasi dan perlu dibereskan saat hardening Debian.
+- Direktori `/opt/stacks` dengan izin `0750` milik root dan jaringan Docker `proxy` dibuat pada VM201; belum ada container atau port aplikasi yang dipublikasikan.
+- `apt-get update` berhasil pada kedua guest melalui router sementara. CT mengeluarkan peringatan `en_US.UTF-8` dari lingkungan perintah administrasi; `/etc/default/locale` di CT mengatur `LANG=C`, jadi peringatan ini tidak menghentikan instalasi.
 - Link sumber instalasi: [Docker Engine Debian](https://docs.docker.com/engine/install/debian/) dan [AdGuard Home resmi](https://github.com/AdguardTeam/AdGuardHome).
+
+## Pesan AF_VSOCK pada konsol VM201 — 1 November 2026
+
+- Screenshot konsol memperlihatkan `systemd-ssh-generator: Failed to query local AF_VSOCK CID: Cannot assign requested address` berulang. VM tidak gagal boot: systemd yang terpasang `257.13-1~deb13u1`, SSH biasa tetap aktif/listening di TCP 22, dan Docker aktif.
+- Gejalanya cocok dengan isu Debian `systemd-ssh-generator` pada Debian 13/systemd 257.13. Generator ini menyediakan socket SSH opsional AF_VSOCK dan AF_UNIX; VM ini dikelola melalui jaringan TCP dan QEMU Guest Agent, bukan melalui socket tersebut.
+- GRUB VM201 diatur ke `systemd.ssh_auto=no`; `update-grub` berhasil dan `/proc/cmdline` mengonfirmasi opsi aktif setelah VM dimatikan dan dinyalakan kembali secara bersih.
+- Pasca-boot: hostname VM `docker-core`, SSH dan Docker `active`, Docker belum memiliki container, serta log boot tidak berisi pesan AF_VSOCK tersebut. CT101 juga tetap aktif; AdGuard tetap disabled.
+- IP VM melalui DHCP sementara berubah dari `192.168.0.107` menjadi `192.168.0.102` setelah reboot. Jangan gunakan alamat ini sebagai IP tetap; tunggu reservasi DHCP MikroTik `.20`.
+- Rujukan: [systemd-ssh-generator](https://www.freedesktop.org/software/systemd/man/latest/systemd-ssh-generator.html), [laporan Debian #1137216](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1137216).
