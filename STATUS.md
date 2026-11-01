@@ -3,6 +3,7 @@
 **Terakhir diperbarui:** 1 November 2026
 
 ## Posisi sekarang
+- **Status pekerjaan: dijeda atas permintaan pengguna pada 1 November 2026.** Tidak ada pemasangan layanan lanjutan setelah Portainer. Perubahan progres tersimpan lokal tetapi belum tersinkron ke GitHub karena `git push` gagal me-resolve `github.com` (`Could not resolve host: github.com`).
 - Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. Server masih memakai jaringan sementara `192.168.0.200/24` sampai kembali tersambung ke MikroTik.
 - Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
 - RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.

@@ -119,3 +119,4 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Langkah yang belum diuji: login Portainer dari browser klien, wizard admin, Tailscale/TUN, Jellyfin, Grafana, Immich, Home Assistant Container, jaringan final MikroTik, penyimpanan HDD, dan backup.
 - Arahan pengguna: Prometheus tidak perlu dipasang. Grafana tidak mengumpulkan metrik sendiri; status Grafana/datasource masih perlu dipastikan.
 - Referensi instalasi: [Dokumentasi Portainer CE Docker](https://docs.portainer.io/start/install-ce/server/docker/linux), [Docker Debian](https://docs.docker.com/engine/install/debian/).
+- Pengguna meminta progres dijeda pada 1 November 2026. Commit progres lokal `18bbce2` belum terunggah; `git push origin main` gagal dengan pesan persis `fatal: unable to access 'https://github.com/midnightcodeprotocol-corporation/home-server-lab.git/': Could not resolve host: github.com`. Tidak ada pemasangan layanan lanjutan setelah jeda.

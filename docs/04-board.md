@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: pengujian di mesin asli (ThinkCentre M710q)**. CT101, CT104, dan VM201 hidup di jaringan sementara. CT104 menampung Docker/Portainer dan rencana layanan; alamat final menunggu MikroTik.
+- [ ] **Dijeda atas permintaan pengguna (1 November 2026).** CT101, CT104, dan VM201 hidup di jaringan sementara. CT104 menampung Docker/Portainer; akun admin Portainer belum dibuat. Lanjutkan hanya setelah pengguna meminta.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
