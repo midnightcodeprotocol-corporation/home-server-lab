@@ -10,7 +10,7 @@ flowchart LR
   WR840 -- "kabel LAN" --> E1["MikroTik ether1<br/>WAN utama"]
   subgraph MT["MikroTik RB750GL, LAN 192.168.88.1/24"]
     E1
-    E2["ether2: Proxmox .10"]
+    E2["ether2: kosong; calon WAN2"]
     E3["ether3: STB AdGuard .3"]
     E4["ether4: uplink switch"]
     E5["ether5: laptop admin .252"]
@@ -20,20 +20,20 @@ flowchart LR
   subgraph SW["Switch LiteWave LS1005"]
     SW1["Port 1: uplink MikroTik"]
     SW2["Port 2: AP"]
-    SW3["Port 3: kosong"]
+    SW3["Port 3: Proxmox .10"]
     SW4["Port 4: kosong"]
     SW5["Port 5: kosong"]
   end
   SW2 --- AP["TL-WR820N<br/>192.168.88.2"]
   AP -. "WiFi rumah" .-> CL["HP dan perangkat rumah"]
-  E2 --- PVE["Proxmox<br/>192.168.88.10"]
+  SW3 --- PVE["Proxmox<br/>192.168.88.10"]
   E5 --- LAP["Laptop admin<br/>192.168.88.252"]
 ```
 
 Catatan kabel:
-- Susunan kabel yang dilaporkan pengguna per 1 Nov 2026: ether1 WAN dari WR840N, ether2 Proxmox, ether3 STB AdGuard, ether4 switch, ether5 laptop admin. Switch port 1 menerima uplink dari ether4; port 2 ke AP; port 3-5 kosong.
-- Rencana masa depan: ether2 akan dipakai untuk modem WAN cadangan saat IndiHome mati. Sebelum itu, pindahkan Proxmox ke port kosong switch dan rancang failover.
-- Server Proxmox saat ini tersambung langsung ke MikroTik ether2; STB ke ether3.
+- Susunan kabel yang dilaporkan pengguna per 1 Nov 2026: ether1 WAN dari WR840N, ether2 kosong (rencana WAN2), ether3 STB AdGuard, ether4 switch, ether5 laptop admin. Switch port 1 menerima uplink dari ether4; port 2 ke AP; port 3 ke Proxmox; port 4-5 kosong.
+- Rencana masa depan: ether2 akan dipakai untuk modem WAN cadangan saat IndiHome mati. Sebelum itu, rancang dan uji failover WAN; Proxmox saat ini sudah berada di switch port 3.
+- Proxmox saat ini tersambung ke switch port 3; switch port 1 ke MikroTik ether4. MikroTik ether2 kosong; STB ke ether3.
 
 ## 2. Rangkaian logis (alamat)
 

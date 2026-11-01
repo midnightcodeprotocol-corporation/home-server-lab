@@ -28,10 +28,11 @@ flowchart TB
   WISP -->|"Ethernet"| MT["MikroTik RB750GL<br/>WAN 192.168.0.100<br/>LAN 192.168.88.1/24"]
   MT -->|"ether5"| Admin["Laptop admin .252"]
   AP -. WiFi rumah .-> Clients["Laptop Windows, HP,<br/>perangkat rumah"]
-  MT -->|"ether4 -> port 1"| Switch["Switch LiteWave LS1005<br/>port 1 uplink, port 2 AP, port 3-5 kosong"]
+  MT -->|"ether4 -> port 1"| Switch["Switch LiteWave LS1005<br/>port 1 uplink, port 2 AP, port 3 Proxmox, port 4-5 kosong"]
   MT -->|"ether3"| STB1["STB HG680 .3<br/>Armbian + AdGuard Home<br/>DNS utama"]
-  MT -->|"ether2"| PVE
+  MT -.->|"ether2 kosong; rencana WAN2"| Modem2["Modem cadangan (rencana)"]
   Switch -->|"port 2"| AP["TP-Link TL-WR820N<br/>Access Point .2"]
+  Switch -->|"port 3"| PVE
 
   subgraph PVE["Target: Proxmox di ThinkCentre M710q — 192.168.88.10"]
     direction TB
@@ -80,15 +81,15 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
 | CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
-Peta layanan adalah rancangan bertahap: CT101 dan VM201 sudah dibuat; fondasi AdGuard dan Docker disiapkan, tetapi layanan aplikasi belum dikonfigurasi. Langkah berikutnya menyambungkan host ke MikroTik dan menetapkan alamat final sebelum membuka wizard AdGuard atau Portainer. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Peta layanan adalah rancangan bertahap: CT101 dan VM201 sudah dibuat; fondasi AdGuard dan Docker disiapkan, tetapi layanan aplikasi belum dikonfigurasi. Langkah berikutnya memeriksa DNS host, alamat guest setelah pindah LAN, dan menyiapkan storage HDD secara aman sebelum membuka wizard layanan. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
 Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
 ## Penyimpanan dan backup
 
-Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. Rencana sementara adalah menguji satu HDD 3,5 inci melalui enclosure single-bay lama yang ditemukan; enclosure belum diuji dan HDD kedua ditunda. Peran storage (termasuk datastore PBS) belum diputuskan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
+Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. HDD pertama terdeteksi: Seagate ST2000VX008-2E3164, `/dev/sda`, 2 TB, partisi NTFS, S.M.A.R.T. PASSED. Isi dan fungsi storage belum ditetapkan; HDD kedua menunggu enclosure. Jangan format sebelum isi dan kebutuhan data dipastikan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
 
-**Keadaan saat ini:** kedua HDD belum tersambung; enclosure belum diuji; PBS belum dipasang; belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
+**Keadaan saat ini:** satu HDD tersambung dengan partisi NTFS; belum menjadi Proxmox storage. HDD kedua menunggu enclosure; PBS belum dipasang; belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
 
 ## Mulai menjelajahi repo
 

@@ -12,7 +12,7 @@ host:
   ip_sementara: 192.168.0.200
   gateway_sementara: 192.168.0.1
   dns_sementara: 192.168.0.1
-  disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda)
+  disk_data: HDD Seagate ST2000VX008-2E3164 unit 1 terdeteksi /dev/sda 2.00 TB, partisi NTFS, SMART PASSED; belum dikonfigurasi sebagai storage; HDD unit 2 menunggu enclosure
   docker_di_host: false
 templat:
   - {vmid: 200, nama: Template-VM, jenis: vm, status: "template aktif, stopped; SSH host key dibersihkan; machine ID VM direset dan diuji melalui clone 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "QEMU Guest Agent aktif; paket lainnya belum dicatat"}

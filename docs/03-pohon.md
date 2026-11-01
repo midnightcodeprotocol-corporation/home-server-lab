@@ -8,16 +8,18 @@ Tiga pohon: perangkat, guest dan ketergantungan, lalu struktur folder.
 IndiHome (WiFi)
 └── TL-WR840N (WISP)  192.168.0.1
     └── MikroTik RB750GL  ether1=192.168.0.100 | LAN 192.168.88.1/24
-        ├── ether2   Proxmox .10 (ThinkCentre M710q)
-        │   ├── CT101 adguard2   .11
-        │   ├── CT102 files      .12 (Samba)
-        │   ├── CT103 ts-router
-        │   ├── CT104 docker-services (IP final belum ditetapkan)
-        │   ├── VM 201 docker-core .20
-        │   └── VM 202-214 (rencana; lihat data/guest.yaml)
+        ├── ether2   Kosong (calon WAN modem cadangan; belum dikonfigurasi)
         ├── ether3   STB HG680 .3 (AdGuard Home utama; sebelumnya .253)
         ├── ether4   Switch LiteWave LS1005 port 1 (uplink)
-        │   └── port 2: AP TL-WR820N .2; port 3-5 kosong
+        │   ├── port 2: AP TL-WR820N .2
+        │   ├── port 3: Proxmox .10 (ThinkCentre M710q)
+        │   │   ├── CT101 adguard2 .11 (rencana IP)
+        │   │   ├── CT102 files .12 (Samba; rencana IP)
+        │   │   ├── CT103 ts-router (IP belum ditetapkan)
+        │   │   ├── CT104 docker-services (IP final belum ditetapkan)
+        │   │   ├── VM 201 docker-core .20 (target IP)
+        │   │   └── VM 202-214 (rencana; lihat data/guest.yaml)
+        │   └── port 4-5: kosong
         └── ether5   Laptop admin .252
             └── STB 2 .250 (usulan, belum tiba): Tailscale subnet router
 ```

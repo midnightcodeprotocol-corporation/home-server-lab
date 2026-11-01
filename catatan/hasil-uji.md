@@ -133,6 +133,13 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Lease DHCP statis STB `stb-adguard` (MAC `00:15:18:01:81:31`) diubah dari `192.168.88.253` ke `192.168.88.3`; pengguna mengonfirmasi Active Address kini `.3`.
 - Dari Windows, `nslookup google.com 192.168.88.3` berhasil dan mengembalikan jawaban non-authoritative.
 - Pengguna mengubah DHCP Network MikroTik agar membagikan DNS `.3`. `ipconfig /all` menunjukkan laptop `192.168.88.252`, gateway/DHCP server `.1`, DNS `.3` dan `.11`. `.11` belum diverifikasi aktif; pengguna diarahkan agar sementara hanya membagikan `.3`, belum dikonfirmasi.
-- MikroTik WinBox Tools → Ping ke `192.168.88.10` menunjukkan 16/16 balasan, 0% loss. Pengguna kemudian mengonfirmasi kabel Proxmox langsung ke MikroTik ether2 (bukan lewat switch); Proxmox bukan DHCP client karena IP statis.
+- MikroTik WinBox Tools → Ping ke `192.168.88.10` menunjukkan 16/16 balasan, 0% loss. Pengguna kemudian mengonfirmasi kabel Proxmox melalui switch port 3, switch port 1 ke MikroTik ether4; Proxmox bukan DHCP client karena IP statis.
 - Pengguna melaporkan DNS server host Proxmox diganti ke `192.168.88.3`. Uji resolusi nama dari host belum dilakukan. Gateway tetap `192.168.88.1` dan alamat host `192.168.88.10/24`.
-- Pengguna mengonfirmasi susunan port fisik: MikroTik ether1 ke TL-WR840N (WAN), ether2 Proxmox, ether3 STB AdGuard, ether4 ke switch, ether5 laptop. Switch port 1 uplink MikroTik, port 2 AP, port 3-5 kosong. Rencana memakai ether2 sebagai WAN modem cadangan belum diterapkan; Proxmox perlu dipindah ke port switch kosong sebelum perubahan itu.
+- Pengguna mengonfirmasi susunan port fisik: MikroTik ether1 ke TL-WR840N (WAN), ether2 kosong (calon WAN modem cadangan), ether3 STB AdGuard, ether4 ke switch, ether5 laptop. Switch port 1 uplink MikroTik, port 2 AP, port 3 Proxmox, port 4-5 kosong. WAN cadangan belum dikonfigurasi.
+## Pemeriksaan panel Proxmox dan HDD pertama — 1 November 2026
+
+- Screenshot WebUI menunjukkan Proxmox VE 9.2.24 pada node `pve`, uptime sekitar 1 jam, RAM 23.36 GiB, 4 CPU, dan akses `https://192.168.88.10:8006` aktif.
+- Node menampilkan CT101 `adguard2`, CT104 `docker-services`, CT100 `Template-CT`, VM201 `docker-core`, dan VM200 `Template-VM`.
+- `Disks > Disks`: NVMe sistem `/dev/nvme0n1` berukuran 512.11 GB dengan partisi EFI dan LVM. HDD terdeteksi sebagai `/dev/sda`, model Seagate `ST2000VX008-2E3164`, ukuran 2.00 TB, S.M.A.R.T. `PASSED`; memiliki partisi `/dev/sda1` berjenis NTFS.
+- Tidak ada initialize, wipe, format, mount, atau pembuatan storage yang dijalankan. Isi partisi NTFS dan peran disk belum diperiksa/diputuskan. HDD kedua menunggu enclosure lain.
+- Koreksi topologi pengguna: Proxmox ke switch port 3; switch port 1 ke MikroTik ether4. MikroTik ether2 kosong dan direncanakan untuk WAN modem cadangan; belum dikonfigurasi.

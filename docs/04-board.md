@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: sambungan dasar ke MikroTik.** MikroTik ping Proxmox `.10` 16/16 lewat switch; AdGuard STB pindah ke `.3`, DNS langsung berhasil, dan DHCP membagikan `.3`. Uji DNS dari host Proxmox masih tertunda.
+- [ ] **Fase A: sambungan dasar ke MikroTik.** MikroTik ping Proxmox `.10` 16/16 lewat switch; AdGuard STB pindah ke `.3`, DNS langsung berhasil, dan DHCP membagikan `.3`. Uji DNS dari host Proxmox masih tertunda; kabel host melalui switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -15,7 +15,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
-- [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)
+- [ ] HDD unit 1 terdeteksi NTFS/S.M.A.R.T. PASSED; periksa isi secara read-only dan tentukan peran storage sebelum format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
