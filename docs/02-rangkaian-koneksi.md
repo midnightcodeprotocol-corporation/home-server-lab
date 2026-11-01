@@ -14,7 +14,7 @@ flowchart LR
     E4["ether4: STB 1"]
     EX["port lain: switch, AP, server"]
   end
-  E4 --- STB1["STB HG680<br/>192.168.88.253"]
+  E4 --- STB1["STB HG680<br/>192.168.88.3"]
   EX --- AP["TL-WR820N (AP)<br/>192.168.88.2<br/>colok ke port LAN, bukan WAN"]
   EX --- SW["Switch LS1005"]
   SW --- PVE["Proxmox 192.168.88.10"]
@@ -23,7 +23,7 @@ flowchart LR
 
 Catatan kabel:
 - AP dicolok ke port **LAN** AP (bukan WAN/Internet), DHCP AP dimatikan.
-- Saat setup MikroTik, laptop di **ether2** (bukan ether1 yang ke WAN).
+- Saat setup MikroTik, laptop admin saat ini di **ether2** (bukan ether1 yang ke WAN). Pengguna merencanakan ether2 kelak dialihkan untuk WAN modem cadangan saat IndiHome mati; sebelum diterapkan, siapkan jalur admin WinBox alternatif dan rancang failover.
 - Laptop admin: kabel via adaptor USB-LAN ke jaringan MikroTik (`192.168.88.252`). Server Proxmox: kabel LAN dari port Ethernet M710q ke MikroTik/switch.
 
 ## 2. Rangkaian logis (alamat)
@@ -44,11 +44,11 @@ NAT berlapis: perangkat -> MikroTik (masquerade di ether1) -> TL-WR840N (WISP) -
 sequenceDiagram
   participant K as Klien (HP/laptop)
   participant M as MikroTik DHCP
-  participant A as AdGuard STB 1 (.253)
+  participant A as AdGuard STB 1 (.3)
   participant B as AdGuard CT101 (.11)
   participant U as Upstream (Quad9 / 1.1.1.1)
   K->>M: minta IP (DHCP)
-  M-->>K: IP + DNS .253 dan .11
+  M-->>K: IP + DNS .3 (utama); .11 hanya setelah layanan cadangan diuji
   K->>A: kuma.home.arpa ?
   A-->>K: 192.168.88.20 (DNS rewrite *.home.arpa)
   K->>A: google.com ?
@@ -57,7 +57,7 @@ sequenceDiagram
   A-->>K: jawaban
   K->>A: doubleclick.net ?
   A-->>K: 0.0.0.0 (diblokir)
-  Note over K,B: Bila .253 mati, klien memakai .11
+  Note over K,B: .11 belum aktif/terverifikasi; jangan dibagikan sebagai DNS cadangan dulu
 ```
 
 Aturan: jangan menaruh DNS publik (8.8.8.8) sebagai DNS kedua di DHCP; sebagian klien lolos dari pemblokiran.
@@ -66,7 +66,7 @@ Aturan: jangan menaruh DNS publik (8.8.8.8) sebagai DNS kedua di DHCP; sebagian 
 
 ```mermaid
 flowchart LR
-  C["Klien"] -->|"nama *.home.arpa"| DNS["AdGuard .253"]
+  C["Klien"] -->|"nama *.home.arpa"| DNS["AdGuard .3"]
   DNS -->|"192.168.88.20"| C
   C -->|"HTTPS 443"| CD["Caddy (VM 201)"]
   CD -->|"IP:port"| S1["VM 206 affine :3010"]
@@ -134,7 +134,7 @@ Batas: bila IndiHome atau listrik rumah mati, tidak ada notifikasi yang sampai (
 
 ## 9. Alur Wake-on-LAN
 
-STB 1 (`.253`) menjalankan `nyalakan-proxmox` (magic packet ke MAC Proxmox). Dari luar rumah:
+STB 1 (`.3`) menjalankan `nyalakan-proxmox` (magic packet ke MAC Proxmox). Dari luar rumah:
 HP -> Tailscale -> SSH ke STB -> perintah WoL. Wajib di BIOS: Wake on LAN aktif, ErP/Deep Sleep mati,
 Restore on AC Power Loss = Power On.
 

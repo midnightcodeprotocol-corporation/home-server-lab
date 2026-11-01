@@ -3,6 +3,7 @@ host:
   nama: pve
   mesin: Lenovo ThinkCentre M710q (Core i5-6500T, 4 core/4 thread)
   ip: 192.168.88.10
+  dns: 192.168.88.3
   web: https://192.168.88.10:8006
   ram_terpasang_gb: 24
   ram_konfigurasi_gb: [16, 8]
@@ -36,6 +37,6 @@ guest:
   - {vmid: 102, nama: files, jenis: lxc, ip: 192.168.88.12, isi: "Samba", port: [445]}
   - {vmid: 103, nama: ts-router, jenis: lxc, ip: null, isi: "Tailscale subnet router (nanti STB 2)"}
 perangkat_luar_proxmox:
-  - {nama: stb-1, ip: 192.168.88.253, isi: "AdGuard Home utama (HG680, Armbian, eMMC)"}
+  - {nama: stb-1, ip: 192.168.88.3, ip_sebelumnya: 192.168.88.253, isi: "AdGuard Home utama (HG680, Armbian, eMMC); DNS langsung diuji berhasil 1 Nov 2026"}
   - {nama: stb-2, ip: 192.168.88.250, isi: "Tailscale subnet router (rencana, belum tiba)"}
 

@@ -3,14 +3,14 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: persiapan jaringan rumah.** Host diarahkan ke MikroTik (`192.168.88.10`, gateway `.88.1`, DNS `.88.253`) dan konfigurasi telah di-apply; sambungan fisik serta akses WebUI dari LAN rumah masih menunggu pengujian.
+- [ ] **Fase A: sambungan dasar ke MikroTik.** MikroTik ping Proxmox `.10` 16/16 lewat switch; AdGuard STB pindah ke `.3`, DNS langsung berhasil, dan DHCP membagikan `.3`. Uji DNS dari host Proxmox masih tertunda.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
-- [ ] Uji host saat tersambung ke MikroTik: buka `https://192.168.88.10:8006`, pastikan gateway/DNS, dan perbarui lease guest yang masih memakai subnet sementara. SSH kunci publik Codex berhasil; audit baca-saja sebelumnya dilakukan pada jaringan sementara.
+- [ ] Buka `https://192.168.88.10:8006`, uji resolusi DNS dari host, dan cek lease guest yang masih memakai subnet sementara. SSH kunci publik Codex berhasil; audit baca-saja sebelumnya dilakukan pada jaringan sementara.
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
@@ -37,8 +37,8 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 - [x] Jaringan: TL-WR840N mode WISP -> MikroTik RB750GL (RouterOS 6.49.23, DHCP .100-.254)
 - [x] MikroTik: layanan tak terpakai dimatikan, WinBox/SSH dibatasi LAN, MAC server dimatikan, backup awal
 - [x] TL-WR820N mode Access Point di belakang MikroTik
-- [x] STB HG680: Armbian v25.05.0 dipindah ke eMMC, IP .253 (static lease)
-- [x] AdGuard Home di STB; tes `nslookup` lulus; DHCP MikroTik membagikan DNS .253
+- [x] STB HG680: Armbian v25.05.0 dipindah ke eMMC; static lease dipindah dari .253 ke .3
+- [x] AdGuard Home di STB; tes `nslookup` langsung ke .3 lulus; MikroTik membagikan DNS .3
 - [x] Backup `AdGuardHome.yaml` ke PC
 - [x] Buku: Edisi 2 + Suplemen 1-9 (Bab 1-56) ditulis (belum diuji)
 - [x] Mesin asli tiba: Lenovo ThinkCentre M710q

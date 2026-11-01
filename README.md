@@ -7,7 +7,7 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Jaringan rumah terakhir diverifikasi **28 Oktober 2026**. Proxmox dipasang dan diperbarui pada **31 Oktober 2026**; per 1 November host masih memakai alamat sementara `192.168.0.200` dan sedang disiapkan untuk pindah ke MikroTik. Rincian ada di [STATUS.md](STATUS.md).
+Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox sudah diarahkan ke `.3`, tetapi resolusi dari host belum diuji. Rincian ada di [STATUS.md](STATUS.md).
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
@@ -29,7 +29,7 @@ flowchart TB
   MT --> AP["TP-Link TL-WR820N<br/>Access Point .2"]
   AP -. WiFi rumah .-> Clients["Laptop Windows, HP,<br/>perangkat rumah"]
   MT --> Switch["Switch LiteWave LS1005"]
-  MT --> STB1["STB HG680 .253<br/>Armbian + AdGuard Home<br/>DNS utama"]
+  MT --> STB1["STB HG680 .3<br/>Armbian + AdGuard Home<br/>DNS utama"]
   Switch --> PVE
 
   subgraph PVE["Target: Proxmox di ThinkCentre M710q — 192.168.88.10"]
@@ -53,7 +53,7 @@ flowchart TB
 ### Cara membaca diagram
 
 - **Jaringan rumah:** MikroTik menjadi gateway, DHCP, firewall, dan NAT. Pool DHCP direncanakan pada `192.168.88.100–254`; alamat server menggunakan rentang statis di luar pool.
-- **DNS:** AdGuard Home utama berada di STB HG680 `192.168.88.253`. AdGuard kedua di CT101 `.11` direncanakan sebagai cadangan. Nama `*.home.arpa` diarahkan ke Caddy di VM 201.
+- **DNS:** AdGuard Home utama berada di STB HG680 `192.168.88.3` (dipindah dari `.253`, kueri langsung berhasil). MikroTik membagikan `.3`; laptop menerima `.3` dan `.11`, tetapi `.11` belum diverifikasi aktif dan jangan digunakan sebagai cadangan sebelum diuji. Nama `*.home.arpa` diarahkan ke Caddy di VM 201.
 - **Akses privat lokal:** klien membuka layanan melalui Caddy pada HTTPS 443; firewall Proxmox membatasi port aplikasi agar hanya dapat dijangkau dari gerbang yang diperlukan.
 - **Akses dari luar rumah:** memakai Tailscale. Rancangan tidak membuka port admin Proxmox atau router ke internet dan tidak memakai Tailscale Funnel.
 - **Situs publik opsional:** hanya situs statis di VM 210 melalui koneksi keluar Cloudflare Tunnel; VM ini dirancang terisolasi dari LAN.

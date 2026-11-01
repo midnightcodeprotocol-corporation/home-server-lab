@@ -127,3 +127,11 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - `ifquery vmbr0` berhasil menampilkan stanza dengan alamat, gateway, dan port bridge yang benar. `ifreload -a` dijalankan sesuai dokumentasi Proxmox. Sesi shell WebUI lama di `192.168.0.200` berhenti merespons setelah perubahan alamat; keadaan runtime di alamat baru belum dapat diuji dari jaringan sementara.
 - Di rumah, sambungkan `enp0s31f6` ke port LAN MikroTik lalu buka `https://192.168.88.10:8006`. Pastikan CT/VM memperoleh lease jaringan `192.168.88.x`; jika masih menyimpan alamat `192.168.0.x`, perbarui lease atau mulai ulang guest. Alamat DNS `.253` dan gateway `.1` mengikuti rencana jaringan yang sudah ada dan belum diuji ulang pada sesi ini.
 - Pengguna meminta progres dijeda pada 1 November 2026. Commit progres lokal `18bbce2` belum terunggah; `git push origin main` gagal dengan pesan persis `fatal: unable to access 'https://github.com/midnightcodeprotocol-corporation/home-server-lab.git/': Could not resolve host: github.com`. Tidak ada pemasangan layanan lanjutan setelah jeda.
+
+## Pindah DNS utama ke STB `.3` dan verifikasi Proxmox di MikroTik — 1 November 2026
+
+- Lease DHCP statis STB `stb-adguard` (MAC `00:15:18:01:81:31`) diubah dari `192.168.88.253` ke `192.168.88.3`; pengguna mengonfirmasi Active Address kini `.3`.
+- Dari Windows, `nslookup google.com 192.168.88.3` berhasil dan mengembalikan jawaban non-authoritative.
+- Pengguna mengubah DHCP Network MikroTik agar membagikan DNS `.3`. `ipconfig /all` menunjukkan laptop `192.168.88.252`, gateway/DHCP server `.1`, DNS `.3` dan `.11`. `.11` belum diverifikasi aktif; pengguna diarahkan agar sementara hanya membagikan `.3`, belum dikonfirmasi.
+- MikroTik WinBox Tools → Ping ke `192.168.88.10` menunjukkan 16/16 balasan, 0% loss. Proxmox tersambung lewat switch; bukan DHCP client karena IP statis.
+- Pengguna melaporkan DNS server host Proxmox diganti ke `192.168.88.3`. Uji resolusi nama dari host belum dilakukan. Gateway tetap `192.168.88.1` dan alamat host `192.168.88.10/24`.

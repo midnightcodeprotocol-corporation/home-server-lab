@@ -7,11 +7,11 @@ jaringan:
   domain_lokal: home.arpa
 perangkat:
   - {nama: TP-Link TL-WR840N v6.20, peran: "penerima WISP", ip: 192.168.0.1}
-  - {nama: MikroTik RB750GL, peran: "router utama", ip: 192.168.88.1, routeros: 6.49.23, catatan: "ether1 = WAN (192.168.0.100 dari WR840N); admin lewat WinBox di ether2"}
+  - {nama: MikroTik RB750GL, peran: "router utama", ip: 192.168.88.1, routeros: 6.49.23, catatan: "ether1 = WAN utama (192.168.0.100 dari WR840N); ether2 saat ini jalur admin WinBox; rencana pengguna: alihkan ether2 untuk WAN modem cadangan bila IndiHome mati (belum dikonfigurasi)"}
   - {nama: TP-Link TL-WR820N, peran: "Access Point (DHCP mati)", ip: 192.168.88.2}
   - {nama: TP-Link LiteWave LS1005, peran: "switch"}
-  - {nama: STB HG680 (Armbian v25.05.0, eMMC), peran: "AdGuard Home utama", ip: 192.168.88.253}
-  - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, ip_sementara: 192.168.0.200, cpu: "i5-6500T", ram_gb_terpasang: 24, ram_konfigurasi_gb: [16, 8], ram_status: "Linux melaporkan 23 GiB; BIOS/MemTest belum dicatat", virtualisasi: "VT-x/KVM aktif; VT-d Disabled", nvme_model: "Samsung MZALQ512HALU-000L2", nvme_terdeteksi_gb: 476.9, nvme_slot: 1, proxmox_version: "9.2.24", proxmox_kernel: "7.0.14-26-pve", proxmox_status: "vmbr0 diarahkan ke .88.10 via enp0s31f6; gateway .88.1, DNS .88.253; perlu verifikasi fisik di MikroTik"}
+  - {nama: STB HG680 (Armbian v25.05.0, eMMC), peran: "AdGuard Home utama", ip: 192.168.88.3, ip_sebelumnya: 192.168.88.253, status: "static DHCP lease baru; kueri DNS langsung berhasil 1 Nov 2026"}
+  - {nama: Lenovo ThinkCentre M710q, peran: "server Proxmox", ip: 192.168.88.10, ip_sementara: 192.168.0.200, cpu: "i5-6500T", ram_gb_terpasang: 24, ram_konfigurasi_gb: [16, 8], ram_status: "Linux melaporkan 23 GiB; BIOS/MemTest belum dicatat", virtualisasi: "VT-x/KVM aktif; VT-d Disabled", nvme_model: "Samsung MZALQ512HALU-000L2", nvme_terdeteksi_gb: 476.9, nvme_slot: 1, proxmox_version: "9.2.24", proxmox_kernel: "7.0.14-26-pve", proxmox_status: "vmbr0 diarahkan ke .88.10 via enp0s31f6; ping MikroTik 16/16 lulus; DNS diarahkan ke .88.3, resolusi host belum diuji"}
   - {nama: "HDD Seagate Surveillance 2 TB (2 unit, 3.5 inci)", peran: "belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda; model tiap HDD belum dicatat; setidaknya satu belum diformat"}
   - {nama: "Laptop AMD Ryzen 3 4300U (RAM 19,4 GB)", peran: "laptop admin", ip: 192.168.88.252, catatan: "kabel via adaptor USB-LAN (ASIX)"}
 lain_dimiliki:
@@ -22,7 +22,7 @@ lain_dimiliki:
   - TP-Link TL-POE160S
 rencana:
   - STB 2 (Tailscale subnet router)
-  - Modem kedua untuk failover internet
+  - Modem kedua untuk failover internet; ether2 MikroTik direncanakan sebagai WAN cadangan, perlu menyiapkan jalur admin alternatif sebelum port dialihkan
   - TP-Link MR3020 (cetak dari mana saja)
   - UPS kecil dan monitor listrik
 
