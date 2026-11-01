@@ -10,7 +10,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
-- [ ] Buka `https://192.168.88.10:8006`, uji `apt-get -o Acquire::ForceIPv4=true update`, lalu periksa lease guest setelah pindah LAN. SSH kunci publik Codex berhasil; audit baca-saja sebelumnya dilakukan pada jaringan sementara.
+- [ ] Buka `https://192.168.88.10:8006`, diagnosis akses repo Proxmox (HTTP port 80 no route), lalu periksa lease guest setelah pindah LAN. SSH kunci publik Codex berhasil; audit baca-saja sebelumnya dilakukan pada jaringan sementara.
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.

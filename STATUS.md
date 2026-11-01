@@ -21,7 +21,7 @@
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Jalankan `apt-get -o Acquire::ForceIPv4=true update` untuk memeriksa akses repository IPv4 tanpa memasang atau meng-upgrade paket.
+1. Uji koneksi HTTPS baca-saja ke endpoint repo Proxmox; jangan ubah source apt sampai hasilnya jelas.
 2. Buka `https://192.168.88.10:8006` dan pastikan guest CT101, CT104, VM201 mendapat alamat LAN rumah; alamat guest final belum boleh diasumsikan.
 3. Pastikan DHCP MikroTik hanya membagikan DNS yang sudah aktif. AdGuard CT101 `.11` belum diverifikasi aktif; jangan jadikan DNS cadangan sampai diuji.
 4. Buat DHCP reservation/IP final CT104 di MikroTik, lalu buka Portainer di HTTPS port 9443 dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
@@ -31,7 +31,7 @@
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
-- Resolusi IPv4 dan IPv6 DNS host berhasil; akses repository internet host masih tertunda. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
+- Resolusi IPv4 dan IPv6 DNS host berhasil; repo Debian/security dapat diakses, tetapi repo Proxmox HTTP port 80 tidak terjangkau; penyebab belum diketahui. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
 - HDD unit 1 terlihat tetapi belum mounted/dikonfigurasi; isi partisi NTFS dan peran storage belum diputuskan. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard CT101 belum diaktifkan/dikonfigurasi; AdGuard utama STB `.3` sudah merespons kueri DNS langsung. Konektivitas jaringan rumah belum diverifikasi, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.

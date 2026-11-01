@@ -155,3 +155,12 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Pengguna menjalankan `getent ahostsv4 deb.debian.org` pada shell root Proxmox.
 - Perintah mengembalikan empat alamat IPv4 `151.101.66.132`, `151.101.130.132`, `151.101.194.132`, dan `151.101.2.132` (Fastly); resolusi A/IPv4 lulus.
 - Akses koneksi keluar Proxmox ke repositori paket belum diuji. Langkah berikutnya `apt-get -o Acquire::ForceIPv4=true update` hanya memperbarui daftar paket.
+
+## Uji akses repository Proxmox — 1 November 2026
+
+Perintah: `apt-get -o Acquire::ForceIPv4=true update`
+
+- Repo Debian trixie dan trixie-security dapat diakses (`Hit`/`Get`).
+- Repo Proxmox `http://download.proxmox.com/debian/pve trixie InRelease` gagal setelah tiga kali percobaan. Pesan persis: `Could not connect to download.proxmox.com:80 (117.120.5.231). - connect (113: No route to host)`.
+- APT melaporkan `Fetched 90.7 kB in 9s (10.6 kB/s)`, `Reading package lists... Done`, serta warning bahwa indeks repo Proxmox gagal diperoleh dan indeks lama/yang ada dipakai. Jadi pembaruan indeks hanya parsial; belum ada upgrade atau instalasi paket.
+- Langkah diagnosis berikutnya adalah menguji koneksi HTTPS ke endpoint InRelease tanpa mengubah source apt.
