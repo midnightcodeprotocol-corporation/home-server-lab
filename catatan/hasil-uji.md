@@ -58,3 +58,17 @@ Bab terkait: 8, 11, 24, 27.5. Hasil: **gagal, kemudian diperbaiki**; perubahan p
 - Pengguna mengonfirmasi kedua template memakai Debian 13. CT 100 menampilkan 1 CPU, RAM 512 MiB, swap 512 MiB, dan disk boot 8 GiB.
 - Paket tambahan pada VM 200 belum dicatat. Guest layanan dan uji clone belum dilaporkan.
 - URL Proxmox yang terlihat masih memakai host sementara `192.168.0.200`; perpindahan jaringan ke MikroTik belum diterapkan.
+
+
+## SSH baca-saja dan verifikasi template — 1 November 2026
+
+Hasil: **SSH berhasil; audit baca-saja lulus.** Pengguna menambahkan kunci publik Codex ke akun `root`; tidak ada private key, passphrase, atau isi `authorized_keys` yang dicatat. Perintah hanya membaca versi, daftar guest, konfigurasi template, storage, dan jaringan.
+
+- `hostname`: `pve`; Proxmox VE `9.2.24`, kernel aktif `7.0.14-26-pve`.
+- VM 200: `stopped`, `template: 1`, Debian 13 menurut pengguna; nama konfigurasi `Tamplate-VM` (kemungkinan typo), 1 vCPU, RAM 2048 MiB, disk 32 GiB pada `local-lvm`, QEMU Guest Agent aktif pada konfigurasi, bridge `vmbr0`, firewall aktif. Isi paket guest belum diperiksa karena template berhenti.
+- CT 100: `stopped`, `template: 1`, Debian 13 menurut pengguna; nama `Tamplate-CT` (kemungkinan typo), 1 vCPU, RAM 512 MiB, swap 512 MiB, disk 8 GiB pada `local-lvm`, unprivileged, nesting aktif, DHCP pada `vmbr0`, firewall aktif.
+- `qm list` dan `pct list` hanya menunjukkan template 200 dan 100; clone/guest layanan belum ada.
+- Host: `vmbr0` `192.168.0.200/24`, gateway `192.168.0.1`, DNS `192.168.0.1`. Perpindahan ke MikroTik dan alamat target `192.168.88.10` belum dilakukan.
+- Storage `local` dan `local-lvm` aktif; penggunaan `local-lvm` sekitar 1.09% pada saat audit. HDD belum tersambung.
+
+Tidak ada perubahan konfigurasi Proxmox yang dijalankan oleh Codex pada sesi ini. Nama `Tamplate-*` belum diperbaiki.

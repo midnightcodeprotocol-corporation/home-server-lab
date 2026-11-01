@@ -10,9 +10,9 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 1 Novem
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
-- [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH TCP 22 dari Windows sudah terjangkau pada jaringan sementara
+- [ ] Sambungkan host kembali ke MikroTik dan tetapkan IP manajemen final; SSH kunci publik Codex berhasil; audit baca-saja dilakukan pada jaringan sementara
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
-- [x] Buat template Debian 13: VM 200 `Template-VM` dan CT 100 `Template-CT` (1 CPU, 512 MiB RAM, 8 GiB disk CT) tampak di Proxmox; paket dasar VM masih perlu dicatat (Bab 49)
+- [x] Buat template Debian 13 VM 200 dan CT 100; SSH memverifikasi konfigurasi (Bab 49). VM 200: 1 vCPU/2 GiB/32 GiB; CT 100: 1 vCPU/512 MiB/8 GiB, unprivileged + nesting. Nama aktual `Tamplate-*` kemungkinan typo. Paket guest VM belum diperiksa.
 - [ ] Setelah jaringan host pindah ke MikroTik, buat dan verifikasi clone guest pertama dengan nama/IP/resource unik (Bab 49)
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] Uji enclosure single-bay lama yang ditemukan; identifikasi satu HDD sebelum menentukan peruntukan atau memformat (Bab 27.4, 9.9)

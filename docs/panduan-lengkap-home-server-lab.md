@@ -4,7 +4,7 @@
 
 Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku.
 
-> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24` sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat; guest layanan, backup, dan HDD belum dibuat atau diuji.
+> **Status aktual (1 November 2026):** Proxmox VE 9.2.24 berjalan dan sudah diperbarui pada ThinkCentre M710q; kernel aktif `7.0.14-26-pve`. RAM 16+8 GB terbaca Linux sebagai 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. VT-x/KVM aktif setelah perbaikan tanpa monitor melalui `thinklmi`; VT-d tetap Disabled. NVMe Samsung terdeteksi pada 476,9 GB. Jaringan host sementara `192.168.0.200/24`, gateway/DNS `192.168.0.1`, sampai tersambung kembali ke MikroTik. Template Debian 13 VM 200 dan CT 100 sudah dibuat dan diverifikasi melalui SSH. Nama aktual `Tamplate-VM`/`Tamplate-CT` (kemungkinan typo). VM: 1 vCPU, 2 GiB RAM, disk 32 GiB, QEMU Agent aktif pada konfigurasi. CT: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Paket VM, guest layanan, backup, HDD, dan clone belum diuji.
 
 ## Sebelum mulai
 
@@ -9726,13 +9726,13 @@ Alasan: Satu sumber yang sama untuk semua VM Docker: cepat, seragam, dan pembaru
 ada. Setiap layanan lalu mendapat salinan penuh yang berdiri sendiri.
 Tidak termasuk: Tailscale (setiap node harus punya identitas sendiri) dan layanan apa pun.
 
-Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. Paket dasar VM 200 belum dicatat; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
+Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. SSH baca-saja mengonfirmasi VM 200: 1 vCPU, RAM 2 GiB, disk 32 GiB, QEMU Agent aktif pada konfigurasi; CT 100: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Nama aktual tertulis `Tamplate-VM` dan `Tamplate-CT` (kemungkinan typo). Paket guest VM 200 belum diperiksa; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
 
 **Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 200 dan CT 100 sudah tercatat dibuat; jangan buat ulang jika ID tersebut masih ada.
 
 ## 49.1 Rencana: dari mana templat dibuat
 
-Template yang sudah tampak pada UI adalah VM 200 `Template-VM` dan CT 100 `Template-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
+Template yang sudah tampak pada UI adalah VM 200 `Tamplate-VM` dan CT 100 `Tamplate-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
 
 ## 49.2 Membuat dan mengisi VM dasar
 

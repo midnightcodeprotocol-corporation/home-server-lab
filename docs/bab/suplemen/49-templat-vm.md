@@ -7,13 +7,13 @@ Alasan: Satu sumber yang sama untuk semua VM Docker: cepat, seragam, dan pembaru
 ada. Setiap layanan lalu mendapat salinan penuh yang berdiri sendiri.  
 Tidak termasuk: Tailscale (setiap node harus punya identitas sendiri) dan layanan apa pun.  
 
-Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. Paket dasar VM 200 belum dicatat; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
+Bab ini menjelaskan dua sumber dasar yang bisa dipakai berulang: VM 200 untuk aplikasi berbasis VM/Docker, dan CT 100 untuk layanan Linux ringan tanpa Docker. Keduanya sudah dibuat dengan Debian 13 di Proxmox pada 1 November 2026. SSH baca-saja mengonfirmasi VM 200: 1 vCPU, RAM 2 GiB, disk 32 GiB, QEMU Agent aktif pada konfigurasi; CT 100: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Nama aktual tertulis `Tamplate-VM` dan `Tamplate-CT` (kemungkinan typo). Paket guest VM 200 belum diperiksa; periksa sebelum memakai template sebagai sumber guest Docker. Template adalah sumber yang tidak dijalankan; buat clone untuk setiap layanan, lalu atur nama, IP, resource, dan aplikasinya sendiri.
 
 **Prasyarat sebelum mulai:** pembaruan Proxmox selesai dan host sudah reboot. Jalankan verifikasi pasca-update di Bab 9.6; `lscpu` harus menunjukkan VT-x dan `/dev/kvm` harus ada sebelum membuat template VM. Jika pemeriksaan gagal, perbaiki firmware mengikuti Bab 27.5. Template VM 200 dan CT 100 sudah tercatat dibuat; jangan buat ulang jika ID tersebut masih ada.
 
 ## 49.1 Rencana: dari mana templat dibuat
 
-Template yang sudah tampak pada UI adalah VM 200 `Template-VM` dan CT 100 `Template-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
+Template yang sudah tampak pada UI adalah VM 200 `Tamplate-VM` dan CT 100 `Tamplate-CT`; pengguna mengonfirmasi keduanya memakai Debian 13. Paket dasar VM 200 belum dicatat. Jangan jalankan ulang langkah pembuatan atau mengubah template berisi data; gunakan bagian 49.2–49.3 hanya bila perlu membangun ulang dari awal setelah memastikan template lama memang boleh diganti.
 
 ## 49.2 Membuat dan mengisi VM dasar
 

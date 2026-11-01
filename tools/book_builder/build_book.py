@@ -820,8 +820,8 @@ class Cover(Flowable):
         c.setFillColor(colors.HexColor('#FFF1D0')); c.roundRect(22 * mm, 38 * mm, pw - 44 * mm, 40 * mm, 3 * mm, fill=1, stroke=0)
         c.setFillColor(NAVY); c.setFont('Sans-B', 9.5); c.drawString(28 * mm, 70 * mm, 'STATUS PROYEK PER 1 NOVEMBER 2026')
         c.setFont('Sans', 9)
-        for i, t in enumerate(['Proxmox VE 9.2.24 berjalan; kernel 7.0.14-26-pve.', 'Template Debian 13 VM 200 dan CT 100 sudah dibuat.',
-                               'Host sementara 192.168.0.200; target MikroTik 192.168.88.10.']):
+        for i, t in enumerate(['Proxmox VE 9.2.24; kernel 7.0.14-26-pve.', 'Template Debian 13 VM 200 dan CT 100; SSH baca-saja berhasil.',
+                               'Host sementara .0.200; target rumah .88.10 belum diterapkan.', 'Nama Tamplate-VM/CT kemungkinan salah eja.']):
             c.drawString(28 * mm, (62 - i * 6) * mm, t)
         c.setFillColor(colors.HexColor('#9FB4C8')); c.setFont('Sans', 9.5)
         c.drawString(22 * mm, 24 * mm, '%s - %s' % (EDITION, DATE))
@@ -833,9 +833,12 @@ def front_matter():
     f.append(P('Panduan menyeluruh dari persiapan komputer, jaringan, instalasi Proxmox, VM/LXC, layanan, keamanan, backup, pemantauan, hingga pemulihan. '
                'Edisi ini menggabungkan Bab 1-56, lampiran, serta sembilan pengantar dan penutup fase dari materi proyek yang masih berlaku. '
                'Tata letak (kotak perintah bernomor, kotak berkas, tabel, catatan, dan gambar) dipulihkan dengan gaya Edisi 2; isi mengikuti sumber terbaru di repositori.'))
-    f += callout('PERINGATAN', 'Status aktual', ['Proxmox VE 9.2.24 berjalan pada ThinkCentre M710q; kernel aktif 7.0.14-26-pve. RAM 16+8 GB terbaca sebagai 23 GiB. '
-        'NVMe Samsung berkapasitas 476,9 GB terdeteksi. Template Debian 13 VM 200 dan CT 100 telah dibuat; spesifikasi CT: 1 CPU, 512 MiB RAM, 512 MiB swap, disk 8 GiB. '
-        'Host masih memakai jaringan sementara 192.168.0.200/24; target pindah ke MikroTik 192.168.88.10 belum diterapkan. Layanan, backup, HDD, dan hasil clone belum diuji.'])
+    f += callout('PERINGATAN', 'Status aktual', [
+        'Proxmox VE 9.2.24, kernel 7.0.14-26-pve; RAM 16+8 GB (Linux melaporkan 23 GiB); NVMe Samsung 476,9 GB.',
+        'VM 200 `Tamplate-VM`: Debian 13 menurut pengguna, 1 vCPU, 2 GiB RAM, disk 32 GiB, QEMU Agent aktif di konfigurasi. Paket di dalam VM belum diperiksa.',
+        'CT 100 `Tamplate-CT`: Debian 13, 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting, DHCP. Ejaan `Tamplate` mungkin typo.',
+        'Host sementara 192.168.0.200/24, gateway/DNS 192.168.0.1; target MikroTik 192.168.88.10 belum diterapkan. SSH Codex root aktif; audit baca-saja berhasil.',
+        'Clone, guest layanan, HDD, backup, dan pemulihan belum diuji.'])
     f.append(Paragraph('Sebelum mulai', ST['h2']))
     for t in ['Baca bab secara berurutan dan kerjakan satu perubahan pada satu waktu.',
               'Gunakan direktori konfigurasi/ di repositori sebagai sumber YAML/Compose yang benar bila ada perbedaan dengan teks buku.',

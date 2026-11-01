@@ -10,9 +10,11 @@
 - Dua HDD Seagate Surveillance 2 TB, 3,5 inci belum dipasang. Enclosure single-bay lama ditemukan, belum diuji, dan berada di rumah bersama HDD.
 - Proxmox VE 9.2.24 selesai diperbarui dan reboot: kernel `7.0.14-26-pve`; `systemctl --failed` melaporkan nol unit gagal. Storage `local` dan `local-lvm` aktif.
 - VT-x/KVM aktif setelah perbaikan BIOS tanpa monitor melalui `thinklmi`; setelah reboot `lscpu` menunjukkan `Virtualization: VT-x` dan `/dev/kvm` tersedia. VT-d tetap `Disabled`.
-- Windows `192.168.0.100` berhasil menjangkau TCP 22 pada host `192.168.0.200`. Fingerprint ED25519 cocok; autentikasi SSH dari Codex belum ada, dan tidak ada perintah host dijalankan lewat Codex.
-- Pada 1 November, pengguna membuat template Debian 13 VM 200 (`Template-VM`) dan CT 100 (`Template-CT`); keduanya terlihat di antarmuka Proxmox. CT 100 menampilkan 1 CPU, RAM 512 MiB, swap 512 MiB, dan disk 8 GiB. Paket dasar VM 200 belum dicatat. Belum ada guest layanan yang dilaporkan.
-- Proxmox masih dibuka pada alamat sementara `192.168.0.200` melalui router sementara. Konfigurasi rumah yang dituju: `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`; perpindahan ke MikroTik belum diterapkan.
+- SSH dari Codex ke `root@192.168.0.200` berhasil dengan kunci ed25519 yang dikelola pengguna; fingerprint host cocok. Pemeriksaan Proxmox baca-saja berhasil. Kunci privat dan isi `authorized_keys` tidak disimpan di repo.
+- SSH baca-saja 1 November mengonfirmasi VM 200 dan CT 100 berstatus template dan stopped. Nama aktual: `Tamplate-VM` dan `Tamplate-CT` (kemungkinan typo). VM 200: Debian 13 menurut pengguna, 1 vCPU, 2048 MiB RAM, disk 32 GiB di `local-lvm`, QEMU Agent aktif pada konfigurasi, bridge `vmbr0` dengan firewall; isi paket guest belum diperiksa. CT 100: Debian 13 menurut pengguna, 1 vCPU, 512 MiB RAM/swap, 8 GiB di `local-lvm`, unprivileged, nesting, DHCP pada `vmbr0` dengan firewall. Guest layanan dan clone belum dibuat.
+- SSH baca-saja 1 November mengonfirmasi host masih memakai `192.168.0.200/24`, default gateway `192.168.0.1`, dan DNS `192.168.0.1`. Proxmox masih dibuka melalui router sementara. Konfigurasi rumah yang dituju: `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`; perpindahan ke MikroTik belum diterapkan.
+
+- Nama VM/CT pada konfigurasi Proxmox tertulis `Tamplate-VM` dan `Tamplate-CT`; kemungkinan typo ini belum diubah.
 
 ## Langkah berikutnya
 1. Siapkan perubahan jaringan host dari subnet sementara ke MikroTik; pastikan `192.168.88.10` tidak bentrok, lalu sambungkan kabel dan verifikasi panel/DNS.

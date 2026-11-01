@@ -9,12 +9,14 @@ host:
   ram_status: "Linux Proxmox melaporkan 23 GiB; VT-x/KVM aktif; verifikasi BIOS dan MemTest86 belum dicatat"
   disk_sistem: NVMe Samsung MZALQ512HALU-000L2 476.9 GB; Proxmox berjalan
   ip_sementara: 192.168.0.200
+  gateway_sementara: 192.168.0.1
+  dns_sementara: 192.168.0.1
   disk_data: 2 x Seagate Surveillance HDD 2 TB, 3.5 inci (belum dipasang; enclosure single-bay lama ditemukan tetapi belum diuji; unit kedua ditunda)
   docker_di_host: false
 templat:
-  - {vmid: 200, nama: Template-VM, jenis: vm, status: "dibuat; terlihat di UI Proxmox 1 Nov 2026", os: "Debian 13", paket_dan_konfigurasi: "belum dicatat", catatan: "template dasar VM; jangan dinyalakan langsung, clone untuk guest layanan"}
+  - {vmid: 200, nama: Tamplate-VM, jenis: vm, status: "template aktif, stopped; diverifikasi via SSH 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "paket guest belum diperiksa; QEMU Guest Agent disetel pada Proxmox", catatan: "nama host tertulis Tamplate-VM (kemungkinan salah eja); template dasar, clone untuk layanan"}
   - {vmid: 9000, nama: debian13-template, jenis: vm, status: "rencana template cloud-init untuk VM k3s; keberadaan aktual belum diverifikasi"}
-  - {vmid: 100, nama: Template-CT, jenis: lxc, status: "dibuat; terlihat di UI Proxmox 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, catatan: "template dasar CT; jangan menyalakan langsung, clone untuk guest layanan"}
+  - {vmid: 100, nama: Tamplate-CT, jenis: lxc, status: "template aktif, stopped; diverifikasi via SSH 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, storage: "local-lvm", unprivileged: true, nesting: true, bridge: "vmbr0", firewall: true, ipv4: "DHCP", catatan: "nama host tertulis Tamplate-CT (kemungkinan salah eja); template dasar"}
 guest:
   - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}

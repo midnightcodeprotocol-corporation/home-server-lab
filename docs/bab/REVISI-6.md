@@ -6,23 +6,27 @@
 ## Progres host
 
 - Proxmox VE 9.2.24 tampil pada antarmuka; kernel aktif yang sebelumnya dicatat adalah `7.0.14-26-pve`.
-- Template VM 200 bernama `Template-VM` dan template CT 100 bernama `Template-CT` terlihat pada pohon Proxmox.
+- Pemeriksaan SSH baca-saja 1 November mengonfirmasi VM 200 dan CT 100 berstatus template serta berhenti. Nama aktual pada konfigurasi adalah `Tamplate-VM` dan `Tamplate-CT` (kemungkinan typo; belum diubah).
 - Pengguna mengonfirmasi Debian 13 dipakai pada kedua template.
-- Ringkasan CT 100 memperlihatkan 1 CPU, RAM 512 MiB, swap 512 MiB, dan disk 8 GiB. Paket tambahan pada VM 200 belum dicatat.
+- VM 200: 1 vCPU, RAM 2048 MiB, disk 32 GiB di `local-lvm`, QEMU Agent aktif pada konfigurasi, jaringan `vmbr0` + firewall. Paket di dalam guest belum diperiksa karena template berhenti. CT 100: 1 vCPU, RAM/swap 512 MiB, disk 8 GiB, unprivileged, nesting aktif, DHCP di `vmbr0` + firewall.
 - Belum ada guest layanan atau hasil clone yang dilaporkan.
-- Host masih dibuka melalui alamat sementara `192.168.0.200`; target MikroTik adalah `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`. Perubahan IP belum diterapkan.
+- SSH baca-saja mengonfirmasi host masih memakai `192.168.0.200/24`, gateway/DNS `192.168.0.1`; target MikroTik adalah `192.168.88.10/24`, gateway `192.168.88.1`, DNS AdGuard `192.168.88.253`. Perubahan IP belum diterapkan.
 
 ## Penomoran guest
 
 | ID | Nama | Jenis | Status |
 |---:|---|---|---|
-| 100 | `Template-CT` | LXC template | Debian 13; 1 CPU, 512 MiB RAM, 512 MiB swap, disk 8 GiB |
-| 200 | `Template-VM` | VM template | Debian 13; paket dasar belum dicatat |
+| 100 | `Tamplate-CT` | LXC template | Debian 13; 1 CPU, 512 MiB RAM, 512 MiB swap, disk 8 GiB; unprivileged, nesting, DHCP |
+| 200 | `Tamplate-VM` | VM template | Debian 13; 1 CPU, 2 GiB RAM, disk 32 GiB; QEMU Agent disetel; paket guest belum diperiksa |
 | 101+ | LXC layanan | LXC | ID layanan tetap mengikuti peta guest |
 | 201+ | VM layanan | VM | ID layanan tetap mengikuti peta guest |
 | 9000 | `debian13-template` | VM cloud-init | Rencana lama untuk k3s; keberadaan aktual belum diverifikasi |
 
 Template 100 dan 200 tidak bertabrakan dengan ID guest layanan yang direncanakan mulai dari 101 dan 201. Jangan membuat ulang ID template tersebut selama masih terdaftar. Sebelum membuat clone Docker, pastikan VM 200 memiliki Docker dan paket yang memang diperlukan; jika belum, lengkapi baseline atau ikuti prosedur Bab 49 dengan catatan bahwa template akan diubah.
+
+## Akses SSH dan catatan nama
+
+Pengguna menambahkan kunci publik khusus ke `/root/.ssh/authorized_keys`; koneksi Codex ke Proxmox kini aktif sebagai root. SSH dipakai untuk audit baca-saja pada sesi ini. Jangan menyimpan kunci privat, passphrase, atau isi `authorized_keys` di repo. Akses root dapat dicabut dengan menghapus baris kunci tersebut dari `authorized_keys`. Nama template pada konfigurasi aktual tertulis `Tamplate-VM` dan `Tamplate-CT`; kemungkinan typo ini belum diubah.
 
 ## Pembaruan dokumen
 
@@ -42,7 +46,7 @@ Template 100 dan 200 tidak bertabrakan dengan ID guest layanan yang direncanakan
 
 ## Batas verifikasi
 
-Status template dan spesifikasi CT 100 diambil dari tangkapan layar pengguna; Debian 13 pada keduanya dikonfirmasi pengguna. Isi paket VM 200, hasil uji clone, perpindahan IP host, dan layanan belum diverifikasi dari shell Proxmox.
+Konfigurasi VM/CT, status template, bridge, dan IP host diverifikasi melalui SSH baca-saja pada 1 November. Debian 13 dikonfirmasi pengguna. Paket di dalam VM 200, hasil uji clone, perpindahan IP host, dan layanan belum diverifikasi.
 
 ## Pembaruan buku
 
