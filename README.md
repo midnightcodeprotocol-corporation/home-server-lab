@@ -26,11 +26,12 @@ Diagram berikut menggabungkan jaringan rumah yang sudah berjalan dengan server d
 flowchart TB
   Internet["Internet: IndiHome<br/>uplink WiFi"] -. WiFi .-> WISP["TP-Link TL-WR840N<br/>mode WISP"]
   WISP -->|"Ethernet"| MT["MikroTik RB750GL<br/>WAN 192.168.0.100<br/>LAN 192.168.88.1/24"]
-  MT --> AP["TP-Link TL-WR820N<br/>Access Point .2"]
+  MT -->|"ether5"| Admin["Laptop admin .252"]
   AP -. WiFi rumah .-> Clients["Laptop Windows, HP,<br/>perangkat rumah"]
-  MT --> Switch["Switch LiteWave LS1005"]
-  MT --> STB1["STB HG680 .3<br/>Armbian + AdGuard Home<br/>DNS utama"]
-  Switch --> PVE
+  MT -->|"ether4 -> port 1"| Switch["Switch LiteWave LS1005<br/>port 1 uplink, port 2 AP, port 3-5 kosong"]
+  MT -->|"ether3"| STB1["STB HG680 .3<br/>Armbian + AdGuard Home<br/>DNS utama"]
+  MT -->|"ether2"| PVE
+  Switch -->|"port 2"| AP["TP-Link TL-WR820N<br/>Access Point .2"]
 
   subgraph PVE["Target: Proxmox di ThinkCentre M710q — 192.168.88.10"]
     direction TB

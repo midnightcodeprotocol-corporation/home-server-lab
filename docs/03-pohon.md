@@ -8,30 +8,18 @@ Tiga pohon: perangkat, guest dan ketergantungan, lalu struktur folder.
 IndiHome (WiFi)
 └── TL-WR840N (WISP)  192.168.0.1
     └── MikroTik RB750GL  ether1=192.168.0.100 | LAN 192.168.88.1/24
-        ├── ether2   laptop admin (WinBox)
-        ├── ether4   STB 1 HG680  .253  AdGuard Home utama
-        ├── TL-WR820N (AP)  .2  -> WiFi rumah -> HP, laptop, TV, dll.
-        └── Switch LiteWave LS1005
-            ├── Proxmox  .10  (ThinkCentre M710q)
-            │   ├── CT101 adguard2   .11
-            │   ├── CT102 files      .12  (Samba)
-            │   ├── CT103 ts-router
-            │   ├── VM 201 docker-core .20
-            │   ├── VM 202 haos        .21
-            │   ├── VM 203 k3s         .22
-            │   ├── VM 204 git         .23
-            │   ├── VM 205 vault       .24
-            │   ├── VM 206 affine      .25
-            │   ├── VM 207 nextcloud   .26
-            │   ├── VM 208 n8n         .27
-            │   ├── VM 209 web         .28
-            │   ├── VM 210 web-public  .29
-            │   ├── VM 212 pbs         .30
-            │   ├── VM 211 music       .31
-            │   ├── VM 213 sso         .32
-            │   ├── VM 214 immich      .33
-            │   └── VM 200 Template-VM (templat) | 9000 templat cloud-init (k3s)
-            └── STB 2 .250 (usulan, belum tiba)  Tailscale subnet router
+        ├── ether2   Proxmox .10 (ThinkCentre M710q)
+        │   ├── CT101 adguard2   .11
+        │   ├── CT102 files      .12 (Samba)
+        │   ├── CT103 ts-router
+        │   ├── CT104 docker-services (IP final belum ditetapkan)
+        │   ├── VM 201 docker-core .20
+        │   └── VM 202-214 (rencana; lihat data/guest.yaml)
+        ├── ether3   STB HG680 .3 (AdGuard Home utama; sebelumnya .253)
+        ├── ether4   Switch LiteWave LS1005 port 1 (uplink)
+        │   └── port 2: AP TL-WR820N .2; port 3-5 kosong
+        └── ether5   Laptop admin .252
+            └── STB 2 .250 (usulan, belum tiba): Tailscale subnet router
 ```
 
 ## 2. Pohon ketergantungan (apa butuh apa)

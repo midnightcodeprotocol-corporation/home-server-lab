@@ -6,25 +6,34 @@ Dari kabel fisik sampai alur data. Diagram memakai Mermaid (tampil otomatis di G
 
 ```mermaid
 flowchart LR
-  ISP["IndiHome<br/>(WiFi saja, tidak ada LAN)"] -. "WiFi" .-> WR840["TL-WR840N<br/>WISP, LAN 192.168.0.1"]
-  WR840 -- "kabel LAN" --> E1["MikroTik ether1<br/>192.168.0.100 (DHCP client)"]
+  ISP["IndiHome (WiFi saja)"] -. WiFi .-> WR840["TL-WR840N (WISP)<br/>LAN 192.168.0.1"]
+  WR840 -- "kabel LAN" --> E1["MikroTik ether1<br/>WAN utama"]
   subgraph MT["MikroTik RB750GL, LAN 192.168.88.1/24"]
     E1
-    E2["ether2: kabel admin / laptop"]
-    E4["ether4: STB 1"]
-    EX["port lain: switch, AP, server"]
+    E2["ether2: Proxmox .10"]
+    E3["ether3: STB AdGuard .3"]
+    E4["ether4: uplink switch"]
+    E5["ether5: laptop admin .252"]
   end
-  E4 --- STB1["STB HG680<br/>192.168.88.3"]
-  EX --- AP["TL-WR820N (AP)<br/>192.168.88.2<br/>colok ke port LAN, bukan WAN"]
-  EX --- SW["Switch LS1005"]
-  SW --- PVE["Proxmox 192.168.88.10"]
-  AP -. "WiFi rumah" .-> CL["HP, laptop, perangkat lain"]
+  E3 --- STB["STB HG680<br/>AdGuard Home"]
+  E4 --> SW1
+  subgraph SW["Switch LiteWave LS1005"]
+    SW1["Port 1: uplink MikroTik"]
+    SW2["Port 2: AP"]
+    SW3["Port 3: kosong"]
+    SW4["Port 4: kosong"]
+    SW5["Port 5: kosong"]
+  end
+  SW2 --- AP["TL-WR820N<br/>192.168.88.2"]
+  AP -. "WiFi rumah" .-> CL["HP dan perangkat rumah"]
+  E2 --- PVE["Proxmox<br/>192.168.88.10"]
+  E5 --- LAP["Laptop admin<br/>192.168.88.252"]
 ```
 
 Catatan kabel:
-- AP dicolok ke port **LAN** AP (bukan WAN/Internet), DHCP AP dimatikan.
-- Saat setup MikroTik, laptop admin saat ini di **ether2** (bukan ether1 yang ke WAN). Pengguna merencanakan ether2 kelak dialihkan untuk WAN modem cadangan saat IndiHome mati; sebelum diterapkan, siapkan jalur admin WinBox alternatif dan rancang failover.
-- Laptop admin: kabel via adaptor USB-LAN ke jaringan MikroTik (`192.168.88.252`). Server Proxmox: kabel LAN dari port Ethernet M710q ke MikroTik/switch.
+- Susunan kabel yang dilaporkan pengguna per 1 Nov 2026: ether1 WAN dari WR840N, ether2 Proxmox, ether3 STB AdGuard, ether4 switch, ether5 laptop admin. Switch port 1 menerima uplink dari ether4; port 2 ke AP; port 3-5 kosong.
+- Rencana masa depan: ether2 akan dipakai untuk modem WAN cadangan saat IndiHome mati. Sebelum itu, pindahkan Proxmox ke port kosong switch dan rancang failover.
+- Server Proxmox saat ini tersambung langsung ke MikroTik ether2; STB ke ether3.
 
 ## 2. Rangkaian logis (alamat)
 
@@ -33,6 +42,7 @@ Catatan kabel:
 | Jaringan atas | `192.168.0.0/24` | LAN TL-WR840N; MikroTik ether1 = .100 |
 | LAN rumah | `192.168.88.0/24` | MikroTik .1 (gateway, DHCP, NAT) |
 | Pool DHCP | `.100 - .254` | Klien biasa |
+| AdGuard STB 1 | `.3` | Static DHCP lease; sebelumnya `.253` |
 | Server (di luar pool) | `.2 - .99` | Static lease / IP statis |
 | Tailnet | `100.x.y.z` | Tailscale |
 
@@ -48,7 +58,7 @@ sequenceDiagram
   participant B as AdGuard CT101 (.11)
   participant U as Upstream (Quad9 / 1.1.1.1)
   K->>M: minta IP (DHCP)
-  M-->>K: IP + DNS .3 (utama); .11 hanya setelah layanan cadangan diuji
+  M-->>K: IP + DNS .3; .11 hanya setelah layanan cadangan diuji
   K->>A: kuma.home.arpa ?
   A-->>K: 192.168.88.20 (DNS rewrite *.home.arpa)
   K->>A: google.com ?

@@ -133,5 +133,6 @@ Hasil: **clone boot dan lulus pemeriksaan jaringan/identitas; template akhir CT 
 - Lease DHCP statis STB `stb-adguard` (MAC `00:15:18:01:81:31`) diubah dari `192.168.88.253` ke `192.168.88.3`; pengguna mengonfirmasi Active Address kini `.3`.
 - Dari Windows, `nslookup google.com 192.168.88.3` berhasil dan mengembalikan jawaban non-authoritative.
 - Pengguna mengubah DHCP Network MikroTik agar membagikan DNS `.3`. `ipconfig /all` menunjukkan laptop `192.168.88.252`, gateway/DHCP server `.1`, DNS `.3` dan `.11`. `.11` belum diverifikasi aktif; pengguna diarahkan agar sementara hanya membagikan `.3`, belum dikonfirmasi.
-- MikroTik WinBox Tools → Ping ke `192.168.88.10` menunjukkan 16/16 balasan, 0% loss. Proxmox tersambung lewat switch; bukan DHCP client karena IP statis.
+- MikroTik WinBox Tools → Ping ke `192.168.88.10` menunjukkan 16/16 balasan, 0% loss. Pengguna kemudian mengonfirmasi kabel Proxmox langsung ke MikroTik ether2 (bukan lewat switch); Proxmox bukan DHCP client karena IP statis.
 - Pengguna melaporkan DNS server host Proxmox diganti ke `192.168.88.3`. Uji resolusi nama dari host belum dilakukan. Gateway tetap `192.168.88.1` dan alamat host `192.168.88.10/24`.
+- Pengguna mengonfirmasi susunan port fisik: MikroTik ether1 ke TL-WR840N (WAN), ether2 Proxmox, ether3 STB AdGuard, ether4 ke switch, ether5 laptop. Switch port 1 uplink MikroTik, port 2 AP, port 3-5 kosong. Rencana memakai ether2 sebagai WAN modem cadangan belum diterapkan; Proxmox perlu dipindah ke port switch kosong sebelum perubahan itu.
