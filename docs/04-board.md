@@ -19,7 +19,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] HDD unit 1 sengaja sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang sebelumnya terlihat NTFS/S.M.A.R.T. PASSED. Saat dipasang kembali, periksa identitas dan isi read-only sebelum menetapkan storage. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
-- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes A/AAAA dari Proxmox dan `nslookup` dari laptop lulus. Berikutnya periksa upstream agar AdGuard kedua tetap dapat menjawab jika STB utama mati, lalu evaluasi penambahan DNS cadangan ke DHCP MikroTik.
+- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. Berikutnya tambahkan `.11` sebagai DNS kedua di DHCP MikroTik dan verifikasi lease klien.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
 - [ ] CT104 aktif `.101`; Portainer 2.45.3 UI/API HTTP 200 dan setup selesai menurut pengguna; Jellyfin healthy di TCP 8096 dan setup selesai menurut pengguna. Media kosong; verifikasi reservasi DHCP CT104 dan pasang HDD sebelum mengatur storage/media.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.

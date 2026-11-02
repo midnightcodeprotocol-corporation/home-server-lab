@@ -7,7 +7,7 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua di `.11` selesai dikonfigurasi dan tes DNS A/AAAA dari Proxmox dan laptop lulus; DHCP belum diubah; Jellyfin sehat dan Portainer 2.45.3 setup selesai menurut pengguna di CT104 `.101`; VM202 Home Assistant OS berjalan di `.21` dengan onboarding selesai menurut pengguna. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
+Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua di `.11` selesai dikonfigurasi dan tes DNS A/AAAA dari Proxmox dan laptop lulus; upstream Quad9 independen dari STB untuk domain internet; DHCP belum diubah; Jellyfin sehat dan Portainer 2.45.3 setup selesai menurut pengguna di CT104 `.101`; VM202 Home Assistant OS berjalan di `.21` dengan onboarding selesai menurut pengguna. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
