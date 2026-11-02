@@ -7,12 +7,12 @@
 | TL-WR820N (AP) | .2 | 80 | LAN | langsung |
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
 | Proxmox host (M710q) | `192.168.88.10` (terverifikasi aktif; GUI dan SSH audit) | 8006, 22 | LAN + IPSet admin (rencana firewall) | `proxmox.home.arpa` |
-| CT101 adguard2 | `192.168.88.11` statis pada CT dan interface aktif (2 Nov); wizard belum selesai | 3000 wizard, 53 DNS (uji DNS pending) | LAN | `http://192.168.88.11:3000` |
-| CT104 docker-services | Lease DHCP sementara `192.168.88.101`; IP final/reservasi belum ditetapkan | 9443 Portainer HTTPS, 8096 Jellyfin HTTP | LAN | `https://192.168.88.101:9443`, `http://192.168.88.101:8096` (lease sementara; setup awal) |
+| CT101 adguard2 | `192.168.88.11` statis pada CT dan interface aktif (2 Nov); setup admin selesai menurut pengguna | 3000 UI, 53 DNS (uji DNS pending) | LAN | `http://192.168.88.11:3000` |
+| CT104 docker-services | Aktif `192.168.88.101`; reservasi DHCP router belum diaudit | 9443 Portainer HTTPS, 8096 Jellyfin HTTP | LAN | `https://192.168.88.101:9443`, `http://192.168.88.101:8096` |
 | CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |
 | VM 201 docker-core | Target .20; saat audit stopped, IP aktual tidak ada | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
-| VM 202 haos | Lease DHCP sementara `192.168.88.102`; target .21 belum dialokasikan | 8123, redirect ke UI onboarding | LAN + Tailscale (rencana) | `http://192.168.88.102` (onboarding, HTTP 200); `ha.lan` belum disiapkan |
+| VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna | 8123 | LAN + Tailscale (rencana) | `http://192.168.88.21` (wizard selesai menurut pengguna); `ha.lan` belum disiapkan |
 | VM 203 k3s | .22 | 6443 | IPSet admin | langsung |
 | VM 204 git | .23 | 3000 web, 2222 SSH Git | web dari .20; SSH dari admin dan .22 | `git.home.arpa` |
 | VM 205 vault | .24 | 127.0.0.1:8081 | Tailscale Serve | `lab-vault.*.ts.net` |

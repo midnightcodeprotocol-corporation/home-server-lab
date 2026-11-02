@@ -7,12 +7,12 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua aktif di `.11` dengan wizard belum selesai; Jellyfin sehat di CT104 lease sementara `.101`; VM202 Home Assistant OS berjalan di lease sementara `.102` dan halaman onboarding teruji. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
+Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua aktif di `.11`; Jellyfin sehat dan Portainer 2.45.3 setup selesai menurut pengguna di CT104 `.101`; VM202 Home Assistant OS berjalan di `.21` dengan onboarding selesai menurut pengguna. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
 - **Penyimpanan:** HDD pertama saat ini tidak terpasang (konfirmasi pengguna 2 Nov); ketika terlihat pada 1 Nov, disk berisi partisi NTFS 2 TB dan S.M.A.R.T. PASSED. Periksa ulang isi sebelum menetapkan storage; jangan format. HDD kedua menunggu enclosure.
-- **Layanan terpasang:** CT101 `adguard2` memakai statis `.11`, `onboot=1`, AdGuard Home aktif; wizard `.11:3000` menunggu pengguna. CT104 `docker-services` memakai lease sementara `.101`, Docker/Portainer dan Jellyfin aktif; Jellyfin healthy pada TCP 8096 dan `/srv/media` masih kosong/read-only. VM201 `docker-core` berhenti/onboot=0. VM202 HAOS 18.4 memakai lease sementara `.102`, UEFI, 2 vCPU/2 GiB, disk 32 GiB; checksum image resmi cocok dan onboarding HTTP 200. `.21` tetap target belum dialokasikan. Akun admin setiap aplikasi dibuat pengguna sendiri. CT104 belum mendapat reservasi IP final di MikroTik.
+- **Layanan terpasang:** CT101 `adguard2` memakai statis `.11`, `onboot=1`, dan AdGuard Home aktif; wizard selesai menurut pengguna, uji DNS masih perlu. CT104 `docker-services` aktif di `.101`; Portainer 2.45.3 UI/API merespons dan setup selesai menurut pengguna; Jellyfin healthy pada TCP 8096, `/srv/media` masih kosong/read-only. Reservasi DHCP CT104 belum diaudit. VM201 `docker-core` berhenti/onboot=0. VM202 HAOS 18.4 aktif di `.21`, UEFI, 2 vCPU/2 GiB, disk 32 GiB; checksum image resmi cocok dan onboarding selesai menurut pengguna.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router belum dipasang; rancangan tetap CT103 sementara dan STB2 setelah tersedia. Login/persetujuan tailnet perlu dilakukan pengguna.
 
@@ -68,11 +68,11 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Se
 | Guest | Alamat | Peran target |
 |---|---:|---|
 | Host Proxmox | `192.168.88.10` | Hypervisor M710q |
-| CT101 / CT102 | `.11 / .12` | AdGuard kedua (CT101 statis aktif, wizard pending) / Samba (rencana) |
+| CT101 / CT102 | `.11 / .12` | AdGuard kedua (CT101 statis aktif, setup selesai menurut pengguna; uji DNS pending) / Samba (rencana) |
 | CT103 | Belum ditetapkan | Tailscale subnet router (rencana; autentikasi pengguna diperlukan) |
 | CT104 | Lease `.101` sementara | Docker/Portainer + Jellyfin; Jellyfin healthy, media dan wizard admin belum selesai |
 | VM 201 | Target `.20` | docker-core (stopped/onboot=0); Caddy/layanan pada tabel adalah rencana lama |
-| VM 202 / 203 | Target `.21` / `.22`; VM202 lease `.102` | Home Assistant OS (running/onboarding pending) / k3s + Flux (rencana) |
+| VM 202 / 203 | `.21` aktif / `.22` target | Home Assistant OS (running, onboarding selesai menurut pengguna) / k3s + Flux (rencana) |
 | VM 204 / 205 | `.23 / .24` | Forgejo + Renovate / Vaultwarden |
 | VM 206 / 207 | `.25 / .26` | AFFiNE / Nextcloud |
 | VM 208 / 209 | `.27 / .28` | n8n / situs privat + WordPress |
