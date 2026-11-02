@@ -258,3 +258,8 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - VM212 dimatikan, lalu `scsi1` HDD 1.5 TiB dilepas hanya dari konfigurasi VM (`qm set 212 --delete scsi1`). `pvesm list backup-disk` mengonfirmasi volume `backup-disk:212/vm-212-disk-0.qcow2` tetap tersimpan; volume tidak dihapus. Volume qcow2 sparse hanya memakai sekitar 2.3 MiB pada storage fisik menurut status.
 - VM212 menerima disk baru `local-lvm:vm-212-disk-1,size=100G` pada NVMe sebagai `scsi1` (`discard=on`, `iothread=1`, `ssd=1`). PBS dinyalakan kembali; status running, ping `.30` 3/3 dan UI HTTPS 8007 HTTP 200. Thin pool `local-lvm` menunjukkan sekitar 326.7 GiB tersedia. Disk 100 GiB belum diformat di guest, belum menjadi datastore, dan belum ada backup.
 - Langkah selanjutnya: di UI PBS `https://192.168.88.30:8007`, verifikasi disk sekitar 100 GiB sebelum membuat ext4 datastore. Jangan pilih/format HDD; kedua HDD disiapkan untuk data aplikasi.
+
+## Datastore PBS sementara — 2 November 2026
+
+- Pengguna melaporkan menyelesaikan dialog **Create: Directory** di PBS dengan `/dev/sdb`, ext4, nama `store1`, dan **Add as Datastore** dicentang. `/dev/sdb` sesuai disk guest tambahan 100 GiB di `scsi1` pada VM212; disk OS 32 GiB ada di `scsi0`, volume HDD 1.5 TiB sudah dilepas dari guest.
+- Status pembuatan datastore dicatat berdasarkan konfirmasi pengguna; belum dikonfirmasi secara terpisah melalui daftar datastore dashboard. Belum ada backup job atau backup yang berjalan.
