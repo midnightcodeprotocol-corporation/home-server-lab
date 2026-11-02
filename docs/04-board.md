@@ -17,7 +17,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
-- [ ] HDD unit 1 tampak di screenshot 1 Nov sebagai NTFS/S.M.A.R.T. PASSED, tetapi tidak terdeteksi oleh `lsblk` 2 Nov. Pastikan koneksi dan keberadaan disk; periksa isi read-only sebelum menetapkan peran. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
+- [ ] HDD unit 1 sengaja sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang sebelumnya terlihat NTFS/S.M.A.R.T. PASSED. Saat dipasang kembali, periksa identitas dan isi read-only sebelum menetapkan storage. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443

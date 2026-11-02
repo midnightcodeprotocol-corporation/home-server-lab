@@ -8,7 +8,7 @@
 - Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
 - RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.
 - NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` berukuran **476,9 GB**; Proxmox berjalan.
-- **HDD pertama belum tampak pada audit SSH terbaru:** `lsblk` hanya menunjukkan NVMe. Screenshot Proxmox 1 Nov sebelumnya menunjukkan Seagate ST2000VX008-2E3164 2 TB, partisi NTFS, S.M.A.R.T. PASSED. Perbedaan keadaan ini [BELUM PASTI] penyebabnya; tidak ada tindakan format/mount. HDD kedua menunggu enclosure.
+- **HDD unit 1 sedang tidak dipasang**, sesuai konfirmasi pengguna 2 Nov. `lsblk` hanya menunjukkan NVMe karena HDD dilepas; screenshot Proxmox 1 Nov saat HDD masih terpasang menunjukkan Seagate ST2000VX008-2E3164 2 TB, partisi NTFS, S.M.A.R.T. PASSED. Setelah dipasang kembali, periksa identitas, kondisi, dan isi sebelum mengatur ulang perannya; jangan langsung format. HDD kedua menunggu enclosure.
 - Proxmox VE 9.2.24 selesai diperbarui dan reboot: kernel `7.0.14-26-pve`; `systemctl --failed` melaporkan nol unit gagal. Storage `local` dan `local-lvm` aktif.
 - VT-x/KVM aktif setelah perbaikan BIOS tanpa monitor melalui `thinklmi`; setelah reboot `lscpu` menunjukkan `Virtualization: VT-x` dan `/dev/kvm` tersedia. VT-d tetap `Disabled`.
 - SSH baca-saja ke Proxmox `192.168.88.10` berhasil menggunakan `HostKeyAlias=192.168.0.200` yang cocok dengan fingerprint host yang sudah diverifikasi sebelumnya. SSH ke MikroTik `192.168.88.1` gagal sebelum autentikasi: algoritme MAC lama tidak diterima, dan setelah kompatibilitas sesi ditambahkan RouterOS memutus koneksi saat KEX. Tidak ada SSH/router config yang diubah.
@@ -21,7 +21,7 @@
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Periksa sambungan/enclosure/kabel HDD unit 1; pastikan muncul kembali di Proxmox. Catat kondisi dan isi secara baca-saja, jangan format.
+1. Saat HDD unit 1 dipasang kembali, periksa identitas/kondisi dan isi secara baca-saja, lalu atur storage sesuai peran yang diputuskan. Jangan format sebelum konfirmasi data.
 2. Tetapkan reservasi DHCP/IP final CT104 dan rekonsiliasi target IP guest lain dari MikroTik sebelum mengubah apa pun.
 3. Selaraskan penempatan aplikasi antara `data/guest.yaml`, `docs/08-keputusan.md`, dan buku (terutama Home Assistant, Immich, Tailscale). Setelah itu selesaikan wizard Portainer sendiri dan install satu layanan per langkah.
 4. Dapatkan jalur administrasi MikroTik yang aman dan kompatibel, lalu baca konfigurasi aktual sebelum perubahan router. Jangan matikan verifikasi host key atau melemahkan kriptografi router.
@@ -30,7 +30,7 @@
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
 - APT update dan upgrade terbaru berhasil; gangguan sebelumnya ke `117.120.5.231` tidak berulang dan penyebabnya belum diketahui. SSH Proxmox berhasil untuk audit baca-saja dengan alias host key terverifikasi. Akses remote MikroTik masih gagal saat negosiasi SSH; belum ada perubahan router. DNS `.3` terlihat pada DHCP Network WinBox, tetapi keseluruhan konfigurasi DHCP belum diaudit.
-- HDD unit 1 muncul di screenshot 1 Nov tetapi tidak terdeteksi pada `lsblk` 2 Nov; penyebab/peran storage belum dipastikan, dan isi NTFS belum dibaca. Jangan format. HDD unit 2 menunggu enclosure; belum ada backup server.
+- HDD unit 1 sengaja sedang tidak dipasang; screenshot 1 Nov saat terpasang menunjukkan NTFS dan SMART PASSED. Isi belum dibaca dan peran storage belum diputuskan. Setelah dipasang kembali, audit sebelum konfigurasi; jangan format. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer CT104 belum selesai. Saat ini hanya Portainer berjalan di CT104; Tailscale, Jellyfin, Grafana, Immich, Home Assistant belum dipasang. CT104 memakai lease sementara `.101`; IP final belum ditetapkan. CT101 dan VM201 berhenti dan onboot=0. Penempatan beberapa aplikasi dalam dokumen berbeda; perlu diselaraskan sebelum instalasi. AdGuard CT101 belum diaktifkan; AdGuard STB `.3` sudah merespons kueri DNS langsung.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.
 - Firewall guest, backup, dan pemulihan belum diuji pada M710q.
@@ -57,4 +57,4 @@
 - 1 Nov: screenshot `Disks > Disks` menunjukkan NVMe `/dev/nvme0n1` 512.11 GB untuk sistem dan HDD `/dev/sda` Seagate ST2000VX008-2E3164 2.00 TB dengan partisi NTFS `/dev/sda1`, S.M.A.R.T. PASSED. Disk belum diinisialisasi, di-wipe, diformat, atau ditambahkan sebagai storage; isi perlu diperiksa.
 - 1 Nov: pengguna mengoreksi susunan kabel: Proxmox ke switch port 3, switch port 1 ke MikroTik ether4. MikroTik ether2 kosong; rencana WAN cadangan belum diterapkan.
 - 2 Nov: `apt update` berhasil mengakses repo Debian/security/updates dan Proxmox. Daftar upgrade memuat `libnss3`, `vim-common`, `vim-tiny`; screenshot konsol menunjukkan `apt-get upgrade` menyelesaikan pemasangan dan kembali ke prompt root.
-- 2 Nov: Chrome menampilkan Proxmox VE 9.2.24 dan entri CT101, CT104, CT100, VM201, VM200, `local`, dan `local-lvm`. WinBox DHCP Network menampilkan LAN `192.168.88.0/24`, gateway `.1`, DNS `.3`. Koneksi SSH awal ke `.10` gagal dari lingkungan eksekusi; setelah memakai alias host key lama yang sudah diverifikasi, audit baca-saja PVE berhasil. SSH MikroTik tetap gagal saat negosiasi; tidak ada perubahan router atau instalasi aplikasi. Push GitHub sebelumnya gagal me-resolve `github.com`.
+- 2 Nov: Chrome menampilkan Proxmox VE 9.2.24 dan entri CT101, CT104, CT100, VM201, VM200, `local`, dan `local-lvm`. WinBox DHCP Network menampilkan LAN `192.168.88.0/24`, gateway `.1`, DNS `.3`. Koneksi SSH awal ke `.10` gagal dari lingkungan eksekusi; setelah memakai alias host key lama yang sudah diverifikasi, audit baca-saja PVE berhasil. SSH MikroTik tetap gagal saat negosiasi. Pengguna mengonfirmasi HDD unit 1 memang sedang tidak dipasang; bukan kegagalan deteksi. Tidak ada konfigurasi host/router atau pemasangan aplikasi pada sesi audit ini. Push GitHub gagal me-resolve `github.com`.

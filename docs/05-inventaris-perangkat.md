@@ -11,7 +11,7 @@
 | STB 2 | Tailscale subnet router (rencana) | Belum tiba; usulan 192.168.88.250 |
 | **Lenovo ThinkCentre M710q** | **Server Proxmox** | **Konfigurasi host `192.168.88.10/24`, gateway `192.168.88.1`, DNS `192.168.88.3` melalui NIC `enp0s31f6`; ping host dari MikroTik 16/16 dan ping gateway dari host 4/4 lulus; panel WebUI terbuka. Kabel Proxmox ke switch port 3, switch port 1 ke MikroTik ether4; DNS IPv4/IPv6 lulus dan APT update Debian/Proxmox berhasil 2 Nov. SSH audit baca-saja berhasil; CT101 dan VM201 berhenti, CT104 memakai lease sementara `.101`; NVMe Samsung MZALQ512HALU-000L2 476,9 GB; kernel `7.0.14-26-pve`; VT-x/KVM aktif** |
 | RAM M710q | Konfigurasi fisik dilaporkan 1×16 GB + 1×8 GB | Total yang diharapkan 24 GB; pastikan kapasitas terbaca dan lulus MemTest86 |
-| 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Status unit 1 bertentangan antar-pemeriksaan; fungsi storage belum diputuskan | Screenshot 1 Nov menunjukkan ST2000VX008-2E3164, `/dev/sda`, partisi NTFS, SMART PASSED; `lsblk` SSH 2 Nov tidak menemukan disk tersebut. Penyebab belum diketahui. Unit 2 menunggu enclosure. Jangan format sebelum identitas/data dan peran dikonfirmasi. |
+| 2 × HDD Seagate Surveillance 2 TB, 3,5 inci | Unit 1 sedang tidak dipasang; fungsi storage belum diputuskan | Pengguna mengonfirmasi unit 1 sedang dilepas. Screenshot 1 Nov saat terpasang menunjukkan ST2000VX008-2E3164, `/dev/sda`, partisi NTFS, SMART PASSED. Setelah dipasang lagi, identitas/kondisi/isi harus diperiksa sebelum storage dikonfigurasi. Unit 2 menunggu enclosure. Jangan format sebelum data dan peran dikonfirmasi. |
 | Laptop (AMD Ryzen 3 4300U, RAM 19,4 GB) | Laptop admin | 192.168.88.252 via adaptor USB-LAN (ASIX); WinBox, browser, SSH |
 
 ## Perangkat lain yang dimiliki (belum berperan)

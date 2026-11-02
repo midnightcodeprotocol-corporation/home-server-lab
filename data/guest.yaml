@@ -12,7 +12,7 @@ host:
   ip_sementara: 192.168.0.200
   gateway_sementara: 192.168.0.1
   dns_sementara: 192.168.0.1
-  disk_data: "HDD Seagate ST2000VX008-2E3164 unit 1 terlihat di screenshot Proxmox 1 Nov sebagai /dev/sda 2.00 TB NTFS, SMART PASSED; audit lsblk SSH 2 Nov tidak menemukan HDD itu [BELUM PASTI: penyebab]; belum dikonfigurasi sebagai storage; HDD unit 2 menunggu enclosure"
+  disk_data: "HDD Seagate ST2000VX008-2E3164 unit 1 sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang 1 Nov terlihat sebagai /dev/sda 2.00 TB NTFS, SMART PASSED; setelah dipasang ulang periksa identitas/kondisi/isi dan konfigurasi storage sesuai keputusan; jangan format sebelum konfirmasi data. HDD unit 2 menunggu enclosure"
   docker_di_host: false
 templat:
   - {vmid: 200, nama: Template-VM, jenis: vm, status: "template aktif, stopped; SSH host key dibersihkan; machine ID VM direset dan diuji melalui clone 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "QEMU Guest Agent aktif; paket lainnya belum dicatat"}
