@@ -10,7 +10,7 @@
 | CT101 adguard2 | `192.168.88.11` statis; wizard selesai 2 Nov | 80 Admin UI HTTP; 53 DNS TCP/UDP (A/AAAA lulus dari Proxmox; tes klien pending) | LAN | `http://192.168.88.11` |
 | CT104 docker-services | Aktif `192.168.88.101`; reservasi DHCP router belum diaudit | 9443 Portainer HTTPS, 8096 Jellyfin HTTP | LAN | `https://192.168.88.101:9443`, `http://192.168.88.101:8096` |
 | CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |
-| VM 201 docker-core | Target .20; saat audit stopped, IP aktual tidak ada | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
+| VM 201 docker-core | Stopped, tanpa IP; `.20` dialihkan ke CT104 | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
 | VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna | 8123 | LAN + Tailscale (rencana) | `http://192.168.88.21` (wizard selesai menurut pengguna); `ha.lan` belum disiapkan |
 | VM 203 k3s | .22 | 6443 | IPSet admin | langsung |
@@ -22,7 +22,7 @@
 | VM 209 web | .28 | 8081 WordPress, 8082 situs | dari .20 | `wp.home.arpa`, `web.home.arpa` |
 | VM 210 web-public | .29 | (tidak ada masuk) | Cloudflare Tunnel keluar | domain Anda |
 | VM 211 music | .31 | 127.0.0.1:4533 | Tailscale Serve | `lab-music.*.ts.net` |
-| VM 212 pbs | .30 | 8007 | host .10 dan admin | `https://192.168.88.30:8007` |
+| VM 212 pbs | Target `.30`; VM sedang installer, lease belum diketahui | 8007 (setelah instalasi) | host .10 dan admin | `https://192.168.88.30:8007` (belum aktif) |
 | VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
 | VM 214 immich | .33 | 127.0.0.1:2283 | Tailscale Serve | `lab-immich.*.ts.net` |
 | STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |

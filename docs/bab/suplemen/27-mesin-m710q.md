@@ -91,7 +91,7 @@ HDMI jalan
 | Disk | Peran | Sistem berkas | Catatan |
 |---|---|---|---|
 | NVMe Samsung MZALQ512HALU-000L2 (476,9 GB) | Sistem Proxmox + disk VM (local-lvm) | ext4 | Proxmox sudah berjalan; `local` dan `local-lvm` aktif |
-| HDD Seagate Surveillance 2 TB (unit 1) | Calon disk data / datastore PBS | Belum dipilih | Belum tersambung; enclosure lama ditemukan tetapi belum diuji. Identifikasi model/kondisi sebelum dipakai |
+| HDD Seagate Surveillance 2 TB (unit 1) | Storage Proxmox `backup-disk` untuk datastore VM PBS | ext4 pada GPT; UUID `f1420efd-4618-4804-8b6b-4f924f31f36c` | Terhubung melalui USB; SMART attributes overall PASSED dengan keterbatasan USB bridge; PBS VM 212 sedang installer (2 Nov 2026) |
 | HDD Seagate Surveillance 2 TB (unit 2) | Ditunda | — | Enclosure yang tersedia hanya single-bay; peran unit ini belum ditentukan |
 
 **Anggaran ruang NVMe 500 GB.** Disk VM dibuat tipis (thin), jadi ruang terpakai mengikuti isi, bukan ukuran yang diminta. Tetap hitung: sekitar 10-15 VM dengan sistem 4-8 GB aktual, ditambah image Docker dan data aplikasi. Contoh di bab layanan memakai disk data besar (musik 200 GiB di Bab 53, foto 300 GiB di Bab 55, datastore PBS 200 GiB di Bab 50). **Jangan menaruh semuanya di NVMe.** Saran:
@@ -103,7 +103,7 @@ HDMI jalan
 | Pustaka musik (VM 211) | NVMe atau HDD, 80-100 GiB | 80 GiB |
 | Datastore PBS (VM 212) | **HDD 2 TB** | 1-1,5 TB |
 
-**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci; keduanya dinyatakan aman. Satu HDD belum diformat sehingga sebelumnya tidak muncul di Windows. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi HDD 3,5 inci akan dipakai melalui koneksi luar. Enclosure yang tersedia single-bay dan belum diuji; rencana sementara memakai satu HDD dahulu dan menunda yang kedua. Pastikan enclosure memiliki catu daya sendiri. Pilih peruntukan disk setelah model dan kondisi diverifikasi. Jangan mencabut disk saat backup berjalan. Catat model (dan serial secara lokal, jangan di repo) agar tidak salah pilih saat menyiapkan storage.
+**Menghubungkan HDD pertama.** Anda memiliki dua HDD Seagate Surveillance 2 TB berukuran 3,5 inci. M710q Tiny hanya menyediakan satu bay SATA 2,5", jadi HDD 3,5 inci dipakai melalui enclosure USB bercatu daya. Pada 2 Nov 2026, HDD unit 1 (model ST2000VX008-2E3164) terdeteksi sebagai `/dev/sda`, diperiksa sebelum digunakan, lalu dibuat GPT/ext4 sebagai storage `backup-disk`; PBS VM 212 sedang installer. Jangan cabut disk saat VM/storage aktif atau backup berjalan. Serial dicatat lokal di host, bukan repo. HDD unit 2 masih menunggu enclosure.
 
 > Disk tunggal bukan backup. Backup VM ke HDD 2 TB (Bab 50), ditambah satu salinan lagi di media lain (Bab 50.13).
 

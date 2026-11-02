@@ -34,25 +34,21 @@ kebobolan)
 
 ## 50.2 Menyiapkan disk fisik untuk datastore (host)
 
-Di web Proxmox buka node &gt; Disks. Disk kedua (bukan yang berisi Proxmox) harus kosong. Bila ada isi lama:  
+Di web Proxmox buka node &gt; Disks. Pilih HDD unit 1 yang bukan disk Proxmox. Wipe menghapus seluruh isi; verifikasi model/serial dan salinan data sebelum melanjutkan. Bila ada isi lama:
 pilih disk &gt; Wipe Disk (menghapus semuanya, pastikan disk yang benar). Lalu buat penyimpanan di atasnya:  
-1. Node &gt; Disks &gt; Directory &gt; Create: Directory. Pilih disk kedua, filesystem ext4, nama backup-disk. Biarkan  
+1. Node &gt; Disks &gt; Directory &gt; Create: Directory. Pilih HDD unit 1, filesystem ext4, nama backup-disk. Biarkan
 Add Storage tercentang.  
 2. Hasilnya penyimpanan backup-disk tampil di Datacenter &gt; Storage. Di sinilah disk virtual datastore PBS akan  
 dibuat.  
 CATATAN  
-Disk kedua adalah HDD 2 TB (bay 2,5" atau USB; lihat Bab 27.4). Datastore PBS wajib di perangkat fisik berbeda dari NVMe sistem.  
+HDD unit 1 2 TB terhubung melalui USB; Proxmox Directory storage `backup-disk` sudah dibuat ext4 dan dipasang di `/mnt/pve/backup-disk`. VM 212 memakai qcow2 sparse 1.5 TiB untuk datastore guest. USB dapat terputus; pastikan storage online sebelum backup.
 
 ## 50.3 Mengunduh ISO dan membuat VM pbs
 
-1. Unduh ISO Proxmox Backup Server terbaru dari proxmox.com/en/downloads (dokumentasi resmi yang saya  
-baca mencantumkan rilis 4.1; nomor terbaru [BELUM PASTI]).  
-2. Di Proxmox: node &gt; storage local &gt; ISO Images &gt; Upload, pilih ISO PBS.  
-3. Klik Create VM: VM ID 212, Name pbs, ISO PBS. System bawaan. Disks: SCSI 32 GiB di local-lvm untuk  
-sistem. CPU 2 inti. Memory 2048 (perkiraan [BELUM PASTI]). Network vmbr0, VirtIO.  
-4. Setelah VM terbentuk: Hardware &gt; Add &gt; Hard Disk: Storage backup-disk, ukuran sesuai kebutuhan (mulai  
-dari 200 GiB; ukuran bergantung total data dan retensi).  
-5. Nyalakan VM dan buka Console.  
+1. Gunakan ISO PBS 4.2-1 resmi. ISO lokal pengguna telah diverifikasi SHA256 terhadap checksum resmi, lalu disalin ke storage local pada host.
+2. VM 212 `pbs` sudah dibuat dari ISO ini dan berjalan pada installer.
+3. Konfigurasi: 2 vCPU, 2 GiB RAM, VirtIO NIC, QEMU agent enabled. Disk OS SCSI 32 GiB di local-lvm; disk datastore qcow2 sparse 1.5 TiB di `backup-disk`.
+4. VM running dari installer dengan urutan boot ISO dahulu; buka Console dan selesaikan instalasi secara interaktif.
 PERINGATAN  
 Pada pemasangan nanti, pilih disk 32 GiB sebagai target sistem. Disk besar jangan dipilih; ia dipakai untuk datastore  
 sesudah pemasangan.  

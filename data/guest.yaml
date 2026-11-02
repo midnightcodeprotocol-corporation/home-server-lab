@@ -12,13 +12,13 @@ host:
   ip_sementara: 192.168.0.200
   gateway_sementara: 192.168.0.1
   dns_sementara: 192.168.0.1
-  disk_data: "HDD Seagate ST2000VX008-2E3164 unit 1 sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang 1 Nov terlihat sebagai /dev/sda 2.00 TB NTFS, SMART PASSED; setelah dipasang ulang periksa identitas/kondisi/isi dan konfigurasi storage sesuai keputusan; jangan format sebelum konfirmasi data. HDD unit 2 menunggu enclosure"
+  disk_data: "HDD Seagate ST2000VX008-2E3164 serial Z52655EN unit 1 terhubung USB; SMART attributes overall PASSED (USB bridge incomplete status registers), 31°C, 0 reallocated/pending sectors. NTFS sebelumnya root hanya System Volume Information (159 MB used); diformat GPT/ext4 sesuai rencana PBS, UUID f1420efd-4618-4804-8b6b-4f924f31f36c, Proxmox Directory storage backup-disk aktif di /mnt/pve/backup-disk. HDD unit 2 menunggu enclosure"
   docker_di_host: false
 templat:
   - {vmid: 200, nama: Template-VM, jenis: vm, status: "template aktif, stopped; SSH host key dibersihkan; machine ID VM direset dan diuji melalui clone 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "QEMU Guest Agent aktif; paket lainnya belum dicatat"}
   - {vmid: 100, nama: Template-CT, jenis: lxc, status: "template aktif, stopped; SSH host key dibersihkan; keunikan identitas clone diuji 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, storage: "local-lvm", unprivileged: true, nesting: true, bridge: "vmbr0", firewall: true, ipv4: "DHCP"}
 guest:
-  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ip_sementara: null, status: "stopped pada audit 2 Nov 2026; onboot=0; IP aktual tidak tersedia; Docker CE 29.9.2 dan Compose 5.6.1 terpasang sebelumnya; target .20 belum dialokasikan", cpu: 2, ram_mb: 2048, isi: "Rencana lama: Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Rencana lama: Caddy 80/443"}
+  - {vmid: 201, nama: docker-core, jenis: vm, ip: null, ip_sementara: null, ip_status: "stopped; target .20 dialihkan pengguna ke CT104; tidak ada IP aktif", status: "stopped pada audit 2 Nov 2026; onboot=0; Docker CE 29.9.2/Compose 5.6.1 terpasang sebelumnya; VM tidak digunakan saat ini", cpu: 2, ram_mb: 2048, isi: "Rencana lama: Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Rencana lama: Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ip_sementara: null, ip_status: "lease DHCP aktif di .21, diverifikasi 2 Nov melalui neighbor table dan HTTP; pengguna melaporkan reservasi MikroTik dibuat", status: "VM dibuat dan running 2 Nov 2026; HAOS 18.4 resmi, SHA256 cocok; 2 vCPU, 2048 MiB RAM, UEFI, disk 32 GiB local-lvm, onboot=1; .21 merespons ping dan HTTP onboarding; wizard admin selesai menurut pengguna; QEMU Guest Agent tidak aktif", ram_mb: 2048, isi: "Home Assistant OS 18.4", port: [8123]}
   - {vmid: 203, nama: k3s, jenis: vm, ip: 192.168.88.22, ram_mb: 3072, isi: "k3s + Flux", port: [6443]}
   - {vmid: 204, nama: git, jenis: vm, ip: 192.168.88.23, ram_mb: 1024, isi: "Forgejo + Renovate", port: [3000, 2222]}
@@ -29,7 +29,7 @@ guest:
   - {vmid: 209, nama: web, jenis: vm, ip: 192.168.88.28, ram_mb: 1536, isi: "situs statis + WordPress", port: [8081, 8082]}
   - {vmid: 210, nama: web-public, jenis: vm, ip: 192.168.88.29, ram_mb: 768, isi: "cloudflared + situs statis publik (opsional)", akses: "Cloudflare Tunnel keluar; tidak boleh ke LAN"}
   - {vmid: 211, nama: music, jenis: vm, ip: 192.168.88.31, ram_mb: 1024, isi: "Navidrome", akses: "Tailscale Serve lab-music"}
-  - {vmid: 212, nama: pbs, jenis: vm, ip: 192.168.88.30, ram_mb: 2048, isi: "Proxmox Backup Server", port: [8007]}
+  - {vmid: 212, nama: pbs, jenis: vm, ip: null, ip_rencana: 192.168.88.30, ip_status: "target plan .30; VM installer belum diselesaikan dan DHCP lease belum diperiksa", ram_mb: 2048, isi: "Proxmox Backup Server 4.2; VM dibuat/running dari installer; OS disk 32 GiB local-lvm, datastore virtual 1.5 TiB di backup-disk; belum dikonfigurasi", port: [8007]}
   - {vmid: 213, nama: sso, jenis: vm, ip: 192.168.88.32, ram_mb: 1024, isi: "Pocket ID", akses: "Tailscale Serve lab-sso"}
   - {vmid: 214, nama: immich, jenis: vm, ip: 192.168.88.33, ram_mb: 6144, isi: "Immich", akses: "Tailscale Serve lab-immich"}
   - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_status: "statis di konfigurasi CT dan interface aktif, terverifikasi 2 Nov 2026", status: "running, onboot=1; wizard selesai 2 Nov; AdGuardHome mendengarkan TCP/UDP 53 dan UI TCP 80; kueri A/AAAA dari Proxmox dan laptop lulus; DNS `.11` dibagikan via DHCP menurut output ipconfig laptop", cpu: 1, ram_mb: 512, isi: "AdGuard Home kedua; DNS `.11` dibagikan oleh DHCP MikroTik menurut output lease laptop 2 Nov"}
