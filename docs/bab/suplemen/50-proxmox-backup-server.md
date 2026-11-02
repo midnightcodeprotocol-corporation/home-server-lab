@@ -1,6 +1,6 @@
 # Bab 50. Proxmox Backup Server
 
-> **Status 2 November 2026.** Pengguna memutuskan kedua HDD 2 TB digunakan untuk data aplikasi; backup ditunda. PBS 212 selesai dipasang menurut pengguna, tetapi `192.168.88.30:8007` belum terjangkau dari host pada audit. Disk virtual 1.5 TiB di atas HDD masih terpasang tanpa datastore/backup; jangan format atau membuat datastore di sana. Disk backup sementara 100 GiB pada NVMe masih berupa rencana.
+> **Status 2 November 2026.** Pengguna memutuskan kedua HDD 2 TB digunakan untuk data aplikasi; backup sementara memakai NVMe. PBS 212 di `.30` telah diuji ping 3/3 dan HTTPS 8007 HTTP 200 setelah hard reset. Volume disk qcow2 1.5 TiB pada HDD dilepas dari VM tanpa dihapus. Disk virtual baru 100 GiB dari `local-lvm`/NVMe terpasang sebagai scsi1, belum dibuat datastore atau backup.
 
 PENEMPATAN - BARU - VM sendiri  
 Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 200).  
@@ -19,7 +19,7 @@ server tidak bisa membacanya.
 Keputusan Pilihan buku ini Alasan  
 Tempat PBS VM 212 di host yang sama Satu mesin tersedia; ditutup oleh salinan kedua  
 50.13  
-Datastore Sementara pada NVMe; HDD untuk aplikasi Pengguna mengubah prioritas; kapasitas datastore 100 GiB masih rencana dan belum dialokasikan
+Datastore Sementara pada NVMe; HDD untuk aplikasi Pengguna mengubah prioritas; disk virtual 100 GiB sudah terpasang; datastore belum dibuat
 Jenis disk SSD bila ada; HDD diterima dengan harapan  
 lambat  
 Dokumentasi PBS menyarankan penyimpanan  
@@ -33,20 +33,20 @@ kebobolan)
 
 ## 50.2 Menyiapkan disk fisik untuk datastore (host)
 
-**Keputusan terbaru pengguna:** kedua HDD dialokasikan untuk data aplikasi; backup ditunda. Jangan ikuti prosedur wipe untuk HDD yang ada. HDD unit 1 sudah menjadi GPT/ext4 Proxmox Directory storage `backup-disk` di `/mnt/pve/backup-disk`; volume qcow2 sparse 1.5 TiB masih terpasang ke PBS 212 dan belum menjadi datastore. Untuk mengalihkan HDD, matikan VM, lepaskan disk virtual dari konfigurasi **tanpa menghapus volumenya**, lalu siapkan struktur storage aplikasi. Disk backup sementara 100 GiB pada NVMe masih rencana dan belum dialokasikan.
+**Keputusan terbaru pengguna:** kedua HDD dialokasikan untuk data aplikasi; backup sementara di NVMe. HDD unit 1 sudah GPT/ext4 pada Proxmox Directory storage `backup-disk` di `/mnt/pve/backup-disk`. Volume qcow2 sparse 1.5 TiB telah dilepas dari PBS 212 tanpa dihapus; disk virtual 100 GiB NVMe kini terpasang sebagai scsi1. Belum ada datastore. HDD dapat disiapkan untuk aplikasi tanpa memformat ulang.
 ## 50.3 Mengunduh ISO dan membuat VM pbs
 
 1. Gunakan ISO PBS 4.2-1 resmi. ISO lokal pengguna telah diverifikasi SHA256 terhadap checksum resmi, lalu disalin ke storage local pada host.
 2. VM 212 `pbs` sudah dibuat dari ISO ini; instalasi selesai menurut pengguna dan VM masih running.
-3. Konfigurasi: 2 vCPU, 2 GiB RAM, VirtIO NIC, QEMU agent enabled. Disk OS SCSI 32 GiB di local-lvm; disk datastore qcow2 sparse 1.5 TiB di `backup-disk`.
-4. Instalasi selesai menurut pengguna; VM berjalan dan ISO sudah dilepas. Ringkasan installer menampilkan `.30/24`, gateway `.1`, DNS `.3`; akses guest belum terjangkau dari host saat audit.
+3. Konfigurasi saat ini: 2 vCPU, 2 GiB RAM, VirtIO NIC, QEMU agent enabled. Disk OS SCSI 32 GiB dan disk datastore sementara 100 GiB (scsi1) berada di `local-lvm`; keduanya thin-provisioned. Disk qcow2 1.5 TiB pada HDD sudah dilepas dari VM tanpa menghapus file volumenya.
+4. Instalasi selesai menurut pengguna; VM berjalan dan ISO sudah dilepas. Ringkasan installer menampilkan `.30/24`, gateway `.1`, DNS `.3`; setelah hard reset, ping 3/3 dan HTTPS 8007 HTTP 200 dari host.
 PERINGATAN  
 Pada pemasangan nanti, pilih disk 32 GiB sebagai target sistem. Disk besar jangan dipilih; ia dipakai untuk datastore  
 sesudah pemasangan.  
 
 ## 50.4 Pemasangan PBS
 
-Installer PBS selesai menurut laporan pengguna. Pengaturan yang ditampilkan: target OS 32 GiB, zona Asia/Jakarta, hostname `pbs`, IP `192.168.88.30/24`, gateway `.1`, DNS `.3`. ISO telah dilepas dari CD/DVD. Namun ping dan akses HTTPS 8007 ke `.30` gagal dari host saat audit; lanjutkan troubleshooting di Console sebelum menyetel datastore.
+Installer PBS selesai menurut laporan pengguna. Pengaturan yang ditampilkan: target OS 32 GiB, zona Asia/Jakarta, hostname `pbs`, IP `192.168.88.30/24`, gateway `.1`, DNS `.3`. Setelah hard reset, ping 3/3 dan HTTPS 8007 HTTP 200 dari host. Disk virtual 100 GiB pada NVMe telah ditambahkan ke VM; datastore belum dibuat.
 ## 50.5 Pasca-instalasi
 
 1. Dari laptop buka https://192.168.88.30:8007 (setujui peringatan sertifikat). Masuk: User root, Realm Linux  
@@ -62,9 +62,8 @@ No-Subscription. Pesan peringatan tanpa langganan di login boleh diabaikan.
 ```
 lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
 ```
-> Penjelasan: Mengenali disk besar yang kosong (misalnya sdb) dan membedakannya dari disk sistem 32 GiB.
-1. Di web PBS buka Administration &gt; Storage / Disks &gt; Directory &gt; Create: Directory. Disk: disk besar tadi,  
-filesystem ext4, nama store1, dan biarkan Add as Datastore tercentang.  
+> Penjelasan: Kenali disk data sekitar 100 GiB dan bedakan dari disk sistem 32 GiB. Jangan pilih disk 1.5 TiB; disk HDD sudah dilepas dari guest. Pastikan `lsblk` menunjukkan disk 100 GiB yang baru ditambahkan.
+1. Di web PBS buka Administration &gt; Storage / Disks &gt; Directory &gt; Create: Directory. Pilih disk sekitar 100 GiB yang telah dipastikan lewat `lsblk`, filesystem ext4, nama `store1`, lalu centang Add as Datastore. Jangan pilih disk 32 GiB OS.
 2. Datastore store1 muncul di panel kiri. Alternatif baris perintah (sintaks belum saya verifikasi [BELUM PASTI]):  
 proxmox-backup-manager disk fs create store1 --disk sdb --filesystem ext4 --add-datastore true.  
 

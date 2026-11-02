@@ -30,7 +30,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE, Nextcloud
-- [ ] PBS VM212 terpasang menurut pengguna; VM berjalan, ISO terlepas. Installer menampilkan `.30`, tetapi ping/HTTPS 8007 belum berhasil dari host. OS disk 32 GiB local-lvm; disk 1.5 TiB HDD masih terpasang tanpa datastore. Lepas disk HDD dari VM tanpa menghapus volume; pertimbangkan 100 GiB backup sementara dari NVMe. Belum ada backup/restore test.
+- [ ] PBS VM212 terpasang, `.30` ping 3/3 dan HTTPS 8007 HTTP 200 setelah hard reset. Disk HDD 1.5 TiB dilepas dari VM tanpa menghapus volume; disk virtual 100 GiB NVMe terpasang tetapi datastore/backup belum dibuat. Pastikan datastore dibuat pada disk 100 GiB saja. Belum ada backup/restore test.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
