@@ -25,7 +25,7 @@
 | VM 211 music | .31 | 127.0.0.1:4533 | Tailscale Serve | `lab-music.*.ts.net` |
 | VM 212 pbs | `192.168.88.30` (ping 3/3, HTTPS HTTP 200 dari host setelah hard reset) | 8007 HTTPS | host .10 dan admin | `https://192.168.88.30:8007` |
 | VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
-| VM 214 immich | .33 | 127.0.0.1:2283 | Tailscale Serve | `lab-immich.*.ts.net` |
+| VM 214 (slot lama Immich) | .33 target lama, belum dibuat | — | — | Immich dialihkan ke CT104; lihat baris CT104 |
 | STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
 | Agen Beszel | tiap mesin | 45876 | hanya dari .20 | |
 
@@ -34,7 +34,7 @@ Nama PBS diakses lewat **IP**, bukan nama: rewrite `*.home.arpa` mengarahkan nam
 ## Matriks siapa boleh ke mana (Bab 51.2)
 - Semua VM: SSH hanya dari IPSet `admin` (PC kabel 192.168.88.252, laptop, alamat CT103).
 - VM di belakang Caddy: port layanan hanya dari `192.168.88.20`.
-- VM 205, 211, 213, 214: tidak ada port layanan di LAN.
+- VM 205, 211, 213, 214: slot target, belum ada port layanan aktif di LAN.
 - VM 210: tidak boleh keluar ke LAN selain DNS.
 
 ## Nama domain

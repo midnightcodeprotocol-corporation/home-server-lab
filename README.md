@@ -78,7 +78,7 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Se
 | VM 208 / 209 | `.27 / .28` | n8n / situs privat + WordPress |
 | VM 210 | `.29` | Situs statis publik opsional; akses melalui tunnel keluar |
 | VM 212 / 211 | `.30` aktif / `.31` target | PBS 4.2; disk 100 GiB NVMe, `store1` dilaporkan dibuat; disk HDD 1.5 TiB dilepas dari VM / Navidrome rencana |
-| VM 213 / 214 | `.32 / .33` | Pocket ID / Immich |
+| VM 213 / 214 | `.32` target / belum dialokasikan | Pocket ID target / slot Immich lama; Immich sedang disiapkan di CT104 |
 | VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
 | CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
