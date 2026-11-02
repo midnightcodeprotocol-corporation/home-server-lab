@@ -19,7 +19,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] HDD unit 1 sengaja sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang sebelumnya terlihat NTFS/S.M.A.R.T. PASSED. Saat dipasang kembali, periksa identitas dan isi read-only sebelum menetapkan storage. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
-- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, AdGuard Home aktif; setup admin selesai menurut pengguna. Uji DNS langsung ke `.11`, baru pertimbangkan DNS DHCP failover.
+- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, service AdGuard aktif, tetapi installer masih terbuka di `/install.html`; port 53 belum listen dan kueri A/AAAA ditolak. Selesaikan installer, lalu uji DNS langsung sebelum mempertimbangkan DNS DHCP failover. DHCP tetap memakai DNS utama `.3`.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
 - [ ] CT104 aktif `.101`; Portainer 2.45.3 UI/API HTTP 200 dan setup selesai menurut pengguna; Jellyfin healthy di TCP 8096 dan setup selesai menurut pengguna. Media kosong; verifikasi reservasi DHCP CT104 dan pasang HDD sebelum mengatur storage/media.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
