@@ -178,4 +178,5 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Pengguna melaporkan `ping -c 4 192.168.88.1` ulang: 4/4 diterima, 0% loss, RTT rata-rata 0.343 ms.
 - Pengguna menjalankan `apt update`; repo Debian trixie, security, updates, dan repo Proxmox `http://download.proxmox.com/debian/pve trixie InRelease` seluruhnya berhasil (`Hit`/`Get`). Output akhir: `Fetched 384 kB in 2s (244 kB/s)` dan `3 packages can be upgraded`.
 - Akses internet dan repo Proxmox dinyatakan bekerja oleh pengguna pada pengujian terbaru. Kegagalan akses spesifik `117.120.5.231` dan ICMP unreachable sebelumnya tidak terulang pada update ini; penyebab insiden sebelumnya belum diketahui.
-- Belum ada upgrade paket yang dilakukan. Lanjutkan dengan meninjau `apt list --upgradable` sebelum menentukan perubahan sistem.
+- Pengguna menjalankan `apt list --upgradable`; tersedia `libnss3` (`2:3.110-1+deb13u4` → `2:3.110-1+deb13u5`), `vim-common` (`2:9.1.1230-2` → `2:9.1.1230-2+deb13u1`), dan `vim-tiny` (versi yang sama naik ke `2:9.1.1230-2+deb13u1`). Ketiganya dari `stable-security`.
+- Belum ada upgrade paket yang dilakukan. Langkah berikutnya simulasi `apt-get -s upgrade` untuk meninjau rencana perubahan sebelum memutuskan penerapan.

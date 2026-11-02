@@ -10,7 +10,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
-- [x] APT update pada 2 Nov berhasil mengakses repo Debian dan Proxmox; konektivitas internet host terverifikasi. Gangguan sementara ke `117.120.5.231` sebelumnya tidak terulang; penyebabnya tidak diketahui. 3 paket dapat di-upgrade, daftar perlu ditinjau sebelum upgrade.
+- [x] APT update pada 2 Nov berhasil mengakses repo Debian dan Proxmox; konektivitas internet host terverifikasi. Gangguan sementara ke `117.120.5.231` sebelumnya tidak terulang; penyebabnya tidak diketahui. Daftar paket ditinjau: tiga update security (`libnss3`, `vim-common`, `vim-tiny`) tersedia; simulasikan sebelum upgrade.
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.

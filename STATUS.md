@@ -21,7 +21,7 @@
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Lihat tiga paket yang tersedia untuk upgrade dengan perintah baca-saja `apt list --upgradable`; tinjau daftar sebelum memutuskan menjalankan upgrade.
+1. Jalankan simulasi baca-saja `apt-get -s upgrade` untuk melihat dampak tiga pembaruan keamanan yang tersedia; tinjau hasil sebelum menerapkan.
 2. Buka `https://192.168.88.10:8006` dan pastikan guest CT101, CT104, VM201 mendapat alamat LAN rumah; alamat guest final belum boleh diasumsikan.
 3. Pastikan DHCP MikroTik hanya membagikan DNS yang sudah aktif. AdGuard CT101 `.11` belum diverifikasi aktif; jangan jadikan DNS cadangan sampai diuji.
 4. Buat DHCP reservation/IP final CT104 di MikroTik, lalu buka Portainer di HTTPS port 9443 dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
@@ -31,7 +31,7 @@
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
-- APT update terbaru berhasil menjangkau repo Debian dan Proxmox; uji konektivitas saat ini lulus. Kegagalan akses sebelumnya pada `117.120.5.231` dan unreachable dari `172.30.100.1` bersifat historis/tidak terulang; penyebabnya belum diketahui. Ada 3 paket yang dapat di-upgrade; paket belum di-upgrade. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
+- APT update terbaru berhasil menjangkau repo Debian dan Proxmox; uji konektivitas saat ini lulus. Kegagalan akses sebelumnya pada `117.120.5.231` dan unreachable dari `172.30.100.1` bersifat historis/tidak terulang; penyebabnya belum diketahui. Tiga paket keamanan tersedia (`libnss3`, `vim-common`, `vim-tiny`); belum di-upgrade. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
 - HDD unit 1 terlihat tetapi belum mounted/dikonfigurasi; isi partisi NTFS dan peran storage belum diputuskan. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard CT101 belum diaktifkan/dikonfigurasi; AdGuard utama STB `.3` sudah merespons kueri DNS langsung. Konektivitas jaringan rumah belum diverifikasi, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.
