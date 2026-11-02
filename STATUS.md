@@ -3,8 +3,8 @@
 **Terakhir diperbarui:** 2 November 2026
 
 ## Posisi sekarang
-- **Status pekerjaan:** konektivitas dasar ke MikroTik diverifikasi; diagnosis akses repo Proxmox sedang berjalan. Pemasangan layanan tetap dijeda. Perubahan progres tersimpan lokal tetapi belum tersinkron ke GitHub karena `git push` gagal me-resolve `github.com` (`Could not resolve host: github.com`).
-- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; `getent hosts` dan `getent ahostsv4` berhasil mengembalikan alamat IPv6 dan IPv4. Repo Debian/security berhasil diakses oleh APT dan HTTPS ke `deb.debian.org` membalas HTTP/2 200, tetapi repo Proxmox gagal pada HTTP port 80 dan HTTPS port 443. `ip route get 117.120.5.231` memilih gateway `.1` lewat `vmbr0` dengan sumber `.10`; ping tujuan dari Proxmox dan MikroTik menerima `Destination Host Unreachable` dari `172.30.100.1`/timeout. Ping Proxmox ke gateway LAN MikroTik `.1` lulus 4/4; alamat DNS repo terkini perlu diperiksa sebelum langkah berikutnya. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
+- **Status pekerjaan:** konektivitas dasar ke MikroTik dan internet Proxmox diverifikasi; `apt update` terbaru berhasil mengakses repo Debian dan Proxmox. Pemasangan layanan tetap dijeda. Dokumentasi perubahan masih tersimpan lokal; push sebelumnya gagal me-resolve `github.com`.
+- Jaringan rumah memakai MikroTik, access point, dan STB AdGuard. STB dipindah melalui static DHCP lease dari `.253` ke `192.168.88.3`; kueri DNS langsung ke `.3` berhasil. MikroTik membagikan `.3` sebagai DNS dan laptop menerimanya. Panel Proxmox terbuka di `192.168.88.10:8006`; DNS host diarahkan ke `.3`; resolusi DNS IPv4/IPv6 berhasil. `apt update` terakhir (2 Nov) berhasil mengambil `trixie`, `trixie-security`, `trixie-updates`, dan `download.proxmox.com`; daftar paket lengkap diperbarui, 3 paket tercatat dapat di-upgrade. Uji lebih awal ke `117.120.5.231` gagal dengan `Destination Host Unreachable` dari `172.30.100.1` baik dari Proxmox maupun WinBox, tetapi gangguan tersebut tidak terulang pada apt update terbaru; sebab gangguan lama belum diketahui. Ping LAN ke gateway `.1` lulus 4/4. Kabel Proxmox ke switch port 3; switch port 1 uplink ke MikroTik ether4; ether2 MikroTik kosong (calon WAN2).
 - Mini PC server **Lenovo ThinkCentre M710q** sudah tersedia (Intel Core i5-6500T, 4 core/4 thread).
 - RAM 16 GB + 8 GB terpasang; Linux Proxmox melaporkan **23 GiB**. BIOS dan MemTest86 belum diperiksa.
 - NVMe Samsung MZALQ512HALU-000L2 terdeteksi sebagai `nvme0n1` berukuran **476,9 GB**; Proxmox berjalan.
@@ -21,7 +21,7 @@
 - Rencana jangka lanjut: pengguna ingin memakai ether2 MikroTik untuk modem WAN cadangan bila IndiHome mati. Ether2 MikroTik kosong dan menjadi calon WAN modem cadangan; failover belum dikonfigurasi.
 
 ## Langkah berikutnya
-1. Jalankan `getent ahostsv4 download.proxmox.com` di Proxmox untuk memeriksa alamat IPv4 DNS terkini dan bandingkan dengan `117.120.5.231` yang gagal.
+1. Lihat tiga paket yang tersedia untuk upgrade dengan perintah baca-saja `apt list --upgradable`; tinjau daftar sebelum memutuskan menjalankan upgrade.
 2. Buka `https://192.168.88.10:8006` dan pastikan guest CT101, CT104, VM201 mendapat alamat LAN rumah; alamat guest final belum boleh diasumsikan.
 3. Pastikan DHCP MikroTik hanya membagikan DNS yang sudah aktif. AdGuard CT101 `.11` belum diverifikasi aktif; jangan jadikan DNS cadangan sampai diuji.
 4. Buat DHCP reservation/IP final CT104 di MikroTik, lalu buka Portainer di HTTPS port 9443 dan buat akun administrator sendiri; jangan kirim kata sandinya ke chat atau repo.
@@ -31,7 +31,7 @@
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
-- Resolusi IPv4 dan IPv6 DNS host berhasil; repo Debian/security serta HTTPS umum ke `deb.debian.org` dapat diakses, tetapi repo Proxmox pada HTTP port 80 maupun HTTPS port 443 tidak terjangkau. Rute host memilih gateway MikroTik yang benar dan ping host-ke-gateway lulus. Ping tujuan dari host maupun MikroTik tidak menerima balasan; `172.30.100.1` mengirim `Destination Host Unreachable`. DNS IPv4 terkini repo dan penyebab upstream perlu dipastikan. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
+- APT update terbaru berhasil menjangkau repo Debian dan Proxmox; uji konektivitas saat ini lulus. Kegagalan akses sebelumnya pada `117.120.5.231` dan unreachable dari `172.30.100.1` bersifat historis/tidak terulang; penyebabnya belum diketahui. Ada 3 paket yang dapat di-upgrade; paket belum di-upgrade. DNS sekunder DHCP `.11` belum terverifikasi aktif dan perlu dipastikan tidak dibagikan dulu.
 - HDD unit 1 terlihat tetapi belum mounted/dikonfigurasi; isi partisi NTFS dan peran storage belum diputuskan. HDD unit 2 menunggu enclosure; belum ada backup server.
 - Wizard admin Portainer pada CT104 belum diselesaikan; Tailscale, Jellyfin, Grafana, Immich, dan Home Assistant belum diverifikasi/dipasang. Enclosure dan HDD belum diuji. AdGuard CT101 belum diaktifkan/dikonfigurasi; AdGuard utama STB `.3` sudah merespons kueri DNS langsung. Konektivitas jaringan rumah belum diverifikasi, firewall layanan, backup, dan pemulihan belum disiapkan.
 - Terapkan profil RAM 24 GB Bab 56 secara konservatif dan pantau penggunaan nyata.

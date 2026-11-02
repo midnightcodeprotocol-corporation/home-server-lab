@@ -172,3 +172,10 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Pengguna menjalankan `ping -c 4 192.168.88.1` dari Proxmox. Hasil 4/4 diterima, 0% loss, RTT rata-rata 0.343 ms (min 0.283, maks 0.422 ms). Konektivitas host ke gateway LAN MikroTik terverifikasi.
 - Screenshot WinBox Tools > Ping ke `117.120.5.231`: 0/10 diterima (100% loss); sequence 0, 3, 6, 9 mendapat host unreachable dari `172.30.100.1`; sequence lainnya timeout. Router MikroTik juga belum dapat mencapai target tersebut pada uji ICMP.
 - Temuan ini mempersempit masalah ke jalur WAN/upstream atau tujuan/IP target; belum membuktikan penyebabnya. Langkah berikutnya cek hasil DNS IPv4 terkini `download.proxmox.com` dari host Proxmox dan hindari mengubah rute/firewall sampai IP tujuan dipastikan. Belum ada perubahan konfigurasi router atau host.
+
+## Uji ulang koneksi internet dan repo paket — 2 November 2026
+
+- Pengguna melaporkan `ping -c 4 192.168.88.1` ulang: 4/4 diterima, 0% loss, RTT rata-rata 0.343 ms.
+- Pengguna menjalankan `apt update`; repo Debian trixie, security, updates, dan repo Proxmox `http://download.proxmox.com/debian/pve trixie InRelease` seluruhnya berhasil (`Hit`/`Get`). Output akhir: `Fetched 384 kB in 2s (244 kB/s)` dan `3 packages can be upgraded`.
+- Akses internet dan repo Proxmox dinyatakan bekerja oleh pengguna pada pengujian terbaru. Kegagalan akses spesifik `117.120.5.231` dan ICMP unreachable sebelumnya tidak terulang pada update ini; penyebab insiden sebelumnya belum diketahui.
+- Belum ada upgrade paket yang dilakukan. Lanjutkan dengan meninjau `apt list --upgradable` sebelum menentukan perubahan sistem.
