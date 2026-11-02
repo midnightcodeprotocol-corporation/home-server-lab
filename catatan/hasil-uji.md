@@ -223,3 +223,12 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 
 - Pengguna melaporkan mengubah daftar DNS pada network DHCP LAN `192.168.88.0/24` menjadi `192.168.88.3` dan `192.168.88.11`; perubahan router belum diverifikasi langsung melalui WinBox/CLI oleh Codex.
 - Langkah verifikasi: renew lease Ethernet laptop dan periksa `ipconfig /all` untuk memastikan kedua DNS diterima; kemudian jalankan `nslookup google.com` tanpa menyebut server agar DNS klien default ikut diuji.
+
+
+## Checkpoint jeda konfigurasi Proxmox/MikroTik — 2 November 2026
+
+- Pengguna meminta jeda sampai kembali ke rumah untuk mematikan perangkat dan membersihkan area server. Pada saat checkpoint, Proxmox dan guest berjalan; pengguna belum melaporkan perangkat sudah dimatikan.
+- Audit Proxmox terakhir: storage local dan local-lvm aktif; tidak ada upgrade paket tertunda; CT101, CT104, VM202 running, VM201 stopped. CT104 .101 DHCP, MAC BC:24:11:25:14:4B; Docker menampilkan Portainer Up dan Jellyfin Up (healthy). IP .20 tidak terlihat pada neighbor cache dan tidak membalas dua ping, tetapi konflik alamat belum diverifikasi lengkap lewat DHCP lease MikroTik.
+- Pengguna memilih .20 sebagai IP final CT104. Belum ada perubahan jaringan di CT104, reservation MikroTik, restart, atau downtime layanan.
+- Kelanjutan setelah di rumah: verifikasi .20 kosong pada WinBox DHCP leases/ARP, reserve MAC CT104 ke .20, lalu reboot CT104 dan cek akses Portainer/Jellyfin. DHCP DNS .3 + .11 sudah diverifikasi diterima laptop; jangan ubah.
+- MikroTik SSH gagal negosiasi, WinBox UI automation unavailable. Ether2 MikroTik masih kosong untuk rencana modem WAN backup. HDD 2 TB sedang tidak terpasang; jangan konfigurasi storage sampai disk tersedia dan isinya diaudit.

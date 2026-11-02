@@ -21,7 +21,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. DHCP membagikan `.3` + `.11` dan laptop menerima keduanya; kueri default lulus via `.3`. Failover ketika `.3` unavailable belum disimulasikan. CT104 masih lease `.101`; tetapkan IP final dan reservation, jangan anggap lease dinamis sebagai final.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
-- [ ] CT104 aktif `.101`; Portainer 2.45.3 UI/API HTTP 200 dan setup selesai menurut pengguna; Jellyfin healthy di TCP 8096 dan setup selesai menurut pengguna. Media kosong; tetapkan IP final/reservasi DHCP CT104 (lease `.101` belum final) dan pasang HDD sebelum mengatur storage/media.
+- [ ] CT104 aktif sementara `.101`; Portainer dan Jellyfin berjalan. Pengguna memilih target `.20` (belum diterapkan). Setelah kembali: cek konflik di WinBox dan reservasi MAC `BC:24:11:25:14:4B` ke `.20`; restart CT lalu uji layanan. HDD tidak terpasang.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
