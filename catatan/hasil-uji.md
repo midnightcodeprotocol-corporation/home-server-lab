@@ -8,6 +8,7 @@
 - **Lulus sebagian:** Image HAOS 18.4 diunduh dari rilis resmi; checksum SHA256 `756ec485b1b153099ca53e88a5eebd63a801d56b791afe5c6d63ef94a35dc02d` cocok dengan `SHA256SUMS`. QCOW2 valid dan disk virtual 32 GiB. VM202 dibuat UEFI/q35, 2 vCPU, RAM 2048 MiB, disk 32 GiB di local-lvm, VirtIO NIC di vmbr0, onboot=1; status running. Paket dari MAC VM `BC:24:11:60:7C:42` menunjukkan alamat DHCP `.102`; ping 2/2 lulus. `http://192.168.88.102:8123/` mengembalikan 307 ke `http://192.168.88.102/`, dan `http://192.168.88.102/onboarding.html` merespons HTTP 200. QEMU Guest Agent belum aktif. Onboarding admin masih menunggu pengguna.
 - **Belum selesai:** akun admin Portainer, wizard AdGuard2, dan wizard Jellyfin dibuat oleh pengguna sendiri (kata sandi tidak ditangani/dicatat oleh Codex).
 - **Belum dikerjakan:** MikroTik SSH tetap tidak bisa dipakai, WinBox automation sebelumnya tidak berhasil; belum ada reservasi DHCP untuk CT104, belum ada perubahan DNS DHCP. Immich menunggu HDD dipasang kembali dan isi diperiksa; Tailscale memerlukan autentikasi akun; Grafana belum memiliki datasource, Prometheus tidak dipasang.
+- **Pengecekan akhir 2 Nov:** CT101 tetap running/onboot=1 dengan `.11`, AdGuard service `active`, HTTP `.11:3000` 302; CT104 running, Portainer HTTPS `.101:9443` 307, Jellyfin healthy di `.101:8096` 302; VM202 running, ping lease `.102` 2/2, onboarding `/onboarding.html` HTTP 200. Semua wizard/admin aplikasi masih perlu dibuat pengguna.
 
 Isi setiap kali satu bab selesai diuji. Tulis pesan error persis dan bab yang perlu direvisi.
 
