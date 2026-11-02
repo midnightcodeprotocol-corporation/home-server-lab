@@ -7,12 +7,12 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua terpasang di `.11` tetapi wizard instalasi masih pending dan DNS belum listen; Jellyfin sehat dan Portainer 2.45.3 setup selesai menurut pengguna di CT104 `.101`; VM202 Home Assistant OS berjalan di `.21` dengan onboarding selesai menurut pengguna. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
+Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua di `.11` selesai dikonfigurasi dan tes DNS A/AAAA dari Proxmox lulus; tes laptop dan DHCP belum dilakukan; Jellyfin sehat dan Portainer 2.45.3 setup selesai menurut pengguna di CT104 `.101`; VM202 Home Assistant OS berjalan di `.21` dengan onboarding selesai menurut pengguna. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
 - **Penyimpanan:** HDD pertama saat ini tidak terpasang (konfirmasi pengguna 2 Nov); ketika terlihat pada 1 Nov, disk berisi partisi NTFS 2 TB dan S.M.A.R.T. PASSED. Periksa ulang isi sebelum menetapkan storage; jangan format. HDD kedua menunggu enclosure.
-- **Layanan terpasang:** CT101 `adguard2` memakai statis `.11`, `onboot=1`, dan service AdGuard Home aktif, tetapi installer masih terbuka (`/install.html`); port DNS 53 belum listen dan kueri langsung ditolak. DHCP tetap memakai DNS utama `.3`. CT104 `docker-services` aktif di `.101`; Portainer 2.45.3 UI/API merespons dan setup selesai menurut pengguna; Jellyfin healthy pada TCP 8096, `/srv/media` masih kosong/read-only. Reservasi DHCP CT104 belum diaudit. VM201 `docker-core` berhenti/onboot=0. VM202 HAOS 18.4 aktif di `.21`, UEFI, 2 vCPU/2 GiB, disk 32 GiB; checksum image resmi cocok dan onboarding selesai menurut pengguna.
+- **Layanan terpasang:** CT101 `adguard2` memakai statis `.11`, `onboot=1`, dan service AdGuard Home aktif; port 53 listen dan tes DNS A/AAAA dari Proxmox lulus. Tes laptop dan pengaturan DNS DHCP masih pending. CT104 `docker-services` aktif di `.101`; Portainer 2.45.3 UI/API merespons dan setup selesai menurut pengguna; Jellyfin healthy pada TCP 8096, `/srv/media` masih kosong/read-only. Reservasi DHCP CT104 belum diaudit. VM201 `docker-core` berhenti/onboot=0. VM202 HAOS 18.4 aktif di `.21`, UEFI, 2 vCPU/2 GiB, disk 32 GiB; checksum image resmi cocok dan onboarding selesai menurut pengguna.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
 - Tailscale subnet router belum dipasang; rancangan tetap CT103 sementara dan STB2 setelah tersedia. Login/persetujuan tailnet perlu dilakukan pengguna.
 
@@ -68,7 +68,7 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Se
 | Guest | Alamat | Peran target |
 |---|---:|---|
 | Host Proxmox | `192.168.88.10` | Hypervisor M710q |
-| CT101 / CT102 | `.11 / .12` | AdGuard kedua (CT101 statis aktif; installer belum selesai, DNS port 53 belum listen) / Samba (rencana) |
+| CT101 / CT102 | `.11 / .12` | AdGuard kedua (CT101 statis aktif; DNS A/AAAA lulus dari Proxmox) / Samba (rencana) |
 | CT103 | Belum ditetapkan | Tailscale subnet router (rencana; autentikasi pengguna diperlukan) |
 | CT104 | Lease `.101` sementara | Docker/Portainer + Jellyfin; Jellyfin healthy, media dan wizard admin belum selesai |
 | VM 201 | Target `.20` | docker-core (stopped/onboot=0); Caddy/layanan pada tabel adalah rencana lama |
@@ -82,7 +82,7 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Se
 | VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
 | CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
-Rancangan layanan tetap bertahap. Layanan yang sudah berjalan dan status IP aktual dibedakan dari target di [data/guest.yaml](data/guest.yaml); wizard AdGuard CT101 dan uji DNS, reservasi MikroTik, serta media Jellyfin masih perlu diselesaikan. Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Rancangan layanan tetap bertahap. Layanan yang sudah berjalan dan status IP aktual dibedakan dari target di [data/guest.yaml](data/guest.yaml); uji DNS AdGuard dari laptop, DNS cadangan DHCP MikroTik, reservasi MikroTik, serta media Jellyfin masih perlu diselesaikan. Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
 Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
