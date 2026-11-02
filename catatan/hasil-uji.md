@@ -217,3 +217,9 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Pemeriksaan pertama sebelum wizard dilanjutkan: CT101 `.11/24` berjalan dan service aktif, tetapi UI mengarah ke `/install.html`; port 53 belum listen dan kueri ditolak. Ini adalah keadaan sebelum pengguna menyelesaikan layar konfigurasi.
 - Setelah pengguna melanjutkan wizard, pemeriksaan baca-saja melalui Proxmox menunjukkan AdGuard Home mendengarkan TCP/UDP 53 dan UI TCP 80. `dig @192.168.88.11 google.com A` menjawab `NOERROR` dengan 6 alamat A (46 ms); kueri AAAA menjawab `NOERROR` dengan 4 alamat AAAA (30 ms).
 - DNS CT101 berfungsi dari host Proxmox dan laptop Windows. Pada PowerShell, `nslookup google.com 192.168.88.11` menjawab `Non-authoritative answer`, menampilkan server `adguard2.lab.local` di `192.168.88.11`, serta alamat IPv4 dan IPv6. File dashboard AdGuard Home yang disimpan pengguna menunjukkan upstream publik `https://dns10.quad9.net/dns-query` dan bootstrap `9.9.9.10`, `149.112.112.10`, `2620:fe::10`, `2620:fe::fe:10`, sehingga resolusi domain internet tidak bergantung pada STB `.3`. Private reverse DNS masih menunjukkan resolver default `192.168.88.3:53`; lookup reverse privat dapat bergantung pada STB. DNS DHCP MikroTik belum diubah dan konfigurasi yang terakhir diketahui tetap `.3`. Admin UI: `http://192.168.88.11`. Kata sandi admin tidak dicatat di repo.
+
+
+## DNS DHCP MikroTik diperbarui — 2 November 2026
+
+- Pengguna melaporkan mengubah daftar DNS pada network DHCP LAN `192.168.88.0/24` menjadi `192.168.88.3` dan `192.168.88.11`; perubahan router belum diverifikasi langsung melalui WinBox/CLI oleh Codex.
+- Langkah verifikasi: renew lease Ethernet laptop dan periksa `ipconfig /all` untuk memastikan kedua DNS diterima; kemudian jalankan `nslookup google.com` tanpa menyebut server agar DNS klien default ikut diuji.
