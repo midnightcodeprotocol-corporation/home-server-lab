@@ -12,13 +12,13 @@ host:
   ip_sementara: 192.168.0.200
   gateway_sementara: 192.168.0.1
   dns_sementara: 192.168.0.1
-  disk_data: HDD Seagate ST2000VX008-2E3164 unit 1 terdeteksi /dev/sda 2.00 TB, partisi NTFS, SMART PASSED; belum dikonfigurasi sebagai storage; HDD unit 2 menunggu enclosure
+  disk_data: "HDD Seagate ST2000VX008-2E3164 unit 1 terlihat di screenshot Proxmox 1 Nov sebagai /dev/sda 2.00 TB NTFS, SMART PASSED; audit lsblk SSH 2 Nov tidak menemukan HDD itu [BELUM PASTI: penyebab]; belum dikonfigurasi sebagai storage; HDD unit 2 menunggu enclosure"
   docker_di_host: false
 templat:
   - {vmid: 200, nama: Template-VM, jenis: vm, status: "template aktif, stopped; SSH host key dibersihkan; machine ID VM direset dan diuji melalui clone 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 2048, disk_gb: 32, storage: "local-lvm", agent_qemu: true, bridge: "vmbr0", firewall: true, paket_dan_konfigurasi: "QEMU Guest Agent aktif; paket lainnya belum dicatat"}
   - {vmid: 100, nama: Template-CT, jenis: lxc, status: "template aktif, stopped; SSH host key dibersihkan; keunikan identitas clone diuji 1 Nov 2026", os: "Debian 13", cpu: 1, ram_mb: 512, swap_mb: 512, disk_gb: 8, storage: "local-lvm", unprivileged: true, nesting: true, bridge: "vmbr0", firewall: true, ipv4: "DHCP"}
 guest:
-  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ip_sementara: 192.168.0.102, status: "running; DHCP router sementara (berubah saat reboot); systemd.ssh_auto=no; Docker CE 29.9.2 dan Compose 5.6.1 aktif; belum ada container aplikasi", cpu: 2, ram_mb: 2048, isi: "Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Caddy 80/443"}
+  - {vmid: 201, nama: docker-core, jenis: vm, ip: 192.168.88.20, ip_sementara: null, status: "stopped pada audit 2 Nov 2026; onboot=0; IP aktual tidak tersedia; Docker CE 29.9.2 dan Compose 5.6.1 terpasang sebelumnya; target .20 belum dialokasikan", cpu: 2, ram_mb: 2048, isi: "Rencana lama: Caddy, Portainer, Gotify, Uptime Kuma, Beszel hub, Homepage, adguardhome-sync", akses: "Rencana lama: Caddy 80/443"}
   - {vmid: 202, nama: haos, jenis: vm, ip: 192.168.88.21, ram_mb: 2048, isi: "Home Assistant OS", port: [8123]}
   - {vmid: 203, nama: k3s, jenis: vm, ip: 192.168.88.22, ram_mb: 3072, isi: "k3s + Flux", port: [6443]}
   - {vmid: 204, nama: git, jenis: vm, ip: 192.168.88.23, ram_mb: 1024, isi: "Forgejo + Renovate", port: [3000, 2222]}
@@ -32,8 +32,8 @@ guest:
   - {vmid: 212, nama: pbs, jenis: vm, ip: 192.168.88.30, ram_mb: 2048, isi: "Proxmox Backup Server", port: [8007]}
   - {vmid: 213, nama: sso, jenis: vm, ip: 192.168.88.32, ram_mb: 1024, isi: "Pocket ID", akses: "Tailscale Serve lab-sso"}
   - {vmid: 214, nama: immich, jenis: vm, ip: 192.168.88.33, ram_mb: 6144, isi: "Immich", akses: "Tailscale Serve lab-immich"}
-  - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_sementara: 192.168.0.106, status: "running; AdGuard Home v0.107.79 terpasang; service disabled sampai jaringan final siap", cpu: 1, ram_mb: 512, isi: "AdGuard Home kedua (failover DNS)"}
-  - {vmid: 104, nama: docker-services, jenis: lxc, ip: null, ip_sementara: 192.168.0.104, status: "running; Debian 13 unprivileged + nesting; 4 vCPU, RAM 8192 MiB, swap 1024 MiB, disk 64 GiB; Docker aktif; Portainer CE berjalan pada TCP 9443; 192.168.0.104 adalah lease terakhir sebelum pindah LAN dan perlu dicek/renew", cpu: 4, ram_mb: 8192, isi: "Portainer, Tailscale, Jellyfin, Grafana, Immich, Home Assistant Container (bertahap); Prometheus tidak dipasang sesuai keputusan pengguna", akses: "Portainer HTTPS 9443; alamat final menunggu MikroTik"}
+  - {vmid: 101, nama: adguard2, jenis: lxc, ip: 192.168.88.11, ip_sementara: null, status: "stopped pada audit 2 Nov 2026; onboot=0; IP aktual tidak tersedia; AdGuard Home v0.107.79 terpasang tetapi service disabled; .11 tetap target/rencana", cpu: 1, ram_mb: 512, isi: "Rencana AdGuard Home kedua (failover DNS)"}
+  - {vmid: 104, nama: docker-services, jenis: lxc, ip: null, ip_sementara: 192.168.88.101, status: "running pada audit 2 Nov 2026, onboot=1; Debian 13 unprivileged + nesting; 4 vCPU, RAM 8192 MiB, swap 1024 MiB, disk 64 GiB; lease DHCP .101 sementara, bukan IP final/reservasi; Docker aktif; hanya Portainer CE berjalan pada TCP 9443; /opt/stacks belum ada; wizard admin pending", cpu: 4, ram_mb: 8192, isi: "Rencana aplikasi belum direkonsiliasi dengan docs/08-keputusan.md dan buku; Prometheus tidak dipasang sesuai keputusan pengguna", akses: "Portainer HTTPS 9443 pada lease saat ini .101; IP final menunggu reservasi MikroTik"}
   - {vmid: 102, nama: files, jenis: lxc, ip: 192.168.88.12, isi: "Samba", port: [445]}
   - {vmid: 103, nama: ts-router, jenis: lxc, ip: null, isi: "Tailscale subnet router (nanti STB 2)"}
 perangkat_luar_proxmox:

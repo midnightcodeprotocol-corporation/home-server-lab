@@ -180,4 +180,22 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Akses internet dan repo Proxmox dinyatakan bekerja oleh pengguna pada pengujian terbaru. Kegagalan akses spesifik `117.120.5.231` dan ICMP unreachable sebelumnya tidak terulang pada update ini; penyebab insiden sebelumnya belum diketahui.
 - Pengguna menjalankan `apt list --upgradable`; tersedia `libnss3` (`2:3.110-1+deb13u4` → `2:3.110-1+deb13u5`), `vim-common` (`2:9.1.1230-2` → `2:9.1.1230-2+deb13u1`), dan `vim-tiny` (versi yang sama naik ke `2:9.1.1230-2+deb13u1`). Ketiganya dari `stable-security`.
 - Pengguna menjalankan `apt-get -s upgrade`. Simulasi menyatakan `3 upgraded, 0 newly installed, 0 to remove and 0 not upgraded`; hanya `libnss3`, `vim-common`, dan `vim-tiny` dari `Debian-Security:13/stable-security`.
-- Belum ada upgrade paket yang dilakukan. Simulasi menunjukkan cakupan perubahan terbatas; penerapan tetap merupakan perubahan paket sistem dan menunggu pengguna menjalankan perintah upgrade.
+- Screenshot konsol Proxmox memperlihatkan pengguna menjalankan `apt-get upgrade`, menyetujui prompt, dan berhasil menyelesaikan unpack/setup ketiga paket; prompt `root@pve:~#` kembali. Tidak terlihat error atau permintaan reboot.
+
+## Sesi audit remote Proxmox dan MikroTik — 2 November 2026
+
+- Sesi Chrome yang sudah login menampilkan Proxmox VE 9.2.24 di `192.168.88.10:8006`, console root, dan entri resource CT101, CT104, CT100, VM201, VM200 serta storage `local`/`local-lvm`. Status aktual/IP guest belum berhasil dibaca dari console.
+- WinBox yang sudah login menampilkan DHCP Server > Networks: network `192.168.88.0/24`, gateway `192.168.88.1`, DNS `192.168.88.3`. Tidak ada pengaturan MikroTik yang diubah.
+- Uji SSH Codex `ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=yes root@192.168.88.10 ...` gagal lokal dengan persis: `ssh: connect to host 192.168.88.10 port 22: Permission denied`. Belum diketahui apakah ini kebijakan jaringan lingkungan Codex atau keadaan sshd host.
+- Otomasi input lewat CUA tidak berhasil mengendalikan console PVE/WinBox; tidak ada perintah console atau perubahan konfigurasi yang dijalankan melalui CUA. Pekerjaan install layanan ditunda sampai audit baca-saja guest, IP, storage dan router dapat dilakukan.
+
+### Hasil audit SSH lanjutan — 2 November 2026
+
+- SSH root ke `192.168.88.10` berhasil setelah koneksi memakai `HostKeyAlias=192.168.0.200`; fingerprint itu cocok dengan kunci host lama yang sudah diverifikasi. Hanya perintah audit baca-saja dijalankan.
+- `pvesh get /cluster/resources --type vm --output-format json`: CT100 template stopped; CT101 `adguard2` stopped; CT104 `docker-services` running; VM200 template stopped; VM201 `docker-core` stopped.
+- `pct config 101` dan `qm config 201`: `onboot=0` untuk CT101 dan VM201. Keduanya tidak memiliki IP aktif saat berhenti. CT101 AdGuard Home terpasang sebelumnya tetapi service disabled.
+- CT104: unprivileged, nesting=1, 4 cores, 8192 MiB RAM, 1024 MiB swap, rootfs 64G, `onboot=1`, `net0` DHCP. `pct exec 104 -- ip -brief address` menunjukkan `192.168.88.101/24`; ini lease DHCP sementara, belum reservasi/final.
+- `pct exec 104 -- docker ps -a`: hanya `portainer/portainer-ce:lts` berjalan, TCP 9443. Docker aktif. `pct exec 104 -- ls -la /opt/stacks` menghasilkan `No such file or directory`. Wizard admin Portainer masih menunggu pengguna.
+- `pvesm status`: `local` dan `local-lvm` active. `lsblk -f` dan `lsblk -o NAME,MODEL,SIZE,TYPE,TRAN` hanya menunjukkan NVMe Samsung 476.9 GB. HDD `/dev/sda` tidak muncul pada audit 2 Nov, meski screenshot 1 Nov menunjukkan Seagate 2 TB NTFS dan SMART PASSED. Penyebab perbedaan belum diketahui; tidak ada format/mount/inisialisasi.
+- SSH MikroTik `192.168.88.1`: pertama gagal `Unable to negotiate ... no matching MAC found. Their offer: hmac-sha1,hmac-md5`; dengan algoritme legacy terbatas per sesi, server kemudian memutus: `Received disconnect from 192.168.88.1 port 22:3:`. Tidak ada autentikasi atau perubahan router. Jangan menurunkan keamanan host key/SSH untuk mengakali kegagalan ini.
+- Risiko sebelum instalasi: IP final CT104 belum diputuskan; rencana lokasi Home Assistant/Immich/Tailscale berbeda antara `data/guest.yaml`, `docs/08-keputusan.md`, dan buku. Tunda layanan sampai IP dan penempatan diselaraskan. Prometheus tetap tidak dipasang sesuai keputusan.

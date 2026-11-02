@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Fase A: sambungan dasar ke MikroTik.** MikroTik ping Proxmox `.10` 16/16 lewat switch; AdGuard STB pindah ke `.3`, DNS langsung berhasil, dan DHCP membagikan `.3`. Uji DNS dari host Proxmox masih tertunda; kabel host melalui switch port 3.
+- [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
@@ -11,16 +11,17 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [x] Instal Proxmox pada M710q dan boot pertama
 - [x] DNS host diperbaiki untuk jaringan sementara `192.168.0.0/24`; apt update dan upgrade berhasil, kernel `7.0.14-26-pve` aktif
 - [x] APT update pada 2 Nov berhasil mengakses repo Debian dan Proxmox; konektivitas internet host terverifikasi. Gangguan sementara ke `117.120.5.231` sebelumnya tidak terulang; penyebabnya tidak diketahui. Simulasi upgrade hanya mencakup tiga update security (`libnss3`, `vim-common`, `vim-tiny`), tanpa paket baru/dihapus.
-- [ ] Terapkan tiga update security yang sudah ditinjau, lalu catat hasilnya.
+- [x] Terapkan tiga update security yang sudah ditinjau (`libnss3`, `vim-common`, `vim-tiny`); console kembali ke prompt root tanpa error yang terlihat.
+- [x] Audit baca-saja Proxmox melalui SSH: CT101 dan VM201 stopped/onboot=0; CT104 running dengan lease DHCP sementara `.101`; hanya Portainer berjalan. MikroTik DHCP Network dilihat di WinBox; koneksi SSH MikroTik belum berhasil, tidak ada perubahan router.
 - [x] Setelah update Proxmox, cek KVM/VT-x: `lscpu` menunjukkan VT-x dan `/dev/kvm` tersedia setelah perbaikan `thinklmi` (Bab 9.6, 27.5)
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
-- [ ] HDD unit 1 terdeteksi NTFS/S.M.A.R.T. PASSED; periksa isi secara read-only dan tentukan peran storage sebelum format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
+- [ ] HDD unit 1 tampak di screenshot 1 Nov sebagai NTFS/S.M.A.R.T. PASSED, tetapi tidak terdeteksi oleh `lsblk` 2 Nov. Pastikan koneksi dan keberadaan disk; periksa isi read-only sebelum menetapkan peran. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
-- [ ] Selesaikan akun admin Portainer CT104 sendiri, lalu buat layanan secara bertahap: Tailscale, Jellyfin, Grafana, Immich, Home Assistant Container
+- [ ] Tetapkan IP/reservasi final CT104, selaraskan penempatan layanan yang bertentangan antara status dan buku, lalu selesaikan akun admin Portainer sendiri. Belum ada layanan aplikasi selain Portainer.
 - [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel

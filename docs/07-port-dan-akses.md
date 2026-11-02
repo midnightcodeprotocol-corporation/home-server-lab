@@ -6,11 +6,11 @@
 | MikroTik | .1 | 80 (WebFig), WinBox | LAN | langsung |
 | TL-WR820N (AP) | .2 | 80 | LAN | langsung |
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
-| Proxmox host (M710q) | `192.168.88.10` (config diarahkan; verifikasi MikroTik menunggu) | 8006, 22 | LAN + IPSet admin | `proxmox.home.arpa` |
-| CT101 adguard2 | .11 | 80, 53 | LAN | `adguard2.lan` |
-| CT104 docker-services | DHCP sementara `192.168.0.104`; IP final belum ditetapkan | 9443 (Portainer HTTPS) | LAN sementara | `https://192.168.0.104:9443` (sertifikat awal self-signed) |
+| Proxmox host (M710q) | `192.168.88.10` (terverifikasi aktif; GUI dan SSH audit) | 8006, 22 | LAN + IPSet admin (rencana firewall) | `proxmox.home.arpa` |
+| CT101 adguard2 | Target .11; saat audit stopped, IP aktual tidak ada | 80, 53 (rencana) | LAN | `adguard2.lan` |
+| CT104 docker-services | Lease DHCP sementara `192.168.88.101`; IP final/reservasi belum ditetapkan | 9443 (Portainer HTTPS) | LAN | `https://192.168.88.101:9443` (lease saat audit; sertifikat awal self-signed) |
 | CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |
-| VM 201 docker-core | .20 | 80, 443 (Caddy) | seluruh LAN | gerbang |
+| VM 201 docker-core | Target .20; saat audit stopped, IP aktual tidak ada | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
 | VM 202 haos | .21 | 8123 | LAN + Tailscale | `ha.lan` |
 | VM 203 k3s | .22 | 6443 | IPSet admin | langsung |
@@ -25,7 +25,7 @@
 | VM 212 pbs | .30 | 8007 | host .10 dan admin | `https://192.168.88.30:8007` |
 | VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
 | VM 214 immich | .33 | 127.0.0.1:2283 | Tailscale Serve | `lab-immich.*.ts.net` |
-| STB 1 | .253 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
+| STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
 | Agen Beszel | tiap mesin | 45876 | hanya dari .20 | |
 
 Nama PBS diakses lewat **IP**, bukan nama: rewrite `*.home.arpa` mengarahkan nama ke docker-core.
