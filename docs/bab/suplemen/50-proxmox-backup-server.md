@@ -1,6 +1,6 @@
 # Bab 50. Proxmox Backup Server
 
-> **Revisi 3.** Datastore PBS direncanakan memakai salah satu dari dua HDD Seagate Surveillance 2 TB (Bab 27.4); contoh ukuran 200 GiB di bawah hanya patokan awal.
+> **Status 2 November 2026.** Pengguna memutuskan kedua HDD 2 TB digunakan untuk data aplikasi; backup ditunda. PBS 212 selesai dipasang menurut pengguna, tetapi `192.168.88.30:8007` belum terjangkau dari host pada audit. Disk virtual 1.5 TiB di atas HDD masih terpasang tanpa datastore/backup; jangan format atau membuat datastore di sana. Disk backup sementara 100 GiB pada NVMe masih berupa rencana.
 
 PENEMPATAN - BARU - VM sendiri  
 Tempat: VM 212 pbs (192.168.88.30), dipasang dari ISO resmi PBS, bukan dari templat Debian (VM 200).  
@@ -19,8 +19,7 @@ server tidak bisa membacanya.
 Keputusan Pilihan buku ini Alasan  
 Tempat PBS VM 212 di host yang sama Satu mesin tersedia; ditutup oleh salinan kedua  
 50.13  
-Datastore Disk virtual dari disk fisik kedua Jangan sama dengan disk sistem; backup dan  
-VM tidak boleh hilang bersamaan  
+Datastore Sementara pada NVMe; HDD untuk aplikasi Pengguna mengubah prioritas; kapasitas datastore 100 GiB masih rencana dan belum dialokasikan
 Jenis disk SSD bila ada; HDD diterima dengan harapan  
 lambat  
 Dokumentasi PBS menyarankan penyimpanan  
@@ -34,39 +33,20 @@ kebobolan)
 
 ## 50.2 Menyiapkan disk fisik untuk datastore (host)
 
-Di web Proxmox buka node &gt; Disks. Pilih HDD unit 1 yang bukan disk Proxmox. Wipe menghapus seluruh isi; verifikasi model/serial dan salinan data sebelum melanjutkan. Bila ada isi lama:
-pilih disk &gt; Wipe Disk (menghapus semuanya, pastikan disk yang benar). Lalu buat penyimpanan di atasnya:  
-1. Node &gt; Disks &gt; Directory &gt; Create: Directory. Pilih HDD unit 1, filesystem ext4, nama backup-disk. Biarkan
-Add Storage tercentang.  
-2. Hasilnya penyimpanan backup-disk tampil di Datacenter &gt; Storage. Di sinilah disk virtual datastore PBS akan  
-dibuat.  
-CATATAN  
-HDD unit 1 2 TB terhubung melalui USB; Proxmox Directory storage `backup-disk` sudah dibuat ext4 dan dipasang di `/mnt/pve/backup-disk`. VM 212 memakai qcow2 sparse 1.5 TiB untuk datastore guest. USB dapat terputus; pastikan storage online sebelum backup.
-
+**Keputusan terbaru pengguna:** kedua HDD dialokasikan untuk data aplikasi; backup ditunda. Jangan ikuti prosedur wipe untuk HDD yang ada. HDD unit 1 sudah menjadi GPT/ext4 Proxmox Directory storage `backup-disk` di `/mnt/pve/backup-disk`; volume qcow2 sparse 1.5 TiB masih terpasang ke PBS 212 dan belum menjadi datastore. Untuk mengalihkan HDD, matikan VM, lepaskan disk virtual dari konfigurasi **tanpa menghapus volumenya**, lalu siapkan struktur storage aplikasi. Disk backup sementara 100 GiB pada NVMe masih rencana dan belum dialokasikan.
 ## 50.3 Mengunduh ISO dan membuat VM pbs
 
 1. Gunakan ISO PBS 4.2-1 resmi. ISO lokal pengguna telah diverifikasi SHA256 terhadap checksum resmi, lalu disalin ke storage local pada host.
-2. VM 212 `pbs` sudah dibuat dari ISO ini dan berjalan pada installer.
+2. VM 212 `pbs` sudah dibuat dari ISO ini; instalasi selesai menurut pengguna dan VM masih running.
 3. Konfigurasi: 2 vCPU, 2 GiB RAM, VirtIO NIC, QEMU agent enabled. Disk OS SCSI 32 GiB di local-lvm; disk datastore qcow2 sparse 1.5 TiB di `backup-disk`.
-4. VM running dari installer dengan urutan boot ISO dahulu; buka Console dan selesaikan instalasi secara interaktif.
+4. Instalasi selesai menurut pengguna; VM berjalan dan ISO sudah dilepas. Ringkasan installer menampilkan `.30/24`, gateway `.1`, DNS `.3`; akses guest belum terjangkau dari host saat audit.
 PERINGATAN  
 Pada pemasangan nanti, pilih disk 32 GiB sebagai target sistem. Disk besar jangan dipilih; ia dipakai untuk datastore  
 sesudah pemasangan.  
 
 ## 50.4 Pemasangan PBS
 
-1. Pilih Install Proxmox Backup Server (Graphical) dan setujui EULA.  
-2. Target: disk 32 GiB, filesystem ext4. Lanjut.  
-3. Negara Indonesia, zona waktu Asia/Jakarta, papan ketik sesuai.  
-4. Kata sandi root yang kuat (simpan di Vaultwarden) dan email Anda.  
-5. Jaringan: Hostname (FQDN) pbs.home.arpa, IP 192.168.88.30/24, Gateway 192.168.88.1, DNS  
-192.168.88.253.  
-6. Install. Setelah selesai, di web Proxmox buka VM 212 &gt; Hardware &gt; CD/DVD &gt; Do not use any media, lalu  
-reboot VM.  
-TIPS  
-Gunakan alamat IP, bukan nama pbs.home.arpa, saat menghubungkan PVE ke PBS. Rewrite wildcard \*.home.arpa di  
-AdGuard mengarahkan nama itu ke docker-core, bukan ke PBS.  
-
+Installer PBS selesai menurut laporan pengguna. Pengaturan yang ditampilkan: target OS 32 GiB, zona Asia/Jakarta, hostname `pbs`, IP `192.168.88.30/24`, gateway `.1`, DNS `.3`. ISO telah dilepas dari CD/DVD. Namun ping dan akses HTTPS 8007 ke `.30` gagal dari host saat audit; lanjutkan troubleshooting di Console sebelum menyetel datastore.
 ## 50.5 Pasca-instalasi
 
 1. Dari laptop buka https://192.168.88.30:8007 (setujui peringatan sertifikat). Masuk: User root, Realm Linux  

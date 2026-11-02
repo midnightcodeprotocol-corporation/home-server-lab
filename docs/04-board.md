@@ -17,7 +17,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [x] Audit dan perbaiki template Debian 13 CT 100/VM 200 setelah clone menemukan identitas bersama; clone uji lulus dan artefak sementara sudah dibersihkan. Lihat Revisi 7.
 - [x] Uji clone sementara di jaringan router: CT lulus DHCP/DNS/SSH; VM lulus DHCP/DNS, QEMU Guest Agent, SSH, dan identitas unik. Semua guest uji dihapus setelah pengujian.
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
-- [x] HDD unit 1 diaudit read-only (NTFS root hanya System Volume Information, 159 MB), SMART attributes PASSED (USB bridge status incomplete), lalu dibuat ext4 Proxmox storage `backup-disk` sesuai rencana PBS; HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
+- [x] HDD unit 1 diaudit read-only (NTFS root hanya System Volume Information, 159 MB), SMART attributes PASSED (USB bridge status incomplete), lalu dibuat ext4 storage `backup-disk`; keputusan terbaru: kedua HDD untuk aplikasi, backup ditunda, HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [ ] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. DHCP membagikan `.3` + `.11` dan laptop menerima keduanya; kueri default lulus via `.3`. Failover ketika `.3` unavailable belum disimulasikan. CT104 masih lease `.101`; tetapkan IP final dan reservation, jangan anggap lease dinamis sebagai final.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
@@ -30,7 +30,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE, Nextcloud
-- [ ] PBS VM212 dibuat dan sedang berjalan dari ISO 4.2-1; checksum resmi cocok. Installer, datastore guest, backup job dan restore test masih pending. OS disk 32 GiB local-lvm; data disk 1.5 TiB `backup-disk`; IP target .30 belum aktif.
+- [ ] PBS VM212 terpasang menurut pengguna; VM berjalan, ISO terlepas. Installer menampilkan `.30`, tetapi ping/HTTPS 8007 belum berhasil dari host. OS disk 32 GiB local-lvm; disk 1.5 TiB HDD masih terpasang tanpa datastore. Lepas disk HDD dari VM tanpa menghapus volume; pertimbangkan 100 GiB backup sementara dari NVMe. Belum ada backup/restore test.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
