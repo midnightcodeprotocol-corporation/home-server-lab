@@ -1,5 +1,14 @@
 # Hasil uji per fase
 
+## Lanjutan pemasangan layanan — 2 November 2026
+
+- **Lulus:** CT101 `adguard2` diubah menjadi `192.168.88.11/24`, gateway `192.168.88.1`, resolver `192.168.88.3`, dan `onboot=1`; CT berhasil start dan interface menunjukkan alamat `.11`.
+- **Lulus sebagian:** `AdGuardHome.service` CT101 aktif; port TCP 3000 terbuka dan `curl http://192.168.88.11:3000/` mengembalikan HTTP 302 ke wizard. Belum diuji kueri DNS lewat `.11`; wizard admin menunggu pengguna. DHCP MikroTik tetap membagikan DNS `.3` saja.
+- **Lulus:** Jellyfin dipasang pada CT104 memakai image resmi `ghcr.io/jellyfin/jellyfin:latest`, digest `sha256:fea863d0cd9ec445985d9c75fc6ed64e38a1d2766cf0c250a33d553f4fc1b771`. Setelah konfigurasi awal terikat lease `.101`, container dibuat ulang dengan volume konfigurasi/cache yang sama dan port host `8096` tidak lagi terikat ke satu IP; sekarang `0.0.0.0:8096` dan `:::8096`. Container kembali healthy, log `Core startup complete`, ffmpeg tersedia, dan HTTP `.101:8096` merespons 302 ke `/web/`. `/srv/media` tetap kosong/read-only karena HDD dilepas.
+- **Lulus sebagian:** Image HAOS 18.4 diunduh dari rilis resmi; checksum SHA256 `756ec485b1b153099ca53e88a5eebd63a801d56b791afe5c6d63ef94a35dc02d` cocok dengan `SHA256SUMS`. QCOW2 valid dan disk virtual 32 GiB. VM202 dibuat UEFI/q35, 2 vCPU, RAM 2048 MiB, disk 32 GiB di local-lvm, VirtIO NIC di vmbr0, onboot=1; status running. Paket dari MAC VM `BC:24:11:60:7C:42` menunjukkan alamat DHCP `.102`; ping 2/2 lulus. `http://192.168.88.102:8123/` mengembalikan 307 ke `http://192.168.88.102/`, dan `http://192.168.88.102/onboarding.html` merespons HTTP 200. QEMU Guest Agent belum aktif. Onboarding admin masih menunggu pengguna.
+- **Belum selesai:** akun admin Portainer, wizard AdGuard2, dan wizard Jellyfin dibuat oleh pengguna sendiri (kata sandi tidak ditangani/dicatat oleh Codex).
+- **Belum dikerjakan:** MikroTik SSH tetap tidak bisa dipakai, WinBox automation sebelumnya tidak berhasil; belum ada reservasi DHCP untuk CT104, belum ada perubahan DNS DHCP. Immich menunggu HDD dipasang kembali dan isi diperiksa; Tailscale memerlukan autentikasi akun; Grafana belum memiliki datasource, Prometheus tidak dipasang.
+
 Isi setiap kali satu bab selesai diuji. Tulis pesan error persis dan bab yang perlu direvisi.
 
 Status: **pengujian panduan di ThinkCentre M710q sedang berlangsung**. Pemeriksaan dasar host dan KVM sudah berhasil. Hasil uji sebelumnya di lab VMware ada di `kasus-nyata-lab.md` dan tidak membuktikan instalasi pada mesin ini.

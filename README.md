@@ -7,14 +7,14 @@ Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M71
 
 ## Status proyek
 
-Jaringan rumah diverifikasi kembali **1 November 2026**: STB AdGuard pindah ke `192.168.88.3`, DNS langsung lulus, dan MikroTik dapat menjangkau Proxmox `.10`. DNS host Proxmox diarahkan ke `.3`; `getent hosts` dan `getent ahostsv4 deb.debian.org` berhasil untuk IPv6 dan IPv4; repo Debian/security dapat dijangkau, tetapi repo Proxmox pada HTTP port 80 gagal; diagnosis masih berlangsung. Rincian ada di [STATUS.md](STATUS.md).
+Pembaruan terakhir **2 November 2026**: Proxmox `.10` terhubung internet; AdGuard kedua aktif di `.11` dengan wizard belum selesai; Jellyfin sehat di CT104 lease sementara `.101`; VM202 Home Assistant OS berjalan di lease sementara `.102` dan halaman onboarding teruji. HDD 2 TB sengaja dilepas. Lihat [STATUS.md](STATUS.md) untuk rincian dan batas verifikasi.
 
 - **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
 - **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
-- **Penyimpanan:** HDD pertama terdeteksi di Proxmox sebagai 2 TB NTFS dengan S.M.A.R.T. PASSED; HDD kedua menunggu enclosure.
-- **Langkah server:** CT 101 `adguard2` dan VM 201 `docker-core` sudah dibuat dan berjalan dari template bersih. CT101 mendapat DHCP router sementara `192.168.0.106`; VM201 mendapat `192.168.0.102` setelah reboot (alamat dinamis). Alamat rumah `.11` dan `.20` belum ditetapkan. AdGuard Home v0.107.79 terpasang tetapi servicenya dinonaktifkan sampai jaringan final siap. Docker CE dan Compose v5.6.1 aktif di VM201; belum ada container aplikasi. Pesan AF_VSOCK ditangani dengan mematikan socket SSH vsock opsional; SSH TCP tetap aktif.
+- **Penyimpanan:** HDD pertama saat ini tidak terpasang (konfirmasi pengguna 2 Nov); ketika terlihat pada 1 Nov, disk berisi partisi NTFS 2 TB dan S.M.A.R.T. PASSED. Periksa ulang isi sebelum menetapkan storage; jangan format. HDD kedua menunggu enclosure.
+- **Layanan terpasang:** CT101 `adguard2` memakai statis `.11`, `onboot=1`, AdGuard Home aktif; wizard `.11:3000` menunggu pengguna. CT104 `docker-services` memakai lease sementara `.101`, Docker/Portainer dan Jellyfin aktif; Jellyfin healthy pada TCP 8096 dan `/srv/media` masih kosong/read-only. VM201 `docker-core` berhenti/onboot=0. VM202 HAOS 18.4 memakai lease sementara `.102`, UEFI, 2 vCPU/2 GiB, disk 32 GiB; checksum image resmi cocok dan onboarding HTTP 200. `.21` tetap target belum dialokasikan. Akun admin setiap aplikasi dibuat pengguna sendiri. CT104 belum mendapat reservasi IP final di MikroTik.
 - Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
-- Tailscale subnet router khusus masih menunggu STB 2; sementara rancangan memakai CT103 di Proxmox.
+- Tailscale subnet router belum dipasang; rancangan tetap CT103 sementara dan STB2 setelah tersedia. Login/persetujuan tailnet perlu dilakukan pengguna.
 
 Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
 
@@ -63,15 +63,16 @@ flowchart TB
 
 ## Arsitektur layanan target
 
-Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Layanan yang memakai Docker ditempatkan di VM Debian; layanan Linux ringan tanpa Docker dapat memakai LXC. Pemisahan ini membantu membatasi dampak gangguan, mengatur akses jaringan, dan memulihkan layanan satu per satu.
+Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Sesuai keputusan proyek, Docker ditempatkan di CT104 Debian 13 unprivileged dengan nesting; ini menghemat VM namun isolasinya lebih rendah daripada Docker di VM. Aplikasi yang memang memerlukan OS terpisah memakai VM.
 
 | Guest | Alamat | Peran target |
 |---|---:|---|
 | Host Proxmox | `192.168.88.10` | Hypervisor M710q |
-| CT101 / CT102 | `.11 / .12` | AdGuard kedua / Samba; CT101 sudah dibuat, IP final menunggu MikroTik |
-| CT103 | Belum ditetapkan | Tailscale subnet router sementara |
-| VM 201 | `.20` | Caddy, Portainer, Gotify, Uptime Kuma, Beszel, Homepage; VM dan Docker sudah siap, stack aplikasi belum dipasang |
-| VM 202 / 203 | `.21 / .22` | Home Assistant OS / k3s + Flux |
+| CT101 / CT102 | `.11 / .12` | AdGuard kedua (CT101 statis aktif, wizard pending) / Samba (rencana) |
+| CT103 | Belum ditetapkan | Tailscale subnet router (rencana; autentikasi pengguna diperlukan) |
+| CT104 | Lease `.101` sementara | Docker/Portainer + Jellyfin; Jellyfin healthy, media dan wizard admin belum selesai |
+| VM 201 | Target `.20` | docker-core (stopped/onboot=0); Caddy/layanan pada tabel adalah rencana lama |
+| VM 202 / 203 | Target `.21` / `.22`; VM202 lease `.102` | Home Assistant OS (running/onboarding pending) / k3s + Flux (rencana) |
 | VM 204 / 205 | `.23 / .24` | Forgejo + Renovate / Vaultwarden |
 | VM 206 / 207 | `.25 / .26` | AFFiNE / Nextcloud |
 | VM 208 / 209 | `.27 / .28` | n8n / situs privat + WordPress |
@@ -81,15 +82,15 @@ Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. La
 | VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
 | CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
 
-Peta layanan adalah rancangan bertahap: CT101 dan VM201 sudah dibuat; fondasi AdGuard dan Docker disiapkan, tetapi layanan aplikasi belum dikonfigurasi. Langkah berikutnya memeriksa DNS host, alamat guest setelah pindah LAN, dan menyiapkan storage HDD secara aman sebelum membuka wizard layanan. Daftar terstruktur beserta RAM dan catatan mode hemat ada di [data/guest.yaml](data/guest.yaml). Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+Rancangan layanan tetap bertahap. Layanan yang sudah berjalan dan status IP aktual dibedakan dari target di [data/guest.yaml](data/guest.yaml); onboarding admin, reservasi MikroTik, uji DNS CT101, dan media Jellyfin masih perlu diselesaikan. Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
 
 Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
 
 ## Penyimpanan dan backup
 
-Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. HDD pertama terdeteksi: Seagate ST2000VX008-2E3164, `/dev/sda`, 2 TB, partisi NTFS, S.M.A.R.T. PASSED. Isi dan fungsi storage belum ditetapkan; HDD kedua menunggu enclosure. Jangan format sebelum isi dan kebutuhan data dipastikan. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
+Rancangan penyimpanan memakai NVMe 500 GB untuk sistem/VM. HDD pertama sedang dilepas; sebelumnya terdeteksi sebagai Seagate ST2000VX008-2E3164, `/dev/sda`, 2 TB NTFS, S.M.A.R.T. PASSED. Isi/fungsi belum ditetapkan; periksa read-only setelah dipasang kembali dan jangan format sebelum data dikonfirmasi. PBS direncanakan mencadangkan VM setiap hari, dengan enkripsi sisi klien, salinan USB offline, dan arsip konfigurasi host.
 
-**Keadaan saat ini:** satu HDD tersambung dengan partisi NTFS; belum menjadi Proxmox storage. HDD kedua menunggu enclosure; PBS belum dipasang; belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
+**Keadaan saat ini:** HDD unit 1 sedang tidak terpasang; saat terpasang terakhir kali terlihat berpartisi NTFS dan belum menjadi Proxmox storage. HDD kedua menunggu enclosure; PBS belum dipasang; belum ada backup atau uji pemulihan. Karena itu backup belum boleh dianggap tersedia. Prosedur backup baru dianggap terbukti setelah pemulihan berhasil diuji. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
 
 ## Mulai menjelajahi repo
 

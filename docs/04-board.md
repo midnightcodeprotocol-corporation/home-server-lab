@@ -19,9 +19,10 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [ ] HDD unit 1 sengaja sedang tidak dipasang (konfirmasi pengguna 2 Nov); saat terpasang sebelumnya terlihat NTFS/S.M.A.R.T. PASSED. Saat dipasang kembali, periksa identitas dan isi read-only sebelum menetapkan storage. Jangan format. HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
-- [ ] Bab 13: binary AdGuard Home sudah terpasang pada CT101; jalankan service dan wizard, lalu siapkan failover setelah IP MikroTik aktif
+- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, AdGuard Home aktif; HTTP 302 ke wizard sudah diuji. Selesaikan wizard admin sendiri, uji DNS langsung ke `.11`, baru pertimbangkan DNS DHCP failover.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
-- [ ] Tetapkan IP/reservasi final CT104, selaraskan penempatan layanan yang bertentangan antara status dan buku, lalu selesaikan akun admin Portainer sendiri. Belum ada layanan aplikasi selain Portainer.
+- [ ] CT104 lease `.101` sementara; tetapkan IP/reservasi final di MikroTik lalu perbarui bind port. Portainer dan Jellyfin sudah aktif (Jellyfin healthy di TCP 8096, media kosong); wizard admin Portainer/Jellyfin masih menunggu pengguna. Selaraskan penempatan aplikasi dari buku.
+- [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease sementara `.102` dan onboarding HTTP 200 terverifikasi. Selesaikan admin sendiri dan minta reservasi DHCP `.21` setelah router dapat dikelola.
 - [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel
