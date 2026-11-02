@@ -1,5 +1,15 @@
 # Hasil uji per fase
 
+## Lanjutan konfigurasi layanan — 3 November 2026
+
+- **Lulus:** Audit Proxmox melalui SSH baca-saja menampilkan CT101, CT102, CT103, CT104, VM202, dan VM212 running; CT100/VM200 template stopped, VM201 stopped. Host RAM 23 GiB, tersedia sekitar 18 GiB saat pemeriksaan; `local`, `local-lvm`, dan HDD `backup-disk` aktif.
+- **Lulus:** CT104 diatur ke statis `192.168.88.20/24` pada config Proxmox; ping dari PVE berhasil. Portainer HTTPS `.20:9443` HTTP 200; Jellyfin `.20:8096` healthy. HDD mount `/srv/media` dan `/srv/appdata` masing-masing menunjukkan 1.8 TiB total, sekitar 1.7 TiB bebas.
+- **Lulus sebagian:** CT102 `.12` menjalankan Samba 4.22.11; `smbd`, `nmbd` aktif dan `testparm` valid. Share `Media` dan `Files` mengarah ke `/srv/media` dan `/srv/files`. Akun Linux `labshare` ada, tetapi password Samba belum ditetapkan; uji klien Windows dan autentikasi belum dilakukan.
+- **Lulus sebagian:** CT103 dibuat dari template Debian 13, memperoleh lease DHCP sementara `.104` (bukan alamat final), `onboot=1`. Tailscale 1.104.4 aktif; `/dev/net/tun` tersedia; `net.ipv4.ip_forward=1` dan `net.ipv6.conf.all.forwarding=1`. `tailscale up --advertise-routes=192.168.88.0/24 --accept-dns=false` memberikan tautan autentikasi; node logout sampai pengguna login dan menyetujui subnet route.
+- **Lulus sebagian:** PBS VM212 `.30` ping 2/2 dan HTTPS 8007 HTTP 200 dari PVE. `onboot=1` kini aktif. Disk 100 GiB `local-lvm` terpasang sebagai `scsi1`; volume lama 1.5 TiB pada HDD masih detached dan file disimpan. `store1` dilaporkan pengguna, tetapi belum diverifikasi dari dalam PBS; belum ada backup/restore.
+- **Dalam proses:** Compose dan `.env` Immich resmi disimpan di `/opt/stacks/immich`; foto diarahkan ke `/srv/media/immich`, database ke `/opt/immich/postgres` di SSD lokal CT, `TZ=Asia/Jakarta`, password database dibuat acak dan `.env` mode 0600. Compose lulus `docker compose config --quiet`; penarikan image berjalan dan belum ada container/UI yang dinyatakan siap.
+- **Catatan sumber:** Penempatan Immich mengikuti [panduan Docker Compose Immich](https://docs.immich.app/install/docker-compose/) dan kebutuhan penyimpanan database lokal/kapasitas RAM pada [persyaratan Immich](https://docs.immich.app/install/requirements/). Instal Tailscale dan persiapan subnet router mengikuti [dokumentasi instalasi Linux](https://tailscale.com/docs/install/linux) serta [setup subnet router](https://tailscale.com/docs/features/subnet-routers/how-to/setup).
+
 ## Lanjutan pemasangan layanan — 2 November 2026
 
 - **Lulus:** CT101 `adguard2` diubah menjadi `192.168.88.11/24`, gateway `192.168.88.1`, resolver `192.168.88.3`, dan `onboot=1`; CT berhasil start dan interface menunjukkan alamat `.11`.

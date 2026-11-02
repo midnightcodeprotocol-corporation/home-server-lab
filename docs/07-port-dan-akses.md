@@ -8,8 +8,9 @@
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
 | Proxmox host (M710q) | `192.168.88.10` (terverifikasi aktif; GUI dan SSH audit) | 8006, 22 | LAN + IPSet admin (rencana firewall) | `proxmox.home.arpa` |
 | CT101 adguard2 | `192.168.88.11` statis; wizard selesai 2 Nov | 80 Admin UI HTTP; 53 DNS TCP/UDP (A/AAAA lulus dari Proxmox; tes klien pending) | LAN | `http://192.168.88.11` |
-| CT104 docker-services | Aktif `192.168.88.101`; reservasi DHCP router belum diaudit | 9443 Portainer HTTPS, 8096 Jellyfin HTTP | LAN | `https://192.168.88.101:9443`, `http://192.168.88.101:8096` |
-| CT102 files (Samba) | .12 | 445 | LAN | `\\192.168.88.12\share` |
+| CT102 files (Samba) | `192.168.88.12` statis; smbd/nmbd aktif, password akun menunggu pengguna | 445 SMB | LAN | `\\192.168.88.12\Media`, `\\192.168.88.12\Files` (akun `labshare`) |
+| CT103 tailscale-router | DHCP sementara `.104`; IP final belum ditetapkan | Tailscale; rute `192.168.88.0/24` diiklankan, approval menunggu | tailnet (belum aktif) | auth link tersimpan di percakapan; jangan anggap subnet route aktif sebelum approval |
+| CT104 docker-services | Statis `192.168.88.20/24` pada config CT; di luar pool DHCP, belum ada router reservation | 9443 Portainer HTTPS, 8096 Jellyfin HTTP, 2283 Immich (sedang disiapkan) | LAN | `https://192.168.88.20:9443`, `http://192.168.88.20:8096`, `http://192.168.88.20:2283` (Immich setelah container healthy) |
 | VM 201 docker-core | Stopped, tanpa IP; `.20` dialihkan ke CT104 | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
 | VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna | 8123 | LAN + Tailscale (rencana) | `http://192.168.88.21` (wizard selesai menurut pengguna); `ha.lan` belum disiapkan |
@@ -44,5 +45,5 @@ Nama PBS diakses lewat **IP**, bukan nama: rewrite `*.home.arpa` mengarahkan nam
 | `.ts.net` | Node Tailscale Serve | Hanya terjawab lewat Tailscale |
 
 ## Cara masuk dari luar rumah
-Tailscale aktif di HP/laptop -> subnet router CT103 (nanti STB 2) -> LAN, atau langsung ke node `lab-*`.
+Tailscale pada CT103 sudah dipasang; pengguna perlu login dan menyetujui route `192.168.88.0/24` di admin console. Setelah aktif: Tailscale di HP/laptop -> CT103 -> LAN, atau langsung ke node `lab-*`.
 Jangan buka port 8006, 22, atau 80 MikroTik ke internet.

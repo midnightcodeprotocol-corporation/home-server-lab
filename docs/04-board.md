@@ -1,6 +1,6 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 November 2026.
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 November 2026.
 
 ## Sedang dikerjakan
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
@@ -19,9 +19,12 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 30: sensor dan Wake-on-LAN dari STB
 - [x] HDD unit 1 diaudit read-only (NTFS root hanya System Volume Information, 159 MB), SMART attributes PASSED (USB bridge status incomplete), lalu dibuat ext4 storage `backup-disk`; keputusan terbaru: kedua HDD untuk aplikasi, backup ditunda, HDD unit 2 menunggu enclosure (Bab 27.4, 9.9)
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
-- [ ] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. DHCP membagikan `.3` + `.11` dan laptop menerima keduanya; kueri default lulus via `.3`. Failover ketika `.3` unavailable belum disimulasikan. CT104 masih lease `.101`; tetapkan IP final dan reservation, jangan anggap lease dinamis sebagai final.
+- [x] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. DHCP membagikan `.3` + `.11`, kueri default lulus via `.3`; failover belum diuji.
+- [x] CT102 Samba `.12` aktif; share Media/Files mengarah ke HDD unit 1, konfigurasi `testparm` valid. Password Samba `labshare` dan uji Windows masih menunggu pengguna.
+- [ ] CT103 Tailscale 1.104.4 terpasang, forwarding/TUN aktif, lease dinamis sementara `.104`; login dan approval route `192.168.88.0/24` menunggu pengguna.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
-- [ ] CT104 aktif sementara `.101`; Portainer dan Jellyfin berjalan. Pengguna memilih target `.20` (belum diterapkan). Verifikasi konflik di WinBox, reservasi MAC `BC:24:11:25:14:4B` ke `.20`, restart CT dan uji layanan.
+- [x] CT104 statis `.20/24` diterapkan di konfigurasi CT (di luar pool DHCP; tidak ada reservation MikroTik); Portainer HTTPS 9443 HTTP 200 dan Jellyfin healthy TCP 8096 diverifikasi setelah restart.
+- [ ] Immich Compose resmi disiapkan pada CT104; upload ke HDD dan database ke SSD. Image masih diunduh; health check, akses UI, dan onboarding pengguna belum selesai. Prometheus tidak dipasang.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
@@ -30,7 +33,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 2 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE, Nextcloud
-- [ ] PBS VM212 terpasang, `.30` ping 3/3 dan HTTPS 8007 HTTP 200 setelah hard reset. Disk HDD 1.5 TiB dilepas dari VM tanpa menghapus volume; disk virtual 100 GiB NVMe terpasang; pengguna melaporkan `store1` dibuat, tetapi perlu verifikasi di dashboard. Belum ada backup/restore test.
+- [ ] PBS VM212 terpasang; `.30` ping dan HTTPS 8007 HTTP 200 setelah hard reset. VM `onboot=1`. Disk HDD 1.5 TiB dilepas tanpa menghapus volume; disk virtual 100 GiB NVMe terpasang. `store1` dilaporkan pengguna tetapi belum diverifikasi dari PBS. Belum ada backup/restore test.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
