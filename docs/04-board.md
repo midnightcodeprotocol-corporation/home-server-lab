@@ -24,14 +24,14 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] CT103 Tailscale 1.104.4 online, forwarding/TUN aktif, route `192.168.88.0/24` tampil pada PrimaryRoutes; uji dari klien HP/laptop masih pending. Lease DHCP `.104` bersifat dinamis.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
 - [x] CT104 statis `.20/24` diterapkan di konfigurasi CT (di luar pool DHCP; tidak ada reservation MikroTik); Portainer HTTPS 9443 HTTP 200 dan Jellyfin healthy TCP 8096 diverifikasi setelah restart.
-- [x] Immich Compose resmi di CT104; upload ke HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; seluruh container healthy dan API merespons. Onboarding admin masih oleh pengguna.
+- [x] Immich Compose di CT104; upload menuju HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; empat container healthy dan API `/api/server/ping` mengembalikan `pong`. Akses `.20:2283` dari laptop melalui Tailscale lulus; login dan upload pertama dari ponsel belum diuji. Salinan ponsel tetap disimpan sampai ada backup terpisah.
 - [ ] Nextcloud 35.0.2.2 terpasang di CT104 `.20:8080` dengan MariaDB/Redis sehat; data pengguna di HDD, DB di SSD; pengguna perlu mengambil password awal dari secret lokal, login, mengganti password, dan uji klien.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; target Prometheus/PVE `up`; dashboard `Home Server Overview` tampil dengan delapan panel (CPU/RAM host & guest, status target, pemakaian storage dan disk guest). File dashboard tervalidasi JSON dan telah dimuat setelah restart Grafana.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
-- [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; dashboard monitor layanan yang sudah dikoreksi tetap aktif dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Monitor Beszel belum ditambahkan.
+- [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; 13 monitor aktif termasuk Beszel, dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Immich belum ditambahkan ke monitor Kuma.
 - [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Password awal dibuat di server dan tidak masuk repo; login awal pengguna menunggu.
-- [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, serta agent Proxmox dan CT104 active/enabled dan terhubung lewat WebSocket. Pembacaan SMART, monitor Beszel di Kuma, dan notifikasi Gotify masih perlu diselesaikan.
+- [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART dan notifikasi Gotify masih perlu diselesaikan.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
