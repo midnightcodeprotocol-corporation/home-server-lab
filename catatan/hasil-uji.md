@@ -386,3 +386,12 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - **Lulus:** semua container Docker yang terlihat pada `docker ps` di CT104 berstatus Up. Gotify dan Uptime Kuma berstatus healthy; `immich_server` juga healthy bersama Postgres, Redis, dan machine learning.
 - **Lulus:** dari laptop, koneksi TCP ke `192.168.88.20:2283` berhasil dan `GET /api/server/ping` mengembalikan `{"res":"pong"}`. Ini hanya menguji jalur laptop saat ini; tidak membuktikan upload ponsel sudah selesai.
 - Tidak ada perubahan konfigurasi server pada audit ini. Penambahan monitor Immich ke Uptime Kuma masih tertunda; belum diubah melalui database atau tanpa sesi admin yang tervalidasi.
+
+## Portainer Server CT105 dan Agent CT104 — 3 November 2026
+
+- Pengguna menyelesaikan wizard admin Portainer pada CT105 dan memilih Skip untuk Edge Compute.
+- Pengguna menjalankan perintah resmi `docker run` untuk `portainer/agent:2.45.3` di CT104 `docker-services` dan melaporkan menambahkan CT104 sebagai environment pada Portainer CT105.
+- **Lulus (status container):** SSH baca-saja ke PVE menunjukkan CT104 dan CT105 `running`; `docker ps` di CT104 menunjukkan `portainer_agent Up` dengan TCP 9001 dipetakan ke `0.0.0.0` dan `::`. Portainer server di CT105 `Up`, HTTPS 9443 dipetakan, dan `/api/status` HTTP 200.
+- **Belum dikonfirmasi:** status environment `Up` pada dashboard Portainer tidak terlihat dari audit ini. Lease CT105 `.105` masih dinamis, belum reservasi/static.
+- **Tindak lanjut keamanan:** perintah agent membuka TCP 9001 di semua interface CT104. Batasi akses ke alamat CT105 setelah IP stabil sebelum migrasi aplikasi; jangan hentikan Portainer lama CT104 selama masa transisi.
+- Tidak ada kata sandi atau token dicatat.

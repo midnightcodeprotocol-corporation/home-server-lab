@@ -6,7 +6,7 @@ Perbandingan rencana aplikasi dengan pemasangan dan verifikasi aktual ada di [Ma
 
 Rencana pemisahan aplikasi CT104 menjadi satu guest per aplikasi stack telah disetujui dan pelaksanaan bertahap dimulai setelah upload Immich dilaporkan selesai. Backup file/database Immich berhasil dibuat terenkripsi dan pemulihan penuh diuji; perbedaan hitungan ponsel 12.923 vs database 10.638 masih perlu direkonsiliasi sebelum Immich dipindah. Lihat [Usulan susunan guest per aplikasi](docs/14-usulan-isolasi-guest.md).
 
-Pembaruan pelaksanaan 3 Nov: CT105 Portainer dibuat dari CT100; lease DHCP sementara `.105`, Docker/Compose aktif, UI HTTPS 9443 merespons. Setup admin awal menunggu pengguna. Portainer lama CT104 tetap berjalan dan aplikasi belum dipindahkan.
+Pembaruan pelaksanaan 3 Nov: CT105 Portainer dibuat dari CT100; lease DHCP sementara `.105`, Docker/Compose aktif, UI HTTPS 9443 merespons, dan pengguna menyelesaikan setup admin serta melewati Edge Compute. CT104 menjalankan Portainer Agent 2.45.3 (diverifikasi `Up` melalui SSH); pengguna melaporkan telah menambahkan CT104 ke environment Portainer CT105. Status `Up` environment di dashboard belum dikonfirmasi. Agent memublikasikan TCP 9001 pada semua interface CT104; pembatasan akses ke sumber CT105 masih perlu ditangani. Portainer lama CT104 tetap berjalan dan aplikasi belum dipindahkan.
 
 Keputusan layanan file: **Nextcloud** menjadi layanan file utama keluarga untuk ponsel dan PC/laptop; **Samba CT102** menjadi pelengkap untuk akses share jaringan langsung dari komputer; **TrueNAS ditunda** dan hanya dipertimbangkan kelak sebagai pengelola storage/NAS, bukan aplikasi file utama. Hindari dua jalur penulisan aktif pada folder yang sama. Rincian ada di bagian “Keputusan layanan file dan NAS” pada dokumen usulan guest.
 
@@ -41,6 +41,7 @@ Keputusan layanan file: **Nextcloud** menjadi layanan file utama keluarga untuk 
 6. Setelah upload Immich selesai, buat dump DB baru, periksa ukuran sumber/ruang `store1`, lalu backup file media secara terpisah. Data HDD CT102/104 dikecualikan dari backup guest (`backup=0`). Pertahankan salinan asli di ponsel sampai backup file selesai diverifikasi.
 7. **Gotify ↔ Proxmox:** Pengguna membuat token aplikasi khusus dan menambahkan target `gotify-proxmox` di PVE; pengguna melaporkan tes target berhasil. Matcher `gotify-all` kini aktif dan mengarahkan semua notifikasi PVE ke Gotify; matcher email bawaan tetap ada. Belum ada event PVE nyata yang diverifikasi sampai ke ponsel. Integrasi notifikasi Uptime Kuma → Gotify juga belum dikonfigurasi. Token tidak disimpan di repo.
 8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
+9. **Portainer:** pengguna melaporkan CT104 sudah ditambahkan sebagai environment di server CT105. Agent container berjalan; konfirmasi tampilan status environment dan batasi TCP 9001 agar hanya dapat diakses dari CT105 sebelum migrasi aplikasi.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
