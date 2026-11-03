@@ -30,7 +30,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; target Prometheus/PVE `up`; dashboard `Home Server Overview` tampil dengan delapan panel (CPU/RAM host & guest, status target, pemakaian storage dan disk guest). File dashboard tervalidasi JSON dan telah dimuat setelah restart Grafana.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; 13 monitor aktif termasuk Beszel, dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Immich belum ditambahkan ke monitor Kuma.
-- [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Password awal dibuat di server dan tidak masuk repo; login awal pengguna menunggu.
+- [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Pengguna melaporkan login admin dan penggantian password selesai; token aplikasi dan uji notifikasi ke HP masih pending.
 - [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART dan notifikasi Gotify masih perlu diselesaikan.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
