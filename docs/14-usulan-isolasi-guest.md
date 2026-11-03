@@ -79,7 +79,7 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 
 ## Tahap migrasi
 
-1. Upload Immich dilaporkan selesai. Dump DB baru sudah lolos `gzip -t` dan folder media sudah berhasil dicadangkan terenkripsi ke PBS pada `host/immich-data/2026-11-03T15:00:28Z`. Sebelum migrasi, rekonsiliasi jumlah akhir (query database 10.638 asset vs catatan ponsel sebelumnya 12.923) dan tinjau uji pemulihan; jangan menganggap backup sebagai salinan fisik terpisah karena PBS masih berada di NVMe host yang sama.
+1. Upload Immich dilaporkan selesai. Dump DB baru lolos `gzip -t`; folder media berhasil dicadangkan terenkripsi ke PBS pada `host/immich-data/2026-11-03T15:00:28Z`. Pemulihan penuh arsip berhasil dan SHA-256 dump hasil restore cocok dengan sumber. Sebelum migrasi Immich, rekonsiliasi jumlah akhir (query database 10.638 asset vs catatan ponsel sebelumnya 12.923); backup ini bukan salinan fisik terpisah karena PBS masih berada di NVMe host yang sama.
 2. Tetapkan pola Docker per guest, jaringan/port, IP yang tidak bertabrakan, mount data, dan batas CPU/RAM. Catat backup serta langkah rollback sebelum memindahkan tiap stack.
 3. Uji Portainer Server CT105 mengelola satu guest Docker percobaan menggunakan Agent dengan akses jaringan terbatas.
 4. Pindahkan layanan ringan dan monitoring satu per satu. Uji UI/API dan fungsi setelah tiap perpindahan.
