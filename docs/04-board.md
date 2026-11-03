@@ -36,7 +36,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
-- [ ] PBS VM212 terpasang; `.30` ping dan HTTPS 8007 HTTP 200 setelah hard reset. VM `onboot=1`. Disk HDD 1.5 TiB dilepas tanpa menghapus volume; disk virtual 100 GiB NVMe terpasang. `store1` dilaporkan pengguna tetapi belum diverifikasi dari PBS. Belum ada backup/restore test.
+- [ ] PBS VM212 terpasang dan berjalan; disk sementara 100 GiB ada di NVMe. Audit 3 Nov: PBS belum ditambahkan sebagai storage PVE dan belum ada backup job (`pvesh ... /cluster/backup` menghasilkan `[]`); `store1` belum diverifikasi dari PBS. Backup CT tidak menyertakan bind-mount media Immich (`backup=0`). Langkah berikut: verifikasi datastore, sambungkan PBS ke PVE, buat dan uji backup guest serta media/database Immich, lalu jadwalkan.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
