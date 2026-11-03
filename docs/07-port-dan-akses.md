@@ -23,7 +23,7 @@
 | VM 209 web | .28 | 8081 WordPress, 8082 situs | dari .20 | `wp.home.arpa`, `web.home.arpa` |
 | VM 210 web-public | .29 | (tidak ada masuk) | Cloudflare Tunnel keluar | domain Anda |
 | VM 211 music | .31 | 127.0.0.1:4533 | Tailscale Serve | `lab-music.*.ts.net` |
-| VM 212 pbs | `192.168.88.30` (ping 3/3, HTTPS HTTP 200 dari host setelah hard reset) | 8007 HTTPS | host .10 dan admin | `https://192.168.88.30:8007` |
+| VM 212 pbs | `192.168.88.30` (HTTPS 8007 dapat dijangkau dari Windows lewat Tailscale; datastore belum diverifikasi) | 8007 HTTPS | admin LAN/tailnet | `https://192.168.88.30:8007` |
 | VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
 | VM 214 (slot lama Immich) | .33 target lama, belum dibuat | — | — | Immich dialihkan ke CT104; lihat baris CT104 |
 | STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
