@@ -333,3 +333,11 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - **Belum ada backup yang dijalankan.** Sebelum unggah foto lebih banyak, verifikasi datastore PBS 100 GiB, tambahkan sebagai storage PVE memakai kredensial/token yang hanya dimasukkan di UI lokal, lalu rancang dua cakupan: backup guest PVE dan backup file+database Immich. Backup PBS sementara berada di NVMe yang sama dengan Proxmox; ini tidak melindungi dari kegagalan fisik NVMe.
 - Sesudah satu backup awal berhasil diverifikasi, jadwal harian (misalnya 03.00 WIB) dengan retensi awal yang dibatasi dapat dibuat. Jadwal harus mencakup pula media Immich; backup CT biasa saja tidak cukup.
 - Pengguna mengonfirmasi pada 3 Nov bahwa datastore `store1` tampak di PBS UI. Free space dan izin datastore belum diverifikasi; belum ada backup. Langkah selanjutnya membuat user/API token khusus PVE dengan izin terbatas pada `/datastore/store1`, menambah storage PBS pada PVE, lalu menjalankan backup awal dan uji hasil.
+
+## Backup guest manual pertama — 3 November 2026
+
+- Storage PBS `pbs-store1` berhasil ditambahkan pada PVE setelah pengguna memasukkan fingerprint sertifikat yang ditampilkan saat koneksi.
+- Pengguna melaporkan backup manual dengan mode Snapshot dan kompresi ZSTD untuk CT101 (`adguard2`), CT102 (`files`), CT103 (Tailscale), CT104 (`docker-services`), dan VM202 (`haos`) masing-masing berakhir `TASK OK`.
+- Pengguna membuka PBS Content dan mengonfirmasi arsip CT101 terlihat. Arsip empat guest lain belum dikonfirmasi lewat halaman Content.
+- Belum ada tes restore, jadwal backup, pemeriksaan ruang kosong datastore, atau backup terpisah untuk data bind-mount Immich. CT104 bind-mount `/srv/media` dan `/srv/appdata` disetel `backup=0`; media Immich di `/srv/media/immich` tidak tercakup backup CT. PBS sementara 100 GiB berada di NVMe yang sama dengan PVE.
+- Langkah berikut: cek kapasitas bebas `store1`, kemudian siapkan dan uji backup media serta database Immich sebelum mengaktifkan jadwal otomatis.

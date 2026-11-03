@@ -36,7 +36,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
-- [ ] PBS VM212 terpasang dan berjalan; disk sementara 100 GiB ada di NVMe. Pengguna mengonfirmasi `store1` terlihat di PBS; ruang kosong belum dicatat. PBS belum ditambahkan sebagai storage PVE dan belum ada backup job (`pvesh ... /cluster/backup` menghasilkan `[]`). Backup CT tidak menyertakan bind-mount media Immich (`backup=0`). Langkah berikut: buat token terbatas, sambungkan PBS ke PVE, buat dan uji backup guest serta media/database Immich, lalu jadwalkan.
+- [ ] PBS VM212 berjalan; disk sementara 100 GiB ada di NVMe. Storage `pbs-store1` sudah ditambahkan di PVE. Backup CT101/102/103/104 dan VM202 dilaporkan `TASK OK`; arsip CT101 terlihat di PBS Content. Belum ada tes restore, jadwal, cek ruang kosong, atau backup file untuk media bind-mount Immich (`backup=0`). Langkah berikut: cek kapasitas `store1`, siapkan backup media/database Immich, uji pemulihan, lalu buat jadwal.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
