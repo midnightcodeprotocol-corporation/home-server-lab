@@ -3,7 +3,7 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Migrasi Gotify ke CT112:** CT104 tetap sehat/sumber (`.20:8070`, HTTP 200). CT112 running dengan DHCP sementara `.109`, MAC `BC:24:11:2F:EE:31`; container Gotify/Compose belum siap. Kedua DB lolos integrity check tetapi hash berbeda; backup CT112 belum ada. Tunggu pemeriksaan/reservation lease MikroTik, lalu backup dan sinkronisasi konsisten sebelum cutover. CT104 tetap rollback.
+- [ ] **Migrasi Gotify ke CT112:** CT104 tetap sehat/sumber (`.20:8070`, HTTP 200). CT112 berjalan pada `.109`, MAC `BC:24:11:2F:EE:31`; pengguna melaporkan lease statis, tetapi WebFig refresh masih menunjukkan `D`. Compose belum siap. Kedua DB lolos integrity check tetapi hash berbeda. Backup terenkripsi CT104/112 sukses dan CT112 masuk job harian. Pastikan lease tetap, lalu sinkronisasi konsisten sebelum cutover. CT104 tetap rollback.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
