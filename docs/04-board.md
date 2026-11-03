@@ -37,7 +37,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
 - [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB untuk CT101–104 dan VM202 dibuat (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif untuk backup mendatang; pengguna melaporkan paperkey disimpan dan salinan sementara dihapus. Backup uji CT101 terenkripsi berhasil dan arsip terlihat di PBS. Backup manual sebelumnya belum terenkripsi.
-- [ ] Verifikasi job harian pertama dan uji restore ke CT ID sementara. Backup data Immich masih menunggu unggahan selesai.
+- [ ] Verifikasi job harian pertama untuk seluruh guest. Uji restore arsip terenkripsi CT101 ke CT109 sementara lulus (CT boot dengan NIC terputus, AdGuard aktif, HTTP 302); CT109 dan disk uji sudah dihapus. Backup data Immich masih menunggu unggahan selesai.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
