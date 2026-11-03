@@ -3,9 +3,11 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026.
 
 ## Sedang dikerjakan
+- [ ] **Migrasi Gotify ke CT112:** CT104 tetap sehat/sumber (`.20:8070`, HTTP 200). CT112 running dengan DHCP sementara `.109`, MAC `BC:24:11:2F:EE:31`; container Gotify/Compose belum siap. Kedua DB lolos integrity check tetapi hash berbeda; backup CT112 belum ada. Tunggu pemeriksaan/reservation lease MikroTik, lalu backup dan sinkronisasi konsisten sebelum cutover. CT104 tetap rollback.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
+- [ ] Setelah migrasi Gotify, siapkan Homepage khusus di CT115; alamat IP belum ditetapkan. Jangan mulai sebelum Gotify selesai diverifikasi.
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
