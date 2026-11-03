@@ -30,7 +30,7 @@
 
 | Aplikasi | Guest target usulan | Stack yang tetap bersama | Urutan / catatan migrasi |
 |---|---|---|---|
-| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai menurut pengguna. Agent 2.45.3 CT104 diverifikasi berjalan; pengguna melaporkan environment CT104 ditambahkan. Konfirmasi status `Up` di dashboard dan batasi port TCP 9001 ke CT105 sebelum migrasi; pertahankan instance lama sampai pengelolaan lewat CT105 teruji. |
+| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai menurut pengguna. SSH memverifikasi Agent 2.45.3 berjalan; screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container terlihat. Tetapkan reservation DHCP CT105, lalu batasi TCP 9001 ke CT105 sebelum migrasi; pertahankan instance lama selama transisi. |
 | Jellyfin | CT106 (baru) | Jellyfin dan konfigurasi/library-nya. | Migrasi setelah uji mount media. Transcode dapat memakai CPU tinggi. |
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |

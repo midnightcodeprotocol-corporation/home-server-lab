@@ -395,3 +395,5 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - **Belum dikonfirmasi:** status environment `Up` pada dashboard Portainer tidak terlihat dari audit ini. Lease CT105 `.105` masih dinamis, belum reservasi/static.
 - **Tindak lanjut keamanan:** perintah agent membuka TCP 9001 di semua interface CT104. Batasi akses ke alamat CT105 setelah IP stabil sebelum migrasi aplikasi; jangan hentikan Portainer lama CT104 selama masa transisi.
 - Tidak ada kata sandi atau token dicatat.
+- **Lulus (konfirmasi dashboard pengguna):** screenshot Portainer Home menunjukkan 2 environment total dan 2 berstatus `Up`; `CT104-docker-services` memakai URL `tcp://192.168.88.20:9001`, Agent 2.45.3, serta 16/16 container dan 1 node. Environment `local` CT105 juga `Up`.
+- Screenshot mengonfirmasi CT105 UI di `https://192.168.88.105:9443`; alamat ini tetap lease DHCP dinamis karena reservasi MikroTik belum dibuat. MAC CT105 pada konfigurasi PVE: `BC:24:11:19:DA:40`.
