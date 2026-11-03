@@ -446,4 +446,13 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 ## Konfirmasi akses Grafana CT111 — 4 November 2026
 
 - Pengguna mengonfirmasi login Grafana berhasil setelah diarahkan ke username `labadmin` dan menggunakan password lama yang ikut tersalin bersama database Grafana ke CT111. Password tidak diketahui/disimpan di chat atau repo.
-- Konfirmasi ini hanya mencakup login Grafana. Static lease CT110/111, environment Portainer CT110/111, dan pengalihan monitor Uptime Kuma tetap belum dikonfirmasi.
+- Pada saat catatan login dibuat, konfirmasi hanya mencakup akses Grafana. Status static lease, environment Portainer, dan monitor Kuma diperbarui setelahnya pada bagian pemeriksaan 4 Nov berikutnya.
+
+## Verifikasi setelah pengguna menyelesaikan pengaturan CT110/CT111 — 4 November 2026
+
+- Pengguna melaporkan Make Static CT110 `.107` dan CT111 `.108` di MikroTik, serta mendaftarkan environment `CT110-prometheus` dan `CT111-grafana` pada Portainer CT105. RouterOS dan tampilan dashboard Portainer tidak dapat diaudit langsung.
+- Audit Proxmox baca-saja: CT109/110/111 running; konfigurasi NIC tetap DHCP, lease aktif masing-masing `.106/.107/.108`; MAC CT110 `BC:24:11:A4:50:42`, CT111 `BC:24:11:94:22:43`.
+- HTTP UI Kuma `.106:3001` memberi 302; health Grafana `.108:3000/api/health` memberi 200. Query Prometheus dari CT111 menunjukkan target `prometheus` dan `proxmox` berstatus `up`.
+- Agent TCP 9001 dari CT105 ke `.107` dan `.108` memberi HTTP 403 tanpa signature, memastikan jalur jaringan sumber Portainer mencapai kedua Agent. Ini bukan pemeriksaan status tampilan environment di UI.
+- Baca database Kuma secara read-only: monitor `Uptime Kuma` mengarah ke host `.106`, port 3001; monitor `Grafana` mengarah ke `.108:3000`. Sampel heartbeat terakhir yang tersimpan untuk keduanya berstatus `1` (Up).
+- Laporan static lease dan environment dicatat sebagai konfirmasi pengguna; RouterOS/dashboard tidak dinyatakan telah diverifikasi langsung.
