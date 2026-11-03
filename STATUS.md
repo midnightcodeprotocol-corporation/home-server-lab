@@ -4,7 +4,9 @@
 
 Perbandingan rencana aplikasi dengan pemasangan dan verifikasi aktual ada di [Matriks rencana vs aktual](docs/13-matriks-rencana-aktual.md).
 
-Rencana memisahkan aplikasi CT104 menjadi satu guest per aplikasi stack telah disetujui untuk dilaksanakan setelah upload Immich selesai. Pengguna kini melaporkan upload selesai; audit menemukan jumlah aset database 10.638 sementara catatan lama di ponsel menunjukkan total 12.923. Lihat [Usulan susunan guest per aplikasi](docs/14-usulan-isolasi-guest.md). Langkah berikutnya adalah merekonsiliasi jumlah/status akhir, membuat dan memverifikasi backup file/database Immich, lalu meninjau kembali IP, mount, serta resource sebelum migrasi. Tidak ada CT/VM baru atau perubahan konfigurasi server pada sesi ini.
+Rencana pemisahan aplikasi CT104 menjadi satu guest per aplikasi stack telah disetujui dan pelaksanaan bertahap dimulai setelah upload Immich dilaporkan selesai. Backup file/database Immich berhasil dibuat terenkripsi dan pemulihan penuh diuji; perbedaan hitungan ponsel 12.923 vs database 10.638 masih perlu direkonsiliasi sebelum Immich dipindah. Lihat [Usulan susunan guest per aplikasi](docs/14-usulan-isolasi-guest.md).
+
+Pembaruan pelaksanaan 3 Nov: CT105 Portainer dibuat dari CT100; lease DHCP sementara `.105`, Docker/Compose aktif, UI HTTPS 9443 merespons. Setup admin awal menunggu pengguna. Portainer lama CT104 tetap berjalan dan aplikasi belum dipindahkan.
 
 Keputusan layanan file: **Nextcloud** menjadi layanan file utama keluarga untuk ponsel dan PC/laptop; **Samba CT102** menjadi pelengkap untuk akses share jaringan langsung dari komputer; **TrueNAS ditunda** dan hanya dipertimbangkan kelak sebagai pengelola storage/NAS, bukan aplikasi file utama. Hindari dua jalur penulisan aktif pada folder yang sama. Rincian ada di bagian “Keputusan layanan file dan NAS” pada dokumen usulan guest.
 

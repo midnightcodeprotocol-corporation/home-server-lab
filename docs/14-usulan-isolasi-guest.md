@@ -1,6 +1,6 @@
 # Usulan susunan guest per aplikasi
 
-**Status: rencana disetujui pengguna untuk dilaksanakan setelah upload Immich selesai; belum diterapkan.** Disetujui 3 November 2026 setelah pengguna mengusulkan satu aplikasi per CT/VM agar restart dan beban CPU tidak bercampur. Prasyarat sebelum migrasi: upload Immich selesai, backup file dan database dibuat serta diuji, lalu rencana IP/mount/resource diperiksa. ID CT/VM baru di bawah adalah usulan; semua IP baru tetap belum dialokasikan.
+**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** Upload Immich dilaporkan selesai; backup file/database sudah dibuat dan pemulihan penuh arsip diuji. Selisih hitungan ponsel (12.923) dan database (10.638) masih harus direkonsiliasi sebelum Immich dipindah. CT105 Portainer sudah dibuat dan dijalankan; guest lain belum dibuat. ID berikut adalah usulan, dan lease DHCP `.105` pada CT105 tetap sementara, bukan alamat final.
 
 ## Dasar rancangan
 
@@ -20,6 +20,7 @@
 | CT102 | Samba | Pertahankan; layanan sudah mandiri. |
 | CT103 | Tailscale subnet router | Pertahankan sementara; lease `.104` dinamis, jangan dicatat sebagai IP final. |
 | CT104 | Docker-services, sekarang menampung beberapa aplikasi | Jadikan sumber migrasi/rollback. Pindahkan aplikasi satu per satu; hentikan CT104 hanya setelah semua target diuji dan data aman. Jangan hapus sekarang. |
+| CT105 | Portainer Server khusus, dibuat 3 Nov 2026 | Docker/Compose aktif dan UI HTTPS `:9443` merespons. Setup admin awal menunggu pengguna; Portainer lama CT104 tetap berjalan. Lease DHCP `.105` dinamis, bukan IP final. |
 | VM200 | Template Debian 13 | Pertahankan untuk VM baru. |
 | VM201 | docker-core | Tetap stopped. Tidak perlu menyalakannya untuk arsitektur baru. |
 | VM202 | Home Assistant OS | Pertahankan sebagai VM mandiri. |
@@ -29,7 +30,7 @@
 
 | Aplikasi | Guest target usulan | Stack yang tetap bersama | Urutan / catatan migrasi |
 |---|---|---|---|
-| Portainer | CT105 (baru) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Buat dan uji jalur pengelolaan beberapa guest sebelum memindahkan stack pertama. |
+| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin awal menunggu pengguna. Setelah itu daftarkan CT104 sebagai environment dan uji akses; pertahankan instance lama sampai berhasil. |
 | Jellyfin | CT106 (baru) | Jellyfin dan konfigurasi/library-nya. | Migrasi setelah uji mount media. Transcode dapat memakai CPU tinggi. |
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
@@ -39,7 +40,7 @@
 | Gotify | CT112 (baru) | Gotify dan data aplikasinya. | Pertahankan target/matcher PVE; verifikasi notifikasi setelah pindah. |
 | Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
 
-Guest CT105–113 tersedia dalam rentang ID CT, tetapi belum dibuat. Tidak ada IP yang ditetapkan pada draf ini. CT104 `.20` tetap menjadi alamat aktif sampai rencana pemindahan IP disetujui dan tiap migrasi siap; jangan menduplikasi IP `.20`.
+CT106–113 adalah usulan dan belum dibuat. CT105 saat ini memakai lease DHCP dinamis `.105`, belum ada reservasi/static IP. CT104 `.20` tetap berjalan sebagai sumber migrasi; jangan memindahkan atau menduplikasi alamat `.20` sebelum rencana jaringan disepakati.
 
 ## Aplikasi rencana yang belum dipasang
 
