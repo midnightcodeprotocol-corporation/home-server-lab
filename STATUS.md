@@ -31,7 +31,7 @@
 4. Pengguna melaporkan password Samba `labshare` sudah ditetapkan di CT102; uji `\\192.168.88.12\\Media` dan `\\192.168.88.12\\Files` dari Windows masih pending.
 5. Uji akses Tailscale dari ponsel dengan membuka Immich; laptop sudah berhasil mengakses `.20:2283` melalui interface Tailscale. CT103 mengiklankan route LAN; lease `.104` tetap dinamis.
 6. Setelah upload Immich selesai, buat dump DB baru, periksa ukuran sumber/ruang `store1`, lalu backup file media secara terpisah. Data HDD CT102/104 dikecualikan dari backup guest (`backup=0`). Pertahankan salinan asli di ponsel sampai backup file selesai diverifikasi.
-7. **Gotify:** pengguna melaporkan login `admin` dan penggantian password selesai. Buat aplikasi `Uptime Kuma`, simpan tokennya secara privat, lalu masukkan di Uptime Kuma dan uji kirim notifikasi ke HP.
+7. **Gotify ↔ Proxmox (audit live 3 Nov):** Gotify service sehat, tetapi tabel aplikasi Gotify kosong; Uptime Kuma tidak memiliki notification entry; konfigurasi PVE tidak memiliki target/matcher Gotify. Login/password sudah selesai menurut pengguna, tetapi koneksi belum dibuat. Langkah berikut: buat aplikasi/token khusus `Proxmox VE`, lalu hubungkan sebagai target di Datacenter → Notifications dan uji kirim.
 8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
 
 ## Masalah terbuka
