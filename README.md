@@ -109,6 +109,7 @@ Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/
 | `docs/00-ide-awal.md` – `docs/10-konteks-proyek.md` | Tujuan, arsitektur target, diagram jaringan, perangkat, konsep, port, keputusan, status awal, dan preferensi kerja |
 | `docs/11-rencana-kerja-ai-ssh.md` | Koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
 | [docs/13-matriks-rencana-aktual.md](docs/13-matriks-rencana-aktual.md) | Perbandingan aplikasi yang direncanakan dengan guest/layanan yang sudah diverifikasi dan pekerjaan tersisa |
+| [docs/14-usulan-isolasi-guest.md](docs/14-usulan-isolasi-guest.md) | Draf susunan satu aplikasi per guest, mencakup layanan aktif, rencana belum terpasang, dan urutan migrasi CT104 |
 | [docs/12-roadmap-manfaat-keamanan.md](docs/12-roadmap-manfaat-keamanan.md) | Prioritas peningkatan kegunaan, keamanan, backup, pemantauan, dan segmentasi jaringan |
 | [docs/panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) | Sumber buku pemula terpadu, langkah kerja, diagram, checklist, perintah, serta syarat lulus tiap fase |
 | `docs/bab/edisi2/` | Instalasi Proxmox, jaringan, VM/LXC, Docker, Git, Home Assistant, dan dasar layanan |
