@@ -282,3 +282,12 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 
 - Pengguna melaporkan menyelesaikan dialog **Create: Directory** di PBS dengan `/dev/sdb`, ext4, nama `store1`, dan **Add as Datastore** dicentang. `/dev/sdb` sesuai disk guest tambahan 100 GiB di `scsi1` pada VM212; disk OS 32 GiB ada di `scsi0`, volume HDD 1.5 TiB sudah dilepas dari guest.
 - Status pembuatan datastore dicatat berdasarkan konfirmasi pengguna; belum dikonfirmasi secara terpisah melalui daftar datastore dashboard. Belum ada backup job atau backup yang berjalan.
+
+## Monitoring Prometheus dan Grafana — 3 November 2026
+
+- **Lulus:** Prometheus 3.15.1, `prompve/prometheus-pve-exporter` 3.11.0, dan Grafana 13.3.0 dipasang dengan Compose di CT104 `/opt/stacks/prometheus`.
+- **Lulus:** endpoint health Grafana menghasilkan JSON `database: ok`; Prometheus API menunjukkan job Prometheus dan Proxmox sama-sama `up`. Query `pve_cpu_usage_ratio{id="node/pve"}` mengembalikan metrik untuk node PVE.
+- **Lulus:** datasource Prometheus dan dashboard `Home Server Overview` diprovisikan. Dashboard memuat panel CPU/RAM host dan guest.
+- **Keamanan/akses:** API Proxmox menggunakan user/token khusus dengan role `PVEAuditor`; TLS diverifikasi memakai CA PVE. Prometheus menyimpan metrik 30 hari. Grafana tersedia di `http://192.168.88.20:3000`; Prometheus hanya bind ke localhost CT104 pada port 9090 dan PVE exporter hanya di jaringan Docker internal. Rahasia disimpan di direktori `secrets` lokal server yang tidak masuk repo.
+- **Belum diuji pengguna:** login pertama Grafana dan tampilan dashboard dari browser klien. Password awal tersedia di `/opt/stacks/prometheus/secrets/grafana_admin_password`; pengguna mengambilnya sendiri melalui shell Proxmox, tidak mengirim password ke chat.
+- Keputusan awal untuk tidak memasang Prometheus pada catatan sebelumnya adalah riwayat; pada 3 Nov pengguna mengarahkan untuk menggunakan Prometheus dan stack ini sudah dipasang.

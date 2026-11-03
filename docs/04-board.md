@@ -24,12 +24,12 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] CT103 Tailscale 1.104.4 online, forwarding/TUN aktif, route `192.168.88.0/24` tampil pada PrimaryRoutes; uji dari klien HP/laptop masih pending. Lease DHCP `.104` bersifat dinamis.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
 - [x] CT104 statis `.20/24` diterapkan di konfigurasi CT (di luar pool DHCP; tidak ada reservation MikroTik); Portainer HTTPS 9443 HTTP 200 dan Jellyfin healthy TCP 8096 diverifikasi setelah restart.
-- [x] Immich Compose resmi di CT104; upload ke HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; seluruh container healthy dan API merespons. Onboarding admin masih oleh pengguna. Prometheus tidak dipasang.
+- [x] Immich Compose resmi di CT104; upload ke HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; seluruh container healthy dan API merespons. Onboarding admin masih oleh pengguna.
 - [ ] Nextcloud 35.0.2.2 terpasang di CT104 `.20:8080` dengan MariaDB/Redis sehat; data pengguna di HDD, DB di SSD; pengguna perlu mengambil password awal dari secret lokal, login, mengganti password, dan uji klien.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
-- [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
+- [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; kedua target scrape `up`, query metrik node berhasil, datasource Prometheus dan dashboard Home Server Overview diprovisikan. Login Grafana pertama menunggu pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
-- [ ] Suplemen 3 (Bab 31-34): Uptime Kuma 2.5.9 terpasang di CT104 `.20:3001`, HTTP mengarah ke setup; pengguna perlu membuat akun admin. Gotify dan Beszel belum dipasang.
+- [x] Uptime Kuma 2.5.9 terpasang di CT104 `.20:3001`; pengguna menyelesaikan setup, HTTP mengarah ke dashboard. Gotify dan Beszel belum dipasang.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel

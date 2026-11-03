@@ -1,0 +1,5 @@
+default:
+  user: "grafana@pve"
+  token_name: "telegraf"
+  token_value: "REPLACE_WITH_LOCAL_TOKEN_SECRET"
+  verify_ssl: true
