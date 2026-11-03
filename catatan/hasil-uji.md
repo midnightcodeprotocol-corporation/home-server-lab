@@ -362,3 +362,13 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - PBS Dashboard yang dilaporkan pengguna: `store1` usage 9.06% (`9.04 GB of 99.70 GB`), sekitar `90.66 GB` available; backup groups: empat CT dan satu VM. Ukuran sumber Immich 8.3G saat ini muat dalam datastore, tetapi ukuran akan bertambah seiring upload foto/video.
 - Pengguna menjalankan `proxmox-backup-client key show`; hasilnya `Error: no encryption file provided and no default file found`. Kunci default lalu dibuat melalui `proxmox-backup-client key create`; pengguna mengonfirmasi paperkey disimpan di password manager. Tidak ada nilai kunci atau passphrase yang dicatat di repo. Backup file terenkripsi belum dijalankan.
 - **Steering pengguna:** meskipun backup file Immich awalnya direncanakan sebelum upload ponsel dilanjutkan, pengguna menyatakan upload foto/video masih berlangsung dan memilih backup nanti. Upload kini dilaporkan sedang berjalan. Setelah selesai, ukur ulang folder, cek kapasitas PBS terbaru, buat dump database baru, baru jalankan backup file terenkripsi. Salinan asli tetap disimpan.
+
+## Integrasi notifikasi Proxmox → Gotify — 3 November 2026
+
+- Pengguna membuat aplikasi/token Gotify khusus untuk PVE, memasukkan token hanya melalui UI PVE, lalu melaporkan tes target berhasil. Audit konfigurasi nonrahasia PVE menunjukkan target `gotify-proxmox` dengan server `http://192.168.88.20:8070`; file privat token tidak dibaca.
+- Sebelum perubahan, `default-matcher` bawaan hanya merutekan ke `mail-to-root`. Dibuat matcher `gotify-all`, mode `all`, tanpa aturan penyaring, target `gotify-proxmox`. Dokumentasi resmi PVE menyatakan matcher tanpa aturan selalu cocok; matcher email bawaan tetap dipertahankan.
+- **Lulus (konfigurasi):** `pvesh get /cluster/notifications/matchers --output-format json` mengonfirmasi matcher `gotify-all` berstatus user-created dan targetnya `gotify-proxmox`.
+- **Lulus (uji target menurut pengguna):** pengguna melaporkan tes target Gotify berhasil. **Belum diuji:** event PVE biasa/backup yang melewati matcher sampai tampil sebagai notifikasi di ponsel.
+- Job backup `home-lab-daily` tidak menetapkan `notification-mode` khusus/legacy; PVE menggunakan pengaturan notifikasi global. Belum ada backup harian yang berjalan sebagai uji notifikasi setelah matcher dibuat.
+- Tidak dibuat target atau matcher Uptime Kuma → Gotify dalam langkah ini. Tidak ada token/rahasia yang dicatat di repo.
+- Rujukan resmi: [Notifikasi Proxmox VE](https://github.com/proxmox/pve-docs/blob/master/notifications.adoc).

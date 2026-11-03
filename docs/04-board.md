@@ -31,7 +31,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; 13 monitor aktif termasuk Beszel, dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Immich belum ditambahkan ke monitor Kuma.
 - [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Pengguna melaporkan login admin dan penggantian password selesai.
-- [ ] Live audit 3 Nov: belum ada aplikasi/token Gotify, Uptime Kuma notification entry, atau target/matcher Gotify di PVE. Buat aplikasi/token khusus Proxmox, tambahkan target/matcher di Datacenter → Notifications, dan kirim uji notifikasi.
+- [x] Pengguna membuat token aplikasi Gotify dan target `gotify-proxmox` PVE; pengguna mengonfirmasi tes target berhasil. Matcher `gotify-all` dibuat dan diarahkan ke target tersebut; matcher email bawaan dipertahankan. Penerimaan event PVE nyata dan notifikasi Uptime Kuma → Gotify masih belum diuji/dikonfigurasi.
 - [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART dan notifikasi Gotify masih perlu diselesaikan.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
