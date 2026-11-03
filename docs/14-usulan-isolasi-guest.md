@@ -1,6 +1,6 @@
 # Usulan susunan guest per aplikasi
 
-**Status: draf usulan, belum diterapkan.** Disusun 3 November 2026 setelah pengguna mengusulkan satu aplikasi per CT/VM agar restart dan beban CPU tidak bercampur. ID CT/VM baru di bawah adalah usulan; semua IP baru tetap belum dialokasikan.
+**Status: rencana disetujui pengguna untuk dilaksanakan setelah upload Immich selesai; belum diterapkan.** Disetujui 3 November 2026 setelah pengguna mengusulkan satu aplikasi per CT/VM agar restart dan beban CPU tidak bercampur. Prasyarat sebelum migrasi: upload Immich selesai, backup file dan database dibuat serta diuji, lalu rencana IP/mount/resource diperiksa. ID CT/VM baru di bawah adalah usulan; semua IP baru tetap belum dialokasikan.
 
 ## Dasar rancangan
 
