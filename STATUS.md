@@ -1,6 +1,6 @@
 # STATUS (perbarui setiap sesi)
 
-**Terakhir diperbarui:** 3 November 2026
+**Terakhir diperbarui:** 4 November 2026
 
 Perbandingan rencana aplikasi dengan pemasangan dan verifikasi aktual ada di [Matriks rencana vs aktual](docs/13-matriks-rencana-aktual.md).
 
@@ -41,7 +41,7 @@ Keputusan layanan file: **Nextcloud** menjadi layanan file utama keluarga untuk 
 6. Setelah upload Immich selesai, buat dump DB baru, periksa ukuran sumber/ruang `store1`, lalu backup file media secara terpisah. Data HDD CT102/104 dikecualikan dari backup guest (`backup=0`). Pertahankan salinan asli di ponsel sampai backup file selesai diverifikasi.
 7. **Gotify ↔ Proxmox:** Pengguna membuat token aplikasi khusus dan menambahkan target `gotify-proxmox` di PVE; pengguna melaporkan tes target berhasil. Matcher `gotify-all` kini aktif dan mengarahkan semua notifikasi PVE ke Gotify; matcher email bawaan tetap ada. Belum ada event PVE nyata yang diverifikasi sampai ke ponsel. Integrasi notifikasi Uptime Kuma → Gotify juga belum dikonfigurasi. Token tidak disimpan di repo.
 8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
-9. **Portainer:** CT104 tetap `Up` menurut screenshot sebelum pembatasan firewall. CT105 reservation DHCP `.105` dilaporkan pengguna dan alamat aktifnya terverifikasi. Firewall CT104 untuk TCP 9001 kini persisten dan hanya mengizinkan source `.105`; refresh halaman Portainer untuk memastikan environment tetap `Up` setelah aturan aktif.
+9. **Portainer — selesai 4 Nov:** pengguna menyegarkan dashboard setelah firewall aktif dan mengonfirmasi environment CT104 tetap `Up`. CT105 reservation DHCP `.105` dilaporkan pengguna dan alamat aktifnya terverifikasi. Firewall CT104 untuk TCP 9001 aktif persisten dan hanya mengizinkan source `.105`.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.

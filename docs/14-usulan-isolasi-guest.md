@@ -30,7 +30,7 @@
 
 | Aplikasi | Guest target usulan | Stack yang tetap bersama | Urutan / catatan migrasi |
 |---|---|---|---|
-| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai. Screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container. DHCP static lease `.105` dilaporkan pengguna. Firewall persisten CT104 membatasi akses TCP 9001 ke source `.105`; refresh status environment setelah aturan aktif, lalu pertahankan instance lama selama transisi. Berkas firewall ada di `konfigurasi/portainer-agent-firewall.*`. |
+| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai. Screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container. DHCP static lease `.105` dilaporkan pengguna. Firewall persisten CT104 membatasi akses TCP 9001 ke source `.105`; status environment tetap `Up` setelah aturan aktif menurut pengguna 4 Nov; pertahankan instance lama selama transisi. Berkas firewall ada di `konfigurasi/portainer-agent-firewall.*`. |
 | Jellyfin | CT106 (baru) | Jellyfin dan konfigurasi/library-nya. | Migrasi setelah uji mount media. Transcode dapat memakai CPU tinggi. |
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
