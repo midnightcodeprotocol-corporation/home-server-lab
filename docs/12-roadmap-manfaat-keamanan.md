@@ -1,7 +1,7 @@
 # Roadmap manfaat dan keamanan Home Server Lab
 
 **Status:** roadmap bertahap; beberapa tahap sudah diterapkan dan hasilnya dicatat di `STATUS.md` serta `catatan/hasil-uji.md`.
-**Kondisi saat ini (3 November 2026):** Proxmox VE 9.2.24 berjalan di M710q pada LAN MikroTik; Prometheus/PVE exporter/Grafana, Uptime Kuma, Gotify, dan Beszel hub berjalan di CT104 `.20`. Kedua endpoint Gotify/Beszel lolos pemeriksaan; akun pertama Beszel telah dibuat pengguna, agent dan notifikasi masih menunggu konfigurasi. RAM tersedia sekitar 6.1 GiB di CT104 saat audit; BIOS/MemTest86 belum dikonfirmasi. HDD unit 1 ext4 terpasang untuk data aplikasi; backup pada disk NVMe sementara belum diverifikasi.
+**Kondisi saat ini (3 November 2026):** Proxmox VE 9.2.24 berjalan di M710q pada LAN MikroTik; Prometheus/PVE exporter/Grafana, Uptime Kuma, Gotify, dan Beszel hub berjalan di CT104 `.20`. Kedua endpoint Gotify/Beszel lolos pemeriksaan; akun Beszel dibuat pengguna dan agent host Proxmox sudah tersambung. Agent CT104 dan notifikasi masih menunggu konfigurasi. RAM tersedia sekitar 6.1 GiB di CT104 saat audit; BIOS/MemTest86 belum dikonfirmasi. HDD unit 1 ext4 terpasang untuk data aplikasi; backup pada disk NVMe sementara belum diverifikasi.
 
 ## Prinsip pelaksanaan
 
