@@ -2,6 +2,8 @@
 
 Gambaran setelah seluruh buku (Edisi 2 + Suplemen 1-9) dikerjakan dan lulus uji.
 
+> Ini adalah **arsitektur target**, bukan inventaris kondisi saat ini. Penempatan beberapa layanan telah berubah (misalnya Nextcloud dan Immich kini di CT104). Lihat [Matriks rencana vs aktual](13-matriks-rencana-aktual.md) dan `STATUS.md` sebelum memakai diagram berikut sebagai panduan tindakan.
+
 ## Ringkasan dalam satu kalimat
 Satu host Proxmox polos (tanpa Docker) berisi VM/LXC terpisah per layanan; satu gerbang HTTPS (Caddy)
 untuk layanan privat; layanan paling sensitif hanya lewat Tailscale Serve; backup harian ke PBS di

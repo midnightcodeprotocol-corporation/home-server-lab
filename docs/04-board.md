@@ -26,13 +26,13 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] CT104 statis `.20/24` diterapkan di konfigurasi CT (di luar pool DHCP; tidak ada reservation MikroTik); Portainer HTTPS 9443 HTTP 200 dan Jellyfin healthy TCP 8096 diverifikasi setelah restart.
 - [x] Immich Compose di CT104; upload menuju HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; empat container healthy. Upload ponsel sempat timeout karena Tailscale tertutup; pengguna melaporkan upload kini masih berjalan. Backup file PBS ditunda sampai unggahan selesai; setelahnya buat dump DB baru dan pastikan ukuran data muat di ruang datastore. Pertahankan salinan asli.
 - [x] Nextcloud 35.0.2.2 aktif di CT104 `.20:8080` dengan MariaDB/Redis sehat; pengguna melaporkan login awal, penggantian password, login ulang, serta uji upload/download satu berkas berhasil. Uji dari klien ponsel/jaringan luar belum dilakukan.
-- [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
+- [x] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; target Prometheus/PVE `up`; dashboard `Home Server Overview` tampil dengan delapan panel (CPU/RAM host & guest, status target, pemakaian storage dan disk guest). File dashboard tervalidasi JSON dan telah dimuat setelah restart Grafana.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; 13 monitor aktif termasuk Beszel, dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Immich belum ditambahkan ke monitor Kuma.
 - [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Pengguna melaporkan login admin dan penggantian password selesai.
 - [x] Pengguna membuat token aplikasi Gotify dan target `gotify-proxmox` PVE; pengguna mengonfirmasi tes target berhasil. Matcher `gotify-all` dibuat dan diarahkan ke target tersebut; matcher email bawaan dipertahankan. Penerimaan event PVE nyata dan notifikasi Uptime Kuma → Gotify masih belum diuji/dikonfigurasi.
-- [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART dan notifikasi Gotify masih perlu diselesaikan.
+- [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART masih perlu diselesaikan; target/matcher PVE → Gotify sudah aktif, sedangkan event nyata dan integrasi Kuma → Gotify masih pending.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel

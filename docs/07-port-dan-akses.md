@@ -8,8 +8,8 @@
 | TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
 | Proxmox host (M710q) | `192.168.88.10` (terverifikasi aktif; GUI dan SSH audit) | 8006, 22 | LAN + IPSet admin (rencana firewall) | `proxmox.home.arpa` |
 | CT101 adguard2 | `192.168.88.11` statis; wizard selesai 2 Nov | 80 Admin UI HTTP; 53 DNS TCP/UDP (A/AAAA lulus dari Proxmox; tes klien pending) | LAN | `http://192.168.88.11` |
-| CT102 files (Samba) | `192.168.88.12` statis; smbd/nmbd aktif, password akun menunggu pengguna | 445 SMB | LAN | File Explorer: `\\192.168.88.12\Media`, `\\192.168.88.12\Files` (akun `labshare`); Samba tidak menyediakan web UI |
-| CT103 tailscale-router | DHCP sementara `.104`; IP final belum ditetapkan | Route `192.168.88.0/24` tampil sebagai primary pada node | tailnet online; uji klien belum dilakukan | Klien Tailscale dapat mengakses IP LAN setelah route tersedia |
+| CT102 files (Samba) | `192.168.88.12` statis; smbd/nmbd aktif; pengguna menyatakan password `labshare` sudah dibuat | 445 SMB | LAN | File Explorer: `\\192.168.88.12\Media`, `\\192.168.88.12\Files`; uji Windows belum dicatat. Samba tidak menyediakan web UI. |
+| CT103 tailscale-router | DHCP sementara `.104`; IP final belum ditetapkan | Route `192.168.88.0/24` tampil sebagai primary pada node | Laptop berhasil menjangkau Immich `.20:2283`; uji aplikasi dari ponsel masih pending | Klien Tailscale dapat mengakses IP LAN melalui CT103 selama Tailscale aktif |
 | CT104 docker-services | Statis `192.168.88.20/24` pada config CT; di luar pool DHCP, belum ada router reservation | 9443 Portainer HTTPS, 8096 Jellyfin HTTP, 2283 Immich HTTP, 8080 Nextcloud HTTP, 3001 Uptime Kuma HTTP, 3000 Grafana HTTP, 8070 Gotify HTTP, 8090 Beszel HTTP, Prometheus 9090 hanya localhost CT104, PVE exporter 9221 internal Docker | LAN / tailnet melalui route CT103; akses `.20:2283` dari laptop lewat Tailscale telah lulus; Prometheus/exporter tidak dipublikasikan ke LAN | `https://192.168.88.20:9443`, `http://192.168.88.20:8096`, `http://192.168.88.20:2283`, `http://192.168.88.20:8080`, `http://192.168.88.20:3001`, `http://192.168.88.20:3000`, `http://192.168.88.20:8070`, `http://192.168.88.20:8090` (Grafana login selesai; Beszel akun dan kedua agent terhubung; target Gotify PVE diuji, matcher PVE aktif; notifikasi event nyata belum diverifikasi) |
 | VM 201 docker-core | Stopped, tanpa IP; `.20` dialihkan ke CT104 | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
@@ -23,7 +23,7 @@
 | VM 209 web | .28 | 8081 WordPress, 8082 situs | dari .20 | `wp.home.arpa`, `web.home.arpa` |
 | VM 210 web-public | .29 | (tidak ada masuk) | Cloudflare Tunnel keluar | domain Anda |
 | VM 211 music | .31 | 127.0.0.1:4533 | Tailscale Serve | `lab-music.*.ts.net` |
-| VM 212 pbs | `192.168.88.30` (HTTPS 8007 dapat dijangkau dari Windows lewat Tailscale; datastore belum diverifikasi) | 8007 HTTPS | admin LAN/tailnet | `https://192.168.88.30:8007` |
+| VM 212 pbs | `192.168.88.30`; datastore `store1` dan storage PVE `pbs-store1` aktif | 8007 HTTPS | admin LAN/tailnet | `https://192.168.88.30:8007`; jadwal harian terenkripsi aktif, backup uji CT101 berhasil dipulihkan; verifikasi job terjadwal pertama masih menunggu |
 | VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
 | VM 214 (slot lama Immich) | .33 target lama, belum dibuat | — | — | Immich dialihkan ke CT104; lihat baris CT104 |
 | STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
