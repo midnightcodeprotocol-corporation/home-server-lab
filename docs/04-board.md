@@ -36,8 +36,8 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
-- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB untuk CT101–104 dan VM202 dibuat (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif untuk backup mendatang. Audit terbaru: store1 8.42 GiB/97.8 GiB (8.60%); backup manual sebelumnya belum terenkripsi.
-- [ ] Simpan paperkey baru PVE dari `/root/backup-recovery/pbs-store1-encryption-paperkey.txt` ke password manager; verifikasi backup terjadwal pertama dan uji restore. Backup data Immich masih menunggu unggahan selesai.
+- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB untuk CT101–104 dan VM202 dibuat (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif untuk backup mendatang; pengguna melaporkan paperkey disimpan dan salinan sementara dihapus. Backup uji CT101 terenkripsi berhasil dan arsip terlihat di PBS. Backup manual sebelumnya belum terenkripsi.
+- [ ] Verifikasi job harian pertama dan uji restore ke CT ID sementara. Backup data Immich masih menunggu unggahan selesai.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
 
