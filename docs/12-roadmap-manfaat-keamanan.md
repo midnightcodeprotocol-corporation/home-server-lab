@@ -1,7 +1,7 @@
 # Roadmap manfaat dan keamanan Home Server Lab
 
-**Status:** usulan bertahap, belum diterapkan di server.  
-**Kondisi saat ini (31 Oktober 2026):** Proxmox berjalan pada M710q, kernel `7.0.14-26-pve`; Linux melaporkan 23 GiB RAM dari konfigurasi 16+8 GB; BIOS/MemTest86 belum dikonfirmasi. NVMe Samsung 476,9 GB terdeteksi dan VT-x/KVM aktif. Jaringan server sementara `192.168.0.200/24`, belum kembali ke MikroTik. Dua HDD 3,5 inci belum dipasang; enclosure lama ditemukan tetapi belum diuji.
+**Status:** roadmap bertahap; beberapa tahap sudah diterapkan dan hasilnya dicatat di `STATUS.md` serta `catatan/hasil-uji.md`.
+**Kondisi saat ini (3 November 2026):** Proxmox VE 9.2.24 berjalan di M710q pada LAN MikroTik; Prometheus/PVE exporter/Grafana, Uptime Kuma, Gotify, dan Beszel hub berjalan di CT104 `.20`. Gotify dan Beszel baru lolos pemeriksaan endpoint; onboarding pengguna, agent, dan notifikasi masih menunggu. RAM tersedia sekitar 6.1 GiB di CT104 saat audit; BIOS/MemTest86 belum dikonfirmasi. HDD unit 1 ext4 terpasang untuk data aplikasi; backup pada disk NVMe sementara belum diverifikasi.
 
 ## Prinsip pelaksanaan
 
@@ -24,7 +24,7 @@
 | **P3 — DNS dan akses** | Setelah Proxmox stabil, siapkan AdGuard kedua di CT101 dan sinkronkan konfigurasi. Uji resolusi ketika STB utama mati dan pastikan kedua resolver memakai kebijakan filter yang sama. | Mengurangi satu titik kegagalan DNS. | Klien tetap bisa membuka internet dan nama lokal saat salah satu resolver dimatikan. |
 | **P3 — akses jarak jauh** | Terapkan kebijakan Tailscale yang hanya memberi akses LAN kepada grup admin. Uji dari jaringan seluler; periksa juga jalur IPv6 dan pastikan tidak ada port-forward yang melewati kebijakan ini. | Akses luar rumah tetap privat dan terbatas. | Hanya perangkat admin yang bisa mencapai LAN; layanan privat hanya bisa diakses oleh identitas yang diizinkan. |
 | **P4 — layanan yang terasa manfaatnya** | Tambahkan layanan satu per satu sesuai kebutuhan: Samba untuk berbagi file lokal; Home Assistant jika perangkat rumah pintar sudah dipilih; Nextcloud untuk sinkronisasi dokumen; Immich untuk foto setelah backup foto siap. | Layanan punya tujuan nyata dan mudah dipelihara. | Setiap layanan punya pemilik/data, jalur akses, backup, dan prosedur restore yang terdokumentasi. |
-| **P5 — pemantauan dan daya** | Gunakan Uptime Kuma untuk pemeriksaan layanan/DNS/internet, Beszel untuk host/VM, dan Gotify untuk notifikasi penting. Setelah konsumsi daya diketahui, pertimbangkan UPS yang mendukung shutdown teratur. | Masalah diketahui lebih awal dan server tidak mati mendadak saat listrik padam. | Alarm kegagalan benar-benar diterima; shutdown saat UPS lemah diuji saat aman. |
+| **P5 — pemantauan dan daya** | Uptime Kuma, Prometheus/Grafana, Gotify, dan Beszel hub telah dipasang di CT104. Selesaikan login awal, tambahkan agent Beszel untuk PVE/CT104, hubungkan notifikasi Kuma ke Gotify, lalu uji alarm. Setelah konsumsi daya diketahui, pertimbangkan UPS yang mendukung shutdown teratur. | Masalah diketahui lebih awal dan server tidak mati mendadak saat listrik padam. | Agent dan dashboard Beszel menampilkan host; alarm Kuma benar-benar diterima di Gotify; shutdown saat UPS lemah diuji saat aman. |
 | **P6 — segmentasi jaringan** | Rencanakan VLAN terpisah untuk admin/server, IoT, dan tamu; batasi komunikasi antarsegmen. Tunda penerapan sampai kemampuan MikroTik, access point, dan switch diverifikasi. LS1005 yang tercatat adalah switch unmanaged; AP TL-WR820N juga perlu diverifikasi dukungan VLAN/SSID sebelum dijadikan bagian desain. | Membatasi dampak jika perangkat IoT atau tamu terkompromi. | Diagram port/VLAN, aturan firewall, dan jalur pemulihan sudah diuji sebelum perangkat dipindah. |
 
 ## Pilihan layanan dengan kapasitas sekarang
