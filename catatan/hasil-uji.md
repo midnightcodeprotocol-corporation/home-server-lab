@@ -341,3 +341,10 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Pengguna membuka PBS Content dan mengonfirmasi arsip CT101 terlihat. Arsip empat guest lain belum dikonfirmasi lewat halaman Content.
 - Belum ada tes restore, jadwal backup, pemeriksaan ruang kosong datastore, atau backup terpisah untuk data bind-mount Immich. CT104 bind-mount `/srv/media` dan `/srv/appdata` disetel `backup=0`; media Immich di `/srv/media/immich` tidak tercakup backup CT. PBS sementara 100 GiB berada di NVMe yang sama dengan PVE.
 - Langkah berikut: cek kapasitas bebas `store1`, kemudian siapkan dan uji backup media serta database Immich sebelum mengaktifkan jadwal otomatis.
+
+## Immich Android: sinkronisasi berhenti karena koneksi timeout — 3 November 2026
+
+- Pengguna melaporkan layar backup menunjukkan Total 12.923 aset, Backup 6.977, Remainder 5.946.
+- Screenshot App Logs memperlihatkan `ApiException 400: HTTP connection failed: GET /server/version (Inner exception: ClientException: java.net.SocketTimeoutException: failed to connect to /192.168.88.20 (port 2283) from /192.168.2.104 (port 49040) after 30000ms, uri=http://192.168.88.20:2283/api/server/version)` pada `remote-sync` pukul 18:46.
+- Temuan langsung: saat itu ponsel tidak berhasil membuat koneksi TCP ke CT104 `.20:2283`. Ini menjelaskan gagalnya remote-sync; belum ada bukti kerusakan database/foto. Apakah Tailscale tidak aktif, route subnet belum tersedia, atau gangguan jaringan sementara masih belum dipastikan.
+- Langkah diagnosis aman: jangan hapus foto asli, reset database Immich, atau instal ulang aplikasi. Dengan Tailscale aktif di Android, uji `http://192.168.88.20:2283/api/server/ping` di browser ponsel dan harapkan `{"res":"pong"}`. Setelah koneksi berhasil, buka kembali aplikasi dan lanjutkan sinkronisasi.
