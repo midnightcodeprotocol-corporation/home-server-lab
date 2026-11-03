@@ -60,6 +60,7 @@ Setiap bab: hasil (lulus / gagal / perlu revisi), pesan error persis, dan butir 
 - [x] Pemakaian PC HP lama (RAM 2 GB) sebagai server: tidak dipakai
 
 ## Ditunda / menunggu
+- [ ] Atas permintaan pengguna (3 Nov 2026): tunda menghubungkan share Samba `Files` ke Nextcloud (external storage SMB/CIFS) dan mengatur akses Samba dari HP; ingatkan kembali nanti, waktu belum ditentukan.
 - [ ] Tailscale subnet router di STB 2 (belum tiba; alamat usulan .250); sementara CT103 di Proxmox (Bab 26)
 - [x] RAM 16 GB + 8 GB dipasang; total yang diharapkan 24 GB, verifikasi BIOS/MemTest86 masih perlu dilakukan
 - [ ] HDD kedua ditunda; enclosure yang tersedia single-bay. Rencana awal memakai satu unit lebih dahulu

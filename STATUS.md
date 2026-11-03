@@ -32,6 +32,7 @@
 5. **Backup berlangsung:** `pbs-store1` sudah ditambahkan; backup CT101/102/103/104 dan VM202 dilaporkan `TASK OK`, CT101 terlihat di PBS Content. Kunci enkripsi client sudah dibuat dengan paperkey tersimpan di password manager. Upload foto/video ponsel masih berjalan; setelah selesai, cek ukuran sumber dan ruang `store1` terbaru, buat dump DB baru, jalankan/verifikasi backup file Immich, lalu uji restore sebelum membuat jadwal harian/mingguan.
 6. Pengguna login ke Gotify (`http://192.168.88.20:8070`) dengan akun `admin` dan password di file lokal, lalu mengganti password. Buat aplikasi/token Gotify dan hubungkan sebagai kanal notifikasi Uptime Kuma.
 7. Upload Immich dari ponsel dilaporkan masih berjalan. Pertahankan salinan asli di ponsel; setelah upload tuntas dan backup file terverifikasi, barulah pertimbangkan penghapusan salinan lokal.
+8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.

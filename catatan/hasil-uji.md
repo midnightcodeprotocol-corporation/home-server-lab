@@ -2,6 +2,8 @@
 
 ## Lanjutan konfigurasi layanan — 3 November 2026
 
+- **Catatan tindak lanjut:** Pengguna meminta dua topik dilewati dahulu dan diingatkan nanti: menghubungkan share Samba ke Nextcloud memakai SMB/CIFS external storage, serta mengakses share Samba dari Android/iPhone. Belum ada konfigurasi yang diubah; waktu pengingat belum ditentukan.
+
 - **Lulus:** Audit Proxmox melalui SSH baca-saja menampilkan CT101, CT102, CT103, CT104, VM202, dan VM212 running; CT100/VM200 template stopped, VM201 stopped. Host RAM 23 GiB, tersedia sekitar 18 GiB saat pemeriksaan; `local`, `local-lvm`, dan HDD `backup-disk` aktif.
 - **Lulus:** CT104 diatur ke statis `192.168.88.20/24` pada config Proxmox; ping dari PVE berhasil. Portainer HTTPS `.20:9443` HTTP 200; Jellyfin `.20:8096` healthy. HDD mount `/srv/media` dan `/srv/appdata` masing-masing menunjukkan 1.8 TiB total, sekitar 1.7 TiB bebas.
 - **Lulus sebagian:** CT102 `.12` menjalankan Samba 4.22.11; `smbd`, `nmbd` aktif dan `testparm` valid. Share `Media` dan `Files` mengarah ke `/srv/media` dan `/srv/files`. Akun Linux `labshare` ada, tetapi password Samba belum ditetapkan; uji klien Windows dan autentikasi belum dilakukan.
