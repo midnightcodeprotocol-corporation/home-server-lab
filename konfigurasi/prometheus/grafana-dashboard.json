@@ -44,6 +44,46 @@
       "targets": [{"expr": "100 * pve_memory_usage_bytes{id=~\"(lxc|qemu)/.*\"} / pve_memory_size_bytes{id=~\"(lxc|qemu)/.*\"}", "legendFormat": "{{id}}", "refId": "A"}],
       "title": "RAM guest (CT/VM)",
       "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "background"}, "mappings": [{"options": {"0": {"color": "red", "index": 0, "text": "DOWN"}, "1": {"color": "green", "index": 1, "text": "UP"}}, "type": "value"}], "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16},
+      "id": 5,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "value"},
+      "targets": [{"expr": "up{job=\"prometheus\"}", "legendFormat": "Prometheus", "refId": "A"}],
+      "title": "Prometheus",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"color": {"mode": "background"}, "mappings": [{"options": {"0": {"color": "red", "index": 0, "text": "DOWN"}, "1": {"color": "green", "index": 1, "text": "UP"}}, "type": "value"}], "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}, "unit": "short"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16},
+      "id": 6,
+      "options": {"colorMode": "background", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "value"},
+      "targets": [{"expr": "up{job=\"proxmox\"}", "legendFormat": "Proxmox exporter", "refId": "A"}],
+      "title": "PVE exporter",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"min": 0, "max": 100, "unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+      "id": 7,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"expr": "100 * pve_disk_usage_bytes{id=~\"storage/pve/(backup-disk|local-lvm|local)\"} / pve_disk_size_bytes{id=~\"storage/pve/(backup-disk|local-lvm|local)\"}", "legendFormat": "{{id}}", "refId": "A"}],
+      "title": "Pemakaian storage Proxmox",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"min": 0, "max": 100, "unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+      "id": 8,
+      "options": {"legend": {"displayMode": "list", "placement": "bottom"}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"expr": "100 * pve_disk_usage_bytes{id=~\"(lxc|qemu)/.*\"} / pve_disk_size_bytes{id=~\"(lxc|qemu)/.*\"}", "legendFormat": "{{id}}", "refId": "A"}],
+      "title": "Pemakaian disk guest",
+      "type": "timeseries"
     }
   ],
   "refresh": "30s",
@@ -53,5 +93,5 @@
   "timezone": "browser",
   "title": "Home Server Overview",
   "uid": "home-server-overview",
-  "version": 1
+  "version": 2
 }

@@ -294,3 +294,11 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 ### Login awal Grafana — 3 November 2026
 
 - Pengguna mengonfirmasi login awal Grafana selesai. Belum ada konfirmasi terpisah bahwa dashboard `Home Server Overview` tampil atau password awal sudah diganti.
+
+### Dashboard monitoring dibenahi — 3 November 2026
+
+- **Uptime Kuma:** monitor Samba lama diarahkan ke `https://192.168.88.12/`, sehingga gagal dengan `connect ECONNREFUSED 192.168.88.12:443`. Diubah menjadi monitor TCP `192.168.88.12:445` dan status baru menunjukkan `[Samba] [Up] 0 ms`. Nama monitor `Nextclaud` diperbaiki menjadi `Nextcloud`; `Home Assistance` menjadi `Home Assistant`.
+- **Uptime Kuma:** monitor yang sebelumnya memakai lease lama `.101` sudah diarahkan ke layanan aktif CT104 `.20`; monitor Jellyfin memberi `[Jellyfin] [Up] 200 - OK`, Portainer TCP `.20:9443` Up, Proxmox TCP `.10:8006` Up, dan PBS TCP `.30:8007` Up. Riwayat down lama tidak dihapus. Grafana ditambahkan memakai `http://192.168.88.20:3000/api/health` dan memperoleh `[Grafana] [Up] 200 - OK`; Uptime Kuma ditambahkan memakai TCP `.20:3001` dan memperoleh `[Uptime Kuma] [Up] 0 ms`. Dashboard menampilkan 11/11 Up pada sesi ini; statistik riwayat lama pada beberapa monitor masih rendah karena kegagalan konfigurasi sebelumnya.
+- **Grafana:** file `konfigurasi/prometheus/grafana-dashboard.json` diperbarui dan tervalidasi JSON. Dashboard `Home Server Overview` menjadi 8 panel: CPU/RAM host dan guest, status scrape Prometheus/PVE exporter, persentase pemakaian storage Proxmox, serta pemakaian disk guest. Prometheus API mengembalikan `up=1` untuk job `prometheus` dan `proxmox`; query metrik disk penggunaan dan ukuran menghasilkan data.
+- Berkas dashboard dipasang ke `/opt/stacks/prometheus/grafana-dashboard.json` di CT104. Perubahan berkas bind mount tidak terlihat sampai container Grafana direstart; setelah restart status container `running`, API dashboard menunjukkan versi 2 dan delapan panel. UI browser menampilkan panel Prometheus `UP` serta PVE exporter `UP`; grafik storage/disk tampak dengan seri metriknya.
+- Endpoint Grafana dan port internal Uptime Kuma dipantau, tetapi notifikasi eksternal belum dikonfigurasi karena kanal/tujuan notifikasi belum ditetapkan. Prometheus tetap hanya bind localhost CT104:9090.
