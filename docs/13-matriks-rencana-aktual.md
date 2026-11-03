@@ -1,6 +1,6 @@
 # Matriks rencana aplikasi vs kondisi aktual
 
-**Audit dokumen:** 3 November 2026. Ini membandingkan rencana buku dengan kondisi yang sudah diverifikasi; rencana lama tidak dianggap sebagai instalasi.
+**Audit dokumen:** 4 November 2026. Ini membandingkan rencana buku dengan kondisi yang sudah diverifikasi; rencana lama tidak dianggap sebagai instalasi.
 
 ## Ringkasan
 
@@ -23,7 +23,7 @@
 | Jellyfin | Container di CT104 sehat; port `:8096`. | Aktif. Pustaka dan alur akses klien dapat dilengkapi sesuai kebutuhan. |
 | Immich | Container server, PostgreSQL, Redis, dan machine learning berjalan; server sehat. Endpoint `/api/server/ping` dari laptop mengembalikan `pong`. Data berada di HDD melalui `/srv/media/immich`. | Pengguna melaporkan upload selesai. Audit menghitung 10.638 baris asset vs catatan layar lama 12.923; rekonsiliasi masih perlu sebelum migrasi Immich. Dump DB baru lolos `gzip -t`; backup file terenkripsi masuk PBS (`host/immich-data/2026-11-03T15:00:28Z`). Restore penuh arsip lulus; dump hasil restore lolos gzip dan SHA-256 cocok dengan sumber. Immich belum masuk monitor Uptime Kuma. |
 | Nextcloud | Nextcloud 35.0.2.2 di CT104 `:8080`, MariaDB/Redis sehat; pengguna melaporkan login ulang dan uji upload/download satu file berhasil. | Aktif. Akses ponsel/jaringan luar belum diverifikasi; share Samba belum disambungkan (ditunda). VM207 tidak dibuat. |
-| Uptime Kuma | CT104 `:3001`, 13 monitor aktif pada audit terdahulu; container kini healthy. | Aktif. Immich belum dimonitor. Notifikasi Uptime Kuma → Gotify belum dikonfigurasi. |
+| Uptime Kuma | Layanan aktif tetap di CT104 `:3001`; 13 monitor ada pada audit terdahulu. CT109 sudah dibuat, Docker/Agent aktif, tetapi aplikasi belum dipindah. | Migrasi direncanakan setelah static lease `.106`, pendaftaran environment dan backup/salin data tervalidasi. Immich belum dimonitor; notifikasi Kuma → Gotify belum dikonfigurasi. |
 | Prometheus + PVE exporter | Berjalan di CT104; target scrape Prometheus dan PVE pernah terverifikasi `up`; Prometheus hanya localhost CT104. | Aktif. Retensi dan akses terbatas sesuai catatan konfigurasi. |
 | Grafana | Berjalan di CT104 `:3000`; datasource Prometheus dan dashboard `Home Server Overview` delapan panel telah dibuat. | Aktif; login selesai menurut pengguna. |
 | Gotify | CT104 `:8070`, container sehat. Target PVE `gotify-proxmox` telah diuji oleh pengguna; matcher `gotify-all` mengirim semua notifikasi PVE ke Gotify. | Konfigurasi target/matcher aktif. Event PVE nyata yang tampil di ponsel belum diverifikasi. Matcher email bawaan tetap dipertahankan. |
