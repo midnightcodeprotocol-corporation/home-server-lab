@@ -26,7 +26,7 @@
 
 ## Langkah berikutnya
 1. **Selesai/terverifikasi:** login Grafana selesai menurut pengguna; `Home Server Overview` tampil dan panel baru terbaca. Pastikan password awal sudah diganti bila belum.
-2. Pengguna mengambil password admin Nextcloud dari file rahasia lokal, login di `http://192.168.88.20:8080`, lalu mengganti password awal; uji klien/sinkronisasi masih perlu dilakukan.
+2. **Nextcloud:** pengguna melaporkan berhasil login sebagai `labadmin` dan mengganti password awal. Verifikasi login ulang dan uji upload/download satu berkas masih perlu dilakukan.
 3. Pengguna menetapkan password Samba `labshare` langsung di terminal CT102; uji `\\192.168.88.12\\Media` dan `\\192.168.88.12\\Files` dari Windows.
 4. Uji akses Tailscale dari ponsel dengan membuka Immich; laptop sudah berhasil mengakses `.20:2283` melalui interface Tailscale. CT103 mengiklankan route LAN; lease `.104` tetap dinamis.
 5. **Backup berlangsung:** `pbs-store1` sudah ditambahkan; backup CT101/102/103/104 dan VM202 dilaporkan `TASK OK`, CT101 terlihat di PBS Content. Kunci enkripsi client sudah dibuat dengan paperkey tersimpan di password manager. Upload foto/video ponsel masih berjalan; setelah selesai, cek ukuran sumber dan ruang `store1` terbaru, buat dump DB baru, jalankan/verifikasi backup file Immich, lalu uji restore sebelum membuat jadwal harian/mingguan.
