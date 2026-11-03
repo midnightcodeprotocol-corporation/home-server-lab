@@ -443,3 +443,7 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Pemeriksaan lokal Prometheus di `127.0.0.1:9090` dari container CT110 gagal karena port memang dipublikasikan hanya pada host `.107`; pemeriksaan yang benar dari CT111 melalui `.107:9090` lulus. Pemeriksaan Grafana pada `127.0.0.1:3000` dari guest host juga tidak sesuai binding; pemeriksaan melalui `.108:3000` lulus. `sqlite3` CLI tidak tersedia di CT104 saat percobaan awal; integritas kemudian diperiksa memakai Python `sqlite3` dan hasilnya `ok`.
 - Saat pull Grafana langsung dari Docker Hub koneksi tertahan; image dipindahkan internal dari CT104 dan versi aplikasi/API kemudian diverifikasi. Satu pemanggilan `docker compose -f /dev/null pull` sebelumnya gagal `empty compose file` dan tidak mengubah layanan.
 - Sisa tindakan dashboard: perbarui monitor self-check Kuma dari `.20:3001` ke `.106:3001`, monitor Grafana dari `.20:3000` ke `.108:3000`; konfirmasi Make Static CT110/111 pada MikroTik; daftarkan environment `CT110-prometheus` dan `CT111-grafana` di Portainer CT105. CT104 lama tetap menjadi rollback.
+## Konfirmasi akses Grafana CT111 — 4 November 2026
+
+- Pengguna mengonfirmasi login Grafana berhasil setelah diarahkan ke username `labadmin` dan menggunakan password lama yang ikut tersalin bersama database Grafana ke CT111. Password tidak diketahui/disimpan di chat atau repo.
+- Konfirmasi ini hanya mencakup login Grafana. Static lease CT110/111, environment Portainer CT110/111, dan pengalihan monitor Uptime Kuma tetap belum dikonfirmasi.
