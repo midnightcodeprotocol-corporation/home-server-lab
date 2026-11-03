@@ -31,7 +31,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 aktif di CT104 `.20:3001`; dashboard monitor layanan yang sudah dikoreksi tetap aktif dan riwayat downtime dipertahankan. Samba menggunakan TCP 445. Monitor Beszel belum ditambahkan.
 - [x] Gotify terpasang di CT104 `.20:8070`; Compose tervalidasi, container healthy, endpoint `/health` HTTP 200. Password awal dibuat di server dan tidak masuk repo; login awal pengguna menunggu.
-- [x] Beszel hub terpasang di CT104 `.20:8090`; Compose tervalidasi dan halaman `/_/` HTTP 200. Akun pertama, agent Proxmox/CT104, dan monitor Beszel di Kuma menunggu onboarding pengguna.
+- [x] Beszel hub terpasang di CT104 `.20:8090`; Compose tervalidasi, halaman `/_/` HTTP 200, dan akun pertama dibuat pengguna. Agent Proxmox/CT104 serta monitor Beszel di Kuma masih menunggu konfigurasi.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
