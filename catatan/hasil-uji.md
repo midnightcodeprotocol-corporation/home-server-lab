@@ -372,3 +372,11 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - Job backup `home-lab-daily` tidak menetapkan `notification-mode` khusus/legacy; PVE menggunakan pengaturan notifikasi global. Belum ada backup harian yang berjalan sebagai uji notifikasi setelah matcher dibuat.
 - Tidak dibuat target atau matcher Uptime Kuma → Gotify dalam langkah ini. Tidak ada token/rahasia yang dicatat di repo.
 - Rujukan resmi: [Notifikasi Proxmox VE](https://github.com/proxmox/pve-docs/blob/master/notifications.adoc).
+
+## Audit baca-saja layanan saat menunggu backup terjadwal — 3 November 2026
+
+- **Lulus:** PVE kembali dapat diakses lewat SSH. CT101, CT102, CT103, CT104, VM202, dan VM212 running; CT100/VM200 adalah template stopped; VM201 tetap stopped.
+- **Lulus:** storage `backup-disk`, `local`, `local-lvm`, dan `pbs-store1` aktif. `pbs-store1` terpakai sekitar 8.84% pada saat pemeriksaan.
+- **Lulus:** semua container Docker yang terlihat pada `docker ps` di CT104 berstatus Up. Gotify dan Uptime Kuma berstatus healthy; `immich_server` juga healthy bersama Postgres, Redis, dan machine learning.
+- **Lulus:** dari laptop, koneksi TCP ke `192.168.88.20:2283` berhasil dan `GET /api/server/ping` mengembalikan `{"res":"pong"}`. Ini hanya menguji jalur laptop saat ini; tidak membuktikan upload ponsel sudah selesai.
+- Tidak ada perubahan konfigurasi server pada audit ini. Penambahan monitor Immich ke Uptime Kuma masih tertunda; belum diubah melalui database atau tanpa sesi admin yang tervalidasi.
