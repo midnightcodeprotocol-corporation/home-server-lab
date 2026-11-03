@@ -1,6 +1,6 @@
 # Usulan susunan guest per aplikasi
 
-**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** Upload Immich dilaporkan selesai; backup file/database sudah dibuat dan pemulihan penuh arsip diuji. Selisih hitungan ponsel (12.923) dan database (10.638) masih harus direkonsiliasi sebelum Immich dipindah. CT105 Portainer sudah dibuat dan dijalankan; guest lain belum dibuat. ID berikut adalah usulan, dan lease DHCP `.105` pada CT105 tetap sementara, bukan alamat final.
+**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** Upload Immich dilaporkan selesai; backup file/database sudah dibuat dan pemulihan penuh arsip diuji. Selisih hitungan ponsel (12.923) dan database (10.638) masih harus direkonsiliasi sebelum Immich dipindah. CT105 Portainer sudah dibuat dan dijalankan; guest lain belum dibuat. Pengguna melaporkan static lease DHCP `.105` dibuat untuk CT105 dan alamat aktif `.105` terverifikasi dari guest; konfigurasi guest sendiri tetap DHCP.
 
 ## Dasar rancangan
 
@@ -30,7 +30,7 @@
 
 | Aplikasi | Guest target usulan | Stack yang tetap bersama | Urutan / catatan migrasi |
 |---|---|---|---|
-| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai menurut pengguna. SSH memverifikasi Agent 2.45.3 berjalan; screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container terlihat. Tetapkan reservation DHCP CT105, lalu batasi TCP 9001 ke CT105 sebelum migrasi; pertahankan instance lama selama transisi. |
+| Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai. Screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container. DHCP static lease `.105` dilaporkan pengguna. Firewall persisten CT104 membatasi akses TCP 9001 ke source `.105`; refresh status environment setelah aturan aktif, lalu pertahankan instance lama selama transisi. Berkas firewall ada di `konfigurasi/portainer-agent-firewall.*`. |
 | Jellyfin | CT106 (baru) | Jellyfin dan konfigurasi/library-nya. | Migrasi setelah uji mount media. Transcode dapat memakai CPU tinggi. |
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
@@ -40,7 +40,7 @@
 | Gotify | CT112 (baru) | Gotify dan data aplikasinya. | Pertahankan target/matcher PVE; verifikasi notifikasi setelah pindah. |
 | Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
 
-CT106–113 adalah usulan dan belum dibuat. CT105 saat ini memakai lease DHCP dinamis `.105`, belum ada reservasi/static IP. CT104 `.20` tetap berjalan sebagai sumber migrasi; jangan memindahkan atau menduplikasi alamat `.20` sebelum rencana jaringan disepakati.
+CT106–113 adalah usulan dan belum dibuat. CT105 menerima `.105` via DHCP dengan static lease MikroTik menurut laporan pengguna; reservasi router belum diaudit langsung. CT104 `.20` tetap berjalan sebagai sumber migrasi; jangan memindahkan atau menduplikasi alamat `.20` sebelum rencana jaringan disepakati.
 
 ## Aplikasi rencana yang belum dipasang
 
