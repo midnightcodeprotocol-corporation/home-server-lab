@@ -27,13 +27,12 @@
 ## Langkah berikutnya
 1. **Selesai/terverifikasi:** login Grafana selesai menurut pengguna; `Home Server Overview` tampil dan panel baru terbaca. Pastikan password awal sudah diganti bila belum.
 2. **Langkah berikutnya:** setelah jadwal pertama berjalan, verifikasi backup terenkripsi CT101–104/VM202 di PBS. Pemulihan sampel CT101 ke CT109 sementara sudah lulus; guest uji telah dihapus. Paperkey PVE sudah disimpan pengguna di password manager menurut laporan.
-3. **Nextcloud:** pengguna melaporkan berhasil login sebagai `labadmin` dan mengganti password awal. Verifikasi login ulang dan uji upload/download satu berkas masih perlu dilakukan.
+3. **Nextcloud — selesai menurut laporan pengguna (3 Nov):** login ulang dan uji upload/download berkas berhasil. Belum diuji dari jaringan luar rumah/klien ponsel.
 4. Pengguna melaporkan password Samba `labshare` sudah ditetapkan di CT102; uji `\\192.168.88.12\\Media` dan `\\192.168.88.12\\Files` dari Windows masih pending.
 5. Uji akses Tailscale dari ponsel dengan membuka Immich; laptop sudah berhasil mengakses `.20:2283` melalui interface Tailscale. CT103 mengiklankan route LAN; lease `.104` tetap dinamis.
 6. Setelah upload Immich selesai, buat dump DB baru, periksa ukuran sumber/ruang `store1`, lalu backup file media secara terpisah. Data HDD CT102/104 dikecualikan dari backup guest (`backup=0`). Pertahankan salinan asli di ponsel sampai backup file selesai diverifikasi.
 7. Pengguna login ke Gotify (`http://192.168.88.20:8070`) dengan akun `admin` dan password di file lokal, lalu mengganti password. Buat aplikasi/token Gotify dan hubungkan sebagai kanal notifikasi Uptime Kuma.
-8. **Nextcloud:** uji login ulang dan upload/download satu berkas masih perlu dilakukan.
-9. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
+8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.
