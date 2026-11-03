@@ -19,7 +19,7 @@
 | CT101 | AdGuard Home kedua | Pertahankan; layanan sudah mandiri. |
 | CT102 | Samba | Pertahankan; layanan sudah mandiri. |
 | CT103 | Tailscale subnet router | Pertahankan sementara; lease `.104` dinamis, jangan dicatat sebagai IP final. |
-| CT104 | Docker-services, masih menampung beberapa aplikasi | Sumber migrasi/rollback. Uptime Kuma dipindah dan container lama dihentikan; aplikasi lainnya masih berjalan di sini. Pertahankan CT104 sampai migrasi, backup, dan observasi selesai. |
+| CT104 | Docker-services, masih menampung beberapa aplikasi | Sumber migrasi/rollback. Uptime Kuma, Prometheus/PVE exporter, dan Grafana dipindah; container lama ketiganya stopped. Aplikasi lain tetap berjalan di sini. Pertahankan CT104 sampai migrasi, backup, dan observasi selesai. |
 | CT105 | Portainer Server khusus, dibuat 3 Nov 2026 | Docker/Compose aktif dan UI HTTPS `:9443` merespons. Admin setup selesai; pengguna melaporkan menambahkan CT104 dan CT109. Lease `.105` dilaporkan static dan aktif di guest. Agent di guest lain dibatasi ke source `.105`. |
 | VM200 | Template Debian 13 | Pertahankan untuk VM baru. |
 | VM201 | docker-core | Tetap stopped. Tidak perlu menyalakannya untuk arsitektur baru. |
@@ -35,12 +35,12 @@
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
 | Uptime Kuma | CT109 (sudah dibuat dan dipakai) | Kuma dan database/file persistennya. | Versi 2.5.9 berjalan di `.106:3001`; 14 monitor tersalin, SQLite integrity `ok`, HTTP UI merespons dan container healthy. Rootfs 16 GiB. Backup PBS terenkripsi CT109 berhasil. CT104 lama stopped untuk rollback. Ganti target monitor self-check dari `.20:3001` ke `.106:3001`. |
-| Prometheus + PVE exporter | CT110 (sudah disiapkan) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | CT110 Debian 13/Docker/Agent 2.45.3 siap, firewall Agent membatasi source `.105`; `.107` masih lease DHCP sementara, static lease dan environment Portainer menunggu pengguna. Prometheus/data/credentials belum dipindah; CT104 tetap sumber. Backup awal terenkripsi PBS sukses. |
-| Grafana | CT111 (baru) | Grafana, datasource, dan dashboard. | Arahkan datasource ke Prometheus CT110; pastikan kredensial tidak masuk repo. |
+| Prometheus + PVE exporter | CT110 (sudah dibuat dan dipakai) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | Prometheus 3.15.1 dan exporter 3.11.0 berjalan di `.107`; dari CT111 kedua target `up`. API 9090 dibatasi ke Grafana CT104 `.20` dan CT111 `.108`. Agent 2.45.3 aktif, hanya source `.105` boleh; backup PBS terenkripsi lulus. Lease `.107` aktif via DHCP, static MikroTik belum diverifikasi. Container CT104 stopped untuk rollback. |
+| Grafana | CT111 (sudah dibuat dan dipakai) | Grafana, datasource, dan dashboard. | Grafana 13.3.0 aktif di `.108:3000`; API health HTTP 200; `Home Server Overview` dan datasource `Prometheus` `.107:9090` diverifikasi; SQLite integrity `ok`. Rootfs 12 GiB; backup PBS terenkripsi berhasil. Agent 2.45.3 dibatasi ke `.105`. Lease `.108` aktif via DHCP, static MikroTik belum diverifikasi. CT104 lama stopped untuk rollback. Perbarui monitor Kuma dari `.20:3000` ke `.108:3000`. |
 | Gotify | CT112 (baru) | Gotify dan data aplikasinya. | Pertahankan target/matcher PVE; verifikasi notifikasi setelah pindah. |
 | Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
 
-CT109 kini menjadi host Docker khusus Uptime Kuma. CT110 sudah disiapkan sebagai Docker guest kosong untuk Prometheus/PVE exporter; stack lama masih di CT104. CT106–108 dan CT111–113 masih usulan dan belum dibuat. Static lease `.106` dan `.105` dilaporkan pengguna; alamat aktif masing-masing terverifikasi dari guest, MikroTik belum diaudit langsung. CT110 `.107` masih dinamis. CT104 `.20` tetap berjalan untuk aplikasi lain dan sumber rollback.
+CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana. Lease `.106` dan `.105` dilaporkan static oleh pengguna; CT110 `.107` dan CT111 `.108` terlihat aktif via DHCP tetapi status static MikroTik belum diverifikasi langsung. CT106–108 dan CT112–113 masih rencana dan belum dibuat. CT104 `.20` tetap berjalan untuk aplikasi lain dan sebagai sumber rollback; tiga container lama yang telah dipindah berada dalam keadaan stopped.
 
 ## Aplikasi rencana yang belum dipasang
 
@@ -83,11 +83,12 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 1. Upload Immich dilaporkan selesai. Dump DB baru lolos `gzip -t`; folder media berhasil dicadangkan terenkripsi ke PBS pada `host/immich-data/2026-11-03T15:00:28Z`. Pemulihan penuh arsip berhasil dan SHA-256 dump hasil restore cocok dengan sumber. Sebelum migrasi Immich, rekonsiliasi jumlah akhir (query database 10.638 asset vs catatan ponsel sebelumnya 12.923); backup ini bukan salinan fisik terpisah karena PBS masih berada di NVMe host yang sama.
 2. Tetapkan pola Docker per guest, jaringan/port, IP yang tidak bertabrakan, mount data, dan batas CPU/RAM. Catat backup serta langkah rollback sebelum memindahkan tiap stack.
 3. Uji Portainer Server CT105 mengelola satu guest Docker percobaan menggunakan Agent dengan akses jaringan terbatas.
-4. **Selesai untuk Uptime Kuma:** pindah data setelah container lama dihentikan, lalu verifikasi SQLite (`integrity_check=ok`, 14 monitor), container healthy, dan HTTP UI. Perbarui monitor self-check dari `.20:3001` ke `.106:3001`.
-5. Pindahkan layanan ringan lain satu per satu. Uji UI/API dan fungsi setelah tiap perpindahan.
-6. Pindahkan Jellyfin dan Nextcloud dengan backup/restore masing-masing; Immich terakhir.
-7. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
-8. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits` per guest. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
+4. **Selesai untuk Uptime Kuma, Prometheus, dan Grafana:** migrasi data/config masing-masing; SQLite Kuma/Grafana integrity `ok`, Kuma menyimpan 14 monitor, kedua target scrape Prometheus `up`, Grafana health/API/dashboard/datasource terverifikasi. Container lama CT104 stopped untuk rollback.
+5. Perbarui monitor Kuma self-check ke `.106:3001` dan Grafana ke `.108:3000`; tambah monitor Immich dan notifikasi Kuma → Gotify.
+6. Tetapkan static lease DHCP `.107` untuk CT110 dan `.108` untuk CT111 melalui MikroTik, lalu daftarkan environment `CT110-prometheus` dan `CT111-grafana` pada Portainer CT105. Pengaturan MikroTik/daftar environment belum terverifikasi langsung.
+7. Pindahkan Gotify, Beszel, Jellyfin, Nextcloud dengan backup/restore tiap stack; Immich terakhir setelah rekonsiliasi aset dan backup terbaru.
+8. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
+9. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits` per guest. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
 
 ### Rujukan resmi
 
