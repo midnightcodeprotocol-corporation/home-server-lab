@@ -291,3 +291,6 @@ Perintah: `apt-get -o Acquire::ForceIPv4=true update`
 - **Keamanan/akses:** API Proxmox menggunakan user/token khusus dengan role `PVEAuditor`; TLS diverifikasi memakai CA PVE. Prometheus menyimpan metrik 30 hari. Grafana tersedia di `http://192.168.88.20:3000`; Prometheus hanya bind ke localhost CT104 pada port 9090 dan PVE exporter hanya di jaringan Docker internal. Rahasia disimpan di direktori `secrets` lokal server yang tidak masuk repo.
 - **Belum diuji pengguna:** login pertama Grafana dan tampilan dashboard dari browser klien. Password awal tersedia di `/opt/stacks/prometheus/secrets/grafana_admin_password`; pengguna mengambilnya sendiri melalui shell Proxmox, tidak mengirim password ke chat.
 - Keputusan awal untuk tidak memasang Prometheus pada catatan sebelumnya adalah riwayat; pada 3 Nov pengguna mengarahkan untuk menggunakan Prometheus dan stack ini sudah dipasang.
+### Login awal Grafana — 3 November 2026
+
+- Pengguna mengonfirmasi login awal Grafana selesai. Belum ada konfirmasi terpisah bahwa dashboard `Home Server Overview` tampil atau password awal sudah diganti.

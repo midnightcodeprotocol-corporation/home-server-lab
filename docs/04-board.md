@@ -27,7 +27,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] Immich Compose resmi di CT104; upload ke HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; seluruh container healthy dan API merespons. Onboarding admin masih oleh pengguna.
 - [ ] Nextcloud 35.0.2.2 terpasang di CT104 `.20:8080` dengan MariaDB/Redis sehat; data pengguna di HDD, DB di SSD; pengguna perlu mengambil password awal dari secret lokal, login, mengganti password, dan uji klien.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
-- [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; kedua target scrape `up`, query metrik node berhasil, datasource Prometheus dan dashboard Home Server Overview diprovisikan. Login Grafana pertama menunggu pengguna.
+- [x] Prometheus 3.15.1 + PVE exporter 3.11.0 + Grafana 13.3.0 di CT104; kedua target scrape `up`, query metrik node berhasil, datasource Prometheus dan dashboard Home Server Overview diprovisikan. Login Grafana pertama selesai menurut pengguna; tampilan dashboard browser belum dikonfirmasi.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 terpasang di CT104 `.20:3001`; pengguna menyelesaikan setup, HTTP mengarah ke dashboard. Gotify dan Beszel belum dipasang.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
