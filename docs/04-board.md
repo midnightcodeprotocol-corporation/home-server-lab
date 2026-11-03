@@ -21,18 +21,19 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 3 Novem
 - [x] Bab 10-11: buat CT 101 `adguard2` dan VM 201 `docker-core` dari template bersih; boot DHCP sementara berhasil
 - [x] Bab 13: CT101 `.11` statis, `onboot=1`, wizard selesai; port 53 listen; tes DNS dari Proxmox dan laptop lulus. Upstream Quad9 DoH + bootstrap independen dari STB untuk domain internet; private reverse DNS default masih ke `.3`. DHCP membagikan `.3` + `.11`, kueri default lulus via `.3`; failover belum diuji.
 - [x] CT102 Samba `.12` aktif; share Media/Files mengarah ke HDD unit 1, konfigurasi `testparm` valid. Password Samba `labshare` dan uji Windows masih menunggu pengguna.
-- [ ] CT103 Tailscale 1.104.4 terpasang, forwarding/TUN aktif, lease dinamis sementara `.104`; login dan approval route `192.168.88.0/24` menunggu pengguna.
+- [x] CT103 Tailscale 1.104.4 online, forwarding/TUN aktif, route `192.168.88.0/24` tampil pada PrimaryRoutes; uji dari klien HP/laptop masih pending. Lease DHCP `.104` bersifat dinamis.
 - [x] Buat CT104 `docker-services` dari CT100 sebagai Docker host (Debian 13 unprivileged + nesting); Docker/Compose aktif, Portainer CE berjalan pada HTTPS 9443
 - [x] CT104 statis `.20/24` diterapkan di konfigurasi CT (di luar pool DHCP; tidak ada reservation MikroTik); Portainer HTTPS 9443 HTTP 200 dan Jellyfin healthy TCP 8096 diverifikasi setelah restart.
-- [ ] Immich Compose resmi disiapkan pada CT104; upload ke HDD dan database ke SSD. Image masih diunduh; health check, akses UI, dan onboarding pengguna belum selesai. Prometheus tidak dipasang.
+- [x] Immich Compose resmi di CT104; upload ke HDD `/srv/media/immich`, database SSD `/opt/immich/postgres`; seluruh container healthy dan API merespons. Onboarding admin masih oleh pengguna. Prometheus tidak dipasang.
+- [ ] Nextcloud 35.0.2.2 terpasang di CT104 `.20:8080` dengan MariaDB/Redis sehat; data pengguna di HDD, DB di SSD; pengguna perlu mengambil password awal dari secret lokal, login, mengganti password, dan uji klien.
 - [ ] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [ ] Grafana: verifikasi apakah sudah ada dan tetapkan datasource. Prometheus tidak dipasang sesuai arahan pengguna.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
-- [ ] Suplemen 3 (Bab 31-34): Gotify, Uptime Kuma, Beszel
+- [ ] Suplemen 3 (Bab 31-34): Uptime Kuma 2.5.9 terpasang di CT104 `.20:3001`, HTTP mengarah ke setup; pengguna perlu membuat akun admin. Gotify dan Beszel belum dipasang.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
-- [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE, Nextcloud
+- [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
 - [ ] PBS VM212 terpasang; `.30` ping dan HTTPS 8007 HTTP 200 setelah hard reset. VM `onboot=1`. Disk HDD 1.5 TiB dilepas tanpa menghapus volume; disk virtual 100 GiB NVMe terpasang. `store1` dilaporkan pengguna tetapi belum diverifikasi dari PBS. Belum ada backup/restore test.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM
