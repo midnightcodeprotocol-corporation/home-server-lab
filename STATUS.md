@@ -42,7 +42,7 @@ Pembaruan isolasi 4 Nov: CT109 `uptime-kuma` dibuat dari CT100 Debian 13 sebagai
 7. **Gotify ↔ Proxmox:** Pengguna membuat token aplikasi khusus dan menambahkan target `gotify-proxmox` di PVE; pengguna melaporkan tes target berhasil. Matcher `gotify-all` kini aktif dan mengarahkan semua notifikasi PVE ke Gotify; matcher email bawaan tetap ada. Belum ada event PVE nyata yang diverifikasi sampai ke ponsel. Integrasi notifikasi Uptime Kuma → Gotify juga belum dikonfigurasi. Token tidak disimpan di repo.
 8. **Ditunda atas permintaan pengguna:** (a) menghubungkan share Samba `Files` ke Nextcloud sebagai external storage SMB/CIFS; (b) menyiapkan akses Samba dari HP Android/iPhone. Ingatkan kembali setelah pekerjaan yang sedang berjalan selesai; tanggal pengingat belum ditentukan.
 9. **Portainer — selesai 4 Nov:** pengguna menyegarkan dashboard setelah firewall aktif dan mengonfirmasi environment CT104 tetap `Up`. CT105 reservation DHCP `.105` dilaporkan pengguna dan alamat aktifnya terverifikasi. Firewall CT104 untuk TCP 9001 aktif persisten dan hanya mengizinkan source `.105`.
-10. **Migrasi Uptime Kuma:** CT109 Docker host dan Agent siap; lease DHCP sementara `.106` (MAC `BC:24:11:84:70:ED`) perlu dibuat static di MikroTik sebelum environment Portainer ditambahkan. Uptime Kuma dan 13 monitor tetap aktif di CT104 sampai data dipindahkan dan diuji.
+10. **Migrasi Uptime Kuma:** CT109 Docker host dan Agent siap; pengguna melaporkan membuat static lease `.106` di MikroTik; alamat aktif `.106` diverifikasi dari guest. Tambahkan environment CT109 di Portainer CT105. Uptime Kuma dan 13 monitor tetap aktif di CT104 sampai data dipindahkan dan diuji.
 
 ## Masalah terbuka
 - BIOS/MemTest86 RAM masih belum diperiksa.

@@ -34,7 +34,7 @@
 | Jellyfin | CT106 (baru) | Jellyfin dan konfigurasi/library-nya. | Migrasi setelah uji mount media. Transcode dapat memakai CPU tinggi. |
 | Nextcloud | CT107 (baru) | Nextcloud + MariaDB + Redis. | Backup konfigurasi, database, dan data pengguna dahulu; lalu uji klien. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
-| Uptime Kuma | CT109 (sudah dibuat) | Kuma dan database/file persistennya. | Guest Debian 13/Docker/Agent siap; lease `.106` masih dinamis. Static lease dan pendaftaran environment CT105 berikutnya, lalu migrasikan data/monitor dengan CT104 tetap sebagai rollback. |
+| Uptime Kuma | CT109 (sudah dibuat) | Kuma dan database/file persistennya. | Guest Debian 13/Docker/Agent siap; static lease DHCP `.106` dilaporkan pengguna dan alamat aktif terverifikasi. Pendaftaran environment CT105 berikutnya, lalu migrasikan data/monitor dengan CT104 tetap sebagai rollback. |
 | Prometheus + PVE exporter | CT110 (baru) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | Periksa target scrape dan rahasia API PVE saat migrasi. |
 | Grafana | CT111 (baru) | Grafana, datasource, dan dashboard. | Arahkan datasource ke Prometheus CT110; pastikan kredensial tidak masuk repo. |
 | Gotify | CT112 (baru) | Gotify dan data aplikasinya. | Pertahankan target/matcher PVE; verifikasi notifikasi setelah pindah. |
