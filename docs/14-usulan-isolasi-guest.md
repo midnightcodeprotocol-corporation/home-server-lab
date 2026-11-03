@@ -65,6 +65,18 @@ Guest CT105–113 tersedia dalam rentang ID CT, tetapi belum dibuat. Tidak ada I
 
 CT114–122 juga usulan dan belum dibuat. IP semua guest baru tetap belum dialokasikan. VM203/205/210/213 berasal dari slot rencana lama; status tersebut bukan bukti guest pernah dibuat.
 
+## Keputusan layanan file dan NAS
+
+Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
+
+| Komponen | Peran yang dipilih | Status |
+|---|---|---|
+| Nextcloud | Layanan file utama yang digunakan anggota keluarga melalui aplikasi ponsel, klien sinkronisasi PC/laptop, dan web. Akun per orang; grup dan kuota ditata sesuai kebutuhan. | Sudah berjalan di CT104; pemisahan ke CT107 mengikuti urutan migrasi di atas. |
+| Samba di CT102 | Pelengkap untuk share jaringan yang dibuka langsung dari PC/laptop, misalnya folder bersama atau transfer file di LAN. Gunakan akun dan izin per pengguna/grup. | Sudah berjalan; uji akses Windows masih tercatat pending. Akses ponsel dan integrasi SMB ke Nextcloud ditunda. |
+| TrueNAS | Bukan layanan file utama pengguna saat ini. Opsi masa depan sebagai lapisan pengelola NAS/storage, setelah rancangan disk dan akses aplikasi disepakati. | Belum dipasang; jangan buat VM atau ubah layout disk sebelum tahap evaluasi storage. |
+
+> Setiap folder sebaiknya memiliki satu jalur utama untuk perubahan agar penulisan bersamaan melalui SMB dan Nextcloud tidak menimbulkan kebingungan izin atau sinkronisasi. Jangan mengekspos dataset aplikasi langsung sebagai share umum. TrueNAS, bila kelak dipakai sebagai storage pusat, menjadi dependensi bagi layanan yang membaca dataset tersebut; pemisahan aplikasi ke guest sendiri tidak menghilangkan dependensi storage bersama.
+
 ## Tahap migrasi
 
 1. Tunggu upload Immich selesai; ekspor backup guest dan buat backup file/database sesuai prosedur. Jangan migrasi Immich sebelum backup file diuji.

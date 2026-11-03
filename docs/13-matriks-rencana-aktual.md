@@ -8,6 +8,7 @@
 - CT104 `docker-services` (`192.168.88.20`) kini menjadi host Docker bersama untuk sebagian besar aplikasi. Ini menggantikan rencana VM201 untuk Docker dan target VM khusus Nextcloud/Immich.
 - Aplikasi inti yang sudah berjalan: AdGuard Home, Samba, Tailscale, Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma, Prometheus, Grafana, Gotify, Beszel, Home Assistant OS, dan Proxmox Backup Server.
 - “Berjalan” tidak selalu berarti penggunaannya sudah tuntas: ada pengujian klien, backup data, notifikasi, dan integrasi yang masih menunggu.
+- Keputusan pengguna (3 Nov): Nextcloud menjadi layanan file utama keluarga; Samba melengkapi akses share PC/laptop; TrueNAS ditunda sebagai opsi pengelola storage. Lihat [rencana susunan guest dan keputusan NAS](14-usulan-isolasi-guest.md).
 
 ## Layanan aktif dan pekerjaan tersisa
 
