@@ -6,7 +6,7 @@ services:
     ports:
       - "8096:8096"
     volumes:
-      - /srv/media:/media:ro
+      - /srv/jellyfin:/media:ro
       - jellyfin-config:/config
       - jellyfin-cache:/cache
 

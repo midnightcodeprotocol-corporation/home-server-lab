@@ -1,0 +1,21 @@
+[Media]
+   path = /srv/media/jellyfin
+   browseable = yes
+   read only = no
+   guest ok = no
+   valid users = labshare
+   force user = labshare
+   force group = labshare
+   create mask = 0664
+   directory mask = 2775
+
+[Immich]
+   path = /srv/media/immich
+   browseable = yes
+   read only = no
+   guest ok = no
+   valid users = labshare
+   force user = labshare
+   force group = labshare
+   create mask = 0664
+   directory mask = 2775

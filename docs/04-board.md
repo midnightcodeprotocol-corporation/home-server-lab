@@ -1,9 +1,9 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026 (malam).
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026 (malam; pemisahan media Jellyfin/Immich).
 
 ## Sedang dikerjakan
-- [ ] **Migrasi Jellyfin CT104 → CT106:** CT106 `.111:8096` healthy; Homepage dan Kuma ID 7 sudah diarahkan ke guest baru (monitor `Up / 200 - OK`); backup PBS terenkripsi dan job harian mencakup CT106. CT104 berhenti sebagai rollback. Portainer masih belum memuat CT106 karena jendela Chrome keluar dari batas tangkap layar; pulihkan/maximalkan jendela, lalu verifikasi endpoint. Konfirmasi URL Jellyfin ponsel/TV sebelum menutup migrasi.
+- [ ] **Selesaikan katalog Jellyfin CT106:** CT106 `.111:8096` healthy; share Samba `Media` hanya untuk Jellyfin dan share `Immich` tetap terpisah. Mount read-only Jellyfin hanya melihat `Movies`/`Shows`; backup PBS CT102/106 4 Nov sukses. Tambahkan library Movies `/media/Movies` dan Shows `/media/Shows` melalui Dashboard → Libraries, lalu uji upload dan pemutaran dari Windows/klien. Pengguna melaporkan environment Portainer CT106 ditambahkan; belum terverifikasi dashboard. CT104 tetap sebagai rollback.
 - [x] **Gotify CT112 dan klien:** pengguna mengonfirmasi Android/iPhone memakai `http://192.168.88.109:8070` dan notifikasi uji diterima. Health/database, tes PVE, tes Kuma, dan backup terenkripsi lulus. CT104 Gotify tetap dihentikan sebagai rollback.
 - [x] **Portainer CT115:** environment `CT115-Homepage` tampil `Up`; Portainer Agent 2.45.3 dan 2/2 container terdeteksi.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
