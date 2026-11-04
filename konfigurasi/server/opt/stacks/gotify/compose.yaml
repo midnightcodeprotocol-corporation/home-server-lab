@@ -4,7 +4,7 @@ services:
     container_name: gotify
     restart: unless-stopped
     ports:
-      - "192.168.88.20:8070:80"
+      - "192.168.88.109:8070:80"
     environment:
       TZ: Asia/Jakarta
       GOTIFY_DEFAULTUSER_NAME: admin
