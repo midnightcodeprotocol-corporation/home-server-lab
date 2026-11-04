@@ -4,7 +4,7 @@
 
 ## Ringkasan
 
-- Host Proxmox 9.2.24 aktif. Audit live 4 Nov menunjukkan CT101–105, CT109–112 dan VM202/VM212 berjalan; CT100/VM200 adalah template stopped dan VM201 `docker-core` sengaja stopped.
+- Host Proxmox 9.2.24 aktif. Audit lanjutan live 4 Nov menunjukkan CT102, CT104, CT105, CT109–112, CT115 dan VM202 berjalan; `backup-disk` aktif. PBS 37.61% terpakai dan backup CT115 pasca-setup sukses.
 - CT104 `docker-services` (`192.168.88.20`) masih host Docker untuk layanan yang belum dipindahkan. Prometheus dan Grafana telah dipisahkan ke CT110/111; CT104 dipertahankan sebagai rollback.
 - Aplikasi inti yang sudah berjalan: AdGuard Home, Samba, Tailscale, Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma, Prometheus, Grafana, Gotify, Beszel, Home Assistant OS, dan Proxmox Backup Server.
 - “Berjalan” tidak selalu berarti penggunaannya sudah tuntas: ada pengujian klien, backup data, notifikasi, dan integrasi yang masih menunggu.
@@ -14,7 +14,7 @@
 
 | Layanan / rencana | Kondisi aktual terverifikasi | Status dan pekerjaan tersisa |
 |---|---|---|
-| Proxmox VE | PVE 9.2.24 di host `.10`; CT101–105, CT109–111, VM202, dan VM212 berjalan pada audit 4 Nov. | Aktif. Audit konfigurasi firewall, BIOS/MemTest86, dan dokumentasi pemulihan host masih tersisa. |
+| Proxmox VE | PVE 9.2.24 di host `.10`; audit lanjutan live menunjukkan CT102, CT104, CT105, CT109–112, CT115 dan VM202 running; `backup-disk` aktif. | CT102/104 sempat gagal start ketika HDD belum muncul, lalu pulih setelah mount. Audit firewall, BIOS/MemTest86, dan dokumentasi pemulihan host masih tersisa. |
 | AdGuard Home utama | STB HG680 `.3`; kueri DNS langsung berhasil. | Aktif di luar Proxmox. Failover DNS saat resolver utama mati belum diuji. |
 | AdGuard Home kedua (CT101) | CT101 `.11`; UI dan port DNS aktif, kueri langsung berhasil. DHCP dilaporkan membagikan `.3` dan `.11`. | Aktif. Uji failover klien belum dilakukan. |
 | Samba / NAS (CT102) | CT102 `.12`, Samba aktif dengan share `Media` dan `Files`; pengguna melaporkan password `labshare` sudah dibuat. | Layanan siap, tetapi uji login/akses dari Windows belum dicatat. Menghubungkan share ke Nextcloud dan akses dari ponsel ditunda atas permintaan pengguna. Samba sendiri tidak memiliki web UI. |
@@ -26,17 +26,18 @@
 | Uptime Kuma | CT109 `.106:3001`, versi 2.5.9, container healthy; UI mengembalikan HTTP 302. Data dipindahkan dari CT104, SQLite integrity `ok`, 14 monitor tersalin. Monitor Gotify `.109:8070/health` memberi HTTP 200. | Aktif di guest khusus. Monitor self-check diarahkan ke `.106:3001`, Grafana ke `.108:3000`. Notifikasi default Gotify memakai `.109:8070`; Test memberi sukses. Immich belum dimonitor. Lease static `.106` dilaporkan pengguna, alamat guest aktif diverifikasi. |
 | Prometheus + PVE exporter | CT110 `.107`, Prometheus 3.15.1 dan exporter 3.11.0 berjalan. API port 9090 hanya menerima CT104 `.20` dan CT111 `.108`. Dari Grafana CT111, kedua target scrape `prometheus`/`proxmox` berstatus `up`. | Aktif di guest khusus. Pengguna melaporkan static lease `.107`; alamat aktif `.107` dikonfirmasi dari CT110. RouterOS tidak diaudit langsung. Container lama CT104 stopped sebagai rollback. |
 | Grafana | CT111 `.108:3000`, versi 13.3.0; `/api/health` HTTP 200. API menampilkan dashboard `Home Server Overview` dan datasource `Prometheus` mengarah ke `.107:9090`. Database SQLite integrity `ok`; pengguna mengonfirmasi login berhasil 4 Nov. | Aktif di guest khusus. Pengguna melaporkan static lease `.108`; alamat aktif `.108` dikonfirmasi dari CT111. RouterOS tidak diaudit langsung. Grafana lama CT104 stopped sebagai rollback; monitor Kuma ke `.108:3000` terverifikasi. |
-| Gotify | CT112 `.109:8070`, versi 3.1.1 healthy; `/health` menyatakan health/database green, SQLite integrity `ok`. Data final disalin konsisten saat CT104 berhenti; SHA-256 cocok. PVE target `gotify-proxmox` mengarah `.109`, matcher `gotify-all` aktif, PVE test sukses. Test Uptime Kuma sukses; monitor Gotify HTTP 200. Portainer environment berjalan 2/2 container. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify stopped sebagai rollback. | Pengguna perlu memperbarui dan menguji aplikasi Gotify Android/iPhone sebelum melepas rollback. Setelah konfirmasi, Homepage CT115 menjadi tahap berikutnya; IP belum dialokasikan. Lease `.109` dilaporkan static; `D` WebFig adalah tombol disable. |
+| Gotify | CT112 `.109:8070`, versi 3.1.1 healthy; `/health` menyatakan health/database green, SQLite integrity `ok`. Data final disalin konsisten saat CT104 berhenti; SHA-256 cocok. PVE target `gotify-proxmox` mengarah `.109`, matcher `gotify-all` aktif, PVE test sukses. Test Uptime Kuma sukses; monitor Gotify HTTP 200. Portainer environment berjalan 2/2 container. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify stopped sebagai rollback. | Pengguna mengonfirmasi URL Android/iPhone sudah diperbarui dan notifikasi uji diterima. CT104 tetap dipertahankan sebagai rollback. Lease `.109` dilaporkan static; `D` WebFig adalah tombol disable. |
+| Homepage | CT115 `.110:3000`, Homepage 2.7.0 container healthy dan HTTP 200; Agent 2.45.3 aktif pada 9001 dengan firewall hanya mengizinkan CT105. MAC `BC:24:11:3C:42:DC`; lease static dilaporkan pengguna. | Aktif, konfigurasi tautan layanan dan layout dibersihkan. Backup PBS terenkripsi pasca-setup sukses; environment CT115 masih perlu didaftarkan/diverifikasi pada Portainer. |
 | Beszel | Hub CT104 `:8090`; agent Proxmox dan CT104 terhubung; ada monitor Beszel di Kuma. | Aktif. Log pembacaan SMART pernah menunjukkan kegagalan pada NVMe dan `/dev/sda`; data SMART belum terverifikasi. |
-| Home Assistant | VM202 `haos` berjalan di `.21`; wizard selesai menurut pengguna. | OS aktif. Integrasi perangkat rumah dan pemantauan dari luar belum dicatat tuntas. |
-| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif. Job harian pukul 00.00 WIB untuk CT101–105, CT109–111, dan VM202, enkripsi sisi klien, retensi 7. Backup manual terenkripsi CT109–111 berhasil 4 Nov. | Aktif. Bind mount data aplikasi `backup=0` tidak ikut backup guest. Datastore 100 GiB berada di NVMe yang sama dengan PVE. Backup Immich file terpisah sudah ada dan restore arsip berhasil. Peringatan thin-pool overcommit perlu ditangani; pemakaian aktual terakhir 29.99%. |
+| Home Assistant | VM202 `haos` running di `.21`; wizard selesai menurut pengguna. | HTTP `.21:8123` gagal tersambung pada pemeriksaan terakhir; UI belum dinyatakan sehat. Integrasi perangkat dan pemantauan dari luar juga belum tuntas. |
+| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif. Job harian pukul 00.00 WIB untuk CT101–105, CT109–112, CT115, dan VM202, enkripsi sisi klien, retensi 7. Backup CT115 pasca-setup sukses. | Aktif. Bind mount data aplikasi `backup=0` tidak ikut backup guest. Datastore 100 GiB berada di NVMe yang sama dengan PVE. Backup Immich file terpisah sudah ada dan restore arsip berhasil. Thin-pool terakhir 31.39% data / 1.47% metadata; peringatan overcommit perlu ditangani. |
 
 ## Rencana lama yang belum dipasang
 
 | Aplikasi / VM target lama | Status sekarang |
 |---|---|
 | Caddy + sertifikat lokal | Belum dipasang; layanan saat ini diakses dengan IP/port masing-masing. |
-| Homepage | Belum dipasang; tahap berikutnya setelah uji ponsel Gotify. Target CT115, IP belum dialokasikan. |
+| Homepage | Sudah dipasang pada CT115 `.110:3000`, container healthy, HTTP 200; environment Portainer masih perlu didaftarkan/diverifikasi. |
 | k3s + Flux (VM203) | Belum dibuat/dipasang. |
 | Forgejo + Renovate (VM204) | Belum dibuat/dipasang. |
 | Password manager Vaultwarden (VM205) | Belum dipasang. Pengguna ingin menambahkan password manager nanti; rencana Vaultwarden masih perlu dipilih/dikonfirmasi saat waktunya. |
@@ -58,11 +59,11 @@
 
 ## Urutan pekerjaan yang disarankan
 
-1. Setelah layanan baru diuji dari Android dan iPhone, lanjutkan Homepage di CT115; kemudian tambah monitor Immich ke Uptime Kuma.
+1. Daftarkan/diverifikasi environment Agent CT115 di Portainer; kemudian tambah monitor Immich ke Uptime Kuma.
 2. Verifikasi hasil job harian PBS berikutnya dan event notifikasi Gotify. Rencanakan thin-pool autoextend setelah memeriksa prosedur resmi yang sesuai dengan Proxmox VE terpasang.
 3. Rekonsiliasi hitungan ponsel Immich 12.923 vs 10.638 baris asset sebelum migrasi; pertahankan backup file/dump yang sudah diverifikasi.
 4. Uji akses Immich dari ponsel melalui Tailscale; salinan asli ponsel tetap disimpan sampai hasil backup dan akses diverifikasi.
 5. Uji akses share Samba dari Windows. Integrasi Samba–Nextcloud dan akses Samba dari ponsel tetap ditunda sampai pengguna meminta dilanjutkan.
-6. **Gotify server selesai:** data sinkron, health/DB/PVE/Kuma/Portainer lulus dan backup pascamigrasi selesai. Pengguna perlu mengubah URL Gotify Android/iPhone menjadi `http://192.168.88.109:8070` dan menguji tiap klien. Pertahankan CT104 sebagai rollback hingga terkonfirmasi. Sesudahnya siapkan Homepage di CT115 (IP belum ditetapkan), baru lanjut ke Beszel, Jellyfin, Nextcloud, dan Immich terakhir.
+6. Gotify server dan klien selesai menurut konfirmasi pengguna; CT104 lama tetap disimpan sementara sebagai rollback. Homepage CT115 sudah aktif; setelah environment Portainer diverifikasi, lanjutkan monitor Immich, lalu migrasi aplikasi sesuai urutan dan backup yang disepakati.
 
 Sumber utama status: `STATUS.md`, `data/guest.yaml`, `docs/04-board.md`, dan `catatan/hasil-uji.md`. Bila status matriks ini berbeda dari audit server terbaru, audit terbaru menjadi acuan dan matriks harus diperbarui.

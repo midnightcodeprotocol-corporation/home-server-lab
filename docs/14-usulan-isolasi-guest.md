@@ -1,6 +1,6 @@
 # Usulan susunan guest per aplikasi
 
-**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** Migrasi pertama, Uptime Kuma, selesai 4 Nov ke CT109. CT105 Portainer Server khusus aktif; CT104 dipertahankan sebagai sumber layanan dan rollback. Pengguna melaporkan static lease `.105` dan `.106`; IP guest aktif terverifikasi, perubahan MikroTik belum diaudit langsung.
+**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** CT109–112 dan Homepage CT115 sudah aktif. Gotify Android/iPhone telah diuji menurut konfirmasi pengguna. CT105 Portainer Server aktif; CT104 dipertahankan sebagai sumber layanan dan rollback.
 
 ## Dasar rancangan
 
@@ -25,6 +25,7 @@
 | VM201 | docker-core | Tetap stopped. Tidak perlu menyalakannya untuk arsitektur baru. |
 | VM202 | Home Assistant OS | Pertahankan sebagai VM mandiri. |
 | VM212 | Proxmox Backup Server | Pertahankan sebagai VM mandiri. Datastore 100 GiB saat ini masih pada NVMe host yang sama; perluasan backup fisik dibahas terpisah. |
+| CT115 | Homepage | CT khusus Docker aktif di `.110:3000`; Homepage 2.7.0 healthy dan HTTP 200. Agent 2.45.3 aktif, firewall membatasi TCP 9001 ke CT105 `.105`; backup PBS pasca-setup sukses. Environment Agent CT115 masih perlu didaftarkan/diverifikasi di Portainer. |
 
 ## Aplikasi yang saat ini ada di CT104
 
@@ -37,17 +38,17 @@
 | Uptime Kuma | CT109 (sudah dibuat dan dipakai) | Kuma dan database/file persistennya. | Versi 2.5.9 berjalan di `.106:3001`; 14 monitor tersalin, SQLite integrity `ok`, HTTP UI merespons dan container healthy. Rootfs 16 GiB. Backup PBS terenkripsi CT109 berhasil. CT104 lama stopped untuk rollback. Target monitor self-check telah diperbarui ke `.106:3001` dan monitor Grafana ke `.108:3000` (database Kuma terverifikasi). |
 | Prometheus + PVE exporter | CT110 (sudah dibuat dan dipakai) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | Prometheus 3.15.1 dan exporter 3.11.0 berjalan di `.107`; dari CT111 kedua target `up`. API 9090 dibatasi ke Grafana CT104 `.20` dan CT111 `.108`. Agent 2.45.3 aktif, hanya source `.105` boleh; backup PBS terenkripsi lulus. Pengguna melaporkan static lease `.107`; alamat aktif terverifikasi dari CT110, RouterOS belum diaudit langsung. Environment Portainer dilaporkan terdaftar; Agent dari CT105 merespons. Container CT104 stopped untuk rollback. |
 | Grafana | CT111 (sudah dibuat dan dipakai) | Grafana, datasource, dan dashboard. | Grafana 13.3.0 aktif di `.108:3000`; API health HTTP 200; `Home Server Overview` dan datasource `Prometheus` `.107:9090` diverifikasi; SQLite integrity `ok`. Rootfs 12 GiB; backup PBS terenkripsi berhasil. Agent 2.45.3 dibatasi ke `.105`. Pengguna melaporkan static lease `.108`; alamat aktif terverifikasi dari CT111, RouterOS belum diaudit langsung. Environment Portainer dilaporkan terdaftar; monitor Kuma ke `.108:3000` diverifikasi. CT104 lama stopped untuk rollback. |
-| Gotify | CT112 (aktif, cutover selesai) | Gotify dan data aplikasinya. | Gotify 3.1.1 healthy di `.109:8070`; data final disalin dari CT104 saat berhenti, hash cocok, DB integrity `ok`. PVE target dan Uptime Kuma mengarah ke CT112 dan pengiriman uji sukses; monitor health HTTP 200. Portainer environment CT112-Gotify 2/2 container berjalan. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify berhenti sebagai rollback sampai endpoint ponsel Android/iPhone diperbarui dan diuji. |
+| Gotify | CT112 (aktif, cutover selesai) | Gotify dan data aplikasinya. | Gotify 3.1.1 healthy di `.109:8070`; data final disalin dari CT104 saat berhenti, hash cocok, DB integrity `ok`. PVE target dan Uptime Kuma mengarah ke CT112 dan pengiriman uji sukses; monitor health HTTP 200. Pengguna mengonfirmasi URL Android/iPhone sudah diperbarui dan notifikasi uji diterima. Portainer environment CT112-Gotify 2/2 container berjalan. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify tetap berhenti sebagai rollback. |
 | Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
 
-CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana. Lease `.106`, `.107`, `.108`, dan `.109` dilaporkan static oleh pengguna; alamat aktif terverifikasi di guest. CT106–108 dan CT113 masih rencana dan belum dibuat. CT112 menjalankan Gotify; CT104 `.20` tetap berjalan untuk aplikasi lain dan menyimpan Gotify lama yang stopped sebagai rollback hingga klien ponsel diuji. Homepage CT115 tetap tahap berikutnya setelah konfirmasi tersebut; alamat IP belum dialokasikan.
+CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana; CT112 Gotify; CT115 Homepage. Lease `.106`–`.110` dilaporkan static oleh pengguna dan alamat aktif terverifikasi di guest; RouterOS belum diaudit penuh. CT106–108, CT113, dan CT114 masih rencana. CT104 `.20` tetap berjalan untuk aplikasi lain; stack Gotify lama stopped sebagai rollback. CT115 static lease `.110` dilaporkan pengguna.
 
 ## Aplikasi rencana yang belum dipasang
 
 | Aplikasi / rencana | Guest target usulan | Status dan keputusan |
 |---|---|---|
 | Caddy + CA lokal | CT114 (baru) | Belum dipasang. Guest terpisah; jika Caddy berhenti, hostname proxy terdampak, sedangkan layanan langsung tetap berjalan. |
-| Homepage | CT115 (baru) | Belum dipasang; dashboard opsional. IP belum dialokasikan. Urutan pertama setelah verifikasi ponsel Gotify. |
+| Homepage | CT115 (aktif) | Terpasang di `.110:3000`; Homepage 2.7.0 healthy, HTTP 200, konfigurasi tautan layanan sudah dimuat. Agent Portainer 2.45.3 berjalan dengan firewall terbatas; environment masih perlu didaftarkan/diverifikasi. Backup PBS pasca-setup sukses. |
 | Forgejo | CT116 (baru) | Belum dipasang; satu guest khusus. |
 | Renovate | CT117 (baru) | Belum dipasang; worker terpisah dari Forgejo. |
 | k3s + Flux | VM203 (rencana lama) | Belum dipasang. Anggap sebagai satu lingkungan Kubernetes/automation untuk latihan; fase lanjut karena menambah beban pada CPU 4 thread. |
@@ -86,7 +87,7 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 4. **Selesai untuk Uptime Kuma, Prometheus, dan Grafana:** migrasi data/config masing-masing; SQLite Kuma/Grafana integrity `ok`, Kuma menyimpan 14 monitor, kedua target scrape Prometheus `up`, Grafana health/API/dashboard/datasource terverifikasi. Container lama CT104 stopped untuk rollback.
 5. **Selesai 4 Nov:** monitor Kuma Gotify diarahkan ke `.109:8070/health` dan HTTP 200; notifikasi default Gotify diarahkan ke `.109` dan tombol Test memberi sukses tanpa mengubah token. Tambah monitor Immich masih tersisa.
 6. Pengguna melaporkan static lease DHCP `.107/.108` dan environment `CT110-prometheus`/`CT111-grafana` sudah selesai. HTTP 403 dari Agent tanpa signature mengonfirmasi jalur jaringan dari CT105; status dashboard Portainer/router belum diperiksa langsung.
-7. **Gotify CT112 cutover selesai** (4 Nov): salin konsisten ketika sumber berhenti, health/DB lulus, PVE dan Kuma diuji, backup pascamigrasi selesai. Tunggu uji klien ponsel, lalu siapkan Homepage CT115 sebelum memindahkan Beszel, Jellyfin, atau Nextcloud; Immich terakhir setelah rekonsiliasi aset dan backup terbaru.
+7. **Gotify CT112 cutover selesai** (4 Nov): salin konsisten ketika sumber berhenti, health/DB lulus, PVE dan Kuma diuji, backup pascamigrasi selesai; pengguna mengonfirmasi Android/iPhone menerima notifikasi uji. **Homepage CT115 juga selesai** dan sehat. Daftarkan environment Agent CT115 di Portainer, lalu lanjutkan monitor Immich dan migrasi layanan berikutnya dengan backup/rollback per tahap; Immich tetap terakhir setelah rekonsiliasi aset.
 8. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
 9. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits` per guest. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
 

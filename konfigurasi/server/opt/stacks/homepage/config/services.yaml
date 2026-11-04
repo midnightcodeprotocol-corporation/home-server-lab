@@ -1,74 +1,47 @@
 - Jaringan:
     - MikroTik:
         href: http://192.168.88.1
-        description: Router utama (WebFig)
-        ping: 192.168.88.1
-    - TP-Link penerima:
-        href: http://192.168.0.1
-        description: TL-WR840N mode WISP
-    - TP-Link AP:
-        href: http://192.168.88.2
-        description: TL-WR820N Access Point
-        ping: 192.168.88.2
-    - AdGuard utama:
-        href: http://192.168.88.253
-        description: DNS pemblokir iklan (STB)
-        ping: 192.168.88.253
-        widget:
-          type: adguard
-          url: http://192.168.88.253
-          username: admin
-          password: GANTI
-- Server:
-    - Proxmox:
-        href: https://proxmox.home.arpa
-        description: Hypervisor (ThinkCentre M710q)
-        ping: 192.168.88.10
-    - Portainer:
-        href: https://portainer.home.arpa
-        description: Manajemen Docker
-    - Uptime Kuma:
-        href: https://kuma.home.arpa
-        description: Monitoring layanan
-    - Beszel:
-        href: https://beszel.home.arpa
-        description: Monitoring host dan container
-    - Gotify:
-        href: https://gotify.home.arpa
-        description: Notifikasi
-    - Homepage:
-        href: https://dash.home.arpa
-        description: Dashboard server
-    - Forgejo:
-        href: https://git.home.arpa
-        description: Git pribadi
-    - AdGuard kedua:
+        description: Router utama dan DHCP
+    - AdGuard Home utama:
+        href: http://192.168.88.3
+        description: DNS utama di STB
+    - AdGuard Home kedua:
         href: http://192.168.88.11
-        description: DNS cadangan (LXC 101)
-        ping: 192.168.88.11
+        description: DNS cadangan di CT101
+- Manajemen:
+    - Proxmox VE:
+        href: https://192.168.88.10:8006
+        description: Virtualisasi dan LXC
+    - Proxmox Backup Server:
+        href: https://192.168.88.30:8007
+        description: Backup terenkripsi
+    - Portainer:
+        href: https://192.168.88.105:9443
+        description: Manajemen Docker guest
+- Monitoring & notifikasi:
+    - Uptime Kuma:
+        href: http://192.168.88.106:3001
+        description: Status layanan dan notifikasi
+    - Grafana:
+        href: http://192.168.88.108:3000
+        description: Dashboard metrik
+    - Gotify:
+        href: http://192.168.88.109:8070
+        description: Notifikasi server
 - Aplikasi:
     - Nextcloud:
-        href: https://nextcloud.home.arpa
-        description: Cloud pribadi
-    - AFFiNE:
-        href: https://affine.home.arpa
-        description: Catatan dan dokumen
-    - n8n:
-        href: https://n8n.home.arpa
-        description: Otomasi alur kerja
-    - WordPress:
-        href: https://wp.home.arpa
-        description: Situs dan blog privat
-    - Situs statis:
-        href: https://web.home.arpa
-        description: Situs privat
-    - Home Assistant:
-        href: http://192.168.88.21:8123
-        description: Otomasi rumah
-        ping: 192.168.88.21
-    - Folder jaringan:
-        href: file://192.168.88.12/share
-        description: Samba (buka dari Explorer)
-    - Tailscale:
-        href: https://login.tailscale.com/admin/machines
-        description: Konsol admin
+        href: http://192.168.88.20:8080
+        description: File dan dokumen pribadi
+    - Immich:
+        href: http://192.168.88.20:2283
+        description: Foto dan video keluarga
+    - Jellyfin:
+        href: http://192.168.88.20:8096
+        description: Pustaka media
+    - Beszel:
+        href: http://192.168.88.20:8090
+        description: Pemantauan host dan container
+- Dashboard:
+    - Homepage:
+        href: http://192.168.88.110:3000
+        description: Dashboard Home Server Lab

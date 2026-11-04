@@ -3,11 +3,12 @@
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026.
 
 ## Sedang dikerjakan
-- [ ] **Migrasi Gotify ke CT112 — menunggu uji ponsel:** CT112 `.109:8070` Gotify healthy, DB `integrity_check=ok`; target PVE diarahkan ke `.109` dan tes sukses. Uptime Kuma mengirim tes sukses; monitor Gotify `/health` memberi 200. Portainer `CT112-Gotify` menunjukkan 2/2 container aktif. Backup terenkripsi pascamigrasi sukses. CT104 Gotify dihentikan dan dipertahankan sebagai rollback. Pengguna perlu mengganti URL di aplikasi Gotify Android dan iPhone ke `http://192.168.88.109:8070` dan menguji keduanya. Setelah terkonfirmasi, lanjut Homepage CT115.
+- [x] **Gotify CT112 dan klien:** pengguna mengonfirmasi Android/iPhone memakai `http://192.168.88.109:8070` dan notifikasi uji diterima. Health/database, tes PVE, tes Kuma, dan backup terenkripsi lulus. CT104 Gotify tetap dihentikan sebagai rollback.
+- [ ] **Portainer CT115:** Homepage aktif dan sehat di `.110:3000`; daftarkan/verifikasi Agent environment CT115 pada Portainer CT105.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
-- [ ] Setelah migrasi Gotify, siapkan Homepage khusus di CT115; alamat IP belum ditetapkan. Jangan mulai sebelum Gotify selesai diverifikasi.
+- [x] Homepage khusus CT115 terpasang di `.110:3000`, HTTP 200/container healthy; link dashboard telah diarahkan ke layanan aktif; backup PBS pasca-setup berhasil.
 - [ ] Verifikasi RAM 24 GB (16+8) di BIOS, lalu jalankan MemTest86 (Bab 27.1, 27.3)
 - [ ] Atur BIOS Lenovo (Bab 27.5)
 - [x] Instal Proxmox pada M710q dan boot pertama
@@ -36,14 +37,14 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 Novem
 - [x] Prometheus 3.15.1 + PVE exporter 3.11.0 kini di CT110; Grafana 13.3.0 di CT111. Target Prometheus/PVE `up`, dashboard `Home Server Overview` tersedia dan datasource terhubung. Stack lama CT104 dihentikan untuk rollback.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
 - [x] Uptime Kuma 2.5.9 kini aktif di CT109 `.106:3001`; 14 monitor/data dipertahankan saat migrasi dari CT104. Container lama di CT104 stopped sebagai rollback. Monitor self-check Kuma `.106:3001` dan monitor Grafana `.108:3000` telah diverifikasi dari database setelah pengguna memperbaruinya. Immich belum ditambahkan ke monitor Kuma.
-- [x] Gotify 3.1.1 dipindahkan dari CT104 ke CT112 `.109:8070`; DB konsisten, SHA-256 cocok, SQLite integrity `ok`, health green. CT104 Gotify dihentikan sebagai rollback.
-- [x] PVE endpoint/matcher Gotify diarahkan ke CT112 dan tes target berhasil. Notifikasi Uptime Kuma diarahkan ke `.109` dan tes sukses; monitor Gotify `/health` mendapat HTTP 200. Klien ponsel Android/iPhone masih perlu diperbarui dan diuji sebelum rollback CT104 dilepas.
+- [x] Gotify 3.1.1 dipindahkan dari CT104 ke CT112 `.109:8070`; DB konsisten, SHA-256 cocok, SQLite integrity `ok`, health green. Pengguna mengonfirmasi URL Android/iPhone diperbarui dan uji notifikasi diterima. CT104 Gotify dihentikan sebagai rollback.
+- [x] PVE endpoint/matcher Gotify diarahkan ke CT112 dan tes target berhasil. Notifikasi Uptime Kuma diarahkan ke `.109` dan tes sukses; monitor Gotify `/health` mendapat HTTP 200. Klien Android/iPhone diuji pengguna; CT104 tetap disimpan sementara sebagai rollback.
 - [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART masih perlu diselesaikan; target PVE → Gotify dan Uptime Kuma → Gotify telah diuji sukses.
 - [ ] Suplemen 4 (Bab 35-38): Caddy dan sertifikat lokal
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
-- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB mencakup CT101–105, CT109–111, dan VM202 (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif. Backup manual terenkripsi CT109, CT110, dan CT111 berhasil di PBS. Peringatan thin-pool overcommit muncul; pemakaian pool aktual terakhir 29.99%, autoextend masih perlu ditangani.
+- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB mencakup CT101–105, CT109–112, CT115, dan VM202 (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif. Backup CT115 pasca-setup berhasil. Peringatan thin-pool overcommit muncul; pemakaian aktual 31.39% data / 1.47% metadata, autoextend masih perlu ditangani.
 - [ ] Verifikasi job harian pertama untuk seluruh guest. Uji restore arsip terenkripsi CT101 ke CT109 sementara lulus (CT boot dengan NIC terputus, AdGuard aktif, HTTP 302); CT109 dan disk uji sudah dihapus. Backup Immich kini ada di PBS dan restore penuh lulus; rekonsiliasi jumlah asset masih pending.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM

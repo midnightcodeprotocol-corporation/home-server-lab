@@ -5,10 +5,17 @@ headerStyle: boxed
 layout:
   Jaringan:
     style: row
-    columns: 4
-  Server:
+    columns: 3
+  Manajemen:
     style: row
-    columns: 4
+    columns: 3
+  Monitoring & notifikasi:
+    style: row
+    columns: 3
   Aplikasi:
     style: row
     columns: 4
+  Dashboard:
+    style: row
+    columns: 2
+disableIndexing: true
