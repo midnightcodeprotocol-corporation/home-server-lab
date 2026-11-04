@@ -1,0 +1,12 @@
+[Unit]
+Description=Restrict Portainer Agent access to Portainer CT105
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/portainer-agent-firewall
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

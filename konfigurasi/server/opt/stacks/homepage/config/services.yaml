@@ -44,6 +44,9 @@
     - Home Assistant:
         href: http://192.168.88.21
         description: Otomasi rumah (Home Assistant OS)
+    - qBittorrent:
+        href: http://192.168.88.114:8080
+        description: Unduhan media ke Inbox Jellyfin
 - Otomasi:
     - n8n:
         href: http://192.168.88.113:5678

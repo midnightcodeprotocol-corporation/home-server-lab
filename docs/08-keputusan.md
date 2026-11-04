@@ -29,6 +29,7 @@
 | 25 | Gunakan baseline profil 16 GB sampai konfigurasi aktual diverifikasi. RAM yang dilaporkan sekarang 24 GB; Bab 56.8 menambah batas konservatif sementara. Opsi 32 GB tetap bersyarat pengukuran | Menjaga ruang bagi host dan mencegah OOM | Menganggap alokasi VM teoritis sama dengan RAM aman untuk VM |
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
 | 27 | **Digantikan 3 Nov 2026 atas arahan terbaru pengguna:** gunakan Prometheus. Prometheus 3.15.1 + PVE exporter 3.11.0 berjalan di CT110 dan Grafana 13.3.0 di CT111 sejak 4 Nov. PVE API memakai akun/token terbatas `PVEAuditor`; retensi Prometheus 30 hari; API Prometheus 9090 dibatasi firewall CT110 hanya ke CT104 (rollback) dan CT111, exporter hanya jaringan Docker. | Pengguna membalik keputusan sebelumnya; kontrol akses minimal dan retensi terbatas | Menganggap keputusan lama “tanpa Prometheus” masih berlaku |
+| 28 | Client torrent ditempatkan pada CT Proxmox terpisah CT108; staging download parsial dipisahkan dari Inbox Jellyfin. Hanya Inbox dan staging yang dipasang di guest; Movies/Shows dan Immich tidak dapat diakses. | Batas isolasi jelas; n8n tidak diberi shell atau mount ke guest torrent. Unduhan selesai tersedia untuk pipeline Inbox. | Menaruh client di CT119 n8n atau mengizinkan client menulis langsung ke Movies/Shows |
 
 ## Keputusan layanan media — 4 November 2026
 
@@ -36,4 +37,4 @@ Pisahkan data aplikasi Immich dan katalog video Jellyfin pada HDD: Samba share `
 
 ## Urutan pemasangan lanjutan — 4 November 2026
 
-Atas arahan pengguna, selesaikan Nextcloud CT107 terlebih dahulu. Sesudah migrasi dan uji Nextcloud tuntas, jadikan otomasi download media Jellyfin prioritas sebelum layanan lain pada backlog. Alur awal berfokus pada Inbox, file/link yang dapat diakses, identifikasi dan penamaan, lalu penempatan Movies/Shows. n8n menjadi orchestrator yang direncanakan; torrent client baru ditambahkan pada tahap berikutnya setelah alur dasar lulus. Akses otomasi harus dibatasi ke Inbox dan direktori Jellyfin yang diperlukan; tidak boleh ada mount atau kredensial Immich.
+Atas arahan pengguna, selesaikan Nextcloud CT107 terlebih dahulu. Sesudah migrasi dan uji Nextcloud tuntas, jadikan otomasi download media Jellyfin prioritas sebelum layanan lain pada backlog. Pengguna menyetujui tiga intake: direct download, torrent, dan folder kumpulan. n8n menjadi orchestrator; qBittorrent ditempatkan di CT108 terpisah dan hanya berbagi Inbox plus staging. Alur harus memeriksa metadata/nama, mengelompokkan serial, menamai ulang, menahan hasil ambigu untuk review, dan memindahkan tanpa overwrite. Jangan beri akses atau mount Immich.

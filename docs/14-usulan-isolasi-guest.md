@@ -26,6 +26,7 @@
 | VM202 | Home Assistant OS | Pertahankan sebagai VM mandiri. |
 | VM212 | Proxmox Backup Server | Pertahankan sebagai VM mandiri. Datastore 100 GiB saat ini masih pada NVMe host yang sama; perluasan backup fisik dibahas terpisah. |
 | CT115 | Homepage | CT khusus Docker aktif di `.110:3000`; Homepage 2.7.0 healthy dan HTTP 200. Portainer menampilkan environment `CT115-Homepage` Up, Agent 2.45.3, 2/2 container. Backup PBS pasca-setup sukses. |
+| CT108 | qBittorrent | Guest Debian 13 unprivileged khusus dibuat 5 Nov 2026 di `.114` (DHCP static menurut laporan pengguna), 1 vCPU/1 GiB/8 GiB. qBittorrent 5.3.0 dan Agent 2.45.3 Up. Default download `/inbox`; incomplete `/downloads/incomplete`. Hanya bind mount Inbox Jellyfin dan staging HDD, tanpa akses ke Movies/Shows maupun Immich. Agent firewall hanya CT105; tes CT105 204, CT104 timeout. Homepage card aktif; Portainer environment Up 2/2; Kuma ID15 Up/HTTP 200; backup PBS terenkripsi dan job harian sudah mencakup CT108. Password awal dan unduhan E2E masih perlu diselesaikan. |
 
 ## Aplikasi yang saat ini ada di CT104
 
@@ -65,7 +66,7 @@ CT106 menjadi host Jellyfin; CT107 Nextcloud; CT109 menjadi host Docker khusus U
 | TrueNAS | Tidak dibuat saat ini | Wishlist. Samba sudah menyediakan share; desain disk sekarang memakai HDD untuk data aplikasi. Evaluasi lagi setelah layout disk/backup baru disepakati. |
 | Server cetak / pemantauan listrik / panel surya | Belum ditetapkan | Menunggu perangkat dan aplikasi yang akan dipakai; jangan membuat guest kosong dulu. |
 
-CT114–122 juga usulan dan belum dibuat. IP semua guest baru tetap belum dialokasikan. VM203/205/210/213 berasal dari slot rencana lama; status tersebut bukan bukti guest pernah dibuat.
+CT108 kini telah dibuat untuk client torrent. Guest usulan lain CT114–122 belum dibuat dan alamatnya belum dialokasikan. VM203/205/210/213 berasal dari slot rencana lama; status tersebut bukan bukti guest pernah dibuat.
 
 ## Keputusan layanan file dan NAS
 
@@ -89,7 +90,7 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 6. Pengguna melaporkan static lease DHCP `.107/.108` dan environment `CT110-prometheus`/`CT111-grafana` sudah selesai. HTTP 403 dari Agent tanpa signature mengonfirmasi jalur jaringan dari CT105; status dashboard Portainer/router belum diperiksa langsung.
 7. **Gotify CT112, Homepage CT115, dan pemantauan Immich selesai diverifikasi** (4 Nov): pengguna mengonfirmasi notifikasi Gotify Android/iPhone; environment Portainer Homepage Up 2/2; monitor Immich Kuma heartbeat Up / HTTP 200. Lanjutkan migrasi aplikasi dengan backup/rollback per tahap; Immich tetap terakhir setelah rekonsiliasi aset.
 8. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
-9. **Prioritas pengguna, 4–5 Nov 2026:** setelah pengguna mengonfirmasi login dan pengujian klien Nextcloud, prioritaskan otomasi Jellyfin lebih dulu. CT119 n8n dibuat 5 Nov dengan Docker, PostgreSQL, mount HDD Jellyfin terbatas dan backup awal. Pengguna menjelaskan tiga intake workflow: link download, link torrent, dan folder kumpulan. Inbox tersedia di `\\192.168.88.12\Media\Inbox`; helper dan workflow prototipe diuji, lalu workflow di-unpublish agar tidak memindahkan otomatis sebelum spesifikasi direvisi. Torrent client perlu guest khusus sesuai prinsip isolasi. Akses otomasi tidak mencakup Immich.
+9. **Prioritas pengguna, 4–5 Nov 2026:** setelah pengguna mengonfirmasi login dan pengujian klien Nextcloud, prioritaskan otomasi Jellyfin lebih dulu. CT119 n8n dibuat dengan Docker/PostgreSQL dan helper terbatas ke Jellyfin. Pengguna menetapkan tiga intake: link download, link torrent, dan folder kumpulan. CT108 qBittorrent kini terpasang terpisah; unduhan selesai diarahkan ke `\\192.168.88.12\Media\Inbox`, file parsial ke staging HDD. Agent dibatasi firewall ke Portainer CT105. Belum ada unduhan uji; password admin awal, environment Portainer, dan monitor Kuma menunggu. Workflow prototipe tetap unpublished sampai integrasi lengkap, klasifikasi/metadata, pengelompokan series, rename, review, dan perpindahan aman lulus uji. Akses otomasi tidak mencakup Immich.
 10. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits`. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
 
 ### Rujukan resmi
