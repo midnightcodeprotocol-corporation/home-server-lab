@@ -1,9 +1,11 @@
 # 04 - Board proyek
 
-Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026 (malam; pemisahan media Jellyfin/Immich).
+Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 November 2026 (Nextcloud CT107; Jellyfin selesai menurut konfirmasi pengguna).
 
 ## Sedang dikerjakan
-- [ ] **Selesaikan katalog Jellyfin CT106:** CT106 `.111:8096` healthy; share Samba `Media` hanya untuk Jellyfin dan share `Immich` tetap terpisah. Mount read-only Jellyfin hanya melihat `Movies`/`Shows`; backup PBS CT102/106 4 Nov sukses. Tambahkan library Movies `/media/Movies` dan Shows `/media/Shows` melalui Dashboard → Libraries, lalu uji upload dan pemutaran dari Windows/klien. Pengguna melaporkan environment Portainer CT106 ditambahkan; belum terverifikasi dashboard. CT104 tetap sebagai rollback.
+- [ ] **Migrasi Nextcloud CT104 → CT107:** Nextcloud masih melayani dari CT104 `.20:8080`; pra-migrasi backup konsisten telah dibuat dan CT104 PBS sukses. CT107 Docker siap tetapi lease `.112` masih menunggu verifikasi static di MikroTik. Setelah itu migrasikan satu writer, uji endpoint, Windows, Android/iPhone, backup, dan rollback sebelum menghentikan CT104.
+- [ ] **Otomasi media Jellyfin (prioritas setelah Nextcloud):** rancang Inbox yang terpisah dari Immich, pemrosesan file/link dan usulan penamaan/kategori, lalu pindahkan hanya ke Movies/Shows. n8n menjadi orchestrator; torrent client masuk tahap terpisah setelah alur file/link terbukti. Belum memasang stack sebelum desain mount, izin, dan backup disepakati dalam plan.
+- [x] **Jellyfin CT106:** pengguna mengonfirmasi library Movies `/media/Movies` dan Shows `/media/Shows`, pemantauan realtime, salin dari Windows melalui SMB, pemutaran video, environment Portainer dan akses perangkat klien sudah selesai. CT104 tetap rollback.
 - [x] **Gotify CT112 dan klien:** pengguna mengonfirmasi Android/iPhone memakai `http://192.168.88.109:8070` dan notifikasi uji diterima. Health/database, tes PVE, tes Kuma, dan backup terenkripsi lulus. CT104 Gotify tetap dihentikan sebagai rollback.
 - [x] **Portainer CT115:** environment `CT115-Homepage` tampil `Up`; Portainer Agent 2.45.3 dan 2/2 container terdeteksi.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.

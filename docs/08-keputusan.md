@@ -33,3 +33,7 @@
 ## Keputusan layanan media — 4 November 2026
 
 Pisahkan data aplikasi Immich dan katalog video Jellyfin pada HDD: Samba share `Immich` menunjuk `/srv/media/immich`, sementara share `Media` menunjuk `/srv/media/jellyfin` dengan subfolder `Movies` dan `Shows`. CT106 Jellyfin hanya menerima bind mount read-only untuk folder `jellyfin`; upload dilakukan melalui SMB CT102, bukan langsung dari container Jellyfin. Pertahankan folder dan isi Immich di tempat. Tujuannya mencegah Jellyfin memindai atau menampilkan dataset Immich, sekaligus menyediakan lokasi upload yang sederhana. Backup CT mengecualikan bind mount, sehingga dataset media perlu backup file tersendiri; PBS saat ini masih pada NVMe host yang sama.
+
+## Urutan pemasangan lanjutan — 4 November 2026
+
+Atas arahan pengguna, selesaikan Nextcloud CT107 terlebih dahulu. Sesudah migrasi dan uji Nextcloud tuntas, jadikan otomasi download media Jellyfin prioritas sebelum layanan lain pada backlog. Alur awal berfokus pada Inbox, file/link yang dapat diakses, identifikasi dan penamaan, lalu penempatan Movies/Shows. n8n menjadi orchestrator yang direncanakan; torrent client baru ditambahkan pada tahap berikutnya setelah alur dasar lulus. Akses otomasi harus dibatasi ke Inbox dan direktori Jellyfin yang diperlukan; tidak boleh ada mount atau kredensial Immich.
