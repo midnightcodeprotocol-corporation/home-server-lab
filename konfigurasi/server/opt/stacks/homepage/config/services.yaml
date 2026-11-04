@@ -36,7 +36,7 @@
         href: http://192.168.88.20:2283
         description: Foto dan video keluarga
     - Jellyfin:
-        href: http://192.168.88.20:8096
+        href: http://192.168.88.111:8096
         description: Pustaka media
     - Beszel:
         href: http://192.168.88.20:8090
