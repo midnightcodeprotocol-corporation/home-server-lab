@@ -1,11 +1,11 @@
 # Matriks rencana aplikasi vs kondisi aktual
 
-**Audit dokumen:** 4 November 2026 (pembaruan Nextcloud CT107 dan urutan otomasi media). Konfirmasi pengguna untuk uji klien dibedakan dari pemeriksaan live; rencana lama tidak dianggap sebagai instalasi.
+**Audit dokumen:** 4 November 2026 (cutover Nextcloud CT107, Portainer, backup, dan monitor diverifikasi live; uji klien pascamigrasi belum dikonfirmasi).
 
 ## Ringkasan
 
-- Host Proxmox 9.2.24 aktif. Audit lanjutan live 4 Nov menunjukkan CT102, CT104–106, CT109–112, CT115 dan VM202 berjalan; `backup-disk` aktif. PBS 38.61% terpakai dan backup CT106 terbaru sukses.
-- CT104 `docker-services` (`192.168.88.20`) masih host Docker untuk layanan yang belum dipindahkan. Jellyfin kini di CT106; Prometheus dan Grafana telah dipisahkan ke CT110/111. CT104 dipertahankan sebagai rollback.
+- Host Proxmox 9.2.24 aktif. Audit live 4 Nov menunjukkan CT104–107, CT109–112, CT115 berjalan; `backup-disk` dan `pbs-store1` aktif. PBS 39.49% terpakai; thin-pool `pve/data` 35.84% data / 1.62% metadata.
+- CT104 `docker-services` (`192.168.88.20`) tetap host Docker untuk layanan yang belum dipindahkan. Jellyfin di CT106; Nextcloud dipindahkan ke CT107; monitoring ke CT109–111. CT104 app Nextcloud lama berhenti dan dipertahankan sebagai rollback.
 - Aplikasi inti yang sudah berjalan: AdGuard Home, Samba, Tailscale, Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma, Prometheus, Grafana, Gotify, Beszel, Home Assistant OS, dan Proxmox Backup Server.
 - “Berjalan” tidak selalu berarti penggunaannya sudah tuntas: ada pengujian klien, backup data, notifikasi, dan integrasi yang masih menunggu.
 - Keputusan pengguna (3 Nov): Nextcloud menjadi layanan file utama keluarga; Samba melengkapi akses share PC/laptop; TrueNAS ditunda sebagai opsi pengelola storage. Lihat [rencana susunan guest dan keputusan NAS](14-usulan-isolasi-guest.md).
@@ -22,7 +22,7 @@
 | Docker dan Portainer | CT104 `.20` menjalankan Docker dan Portainer lama; CT105 Portainer Server baru aktif di lease DHCP `.105`, Docker CE 29.9.2/Compose 5.7.0, UI HTTPS `:9443` HTTP 200. Dashboard Portainer menunjukkan CT112-Gotify di `tcp://192.168.88.109:9001`, Agent 2.45.3, 2/2 container berjalan. VM201 `docker-core` stopped. | CT105 khusus untuk Portainer Server; setup admin selesai. Agent guest dibatasi hanya untuk source `.105`; koneksi tanpa signature memberi HTTP 403. `.105` static lease dilaporkan pengguna, DHCP guest tetap aktif. |
 | Jellyfin | CT106 `.111:8096` healthy, `/System/Info/Public` HTTP 200. Mount HDD hanya folder Jellyfin ke `/srv/jellyfin`, lalu `/media` read-only; share Immich tidak terlihat di guest. | Pengguna mengonfirmasi Movies `/media/Movies`, Shows `/media/Shows`, pemantauan realtime, uji SMB Windows dan playback, environment Portainer serta akses klien sudah selesai. CT104 tetap rollback; backup CT tidak mencakup media `backup=0`. |
 | Immich | Container server, PostgreSQL, Redis, dan machine learning berjalan sehat; endpoint `/api/server/ping` dari PVE mengembalikan `pong`. Data berada di HDD melalui `/srv/media/immich`. | Monitor Kuma `Immich` sudah ada dan heartbeat terakhir `Up / 200 - OK`. Pengguna melaporkan upload selesai. Rekonsiliasi 10.638 baris asset vs catatan ponsel lama 12.923 masih perlu sebelum migrasi. Backup media terenkripsi masuk PBS (`host/immich-data/2026-11-03T15:00:28Z`) dan restore penuh lulus; backup basis data tersedia. |
-| Nextcloud | Nextcloud 35.0.2.2 di CT104 `.20:8080`, MariaDB/Redis sehat; pengguna melaporkan login ulang dan uji upload/download satu file berhasil. CT107 Debian 13 running dengan Docker siap; lease DHCP `.112` sementara dan belum dipastikan static. | Migrasi CT104→CT107 belum dimulai. Backup pra-migrasi DB/data/kode telah dibuat dan gzip/arsip diverifikasi; backup CT104 terenkripsi PBS sukses, tetapi bind mount HDD dikecualikan dan PBS satu host/NVMe. CT104 tetap melayani. Setelah migrasi, uji klien Windows/Android/iPhone; Samba belum disambungkan (ditunda). |
+| Nextcloud | Nextcloud 35.0.2.2 aktif di CT107 `.112:8080`, MariaDB/Redis healthy; `occ status` installed, maintenance false, `needsDbUpgrade=false`; `status.php` HTTP 200 dari guest, PVE, dan GET dari laptop Windows. WebFig menunjukkan komentar CT107-Nextcloud dengan IP/MAC yang cocok; pengguna mengonfirmasi lease static. Data pada bind mount HDD `/srv/nextcloud-data`, owner www-data mode 750. Homepage `.110` HTTP 200 dan Kuma monitor ID 8 menunjuk `/status.php` `.112`; heartbeat terakhir Up. | Server cutover selesai; Portainer dashboard menunjukkan 4 container running, 2 healthy, 0 unhealthy. Backup akhir sumber dan backup CT107 pascamigrasi terenkripsi PBS sukses. CT104 app berhenti sebagai rollback, DB/Redis lama dipertahankan. Bind mount `backup=0` tidak tercakup backup CT; PBS berada pada NVMe host yang sama. Pengguna masih perlu login dan menguji buka/upload/download dari Windows, Android, iPhone. Integrasi Samba–Nextcloud tetap ditunda. |
 | Uptime Kuma | CT109 `.106:3001`, versi 2.5.9, container healthy; UI mengembalikan HTTP 302. Data dipindahkan dari CT104, SQLite integrity `ok`, 14 monitor tersalin. Monitor Gotify `.109:8070/health` memberi HTTP 200. | Aktif di guest khusus. Monitor self-check diarahkan ke `.106:3001`, Grafana ke `.108:3000`. Notifikasi default Gotify memakai `.109:8070`; Test memberi sukses. Monitor Immich telah ada dan heartbeat terakhir Up / HTTP 200. Lease static `.106` dilaporkan pengguna, alamat guest aktif diverifikasi. |
 | Prometheus + PVE exporter | CT110 `.107`, Prometheus 3.15.1 dan exporter 3.11.0 berjalan. API port 9090 hanya menerima CT104 `.20` dan CT111 `.108`. Dari Grafana CT111, kedua target scrape `prometheus`/`proxmox` berstatus `up`. | Aktif di guest khusus. Pengguna melaporkan static lease `.107`; alamat aktif `.107` dikonfirmasi dari CT110. RouterOS tidak diaudit langsung. Container lama CT104 stopped sebagai rollback. |
 | Grafana | CT111 `.108:3000`, versi 13.3.0; `/api/health` HTTP 200. API menampilkan dashboard `Home Server Overview` dan datasource `Prometheus` mengarah ke `.107:9090`. Database SQLite integrity `ok`; pengguna mengonfirmasi login berhasil 4 Nov. | Aktif di guest khusus. Pengguna melaporkan static lease `.108`; alamat aktif `.108` dikonfirmasi dari CT111. RouterOS tidak diaudit langsung. Grafana lama CT104 stopped sebagai rollback; monitor Kuma ke `.108:3000` terverifikasi. |
@@ -30,7 +30,7 @@
 | Homepage | CT115 `.110:3000`, Homepage 2.7.0 container healthy dan HTTP 200; Agent 2.45.3 aktif pada 9001 dengan firewall hanya mengizinkan CT105. MAC `BC:24:11:3C:42:DC`; lease static dilaporkan pengguna. | Aktif, konfigurasi tautan layanan/layout selesai. Portainer menampilkan `CT115-Homepage` Up, 2/2 container. Backup PBS terenkripsi pasca-setup sukses. |
 | Beszel | Hub CT104 `:8090`; agent Proxmox dan CT104 terhubung; ada monitor Beszel di Kuma. | Aktif. Log pembacaan SMART pernah menunjukkan kegagalan pada NVMe dan `/dev/sda`; data SMART belum terverifikasi. |
 | Home Assistant | VM202 `haos` running di `.21`; ping dan MAC neighbor cocok. Observer `:4357` menyatakan Supervisor Connected dan Health Healthy; UI Core di HTTP `:80` merespons 200 dan `/auth/providers` mengembalikan Home Assistant Local. | Akses tersedia melalui `http://192.168.88.21/`. TCP 8123 tertutup [BELUM PASTI: penyebab port non-standar]; monitor Kuma ke port 80 Up. Integrasi perangkat dan akses luar belum tuntas. |
-| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif, 38.61% terpakai. Job harian pukul 00.00 WIB mencakup CT101–106, CT109–112, CT115, VM202; enkripsi sisi klien, retensi 7. Backup CT106 `ct/106/2026-11-04T12:54:52Z` sukses. | Aktif. Bind mount data aplikasi `backup=0` tidak ikut backup guest. Datastore 100 GiB berada di NVMe yang sama dengan PVE. Backup Immich file terpisah sudah ada dan restore arsip berhasil. Thin-pool terakhir 33.48% data / 1.54% metadata; peringatan overcommit perlu ditangani. |
+| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif, 39.49% terpakai. Job harian `home-lab-daily` pukul 00.00 WIB meliputi CT101–107, CT109–112, CT115, VM202; snapshot/ZSTD, enkripsi sisi klien, retensi 7. Backup pasca-cutover CT107 `ct/107/2026-11-04T15:30:38Z` sukses terenkripsi dan snapshot sementara terhapus. | Aktif. Bind mount data Nextcloud/Jellyfin/Immich berflag `backup=0` tidak ikut backup guest dan perlu backup file terpisah. Datastore 100 GiB berada pada NVMe yang sama dengan PVE. Thin-pool 35.84% data / 1.62% metadata; warning autoextend/overcommit tetap perlu ditangani. |
 
 ## Rencana lama yang belum dipasang
 
@@ -42,7 +42,7 @@
 | Forgejo + Renovate (VM204) | Belum dibuat/dipasang. |
 | Password manager Vaultwarden (VM205) | Belum dipasang. Pengguna ingin menambahkan password manager nanti; rencana Vaultwarden masih perlu dipilih/dikonfirmasi saat waktunya. |
 | AFFiNE (VM206) | Belum dibuat/dipasang. |
-| n8n (VM208) | Belum dibuat/dipasang. |
+| n8n (CT119) | Belum dibuat/dipasang; target mengikuti rencana isolasi terbaru. VM208 adalah slot rencana lama dan tidak dibuat. |
 | Situs privat / WordPress (VM209) | Belum dibuat/dipasang. |
 | Cloudflare Tunnel / situs statis (VM210) | Opsional, belum dibuat. |
 | Navidrome (VM211) | Belum dibuat/dipasang. |
@@ -53,19 +53,19 @@
 ## Perubahan penempatan dari rencana
 
 - **VM201 docker-core:** tetap stopped; sebagian besar layanan Docker dipindahkan/dikonsolidasikan di CT104 `.20`.
-- **VM207 Nextcloud dan VM214 Immich:** tidak dibuat; kedua aplikasi berjalan di CT104.
+- **VM207 Nextcloud dan VM214 Immich:** tidak dibuat; Nextcloud aktif di CT107 dan Immich tetap di CT104.
 - **Tailscale router:** saat ini CT103 di Proxmox, bukan STB 2. STB 2 masih belum tersedia.
 - **PBS:** VM212 aktif, tetapi datastore sementara 100 GiB ditempatkan pada NVMe host. Pengguna menetapkan HDD untuk data aplikasi dan backup akan diperluas kemudian.
 
 ## Urutan pekerjaan berikutnya (arahan pengguna, 4 November 2026)
 
-1. Selesaikan migrasi Nextcloud CT104→CT107, termasuk verifikasi lease, data, backup, rollback, dan uji klien.
-2. Setelah Nextcloud lulus, prioritaskan otomasi media Jellyfin: Inbox → identifikasi/penamaan → Movies/Shows. Berikan akses tulis hanya ke Inbox dan tujuan Jellyfin; jangan beri akses ke Immich. Mulai dari file/link langsung, dan tambahkan torrent client setelah alur dasar aman.
-3. Portainer Homepage dan monitor Immich Kuma sudah terverifikasi. Home Assistant bisa diakses di `http://192.168.88.21/`; penyebab port 8123 tertutup belum diketahui dan tidak menghalangi akses web saat ini.
-2. Verifikasi hasil job harian PBS berikutnya dan event notifikasi Gotify. Rencanakan thin-pool autoextend setelah memeriksa prosedur resmi yang sesuai dengan Proxmox VE terpasang.
-3. Rekonsiliasi hitungan ponsel Immich 12.923 vs 10.638 baris asset sebelum migrasi; pertahankan backup file/dump yang sudah diverifikasi.
-4. Uji akses Immich dari ponsel melalui Tailscale; salinan asli ponsel tetap disimpan sampai hasil backup dan akses diverifikasi.
-5. Uji akses share Samba dari Windows. Integrasi Samba–Nextcloud dan akses Samba dari ponsel tetap ditunda sampai pengguna meminta dilanjutkan.
-6. Lanjutkan aplikasi lain menurut plan terbaru setelah otomasi media diuji; pertahankan guest sumber sebagai rollback sesuai tahap migrasi.
+1. Uji login serta buka/upload/download Nextcloud dari klien Windows, Android, dan iPhone menggunakan `http://192.168.88.112:8080`; pertahankan CT104 sebagai rollback sampai uji ini sukses.
+2. Setelah uji klien Nextcloud selesai, prioritaskan otomasi media Jellyfin: Inbox → identifikasi/penamaan → Movies/Shows. Berikan akses tulis hanya ke Inbox dan tujuan Jellyfin; jangan beri akses ke Immich. Mulai dari file/link langsung, dan tambahkan torrent client setelah alur dasar aman.
+3. Verifikasi hasil job harian PBS berikutnya dan event notifikasi Gotify. Rencanakan thin-pool autoextend setelah memeriksa prosedur resmi yang sesuai dengan Proxmox VE terpasang.
+4. Rekonsiliasi hitungan ponsel Immich 12.923 vs 10.638 baris asset sebelum migrasi; pertahankan backup file/dump yang sudah diverifikasi.
+5. Uji akses Immich dari ponsel melalui Tailscale; salinan asli ponsel tetap disimpan sampai hasil backup dan akses diverifikasi.
+6. Uji akses share Samba dari Windows. Integrasi Samba–Nextcloud dan akses Samba dari ponsel tetap ditunda sampai pengguna meminta dilanjutkan.
+7. Portainer Homepage dan monitor Immich Kuma sudah terverifikasi. Home Assistant bisa diakses di `http://192.168.88.21/`; penyebab port 8123 tertutup belum diketahui dan tidak menghalangi akses web saat ini.
+8. Lanjutkan aplikasi lain menurut plan terbaru setelah otomasi media diuji; pertahankan guest sumber sebagai rollback sesuai tahap migrasi.
 
 Sumber utama status: `STATUS.md`, `data/guest.yaml`, `docs/04-board.md`, dan `catatan/hasil-uji.md`. Bila status matriks ini berbeda dari audit server terbaru, audit terbaru menjadi acuan dan matriks harus diperbarui.

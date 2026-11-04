@@ -1,6 +1,6 @@
 # Usulan susunan guest per aplikasi
 
-**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** CT109–112 dan Homepage CT115 sudah aktif. Gotify Android/iPhone telah diuji menurut konfirmasi pengguna. CT105 Portainer Server aktif; CT104 dipertahankan sebagai sumber layanan dan rollback.
+**Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** CT106 Jellyfin, CT107 Nextcloud, CT109–112, dan Homepage CT115 aktif. Nextcloud server cutover selesai 4 Nov; uji klien pascamigrasi masih menunggu. Gotify Android/iPhone telah diuji menurut konfirmasi pengguna. CT105 Portainer Server aktif; CT104 dipertahankan untuk aplikasi yang belum dipindah dan rollback Nextcloud.
 
 ## Dasar rancangan
 
@@ -19,7 +19,7 @@
 | CT101 | AdGuard Home kedua | Pertahankan; layanan sudah mandiri. |
 | CT102 | Samba | Pertahankan; layanan sudah mandiri. |
 | CT103 | Tailscale subnet router | Pertahankan sementara; lease `.104` dinamis, jangan dicatat sebagai IP final. |
-| CT104 | Docker-services, masih menampung beberapa aplikasi | Sumber migrasi/rollback. Uptime Kuma, Prometheus/PVE exporter, dan Grafana dipindah; container lama ketiganya stopped. Aplikasi lain tetap berjalan di sini. Pertahankan CT104 sampai migrasi, backup, dan observasi selesai. |
+| CT104 | Docker-services, masih menampung beberapa aplikasi | Sumber migrasi/rollback. Nextcloud app lama berhenti setelah cutover ke CT107; DB/Redis lama tetap hidup untuk rollback. Immich, Beszel, dan Portainer lama tetap di sini. Stack Gotify, Jellyfin, Kuma, Prometheus, dan Grafana lama berhenti. Pertahankan CT104 sampai klien Nextcloud teruji dan rollback tidak lagi diperlukan. |
 | CT105 | Portainer Server khusus, dibuat 3 Nov 2026 | Docker/Compose aktif dan UI HTTPS `:9443` merespons. Admin setup selesai; pengguna melaporkan menambahkan CT104 dan CT109. Lease `.105` dilaporkan static dan aktif di guest. Agent di guest lain dibatasi ke source `.105`. |
 | VM200 | Template Debian 13 | Pertahankan untuk VM baru. |
 | VM201 | docker-core | Tetap stopped. Tidak perlu menyalakannya untuk arsitektur baru. |
@@ -33,7 +33,7 @@
 |---|---|---|---|
 | Portainer | CT105 (sudah dibuat) | Server Portainer saja; tambahkan Agent pada setiap guest Docker yang dikelola. | Setup admin selesai. Screenshot mengonfirmasi environment CT104 `Up` dan 16/16 container. DHCP static lease `.105` dilaporkan pengguna. Firewall persisten CT104 membatasi akses TCP 9001 ke source `.105`; status environment tetap `Up` setelah aturan aktif menurut pengguna 4 Nov; pertahankan instance lama selama transisi. Berkas firewall ada di `konfigurasi/portainer-agent-firewall.*`. |
 | Jellyfin | CT106 (aktif) | Jellyfin dan konfigurasi/library-nya. | `.111:8096` healthy; mount read-only hanya folder Jellyfin; SMB `Media` dipisah dari `Immich`; subfolder `Movies` dan `Shows` siap menerima upload. Pengguna mengonfirmasi library `/media/Movies` dan `/media/Shows`, pemantauan realtime, uji salin dan playback Windows, environment Portainer, serta akses klien selesai. CT104 dipertahankan sebagai rollback. Transcode dapat memakai CPU tinggi. |
-| Nextcloud | CT107 (dibuat, belum cutover) | Nextcloud + MariaDB + Redis. | Docker siap; DHCP `.112` masih sementara dan lease static menunggu konfirmasi/verifikasi. Backup konsisten telah dibuat di CT104 dan backup CT terenkripsi PBS sukses. Migrasikan data setelah alamat stabil; uji klien dan pertahankan CT104 sebagai rollback. |
+| Nextcloud | CT107 (aktif, cutover selesai) | Nextcloud + MariaDB + Redis. | `.112` static lease pengguna konfirmasi, cocok dengan MAC di WebFig. Nextcloud 35.0.2.2, OCC installed/maintenance false/DB upgrade false; HTTP `status.php` 200. Data di HDD bind mount owner www-data mode 750 (`backup=0`). Portainer CT107 Up (4 running, 2 healthy); Homepage/Kuma mengarah ke `.112`. Backup final CT104 dan pasca-cutover CT107 terenkripsi PBS sukses. CT104 app stopped sebagai rollback, DB/Redis tetap hidup. Minta pengguna uji klien Windows/Android/iPhone pada endpoint baru sebelum rollback dihentikan. |
 | Immich | CT108 (baru) | Immich server + machine learning + PostgreSQL + Redis. | **Pindahkan terakhir** setelah upload ponsel selesai dan backup file + dump database sudah diuji. Pemrosesan awal foto dapat menghabiskan CPU; atur job concurrency/CPU limit. |
 | Uptime Kuma | CT109 (sudah dibuat dan dipakai) | Kuma dan database/file persistennya. | Versi 2.5.9 berjalan di `.106:3001`; 14 monitor tersalin, SQLite integrity `ok`, HTTP UI merespons dan container healthy. Rootfs 16 GiB. Backup PBS terenkripsi CT109 berhasil. CT104 lama stopped untuk rollback. Target monitor self-check telah diperbarui ke `.106:3001` dan monitor Grafana ke `.108:3000` (database Kuma terverifikasi). |
 | Prometheus + PVE exporter | CT110 (sudah dibuat dan dipakai) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | Prometheus 3.15.1 dan exporter 3.11.0 berjalan di `.107`; dari CT111 kedua target `up`. API 9090 dibatasi ke Grafana CT104 `.20` dan CT111 `.108`. Agent 2.45.3 aktif, hanya source `.105` boleh; backup PBS terenkripsi lulus. Pengguna melaporkan static lease `.107`; alamat aktif terverifikasi dari CT110, RouterOS belum diaudit langsung. Environment Portainer dilaporkan terdaftar; Agent dari CT105 merespons. Container CT104 stopped untuk rollback. |
@@ -41,7 +41,7 @@
 | Gotify | CT112 (aktif, cutover selesai) | Gotify dan data aplikasinya. | Gotify 3.1.1 healthy di `.109:8070`; data final disalin dari CT104 saat berhenti, hash cocok, DB integrity `ok`. PVE target dan Uptime Kuma mengarah ke CT112 dan pengiriman uji sukses; monitor health HTTP 200. Pengguna mengonfirmasi URL Android/iPhone sudah diperbarui dan notifikasi uji diterima. Portainer environment CT112-Gotify 2/2 container berjalan. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify tetap berhenti sebagai rollback. |
 | Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
 
-CT106 menjadi host Jellyfin; CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana; CT112 Gotify; CT115 Homepage. Lease `.106`–`.111` dilaporkan static oleh pengguna dan alamat aktif terverifikasi di guest; RouterOS belum diaudit penuh. CT107 sudah dibuat untuk Nextcloud tetapi belum cutover; CT108, CT113, dan CT114 masih rencana. CT104 `.20` tetap berjalan untuk aplikasi lain; stack Gotify/Jellyfin lama stopped sebagai rollback. CT115 static lease `.110` dilaporkan pengguna.
+CT106 menjadi host Jellyfin; CT107 Nextcloud; CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana; CT112 Gotify; CT115 Homepage. Lease `.112` static dikonfirmasi pengguna dan kecocokan lease/IP/MAC terlihat di WebFig. CT104 `.20` tetap berjalan untuk aplikasi lain; Nextcloud app lama serta stack Gotify/Jellyfin/Kuma/Prometheus/Grafana lama berhenti sebagai rollback. CT108, CT113, dan CT114 masih rencana. CT115 static lease `.110` dilaporkan pengguna.
 
 ## Aplikasi rencana yang belum dipasang
 
@@ -73,7 +73,7 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 
 | Komponen | Peran yang dipilih | Status |
 |---|---|---|
-| Nextcloud | Layanan file utama yang digunakan anggota keluarga melalui aplikasi ponsel, klien sinkronisasi PC/laptop, dan web. Akun per orang; grup dan kuota ditata sesuai kebutuhan. | Sudah berjalan di CT104; pemisahan ke CT107 mengikuti urutan migrasi di atas. |
+| Nextcloud | Layanan file utama yang digunakan anggota keluarga melalui aplikasi ponsel, klien sinkronisasi PC/laptop, dan web. Akun per orang; grup dan kuota ditata sesuai kebutuhan. | Cutover ke CT107 selesai; pengguna perlu memperbarui dan menguji klien Windows/Android/iPhone. Integrasi Samba ditunda. |
 | Samba di CT102 | Pelengkap untuk share jaringan yang dibuka langsung dari PC/laptop, misalnya folder bersama atau transfer file di LAN. Gunakan akun dan izin per pengguna/grup. | Sudah berjalan; uji akses Windows masih tercatat pending. Akses ponsel dan integrasi SMB ke Nextcloud ditunda. |
 | TrueNAS | Bukan layanan file utama pengguna saat ini. Opsi masa depan sebagai lapisan pengelola NAS/storage, setelah rancangan disk dan akses aplikasi disepakati. | Belum dipasang; jangan buat VM atau ubah layout disk sebelum tahap evaluasi storage. |
 
@@ -89,7 +89,7 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 6. Pengguna melaporkan static lease DHCP `.107/.108` dan environment `CT110-prometheus`/`CT111-grafana` sudah selesai. HTTP 403 dari Agent tanpa signature mengonfirmasi jalur jaringan dari CT105; status dashboard Portainer/router belum diperiksa langsung.
 7. **Gotify CT112, Homepage CT115, dan pemantauan Immich selesai diverifikasi** (4 Nov): pengguna mengonfirmasi notifikasi Gotify Android/iPhone; environment Portainer Homepage Up 2/2; monitor Immich Kuma heartbeat Up / HTTP 200. Lanjutkan migrasi aplikasi dengan backup/rollback per tahap; Immich tetap terakhir setelah rekonsiliasi aset.
 8. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
-9. **Prioritas baru pengguna, 4 Nov 2026:** setelah Nextcloud selesai, bangun otomasi media Jellyfin terlebih dahulu sebelum layanan lain. Tahap awal: Inbox dan berkas/link langsung, klasifikasi/usulan penamaan, lalu penempatan Movies/Shows. n8n direncanakan sebagai orchestrator. Batasi mount/izin pada Inbox dan Jellyfin; Immich tidak boleh dapat diakses. Torrent client dievaluasi setelah tahap awal terbukti aman.
+9. **Prioritas baru pengguna, 4 Nov 2026:** cutover Nextcloud ke CT107 selesai; tunggu pengguna menguji login dan transfer berkas dari Windows/Android/iPhone sebelum menutup rollback CT104. Setelah itu bangun otomasi media Jellyfin terlebih dahulu sebelum layanan lain. Tahap awal: Inbox dan berkas/link langsung, klasifikasi/usulan penamaan, lalu penempatan Movies/Shows. n8n direncanakan sebagai orchestrator. Batasi mount/izin pada Inbox dan Jellyfin; Immich tidak boleh dapat diakses. Torrent client dievaluasi setelah tahap awal terbukti aman.
 10. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits`. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
 
 ### Rujukan resmi

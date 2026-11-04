@@ -30,7 +30,7 @@
         description: Notifikasi server
 - Aplikasi:
     - Nextcloud:
-        href: http://192.168.88.20:8080
+        href: http://192.168.88.112:8080
         description: File dan dokumen pribadi
     - Immich:
         href: http://192.168.88.20:2283
