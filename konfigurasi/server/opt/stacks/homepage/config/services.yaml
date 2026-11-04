@@ -41,6 +41,9 @@
     - Beszel:
         href: http://192.168.88.20:8090
         description: Pemantauan host dan container
+    - Home Assistant:
+        href: http://192.168.88.21
+        description: Otomasi rumah (Home Assistant OS)
 - Dashboard:
     - Homepage:
         href: http://192.168.88.110:3000

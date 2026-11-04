@@ -16,10 +16,10 @@
 | CT110 Prometheus | DHCP `.107` aktif; static lease dilaporkan pengguna | 9090 HTTP hanya menerima CT104 rollback dan CT111 Grafana; Agent 9001 hanya dari CT105 | LAN terbatas | `http://192.168.88.107:9090` |
 | CT111 Grafana | DHCP `.108` aktif; static lease dilaporkan pengguna | 3000 HTTP; Agent 9001 hanya dari CT105 | LAN / tailnet | `http://192.168.88.108:3000` |
 | CT112 Gotify | DHCP `.109` aktif; static lease dilaporkan pengguna | 8070 HTTP; Agent 9001 hanya dari CT105 | LAN / tailnet | `http://192.168.88.109:8070` (Android/iPhone diuji pengguna; health endpoint `/health`) |
-| CT115 Homepage | DHCP `.110` aktif; static lease dilaporkan pengguna; MAC `BC:24:11:3C:42:DC` | 3000 HTTP; Agent 9001 hanya dari CT105 | LAN | `http://192.168.88.110:3000` (HTTP 200; Agent environment belum didaftarkan/diverifikasi di Portainer) |
+| CT115 Homepage | DHCP `.110` aktif; static lease dilaporkan pengguna; MAC `BC:24:11:3C:42:DC` | 3000 HTTP; Agent 9001 hanya dari CT105 | LAN | `http://192.168.88.110:3000` (HTTP 200; environment Portainer `CT115-Homepage` Up, 2/2 container) |
 | VM 201 docker-core | Stopped, tanpa IP; `.20` dialihkan ke CT104 | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
 | | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
-| VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna | 8123; koneksi belum berhasil pada uji terakhir | LAN + Tailscale (rencana) | `http://192.168.88.21` (wizard selesai menurut pengguna, tetapi port 8123 gagal tersambung saat audit 4 Nov); `ha.lan` belum disiapkan |
+| VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna; MAC aktif cocok dengan VM202 | HTTP 80 aktif (Core), TCP 8123 tertutup; Observer 4357 | LAN + Tailscale (rencana) | `http://192.168.88.21/` (HTTP 200 dan `/auth/providers` memberi Home Assistant Local; Observer menyatakan Supervisor Connected/Health Healthy). Port 8123 tertutup [BELUM PASTI: sebab], `ha.lan` belum disiapkan |
 | VM 203 k3s | .22 | 6443 | IPSet admin | langsung |
 | VM 204 git | .23 | 3000 web, 2222 SSH Git | web dari .20; SSH dari admin dan .22 | `git.home.arpa` |
 | VM 205 vault | .24 | 127.0.0.1:8081 | Tailscale Serve | `lab-vault.*.ts.net` |

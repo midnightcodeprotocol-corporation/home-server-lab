@@ -4,7 +4,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 Novem
 
 ## Sedang dikerjakan
 - [x] **Gotify CT112 dan klien:** pengguna mengonfirmasi Android/iPhone memakai `http://192.168.88.109:8070` dan notifikasi uji diterima. Health/database, tes PVE, tes Kuma, dan backup terenkripsi lulus. CT104 Gotify tetap dihentikan sebagai rollback.
-- [ ] **Portainer CT115:** Homepage aktif dan sehat di `.110:3000`; daftarkan/verifikasi Agent environment CT115 pada Portainer CT105.
+- [x] **Portainer CT115:** environment `CT115-Homepage` tampil `Up`; Portainer Agent 2.45.3 dan 2/2 container terdeteksi.
 - [x] **Fase A: sambungan dasar ke MikroTik.** Host Proxmox `.10` dan gateway `.1` saling terjangkau; DNS dan `apt update` berhasil. AdGuard STB `.3` melayani kueri langsung; WinBox DHCP Network menunjukkan gateway `.1` dan DNS `.3`. Kabel host lewat switch port 3.
 
 ## Siap berikutnya (Backlog Fase A, urut)
@@ -36,7 +36,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 Novem
 - [x] VM202 HAOS 18.4 dibuat dari image resmi dengan checksum cocok dan running (2 vCPU, 2 GiB, UEFI, disk 32 GiB, onboot); lease DHCP `.21` serta onboarding HTTP 200 terverifikasi, admin selesai menurut pengguna.
 - [x] Prometheus 3.15.1 + PVE exporter 3.11.0 kini di CT110; Grafana 13.3.0 di CT111. Target Prometheus/PVE `up`, dashboard `Home Server Overview` tersedia dan datasource terhubung. Stack lama CT104 dihentikan untuk rollback.
 - [ ] Suplemen 1 (Bab 25-26): keamanan dasar dan Tailscale
-- [x] Uptime Kuma 2.5.9 kini aktif di CT109 `.106:3001`; 14 monitor/data dipertahankan saat migrasi dari CT104. Container lama di CT104 stopped sebagai rollback. Monitor self-check Kuma `.106:3001` dan monitor Grafana `.108:3000` telah diverifikasi dari database setelah pengguna memperbaruinya. Immich belum ditambahkan ke monitor Kuma.
+- [x] Uptime Kuma 2.5.9 aktif di CT109 `.106:3001`; 14 monitor/data dipertahankan saat migrasi. Monitor self-check Kuma `.106:3001` dan Grafana `.108:3000` diverifikasi; monitor Immich sudah ada dan heartbeat terakhir `Up / 200 - OK`.
 - [x] Gotify 3.1.1 dipindahkan dari CT104 ke CT112 `.109:8070`; DB konsisten, SHA-256 cocok, SQLite integrity `ok`, health green. Pengguna mengonfirmasi URL Android/iPhone diperbarui dan uji notifikasi diterima. CT104 Gotify dihentikan sebagai rollback.
 - [x] PVE endpoint/matcher Gotify diarahkan ke CT112 dan tes target berhasil. Notifikasi Uptime Kuma diarahkan ke `.109` dan tes sukses; monitor Gotify `/health` mendapat HTTP 200. Klien Android/iPhone diuji pengguna; CT104 tetap disimpan sementara sebagai rollback.
 - [x] Beszel hub terpasang di CT104 `.20:8090`; halaman `/_/` HTTP 200, akun pertama dibuat pengguna, agent Proxmox dan CT104 tersambung lewat WebSocket, dan monitor Beszel aktif di Kuma. Pembacaan SMART masih perlu diselesaikan; target PVE → Gotify dan Uptime Kuma → Gotify telah diuji sukses.

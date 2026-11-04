@@ -25,7 +25,7 @@
 | VM201 | docker-core | Tetap stopped. Tidak perlu menyalakannya untuk arsitektur baru. |
 | VM202 | Home Assistant OS | Pertahankan sebagai VM mandiri. |
 | VM212 | Proxmox Backup Server | Pertahankan sebagai VM mandiri. Datastore 100 GiB saat ini masih pada NVMe host yang sama; perluasan backup fisik dibahas terpisah. |
-| CT115 | Homepage | CT khusus Docker aktif di `.110:3000`; Homepage 2.7.0 healthy dan HTTP 200. Agent 2.45.3 aktif, firewall membatasi TCP 9001 ke CT105 `.105`; backup PBS pasca-setup sukses. Environment Agent CT115 masih perlu didaftarkan/diverifikasi di Portainer. |
+| CT115 | Homepage | CT khusus Docker aktif di `.110:3000`; Homepage 2.7.0 healthy dan HTTP 200. Portainer menampilkan environment `CT115-Homepage` Up, Agent 2.45.3, 2/2 container. Backup PBS pasca-setup sukses. |
 
 ## Aplikasi yang saat ini ada di CT104
 
@@ -48,7 +48,7 @@ CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT1
 | Aplikasi / rencana | Guest target usulan | Status dan keputusan |
 |---|---|---|
 | Caddy + CA lokal | CT114 (baru) | Belum dipasang. Guest terpisah; jika Caddy berhenti, hostname proxy terdampak, sedangkan layanan langsung tetap berjalan. |
-| Homepage | CT115 (aktif) | Terpasang di `.110:3000`; Homepage 2.7.0 healthy, HTTP 200, konfigurasi tautan layanan sudah dimuat. Agent Portainer 2.45.3 berjalan dengan firewall terbatas; environment masih perlu didaftarkan/diverifikasi. Backup PBS pasca-setup sukses. |
+| Homepage | CT115 (aktif) | Terpasang di `.110:3000`; Homepage 2.7.0 healthy, HTTP 200, konfigurasi tautan layanan dimuat. Environment Portainer `CT115-Homepage` Up, Agent 2.45.3, 2/2 container. Backup PBS pasca-setup sukses. |
 | Forgejo | CT116 (baru) | Belum dipasang; satu guest khusus. |
 | Renovate | CT117 (baru) | Belum dipasang; worker terpisah dari Forgejo. |
 | k3s + Flux | VM203 (rencana lama) | Belum dipasang. Anggap sebagai satu lingkungan Kubernetes/automation untuk latihan; fase lanjut karena menambah beban pada CPU 4 thread. |
@@ -85,9 +85,9 @@ Pengguna menyetujui pembagian peran berikut pada 3 November 2026:
 2. Tetapkan pola Docker per guest, jaringan/port, IP yang tidak bertabrakan, mount data, dan batas CPU/RAM. Catat backup serta langkah rollback sebelum memindahkan tiap stack.
 3. Uji Portainer Server CT105 mengelola satu guest Docker percobaan menggunakan Agent dengan akses jaringan terbatas.
 4. **Selesai untuk Uptime Kuma, Prometheus, dan Grafana:** migrasi data/config masing-masing; SQLite Kuma/Grafana integrity `ok`, Kuma menyimpan 14 monitor, kedua target scrape Prometheus `up`, Grafana health/API/dashboard/datasource terverifikasi. Container lama CT104 stopped untuk rollback.
-5. **Selesai 4 Nov:** monitor Kuma Gotify diarahkan ke `.109:8070/health` dan HTTP 200; notifikasi default Gotify diarahkan ke `.109` dan tombol Test memberi sukses tanpa mengubah token. Tambah monitor Immich masih tersisa.
+5. **Selesai 4 Nov:** monitor Kuma Gotify diarahkan ke `.109:8070/health` dan HTTP 200; notifikasi default Gotify diarahkan ke `.109` dan tombol Test memberi sukses tanpa mengubah token. Monitor Immich telah ada; heartbeat terakhir `Up / 200 - OK`.
 6. Pengguna melaporkan static lease DHCP `.107/.108` dan environment `CT110-prometheus`/`CT111-grafana` sudah selesai. HTTP 403 dari Agent tanpa signature mengonfirmasi jalur jaringan dari CT105; status dashboard Portainer/router belum diperiksa langsung.
-7. **Gotify CT112 cutover selesai** (4 Nov): salin konsisten ketika sumber berhenti, health/DB lulus, PVE dan Kuma diuji, backup pascamigrasi selesai; pengguna mengonfirmasi Android/iPhone menerima notifikasi uji. **Homepage CT115 juga selesai** dan sehat. Daftarkan environment Agent CT115 di Portainer, lalu lanjutkan monitor Immich dan migrasi layanan berikutnya dengan backup/rollback per tahap; Immich tetap terakhir setelah rekonsiliasi aset.
+7. **Gotify CT112, Homepage CT115, dan pemantauan Immich selesai diverifikasi** (4 Nov): pengguna mengonfirmasi notifikasi Gotify Android/iPhone; environment Portainer Homepage Up 2/2; monitor Immich Kuma heartbeat Up / HTTP 200. Lanjutkan migrasi aplikasi dengan backup/rollback per tahap; Immich tetap terakhir setelah rekonsiliasi aset.
 8. Setelah tiap layanan lulus, stop hanya stack lamanya. Pertahankan CT104 sebagai rollback sampai semua layanan dan backup terverifikasi.
 9. Sesudah observasi beban, terapkan `cpulimit`/`cpuunits` per guest. Untuk mengurangi CPU Immich saat pemrosesan awal, gunakan concurrency rendah sesuai pengaturan resmi Immich; jangan menganggap penambahan guest akan menurunkan kebutuhan CPU total.
 
