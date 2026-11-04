@@ -44,6 +44,10 @@
     - Home Assistant:
         href: http://192.168.88.21
         description: Otomasi rumah (Home Assistant OS)
+- Otomasi:
+    - n8n:
+        href: http://192.168.88.113:5678
+        description: Alur kerja otomasi umum
 - Dashboard:
     - Homepage:
         href: http://192.168.88.110:3000

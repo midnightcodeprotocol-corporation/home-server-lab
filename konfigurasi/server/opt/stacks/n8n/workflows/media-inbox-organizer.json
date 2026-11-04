@@ -1,0 +1,146 @@
+{
+  "name": "Media — Inbox ke Movies dan Shows",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "e3404cc1-34ed-44f0-a61b-f492a143b89b",
+      "name": "Periksa Inbox setiap 5 menit",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "2e4656a9-5bb7-4425-866a-2de141d9f46f",
+      "name": "Jalankan manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://media-organizer:8080/inbox",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "6121949c-8478-43e9-835e-29b5c9f287ed",
+      "name": "Daftar video di Inbox",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const payload = $input.first()?.json ?? {};\nconst files = Array.isArray(payload.files) ? payload.files : [];\nconst now = Math.floor(Date.now() / 1000);\nconst videoExt = new Set(['.mkv', '.mp4', '.avi', '.m4v', '.mov', '.webm', '.mpg', '.mpeg']);\nfunction clean(value) {\n  const bad = new Set(['<', '>', ':', String.fromCharCode(92), '|', '?', '*']);\n  return Array.from(value, char => bad.has(char) || char.charCodeAt(0) < 32 ? ' ' : char).join('').replace(/[._]+/g, ' ').replace(/\\s+/g, ' ').trim().replace(/[. ]+$/g, '');\n}\nconst result = [];\nfor (const file of files) {\n  if (!file || typeof file.name !== 'string' || !Number.isFinite(file.mtime) || now - file.mtime < 600) continue;\n  const dot = file.name.lastIndexOf('.');\n  if (dot < 1) continue;\n  const ext = file.name.slice(dot).toLowerCase();\n  if (!videoExt.has(ext)) continue;\n  const base = file.name.slice(0, dot).replace(/[._]+/g, ' ').replace(/\\s+/g, ' ').trim();\n  let match = base.match(/^(.+?)\\s*\\(((?:19|20)\\d{2})\\)(?:$|[ ._-].*)$/);\n  if (match) {\n    const title = clean(match[1]);\n    const year = match[2];\n    if (!title) continue;\n    const folder = `${title} (${year})`;\n    result.push({ json: { source: `Inbox/${file.name}`, destination: `Movies/${folder}/${folder}${ext}`, kind: 'movie', title, year } });\n    continue;\n  }\n  match = base.match(/^(.+?)\\s+[.-]?\\s*S(\\d{1,2})E(\\d{1,2})(?:\\s*[-._ ]+(.*))?$/i);\n  if (match) {\n    const title = clean(match[1]);\n    const season = Number(match[2]);\n    const episode = Number(match[3]);\n    const episodeTitle = clean(match[4] || '');\n    if (!title || season > 99 || episode < 1 || episode > 999) continue;\n    const code = `S${String(season).padStart(2, '0')}E${String(episode).padStart(2, '0')}`;\n    const filename = `${title} - ${code}${episodeTitle ? ` - ${episodeTitle}` : ''}${ext}`;\n    result.push({ json: { source: `Inbox/${file.name}`, destination: `Shows/${title}/Season ${String(season).padStart(2, '0')}/${filename}`, kind: 'episode', title, season, episode } });\n  }\n}\nreturn result;"
+      },
+      "id": "d829aee2-ff76-4787-aad4-115b05846cd3",
+      "name": "Kenali nama film atau episode",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://media-organizer:8080/move",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { source: $json.source, destination: $json.destination } }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "2b0d95c6-df2d-4253-8a18-da10ded788f6",
+      "name": "Pindahkan tanpa menimpa",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1020,
+        400
+      ]
+    }
+  ],
+  "connections": {
+    "Periksa Inbox setiap 5 menit": {
+      "main": [
+        [
+          {
+            "node": "Daftar video di Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jalankan manual": {
+      "main": [
+        [
+          {
+            "node": "Daftar video di Inbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daftar video di Inbox": {
+      "main": [
+        [
+          {
+            "node": "Kenali nama film atau episode",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kenali nama film atau episode": {
+      "main": [
+        [
+          {
+            "node": "Pindahkan tanpa menimpa",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Jakarta",
+    "saveManualExecutions": true
+  },
+  "active": false
+}
