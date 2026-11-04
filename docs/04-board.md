@@ -44,7 +44,7 @@ Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 4 Novem
 - [ ] Bab 15, 21, 22: Forgejo, Flux, Renovate
 - [ ] Suplemen 5 (Bab 39-43): web, WordPress, n8n, tunnel
 - [ ] Suplemen 6 (Bab 44-47): Vaultwarden, AFFiNE; Nextcloud sudah dialihkan ke CT104 dan lulus pemeriksaan awal
-- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB mencakup CT101–105, CT109–112, CT115, dan VM202 (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif. Backup CT115 pasca-setup berhasil. Peringatan thin-pool overcommit muncul; pemakaian aktual 31.39% data / 1.47% metadata, autoextend masih perlu ditangani.
+- [x] PBS VM212 berjalan dengan disk sementara 100 GiB di NVMe. Storage `pbs-store1` aktif; jadwal `home-lab-daily` pukul 00.00 WIB mencakup CT101–105, CT109–112, CT115, dan VM202 (snapshot/ZSTD, keep-last=7; PBS VM dan bind-mount `backup=0` dikecualikan). Enkripsi sisi klien aktif. Backup CT115 pasca-setup berhasil. Peringatan thin-pool overcommit muncul; pemakaian aktual 31.39% data / 1.48% metadata, autoextend masih perlu ditangani.
 - [ ] Verifikasi job harian pertama untuk seluruh guest. Uji restore arsip terenkripsi CT101 ke CT109 sementara lulus (CT boot dengan NIC terputus, AdGuard aktif, HTTP 302); CT109 dan disk uji sudah dihapus. Backup Immich kini ada di PBS dan restore penuh lulus; rekonsiliasi jumlah asset masih pending.
 - [ ] Suplemen 8 (Bab 53): Navidrome
 - [ ] Suplemen 9 (Bab 54-56): Pocket ID, Immich, profil RAM

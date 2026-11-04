@@ -4,7 +4,7 @@
 
 ## Ringkasan
 
-- Host Proxmox 9.2.24 aktif. Audit lanjutan live 4 Nov menunjukkan CT102, CT104, CT105, CT109–112, CT115 dan VM202 berjalan; `backup-disk` aktif. PBS 37.61% terpakai dan backup CT115 pasca-setup sukses.
+- Host Proxmox 9.2.24 aktif. Audit lanjutan live 4 Nov menunjukkan CT102, CT104, CT105, CT109–112, CT115 dan VM202 berjalan; `backup-disk` aktif. PBS 37.62% terpakai dan backup CT115 pasca-setup sukses.
 - CT104 `docker-services` (`192.168.88.20`) masih host Docker untuk layanan yang belum dipindahkan. Prometheus dan Grafana telah dipisahkan ke CT110/111; CT104 dipertahankan sebagai rollback.
 - Aplikasi inti yang sudah berjalan: AdGuard Home, Samba, Tailscale, Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma, Prometheus, Grafana, Gotify, Beszel, Home Assistant OS, dan Proxmox Backup Server.
 - “Berjalan” tidak selalu berarti penggunaannya sudah tuntas: ada pengujian klien, backup data, notifikasi, dan integrasi yang masih menunggu.
@@ -30,7 +30,7 @@
 | Homepage | CT115 `.110:3000`, Homepage 2.7.0 container healthy dan HTTP 200; Agent 2.45.3 aktif pada 9001 dengan firewall hanya mengizinkan CT105. MAC `BC:24:11:3C:42:DC`; lease static dilaporkan pengguna. | Aktif, konfigurasi tautan layanan/layout selesai. Portainer menampilkan `CT115-Homepage` Up, 2/2 container. Backup PBS terenkripsi pasca-setup sukses. |
 | Beszel | Hub CT104 `:8090`; agent Proxmox dan CT104 terhubung; ada monitor Beszel di Kuma. | Aktif. Log pembacaan SMART pernah menunjukkan kegagalan pada NVMe dan `/dev/sda`; data SMART belum terverifikasi. |
 | Home Assistant | VM202 `haos` running di `.21`; ping dan MAC neighbor cocok. Observer `:4357` menyatakan Supervisor Connected dan Health Healthy; UI Core di HTTP `:80` merespons 200 dan `/auth/providers` mengembalikan Home Assistant Local. | Akses tersedia melalui `http://192.168.88.21/`. TCP 8123 tertutup [BELUM PASTI: penyebab port non-standar]; monitor Kuma ke port 80 Up. Integrasi perangkat dan akses luar belum tuntas. |
-| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif. Job harian pukul 00.00 WIB untuk CT101–105, CT109–112, CT115, dan VM202, enkripsi sisi klien, retensi 7. Backup CT115 pasca-setup sukses. | Aktif. Bind mount data aplikasi `backup=0` tidak ikut backup guest. Datastore 100 GiB berada di NVMe yang sama dengan PVE. Backup Immich file terpisah sudah ada dan restore arsip berhasil. Thin-pool terakhir 31.39% data / 1.47% metadata; peringatan overcommit perlu ditangani. |
+| PBS | VM212 `.30`; datastore `store1` dan storage PVE `pbs-store1` aktif. Job harian pukul 00.00 WIB untuk CT101–105, CT109–112, CT115, VM202; enkripsi sisi klien, retensi 7. Backup CT115 terenkripsi `ct/115/2026-11-04T11:41:45Z` sukses setelah sinkronisasi dashboard. | Aktif. Bind mount data aplikasi `backup=0` tidak ikut backup guest. Datastore 100 GiB berada di NVMe yang sama dengan PVE. Backup Immich file terpisah sudah ada dan restore arsip berhasil. Thin-pool terakhir 31.39% data / 1.48% metadata; peringatan overcommit perlu ditangani. |
 
 ## Rencana lama yang belum dipasang
 
