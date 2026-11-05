@@ -1,0 +1,136 @@
+{
+  "id": "72cfc58b-1f0d-40ea-b63f-cdf4c833ac2e",
+  "name": "Media — Antrean magnet qBittorrent (paused)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Antrean torrent media",
+        "formDescription": "Masukkan magnet untuk konten yang Anda berhak unduh. Tautan hanya divalidasi dan dimasukkan ke qBittorrent dalam keadaan paused. Periksa sumber dan tujuan, lalu mulai unduhan di qBittorrent bila sesuai.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Magnet link",
+              "fieldName": "magnet",
+              "fieldType": "textarea",
+              "placeholder": "magnet:?xt=urn:btih:...",
+              "requiredField": true
+            }
+          ]
+        },
+        "authentication": "n8nUserAuth",
+        "requireExecuteAccess": true,
+        "options": {
+          "path": "media-torrent-intake",
+          "buttonLabel": "Validasi dan antrekan (paused)",
+          "respondWhen": "lastNode",
+          "appendAttribution": false,
+          "includeUserInOutput": false,
+          "ignoreBots": true
+        }
+      },
+      "id": "f773aa36-9429-4da8-9af3-03f4d70872f4",
+      "name": "Form magnet (login n8n)",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const raw = String($input.first()?.json?.magnet ?? '').trim();\nif (!raw || raw.length > 4096) throw new Error('Magnet kosong atau melebihi 4096 karakter.');\nif (/\\s|[\\u0000-\\u001f\\u007f]/.test(raw)) throw new Error('Magnet mengandung spasi atau karakter kontrol.');\nlet parsed;\ntry { parsed = new URL(raw); } catch { throw new Error('Format magnet tidak valid.'); }\nif (parsed.protocol !== 'magnet:') throw new Error('Hanya URI magnet yang diterima.');\nconst validHash = parsed.searchParams.getAll('xt').some(value => /^urn:btih:(?:[a-f0-9]{40}|[a-z2-7]{32})$/i.test(value));\nif (!validHash) throw new Error('Magnet harus memiliki hash BitTorrent BTIH yang valid.');\nreturn [{ json: { magnet: raw } }];"
+      },
+      "id": "baa6923a-f8be-4138-aa03-4dcdfeb8b16c",
+      "name": "Validasi magnet BTIH",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.88.114:8080/api/v2/torrents/add",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "urls",
+              "value": "={{ $json.magnet }}"
+            },
+            {
+              "name": "savepath",
+              "value": "/inbox"
+            },
+            {
+              "name": "paused",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 15000,
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "id": "802028dc-05b8-4a82-a020-8a1ac6c87149",
+      "name": "Antrekan paused di qBittorrent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "J9L7u9SN1tpFzXGl",
+          "name": "qBittorrent"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Form magnet (login n8n)": {
+      "main": [
+        [
+          {
+            "node": "Validasi magnet BTIH",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validasi magnet BTIH": {
+      "main": [
+        [
+          {
+            "node": "Antrekan paused di qBittorrent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Jakarta",
+    "saveManualExecutions": true
+  },
+  "staticData": null,
+  "meta": null,
+  "tags": []
+}

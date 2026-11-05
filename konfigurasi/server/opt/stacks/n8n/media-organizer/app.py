@@ -54,9 +54,9 @@ def no_symlink_path(parts, allow_missing=False):
 
 
 def valid_source(parts):
-    if len(parts) != 2 or parts[0] != "Inbox":
-        raise ValueError("source_must_be_direct_child_of_inbox")
-    if Path(parts[1]).suffix.lower() not in VIDEO_EXTENSIONS:
+    if len(parts) < 2 or parts[0] != "Inbox":
+        raise ValueError("source_must_be_inside_inbox")
+    if Path(parts[-1]).suffix.lower() not in VIDEO_EXTENSIONS:
         raise ValueError("unsupported_video_extension")
     path = no_symlink_path(parts)
     info = path.lstat()
@@ -100,27 +100,40 @@ class Handler(BaseHTTPRequestHandler):
             return reply(self, 404, {"error": "not_found"})
         inbox = ROOT / "Inbox"
         try:
+            if stat.S_ISLNK(inbox.lstat().st_mode) or not stat.S_ISDIR(inbox.lstat().st_mode):
+                return reply(self, 500, {"error": "inbox_not_a_directory"})
             files = []
             now = time.monotonic()
             seen = set()
-            with os.scandir(inbox) as entries:
-                for entry in entries:
-                    if entry.name.startswith(".") or Path(entry.name).suffix.lower() not in VIDEO_EXTENSIONS:
-                        continue
-                    info = entry.stat(follow_symlinks=False)
-                    if not stat.S_ISREG(info.st_mode):
-                        continue
-                    seen.add(entry.name)
-                    signature = (info.st_size, info.st_mtime_ns)
-                    with _observed_files_lock:
-                        previous = _observed_files.get(entry.name)
-                        if previous is None or previous[0] != signature:
-                            _observed_files[entry.name] = (signature, now)
+            def scan(directory, parent="", depth=0):
+                if depth > 16:
+                    return
+                with os.scandir(directory) as entries:
+                    for entry in entries:
+                        if entry.name.startswith(".") or entry.is_symlink():
                             continue
-                        stable_since = previous[1]
-                    if now - stable_since < STABILITY_SECONDS:
-                        continue
-                    files.append({"name": entry.name, "size": info.st_size, "mtime": int(info.st_mtime)})
+                        relative = f"{parent}/{entry.name}" if parent else entry.name
+                        if entry.is_dir(follow_symlinks=False):
+                            scan(Path(entry.path), relative, depth + 1)
+                            continue
+                        if Path(entry.name).suffix.lower() not in VIDEO_EXTENSIONS:
+                            continue
+                        info = entry.stat(follow_symlinks=False)
+                        if not stat.S_ISREG(info.st_mode):
+                            continue
+                        seen.add(relative)
+                        signature = (info.st_size, info.st_mtime_ns)
+                        with _observed_files_lock:
+                            previous = _observed_files.get(relative)
+                            if previous is None or previous[0] != signature:
+                                _observed_files[relative] = (signature, now)
+                                continue
+                            stable_since = previous[1]
+                        if now - stable_since < STABILITY_SECONDS:
+                            continue
+                        files.append({"name": entry.name, "path": relative, "size": info.st_size, "mtime": int(info.st_mtime)})
+
+            scan(inbox)
             with _observed_files_lock:
                 for name in set(_observed_files) - seen:
                     _observed_files.pop(name, None)
@@ -159,6 +172,14 @@ class Handler(BaseHTTPRequestHandler):
                 except OSError:
                     pass
                 raise
+            parent = source.parent
+            inbox_root = ROOT / "Inbox"
+            while parent != inbox_root:
+                try:
+                    parent.rmdir()
+                except OSError:
+                    break
+                parent = parent.parent
             return reply(self, 200, {"moved": True, "destination": "/".join(target_parts)})
         except (ValueError, json.JSONDecodeError, TypeError):
             return reply(self, 400, {"error": "invalid_request"})
