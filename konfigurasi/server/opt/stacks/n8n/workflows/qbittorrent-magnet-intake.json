@@ -29,13 +29,14 @@
         }
       },
       "id": "f773aa36-9429-4da8-9af3-03f4d70872f4",
-      "name": "Form magnet (login n8n)",
+      "name": "Form Magnet",
       "type": "n8n-nodes-base.formTrigger",
-      "typeVersion": 2.2,
+      "typeVersion": 2.6,
       "position": [
         240,
         300
-      ]
+      ],
+      "webhookId": "8af0bd28-4876-4da1-a611-e2996f24b204"
     },
     {
       "parameters": {
@@ -101,22 +102,22 @@
     }
   ],
   "connections": {
-    "Form magnet (login n8n)": {
+    "Validasi magnet BTIH": {
       "main": [
         [
           {
-            "node": "Validasi magnet BTIH",
+            "node": "Antrekan paused di qBittorrent",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Validasi magnet BTIH": {
+    "Form Magnet": {
       "main": [
         [
           {
-            "node": "Antrekan paused di qBittorrent",
+            "node": "Validasi magnet BTIH",
             "type": "main",
             "index": 0
           }

@@ -1,6 +1,6 @@
 # Matriks rencana aplikasi vs kondisi aktual
 
-**Audit dokumen:** 5 November 2026 (CT108 qBittorrent aktif dan backup PBS; integrasi Portainer/Kuma dan workflow media masih bertahap).
+**Audit dokumen:** 5 November 2026 (form intake magnet aktif dan redirect login terverifikasi; uji E2E menunggu magnet legal).
 
 ## Ringkasan
 
@@ -43,7 +43,7 @@
 | Forgejo + Renovate (VM204) | Belum dibuat/dipasang. |
 | Password manager Vaultwarden (VM205) | Belum dipasang. Pengguna ingin menambahkan password manager nanti; rencana Vaultwarden masih perlu dipilih/dikonfirmasi saat waktunya. |
 | AFFiNE (VM206) | Belum dibuat/dipasang. |
-| n8n (CT119) | CT119 `.113` aktif; n8n 2.46.6, PostgreSQL 18, helper healthy; HTTP 200. Helper internal tanpa port host, mount terbatas ke media Jellyfin; Immich tidak terlihat. Helper kini rekursif dengan batas 16 tingkat; isolated test nested listing/move, byte match, dan traversal lulus. Parser film/episode/Review lulus. Live: tiga workflow tersimpan dan nonaktif. Draft form magnet memakai autentikasi user n8n/execute permission, validasi BTIH, qB API credential privat, dan enqueue paused ke `/inbox`. API smoke dilaporkan sukses; DB menunjukkan tiga success dan tiga error lama, credential tidak dibaca. | Belum operasional. Form production dan scheduler belum diuji; belum ada magnet yang dikirim. Direct download masih butuh guardrail SSRF/ukuran/tipe; ffprobe dan metadata/catalog/AI belum tersedia. Jangan aktifkan sampai uji bertahap; jangan mengunduh tanpa magnet legal pilihan pengguna. Backup PBS terkini CT119 `ct/119/2026-11-05T06:26:52Z`; PBS satu NVMe dengan PVE. |
+| n8n (CT119) | CT119 `.113` aktif; n8n 2.46.6, PostgreSQL 18, helper healthy; HTTP 200. Helper internal tanpa port host, mount terbatas ke media Jellyfin; Immich tidak terlihat. Helper kini rekursif dengan batas 16 tingkat; isolated test nested listing/move, byte match, dan traversal lulus. Parser film/episode/Review lulus. Live: tiga workflow tersimpan; intake magnet aktif, dua workflow lain nonaktif. Form Trigger 2.6 memakai n8n User Auth + execute permission. URL production `http://192.168.88.113:5678/form/media-torrent-intake`; GET tanpa login HTTP 302 ke autentikasi. Node webhookId terisi, path terdaftar setelah publish/restart. Form memvalidasi BTIH dan mengirim magnet ke qB `/inbox` dengan paused=true. | Akses form terverifikasi tetapi E2E qB belum diuji dan belum ada magnet pengguna yang diproses. Scheduler folder masih nonaktif; direct download tetap memerlukan guardrail SSRF/ukuran/tipe; ffprobe dan metadata/catalog/AI belum tersedia. Gunakan magnet legal yang dipilih pengguna dan periksa item paused sebelum memulai unduhan. Backup CT119 `ct/119/2026-11-05T06:26:52Z`; PBS satu NVMe dengan PVE. |
 | Situs privat / WordPress (VM209) | Belum dibuat/dipasang. |
 | Cloudflare Tunnel / situs statis (VM210) | Opsional, belum dibuat. |
 | Navidrome (VM211) | Belum dibuat/dipasang. |
@@ -61,7 +61,7 @@
 ## Urutan pekerjaan berikutnya (arahan pengguna, 4 November 2026)
 
 1. **Selesai menurut konfirmasi pengguna:** login/unduh dan pengujian klien Nextcloud pascamigrasi berhasil. Simpan CT104 sebagai rollback sampai backup serta masa observasi dinilai cukup.
-2. **Sedang berjalan:** implementasikan n8n CT119 untuk tiga intake (link download, link torrent, folder kumpulan) secara bertahap. CT108 qBittorrent sudah berjalan sebagai guest terpisah; koneksi API baca-saja lulus menurut laporan pengguna/live execution. Helper hanya mengakses folder Jellyfin. Workflow saat ini nonaktif; berikutnya intake magnet harus memakai autentikasi dan input tervalidasi, lalu uji folder/scheduler sebelum mengaktifkan pemindahan media.
+2. **Sedang berjalan:** implementasikan n8n CT119 untuk tiga intake (link download, link torrent, folder kumpulan) secara bertahap. CT108 qBittorrent sudah berjalan sebagai guest terpisah; koneksi API baca-saja lulus menurut laporan pengguna/live execution. Helper hanya mengakses folder Jellyfin. Intake magnet sekarang aktif dengan autentikasi n8n dan validasi BTIH; URL dan redirect login diuji. Berikutnya uji magnet legal pilihan pengguna lalu scheduler folder sebelum mengaktifkan pemindahan media.
 3. Verifikasi hasil job harian PBS berikutnya dan event notifikasi Gotify. Rencanakan thin-pool autoextend setelah memeriksa prosedur resmi yang sesuai dengan Proxmox VE terpasang.
 4. Rekonsiliasi hitungan ponsel Immich 12.923 vs 10.638 baris asset sebelum migrasi; pertahankan backup file/dump yang sudah diverifikasi.
 5. Uji akses Immich dari ponsel melalui Tailscale; salinan asli ponsel tetap disimpan sampai hasil backup dan akses diverifikasi.
