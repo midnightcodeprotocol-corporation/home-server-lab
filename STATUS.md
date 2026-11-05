@@ -1,6 +1,6 @@
 # STATUS (perbarui setiap sesi)
 
-**Terakhir diperbarui:** 5 November 2026 (uji autentikasi qBittorrent API sukses; workflow media tetap nonaktif)
+**Terakhir diperbarui:** 5 November 2026 (form magnet diuji, 404 karena workflow masih nonaktif)
 
 **qBittorrent CT108 — terpasang dan terintegrasi:** CT108 Debian 13 unprivileged di `.114` (MAC `BC:24:11:B9:6B:9D`; pengguna melaporkan DHCP lease static). Docker CE 29.9.3/Compose 5.7.0, qBittorrent 5.3.0 (`lscr.io/linuxserver/qbittorrent:5.3.0_v2.1.2-ls485`) dan Agent 2.45.3 aktif. WebUI `http://192.168.88.114:8080` HTTP 200. Default save path `/inbox` menuju Inbox Jellyfin; temp path aktif `/downloads/incomplete` di staging HDD tersendiri. Guest hanya memasang Inbox dan staging torrent; Movies/Shows dan Immich tidak dipasang ke CT108. Port 6881 TCP/UDP dan WebUI 8080 hanya terikat ke `.114`; tidak ada port-forward router yang dibuat. Firewall Agent hanya membolehkan CT105 `.105`: probe CT105 HTTP 204; CT104 timeout/HTTP 000. Homepage card `.114:8080` live HTTP 200. Portainer `CT108-qBittorrent` tampil **Up, 2/2 container**; Kuma monitor ID 15 **Up / HTTP 200**. Pengguna mengonfirmasi DHCP lease static, mengganti password admin, dan melaporkan satu unduhan legal uji selesai; daftar torrent tidak diperiksa langsung.
 
