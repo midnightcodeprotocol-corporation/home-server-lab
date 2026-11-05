@@ -621,3 +621,11 @@ Pengguna memperbarui URL Nextcloud pada aplikasi/klien Windows, Android, dan iPh
 - Password qBittorrent, unduhan legal, API credential torrent, direct download aman, ffprobe/katalog, dan Portainer/Kuma CT119 masih perlu penyelesaian/konfirmasi terpisah.
 - Error persis dan pemulihannya dicatat pada bagian audit lanjutan di `docs/15-workflow-media.md`; tidak ada password/token yang dicatat.
 - Error probe awal sesi: `Error response from daemon: No such container: media-organizer`; `File "<string>", line 1 ... SyntaxError: unexpected character after line continuation character`; `The term '*' is not recognized as a name of a cmdlet, function, script file, or executable program.`. Pemulihan dilakukan memakai nama container aktual `n8n-media-organizer` dan probe terpisah.
+
+## Konfirmasi lanjutan qBittorrent — 5 November 2026
+
+Pengguna menjawab “done” setelah diminta mengganti password admin awal dan melakukan satu unduhan uji legal kecil; saya mencatatnya sebagai konfirmasi pengguna untuk keduanya. Saya tidak membaca password atau log, dan belum memverifikasi unduhan melalui daftar WebUI. CT108/container Up, WebUI HTTP 200. Backup terenkripsi pascakonfirmasi `ct/108/2026-11-05T05:02:52Z` sukses, snapshot bersih; PBS sekitar 42.91% penuh, thin-pool data 38.95%, host dan PBS berbagi NVMe. Berikutnya perlu API key privat di n8n Credential sebelum integrasi torrent.
+
+## Persiapan qBittorrent API — 5 November 2026
+
+Live CT108 qBittorrent/Agent Up, WebUI HTTP 200. Pengguna melaporkan password awal sudah diganti dan uji unduhan legal kecil selesai. Backup terenkripsi pascakonfirmasi `ct/108/2026-11-05T05:02:52Z` sukses; PBS 42.91%, thin-pool data 38.95%, masih satu NVMe dengan PVE. API key belum dibuat. Dokumentasi resmi upstream menyebut API key qBittorrent tersedia sejak v5.2 dan dikirim memakai header `Authorization: Bearer`; key dapat digenerate dari Preferences → Web UI → API Key dan hanya satu key berlaku pada satu waktu.
