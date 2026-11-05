@@ -1,144 +1,74 @@
 # Home Server Lab
 
-Panduan dan catatan proyek home server pribadi berbasis **Lenovo ThinkCentre M710q**. Repo ini menggabungkan rancangan jaringan, panduan Proxmox, konfigurasi layanan, catatan pengujian, dan keputusan proyek dalam satu tempat.
+> Audit live terakhir: **6 November 2026**. [Inventaris lengkap](docs/16-inventaris-live-2026-11-06.md).
 
-> [!IMPORTANT]
-> Repo ini **private dan tidak boleh berisi rahasia**. Jangan commit kata sandi, token, private key SSH/age, `ENCRYPTION_KEY`, kunci backup, dump database, atau arsip konfigurasi host. Nilai asli disimpan di Vaultwarden; repo hanya menyimpan contoh seperti `*.example`.
+Repo ini mencatat rancangan, keadaan aktual, jaringan, endpoint layanan, backup, pekerjaan migrasi, dan rencana masa depan. Rencana dan catatan lama bukan bukti keadaan saat ini.
 
-## Status proyek
-
-Pembaruan terakhir **3 November 2026**: PVE `.10`, CT101–104, VM202 HAOS, dan VM212 PBS berjalan pada audit live. CT104 `.20` menjalankan Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma, Prometheus/PVE exporter, Grafana, Gotify, dan Beszel. Login serta uji upload/download satu berkas Nextcloud selesai menurut pengguna. Immich merespons dari laptop melalui jalur Tailscale, tetapi upload ponsel belum dikonfirmasi tuntas. Gotify target dan matcher notifikasi PVE aktif; penerimaan event nyata masih menunggu verifikasi. Samba share aktif; password sudah ditetapkan menurut pengguna, uji klien Windows belum dicatat. PBS `store1` dan job backup terenkripsi harian aktif; backup uji CT101 berhasil dipulihkan, sedangkan backup harian pertama dan backup file Immich masih menunggu. Lihat [STATUS.md](STATUS.md) dan [Matriks rencana vs aktual](docs/13-matriks-rencana-aktual.md) untuk status terperinci.
-
-- **Jaringan rumah sudah berjalan:** IndiHome melalui WiFi ke TL-WR840N mode WISP, lalu ke MikroTik RB750GL. Access point dan STB AdGuard juga sudah berfungsi.
-- **Server utama:** ThinkCentre M710q, Intel Core i5-6500T (4 core/4 thread), Proxmox sudah berjalan. RAM terpasang 16+8 GB; Linux melaporkan 23 GiB, tetapi BIOS/MemTest86 belum diperiksa. NVMe Samsung terdeteksi sebagai `nvme0n1`, 476,9 GB. Kernel aktif `7.0.14-26-pve`; tidak ada unit systemd gagal.
-- **Penyimpanan:** `backup-disk` pada HDD 2 TB ext4 aktif dan dipakai sebagai sumber data aplikasi CT102/CT104; volume lama PBS 1.5 TiB masih tersimpan pada storage HDD tetapi detached. PBS memakai disk sementara 100 GiB pada NVMe; `store1` dan storage PVE `pbs-store1` aktif. Job harian terenkripsi dibuat dan uji backup/restore CT101 lulus. Backup harian penuh dan backup file Immich masih perlu diverifikasi. HDD unit kedua menunggu enclosure; keputusan pengguna adalah kedua HDD untuk aplikasi dan backup akan diperluas kemudian.
-- **Layanan terpasang:** CT101 AdGuard2 `.11` dan CT102 Samba `.12` aktif. CT103 Tailscale 1.104.4 online dengan lease DHCP `.104` sementara; jalur laptop ke Immich melalui Tailscale lulus. CT104 Docker `.20` menjalankan layanan media, file, monitoring, dan notifikasi di atas; VM201 `docker-core` tetap stopped. VM202 HAOS 18.4 aktif di `.21`; VM212 PBS `.30` aktif. Detail yang belum tuntas ada di matriks rencana vs aktual.
-- Buku panduan lengkap Bab 1–56, lampiran, fase, dan roadmap tersedia dalam edisi terpadu. Revisi 7 mencatat audit identitas template dan hasil clone; guest layanan, backup, dan pemulihan **belum diuji**. Sumber buku ada di [panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md); build PDF ada di [tools/book_builder/README.md](tools/book_builder/README.md) dan [tools/build_handbook.py](tools/build_handbook.py). Riwayat pengujian ada di [catatan/hasil-uji.md](catatan/hasil-uji.md).
-- Tailscale CT103 sudah online dan route LAN tampil sebagai primary; akses laptop ke Immich telah diuji, sedangkan aplikasi ponsel masih perlu diuji. Pemindahan ke STB2 tetap rencana setelah perangkat tersedia.
-
-Repo pernah memuat rencana lab VMware. Rencana tersebut sudah dihentikan dan dihapus dari alur instalasi pada Revisi 3. Lihat [catatan Revisi 3](docs/bab/REVISI-3.md).
-
-## Gambaran jaringan
-
-Diagram berikut menggabungkan jaringan rumah yang sudah berjalan dengan server dan layanan yang **masih menjadi target**, bukan klaim bahwa semuanya sudah dipasang.
+## Arsitektur ringkas
 
 ```mermaid
-flowchart TB
-  Internet["Internet: IndiHome<br/>uplink WiFi"] -. WiFi .-> WISP["TP-Link TL-WR840N<br/>mode WISP"]
-  WISP -->|"Ethernet"| MT["MikroTik RB750GL<br/>WAN 192.168.0.100<br/>LAN 192.168.88.1/24"]
-  MT -->|"ether5"| Admin["Laptop admin .252"]
-  AP -. WiFi rumah .-> Clients["Laptop Windows, HP,<br/>perangkat rumah"]
-  MT -->|"ether4 -> port 1"| Switch["Switch LiteWave LS1005<br/>port 1 uplink, port 2 AP, port 3 Proxmox, port 4-5 kosong"]
-  MT -->|"ether3"| STB1["STB HG680 .3<br/>Armbian + AdGuard Home<br/>DNS utama"]
-  MT -.->|"ether2 kosong; rencana WAN2"| Modem2["Modem cadangan (rencana)"]
-  Switch -->|"port 2"| AP["TP-Link TL-WR820N<br/>Access Point .2"]
-  Switch -->|"port 3"| PVE
-
-  subgraph PVE["Proxmox ThinkCentre M710q — 192.168.88.10"]
-    direction TB
-    Core["CT104 .20 — Docker aktif<br/>Portainer, Jellyfin, Immich,<br/>Nextcloud"]
-    Apps["Layanan lain (target)<br/>Forgejo, Vaultwarden, AFFiNE,<br/>n8n, web, musik"]
-    Special["VM aktif/target<br/>HAOS .21 aktif, PBS .30 aktif;<br/>k3s, Pocket ID rencana"]
-    LXC["LXC aktif<br/>AdGuard2 .11, Samba .12,<br/>Tailscale CT103 (online)"]
-    Core -. proxy HTTPS .-> Apps
-    Core -. proxy HTTPS .-> Special
-  end
-
-  Clients -->|"DNS *.home.arpa"| STB1
-  Clients -->|"HTTPS 443"| Core
-  Remote["Laptop / HP di luar rumah<br/>Tailscale aktif"] <-->|"tailnet / HTTPS Serve"| TS["Tailscale<br/>CT103 sementara;<br/>STB 2 direncanakan"]
-  TS --> PVE
-  Remote <-->|"HTTPS *.ts.net"| Private["Vaultwarden, Navidrome,<br/>Pocket ID, Immich"]
-  Internet -. "opsional: situs statis saja" .-> CF["Cloudflare Tunnel keluar<br/>VM 210 web-public"]
+flowchart LR
+  Internet --> WISP["TL-WR840N WISP<br/>192.168.0.1"] --> MT["MikroTik RB750GL<br/>192.168.88.1"]
+  MT --> SW["LS1005"] --> PVE["Proxmox M710q<br/>192.168.88.10"]
+  MT --> DNS["AdGuard STB<br/>.3"]
+  PVE --> CT104["CT104 Docker / Immich<br/>.20"]
+  PVE --> Files["CT102 Samba<br/>.12"]
+  PVE --> N8N["CT119 n8n<br/>.113"]
+  PVE --> Jellyfin["CT106 Jellyfin<br/>.111"]
+  PVE --> PBS["VM212 PBS<br/>.30"]
+  CT108["CT108 qBittorrent<br/>.114"] -->|"Inbox + staging"| HDD[("HDD backup-disk")]
+  N8N -->|"Jellyfin tree RW"| HDD
+  Jellyfin -->|"Jellyfin tree RO"| HDD
 ```
 
-### Cara membaca diagram
+Alamat adalah alamat guest live saat audit. Sebagian lease DHCP dan belum diverifikasi tetap di MikroTik.
 
-- **Jaringan rumah:** MikroTik menjadi gateway, DHCP, firewall, dan NAT. Pool DHCP direncanakan pada `192.168.88.100–254`; alamat server menggunakan rentang statis di luar pool.
-- **DNS:** AdGuard Home utama berada di STB HG680 `192.168.88.3`; CT101 `.11` juga aktif. DHCP MikroTik membagikan `.3` dan `.11`, laptop menerima keduanya; kueri langsung A/AAAA ke dua resolver berhasil, tetapi failover belum diuji. Nama `*.home.arpa` ke Caddy masih target.
-- **Akses privat lokal:** Caddy HTTPS 443 masih target. Saat ini Portainer, Jellyfin, dan layanan lain yang aktif dibuka memakai port masing-masing pada LAN.
-- **Akses dari luar rumah:** memakai Tailscale. Rancangan tidak membuka port admin Proxmox atau router ke internet dan tidak memakai Tailscale Funnel.
-- **Situs publik opsional:** hanya situs statis di VM 210 melalui koneksi keluar Cloudflare Tunnel; VM ini dirancang terisolasi dari LAN.
-- Detail kabel, DNS, akses jauh, GitOps, monitoring, dan backup ada di [diagram alur koneksi](docs/02-rangkaian-koneksi.md).
+## Tautan layanan
 
-## Arsitektur layanan target
+| Layanan | Endpoint | Kondisi |
+|---|---|---|
+| Proxmox | https://192.168.88.10:8006 | 200 |
+| PBS | https://192.168.88.30:8007 | 200 |
+| Samba | Share Media, Immich, Files pada 192.168.88.12 | TCP 445 |
+| Portainer | https://192.168.88.105:9443 | 200 |
+| Immich / Beszel | http://192.168.88.20:2283 / :8090 | 200 |
+| Jellyfin | http://192.168.88.111:8096 | API 200 |
+| Nextcloud | http://192.168.88.112:8080 | status.php 200 |
+| qBittorrent | http://192.168.88.114:8080 | 200; TCP/UDP 6881 |
+| Uptime Kuma | http://192.168.88.106:3001 | login redirect |
+| Prometheus | http://192.168.88.107:9090 | dibatasi firewall |
+| Grafana | http://192.168.88.108:3000 | API 200 |
+| Gotify | http://192.168.88.109:8070 | health 200 |
+| Homepage | http://192.168.88.110:3000 | 200 |
+| n8n | http://192.168.88.113:5678 | healthz 200 |
+| Speedtest Tracker | http://192.168.88.115:8765 | login redirect; DHCP dinamis |
+| Home Assistant | http://192.168.88.21/ ; Observer :4357 | 200 |
 
-Host Proxmox dibuat sesederhana mungkin: **tanpa Docker dan tanpa aplikasi**. Sesuai keputusan proyek, Docker ditempatkan di CT104 Debian 13 unprivileged dengan nesting; ini menghemat VM namun isolasinya lebih rendah daripada Docker di VM. Aplikasi yang memang memerlukan OS terpisah memakai VM.
+## Layanan terpasang
 
-| Guest | Alamat | Peran target |
-|---|---:|---|
-| Host Proxmox | `192.168.88.10` | Hypervisor M710q |
-| CT101 / CT102 | `.11 / .12` | AdGuard kedua aktif / Samba aktif, password share menunggu pengguna |
-| CT103 | `.104` lease sementara; IP final belum ditetapkan | Tailscale online; route `192.168.88.0/24` tampil sebagai primary; uji klien pending |
-| CT104 | `.20` statis di konfigurasi CT, ping lulus; tanpa reservasi router (di luar pool DHCP) | Docker/Portainer, Jellyfin, Immich, Nextcloud, Uptime Kuma; login awal Nextcloud menunggu pengguna; Grafana sudah dimasuki |
-| VM 201 | Tidak ada IP; stopped | docker-core tidak digunakan; target `.20` dialihkan ke CT104 |
-| VM 202 / 203 | `.21` aktif / `.22` target | Home Assistant OS (running, onboarding selesai menurut pengguna) / k3s + Flux (rencana) |
-| VM 204 / 205 | `.23 / .24` | Forgejo + Renovate / Vaultwarden |
-| VM 206 / 207 | `.25` target / VM207 tidak dibuat | AFFiNE target / slot lama Nextcloud; Nextcloud berjalan di CT104 |
-| VM 208 / 209 | `.27 / .28` | n8n / situs privat + WordPress |
-| VM 210 | `.29` | Situs statis publik opsional; akses melalui tunnel keluar |
-| VM 212 / 211 | `.30` aktif / `.31` target | PBS 4.2; disk 100 GiB NVMe, `store1` dilaporkan dibuat; disk HDD 1.5 TiB dilepas dari VM / Navidrome rencana |
-| VM 213 / 214 | `.32` target / belum dialokasikan | Pocket ID target / slot Immich lama; Immich berjalan di CT104 |
-| VM 200 | — | Template Debian 13 bersih; 1 vCPU/2 GiB/32 GiB, QEMU Agent aktif pada konfigurasi |
-| CT 100 | — | Template Debian 13 bersih; 1 vCPU/512 MiB RAM dan swap/8 GiB, unprivileged, nesting, DHCP |
+- PVE 9.2.24; Docker tidak terpasang di host.
+- LXC aktif: CT101–112, CT115, CT119, CT121 (semua kecuali 113/114).
+- VM aktif: VM202 Home Assistant OS dan VM212 PBS.
+- CT100 dan VM200 template berhenti; VM201 Docker legacy berhenti.
+- CT104 tetap menjalankan Immich, Beszel, Portainer lama, serta DB/Redis Nextcloud rollback.
 
-Rancangan layanan tetap bertahap. Status aktual dan target ada di [data/guest.yaml](data/guest.yaml). Berikutnya: password Samba dan uji Windows, ambil password admin Nextcloud dari file lokal lalu login, verifikasi datastore/backup PBS, uji route Tailscale dari klien, lalu lanjutkan Gotify/Beszel. Tabel port dan aturan akses ada di [docs/07-port-dan-akses.md](docs/07-port-dan-akses.md).
+## Prioritas pekerjaan terbuka
 
-Linux melaporkan 23 GiB dari konfigurasi RAM 16+8 GB. BIOS/MemTest86 belum diperiksa; gunakan profil konservatif dan pantau penggunaan sebelum menyalakan banyak VM. Mode hemat tetap perlu memantau batas CPU 4 thread.
+1. CT121 .115 masih DHCP dinamis, belum ada onboot, belum masuk job PBS, dan Agent 9001 tanpa pembatasan sumber CT105. Belum diubah.
+2. PBS disk 100 GiB berada pada NVMe yang sama dengan Proxmox; bukan backup fisik terpisah. Bind mount HDD bertanda backup=0 tidak tercakup backup guest.
+3. PVE firewall global nonaktif; RouterOS DHCP, firewall/NAT, dan port forwarding tidak diverifikasi sesi ini.
+4. Tinjau peringatan local-lvm thin-pool autoextend/overcommit.
+5. Otomasi media n8n belum tuntas: cek paused state torrent, intake/kategori terpadu, isolasi tujuan non-Jellyfin, rename, dan uji e2e.
+6. Rekonsiliasi aset Immich sebelum migrasi dan pertahankan rollback CT104.
+7. Rencana layanan lainnya dicatat sebagai rencana, bukan kondisi terpasang, di [matriks](docs/13-matriks-rencana-aktual.md) dan [rencana guest](docs/14-usulan-isolasi-guest.md).
 
-## Penyimpanan dan backup
+Bukti, MAC, resource, port, mount, koneksi, backup, dan ketidakpastian lengkap ada di [inventaris live](docs/16-inventaris-live-2026-11-06.md), [data guest](data/guest.yaml), dan [daftar port](docs/07-port-dan-akses.md).
 
-Rencana terbaru pengguna: kedua HDD 2 TB untuk data aplikasi (Nextcloud, Immich, Jellyfin, dll.); backup sementara di NVMe. HDD unit 1 GPT/ext4 tersedia di Proxmox; volume virtual PBS 1.5 TiB sudah dilepas dari VM tanpa dihapus. Disk 100 GiB terpasang ke PBS dan `store1` dilaporkan dibuat; verifikasi dashboard/backup belum dilakukan.
+## Label keadaan
 
-**Keadaan saat ini:** PBS 212 sudah terpasang menurut pengguna; setelah hard reset, `.30` membalas ping 3/3 dan HTTPS `:8007` HTTP 200. Disk 1.5 TiB pada HDD dilepas dari VM tanpa menghapus volumenya; volume tetap tersimpan di storage HDD. Disk virtual 100 GiB pada NVMe/local-lvm terpasang; pengguna melaporkan datastore `store1` dibuat, tetapi dashboard belum diverifikasi. Belum ada backup atau uji restore. CT104 `.20` dan CT102 `.12` berjalan; HDD ter-mount ke CT104 `/srv/media` dan `/srv/appdata`, serta ke CT102 `/srv/media` dan `/srv/files`. Lihat [Bab 50](docs/bab/suplemen/50-proxmox-backup-server.md) dan catatan uji.
+- **Terverifikasi live:** diperiksa pada PVE/guest/LAN tanggal 6 Nov 2026.
+- **Dilaporkan pengguna:** dikonfirmasi pengguna, tetapi bukan pemeriksaan RouterOS langsung.
+- **Historis:** dari audit lama, belum dicek kembali.
+- **Rencana/belum diketahui:** tidak teramati atau tidak bisa diverifikasi.
 
-## Mulai menjelajahi repo
-
-Buku utama terbaru: [Panduan Lengkap Home Server Lab - Edisi Lengkap 2026](docs/panduan-lengkap-home-server-lab.md). PDF edisi terpadu 2026.11 berisi 258 halaman. Sumber Markdown ada di repo; PDF hasil build disimpan lokal pada `06-Book`. Build dapat diulang lewat [tools/book_builder/README.md](tools/book_builder/README.md).
-
-1. Baca [tujuan awal](docs/00-ide-awal.md) dan [arsitektur target](docs/01-ide-akhir.md).
-2. Lihat [status dan langkah berikutnya](STATUS.md), lalu [urutan hari pertama di M710q](docs/09-mulai-di-m710q.md).
-3. Gunakan [board proyek](docs/04-board.md) untuk melihat fase dan backlog.
-4. Baca [Edisi 2: Bab 1–24](docs/bab/edisi2/README.md) dan [Suplemen: Bab 25–56](docs/bab/suplemen/README.md).
-5. Cek [butir yang belum pasti](catatan/belum-pasti.md) dan [hasil uji](catatan/hasil-uji.md).
-
-### Peta dokumentasi
-
-| Lokasi | Isi |
-|---|---|
-| `docs/00-ide-awal.md` – `docs/10-konteks-proyek.md` | Tujuan, arsitektur target, diagram jaringan, perangkat, konsep, port, keputusan, status awal, dan preferensi kerja |
-| `docs/11-rencana-kerja-ai-ssh.md` | Koordinasi Codex dan Claude saat mengakses Proxmox lewat SSH |
-| [docs/13-matriks-rencana-aktual.md](docs/13-matriks-rencana-aktual.md) | Perbandingan aplikasi yang direncanakan dengan guest/layanan yang sudah diverifikasi dan pekerjaan tersisa |
-| [docs/14-usulan-isolasi-guest.md](docs/14-usulan-isolasi-guest.md) | Rencana satu aplikasi per guest yang disetujui untuk dijalankan setelah upload Immich selesai, mencakup layanan aktif, rencana belum terpasang, dan urutan migrasi CT104 |
-| [docs/12-roadmap-manfaat-keamanan.md](docs/12-roadmap-manfaat-keamanan.md) | Prioritas peningkatan kegunaan, keamanan, backup, pemantauan, dan segmentasi jaringan |
-| [docs/panduan-lengkap-home-server-lab.md](docs/panduan-lengkap-home-server-lab.md) | Sumber buku pemula terpadu, langkah kerja, diagram, checklist, perintah, serta syarat lulus tiap fase |
-| `docs/bab/edisi2/` | Instalasi Proxmox, jaringan, VM/LXC, Docker, Git, Home Assistant, dan dasar layanan |
-| `docs/bab/suplemen/` | Keamanan, Tailscale, M710q, monitoring, Caddy, web, aplikasi, penempatan, PBS, firewall, audit, foto, dan profil RAM |
-| `konfigurasi/` | Contoh konfigurasi server, GitOps, Caddy, firewall, skrip, dan contoh environment |
-| `data/` | Data terstruktur perangkat dan guest |
-| `catatan/` | Hasil uji, hal belum pasti, dan pelajaran dari lab terdahulu |
-| `docs/arsip/` | Materi lama sebelum Revisi 3 untuk riwayat |
-
-> [!WARNING]
-> Teks bab hasil ekstraksi dan arsip dapat kehilangan indentasi YAML. Untuk Compose dan YAML, gunakan berkas di `konfigurasi/` sebagai sumber format yang benar. Stack Prometheus di `konfigurasi/prometheus.compose.yaml` sudah diterapkan pada CT104; konfigurasi lain tetap perlu diverifikasi sebelum dianggap aktif.
-
-## Aturan kerja dan keamanan
-
-- Jawab dan tulis panduan dalam **Bahasa Indonesia**; pengguna belajar dari dasar dan menggunakan Windows serta Android. Panduan klien juga mencakup iPhone bila relevan.
-- Berikan satu langkah per giliran untuk sesi pengujian; tunggu hasil dan catat pesan error persis sebelum lanjut.
-- Gunakan IP, VMID, dan RAM dari `data/guest.yaml`; jangan menebak bila data berbeda atau belum diperiksa.
-- Perintah panduan memakai alur tanpa `sudo` (akun biasa lalu `su -`, atau root di host Proxmox).
-- Tandai asumsi yang belum diverifikasi dengan **[BELUM PASTI]**. Periksa dokumentasi resmi saat menulis instruksi teknis baru.
-- Sebelum perubahan berisiko—misalnya disk, firewall, jaringan, SSH, atau penghapusan VM—jelaskan dampak dan jalur pemulihan.
-- Untuk akses melalui SSH oleh lebih dari satu asisten, hanya satu operator yang boleh mengubah server pada satu waktu. Lakukan audit baca-saja dahulu dan tulis catatan serah-terima. Lihat [rencana kerja AI melalui SSH](docs/11-rencana-kerja-ai-ssh.md).
-- Jangan menaruh rahasia di chat maupun repo; gunakan Vaultwarden untuk nilai asli.
-
-## Riwayat revisi
-
-- **Revisi 3 (28 Oktober 2026):** menghapus rencana lab VMware dan instal-ke-disk-dulu setelah M710q tersedia. Mesin asli menjadi target instal Proxmox langsung dari USB.
-- **Revisi 4 (30 Oktober 2026):** memperbaiki kebijakan akses Tailscale, direktori penyimpanan PostgreSQL 18 pada n8n, dan nilai awal pendaftaran Vaultwarden. Lihat [catatan Revisi 4](docs/bab/REVISI-4.md).
-- **Revisi 6 (1 November 2026):** mencatat template Debian 13 VM/CT dan persiapan jaringan MikroTik.
-- **Revisi 7 (1 November 2026):** mencatat identitas yang ikut tersalin, perbaikan template CT 100/VM 200, hasil clone, dan pembersihan guest uji.
-- **Revisi 8 (1 November 2026):** membuat CT 101 `adguard2` dan VM 201 `docker-core` dari template. Keduanya berjalan dengan DHCP router sementara; IP akhir dan pemasangan aplikasi menunggu MikroTik. Lihat [catatan Revisi 8](docs/bab/REVISI-8.md).
-- **Revisi 9 (1 November 2026):** memasang AdGuard Home pada CT101 (service ditahan sampai jaringan final) dan Docker CE/Compose pada VM201. Lihat [catatan Revisi 9](docs/bab/REVISI-9.md).
-- **Revisi 10 (1 November 2026):** menangani pesan `systemd-ssh-generator` AF_VSOCK pada VM201; SSH TCP dan Docker tetap aktif. Lihat [catatan Revisi 10](docs/bab/REVISI-10.md).
+Jangan simpan password, token, private key, kunci enkripsi, atau nilai rahasia environment di repo.

@@ -1,5 +1,7 @@
 # AGENTS.md - panduan untuk AI (Claude, Gemini, ChatGPT, dan lainnya)
 
+> **Peringatan kesegaran:** bagian “Fakta kunci” dan sejumlah catatan bab di bawah berisi snapshot historis yang sudah kedaluwarsa. Untuk keadaan aktual server, baca `STATUS.md` dan khususnya `docs/16-inventaris-live-2026-11-06.md` terlebih dahulu. Snapshot 6 Nov menyatakan CT121 berjalan, CT107 Nextcloud aktif, CT106 Jellyfin aktif, CT108 qBittorrent aktif, CT119 n8n aktif, serta ada guest tambahan; fakta lama yang menyebut hanya CT104 aktif tidak lagi berlaku. Cocokkan lagi dengan server sebelum setiap perubahan.
+
 > English summary: this private repo is the complete knowledge base of a beginner's home-server project
 > (Lenovo ThinkCentre M710q planned for Proxmox VE, MikroTik router, AdGuard Home on an STB, planned Tailscale, Docker services).
 > Read the files in the order below, then continue the work. Answer the user in **Bahasa Indonesia**.

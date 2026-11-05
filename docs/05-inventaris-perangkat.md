@@ -1,5 +1,7 @@
 # 05 - Inventaris perangkat
 
+> Snapshot perangkat/lab ini memuat catatan historis. Untuk keadaan live guest, IP, MAC, versi, port, mount, dan backup per 6 Nov 2026, gunakan [inventaris aktual](16-inventaris-live-2026-11-06.md). Jalur kabel/router di sini belum diverifikasi ulang.
+
 | Perangkat | Peran | Alamat / catatan |
 |---|---|---|
 | IndiHome | Sumber internet | Tidak ada kabel LAN yang bisa dipakai; uplink WiFi |

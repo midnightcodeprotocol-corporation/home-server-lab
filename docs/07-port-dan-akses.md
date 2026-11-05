@@ -1,58 +1,38 @@
-# 07 - Port dan akses
+# Port dan akses layanan
 
-## Alamat dan port per guest
-| Guest | IP | Port | Akses | Lewat |
-|---|---|---|---|---|
-| MikroTik | .1 | 80 (WebFig), WinBox | LAN | langsung |
-| TL-WR820N (AP) | .2 | 80 | LAN | langsung |
-| TL-WR840N | 192.168.0.1 | 80 | jaringan atas | langsung |
-| Proxmox host (M710q) | `192.168.88.10` (terverifikasi aktif; GUI dan SSH audit) | 8006, 22 | LAN + IPSet admin (rencana firewall) | `proxmox.home.arpa` |
-| CT101 adguard2 | `192.168.88.11` statis; wizard selesai 2 Nov | 80 Admin UI HTTP; 53 DNS TCP/UDP (A/AAAA lulus dari Proxmox; tes klien pending) | LAN | `http://192.168.88.11` |
-| CT102 files (Samba) | `192.168.88.12` statis; `smbd` aktif, `testparm` lulus | 445 SMB | LAN | File Explorer: `\\192.168.88.12\Media\Movies` atau `\\192.168.88.12\Media\Shows` untuk video Jellyfin; `\\192.168.88.12\Immich` untuk data Immich; `\\192.168.88.12\Files` tetap untuk file umum. Uji autentikasi Windows belum dicatat. |
-| CT103 tailscale-router | DHCP sementara `.104`; IP final belum ditetapkan | Route `192.168.88.0/24` tampil sebagai primary pada node | Laptop berhasil menjangkau Immich `.20:2283`; uji aplikasi dari ponsel masih pending | Klien Tailscale dapat mengakses IP LAN melalui CT103 selama Tailscale aktif |
-| CT104 docker-services | Statis `192.168.88.20/24` pada config CT; di luar pool DHCP, belum ada router reservation | 9443 Portainer lama HTTPS, 2283 Immich HTTP, 8090 Beszel HTTP; Nextcloud app berhenti (DB/Redis dipertahankan sebagai rollback); Jellyfin/Gotify/Kuma/Prometheus/Grafana lama berhenti | LAN / tailnet melalui route CT103; akses `.20:2283` dari laptop lewat Tailscale telah lulus | `https://192.168.88.20:9443`, `http://192.168.88.20:2283`, `http://192.168.88.20:8090`; Nextcloud aktif di CT107 `.112:8080`; Gotify `.109:8070`. |
-| CT106 Jellyfin | DHCP `.111`, static lease dilaporkan pengguna; audit guest mencocokkan IP dan MAC `BC:24:11:9E:13:F4`; RouterOS belum diaudit langsung | Jellyfin HTTP 8096, API info 200; mount `/srv/jellyfin` read-only; Agent 2.45.3/9001 dibatasi ke CT105 | LAN | `http://192.168.88.111:8096`; file video melalui SMB CT102 `\\192.168.88.12\Media\Movies` dan `\\192.168.88.12\Media\Shows`. Pengguna mengonfirmasi library Movies/Shows, upload SMB, playback, pemantauan realtime, dan akses klien selesai. |
-| CT105 Portainer | DHCP `.105`, reservation dilaporkan pengguna | 9443 HTTPS; Agent clients hanya menerima koneksi dari CT105 | LAN | `https://192.168.88.105:9443` |
-| CT107 Nextcloud | DHCP `.112`; static lease dibuat pengguna dan WebFig menampilkan komentar CT107-Nextcloud, `.112`, MAC `BC:24:11:0F:DA:1F` | Nextcloud 35.0.2.2 HTTP 8080; Agent Portainer 9001 hanya dari CT105 | LAN / tailnet melalui route CT103 | `http://192.168.88.112:8080` (status.php HTTP 200; uji klien pascamigrasi dikonfirmasi pengguna berhasil). |
-| CT109 Uptime Kuma | DHCP `.106`; reservation dilaporkan static pengguna | 3001 HTTP; Agent 9001 hanya dari CT105 | LAN / tailnet | `http://192.168.88.106:3001` |
-| CT110 Prometheus | DHCP `.107` aktif; static lease dilaporkan pengguna | 9090 HTTP hanya menerima CT104 rollback dan CT111 Grafana; Agent 9001 hanya dari CT105 | LAN terbatas | `http://192.168.88.107:9090` |
-| CT111 Grafana | DHCP `.108` aktif; static lease dilaporkan pengguna | 3000 HTTP; Agent 9001 hanya dari CT105 | LAN / tailnet | `http://192.168.88.108:3000` |
-| CT112 Gotify | DHCP `.109` aktif; static lease dilaporkan pengguna | 8070 HTTP; Agent 9001 hanya dari CT105 | LAN / tailnet | `http://192.168.88.109:8070` (Android/iPhone diuji pengguna; health endpoint `/health`) |
-| CT115 Homepage | DHCP `.110` aktif; static lease dilaporkan pengguna; MAC `BC:24:11:3C:42:DC` | 3000 HTTP; Agent 9001 hanya dari CT105 | LAN | `http://192.168.88.110:3000` (HTTP 200; environment Portainer `CT115-Homepage` Up, 2/2 container) |
-| CT119 n8n | DHCP `.113`, static lease dan MAC `BC:24:11:7F:73:F6` dikonfirmasi pengguna; guest tetap memakai `.113` setelah reboot | 5678 HTTP lokal; Agent 9001 hanya dari CT105 | LAN privat | `http://192.168.88.113:5678`; Portainer Agent `192.168.88.113:9001`. Workflow media intake masih draft/nonaktif. |
-| VM 201 docker-core | Stopped, tanpa IP; `.20` dialihkan ke CT104 | 80, 443 (Caddy, rencana lama) | seluruh LAN | gerbang |
-| | | 3001 Kuma, 8090 Beszel, 8070 Gotify, 9443 Portainer, 3002 Homepage | di balik Caddy; 8070 dibuka untuk host, n8n, PBS | |
-| VM 202 haos | Lease DHCP aktif `192.168.88.21`; reservasi dilaporkan pengguna; MAC aktif cocok dengan VM202 | HTTP 80 aktif (Core), TCP 8123 tertutup; Observer 4357 | LAN + Tailscale (rencana) | `http://192.168.88.21/` (HTTP 200 dan `/auth/providers` memberi Home Assistant Local; Observer menyatakan Supervisor Connected/Health Healthy). Port 8123 tertutup [BELUM PASTI: sebab], `ha.lan` belum disiapkan |
-| VM 203 k3s | .22 | 6443 | IPSet admin | langsung |
-| VM 204 git | .23 | 3000 web, 2222 SSH Git | web dari .20; SSH dari admin dan .22 | `git.home.arpa` |
-| VM 205 vault | .24 | 127.0.0.1:8081 | Tailscale Serve | `lab-vault.*.ts.net` |
-| VM 206 affine | .25 | 3010 | dari .20 | `affine.home.arpa` |
-| VM 207 (slot lama Nextcloud) | `.26` target lama; VM tidak dibuat | — | — | Nextcloud 35.0.2.2 berjalan di CT107 `.112`, lihat baris CT107 |
-| VM 208 n8n | .27 | 5678 | dari .20 | `n8n.home.arpa` |
-| VM 209 web | .28 | 8081 WordPress, 8082 situs | dari .20 | `wp.home.arpa`, `web.home.arpa` |
-| VM 210 web-public | .29 | (tidak ada masuk) | Cloudflare Tunnel keluar | domain Anda |
-| VM 211 music | .31 | 127.0.0.1:4533 | Tailscale Serve | `lab-music.*.ts.net` |
-| VM 212 pbs | `192.168.88.30`; datastore `store1` dan storage PVE `pbs-store1` aktif | 8007 HTTPS | admin LAN/tailnet | `https://192.168.88.30:8007`; jadwal harian terenkripsi aktif, backup uji CT101 berhasil dipulihkan; verifikasi job terjadwal pertama masih menunggu |
-| VM 213 sso | .32 | 127.0.0.1:1411 | Tailscale Serve | `lab-sso.*.ts.net` |
-| VM 214 (slot lama Immich) | .33 target lama, belum dibuat | — | — | Immich dialihkan ke CT104; lihat baris CT104 |
-| STB 1 | .3 | 80 admin, 53 DNS | LAN | `adguard.home.arpa` |
-| Agen Beszel | tiap mesin | 45876 | hanya dari .20 | |
+**Snapshot live: 6 November 2026.** DHCP lease bisa berubah; reservasi RouterOS belum diverifikasi langsung. Port pada tabel adalah hasil konfigurasi/observasi LAN, bukan instruksi membuka akses internet.
 
-Nama PBS diakses lewat **IP**, bukan nama: rewrite `*.home.arpa` mengarahkan nama ke docker-core.
+| Guest | Layanan | IP:port | Hasil |
+|---|---|---|---|
+| PVE | Web UI / SSH | .10:8006 HTTPS / 22 | HTTPS 200; SSH audit berhasil |
+| VM212 | PBS Web UI | .30:8007 HTTPS | 200 |
+| CT101 | AdGuard DNS / UI | .11:53 TCP+UDP / 80 | service konfigurasi teramati |
+| CT102 | Samba | .12:445 TCP | share Media, Immich, Files |
+| CT104 | Immich / Beszel / Portainer lama | .20:2283 / 8090 / 9443 | Immich dan Beszel 200 |
+| CT105 | Portainer | .105:9443 HTTPS | 200 |
+| CT106 | Jellyfin / Agent | .111:8096 / 9001 | API 200; Agent dibatasi CT105 |
+| CT107 | Nextcloud / Agent | .112:8080 / 9001 | status.php 200; Agent dibatasi CT105 |
+| CT108 | qBittorrent / BitTorrent / Agent | .114:8080 / 6881 TCP+UDP / 9001 | Web 200; Agent dibatasi CT105 |
+| CT109 | Kuma / Agent | .106:3001 / 9001 | 302 login; Agent dibatasi CT105 |
+| CT110 | Prometheus / exporter / Agent | .107:9090 / 9221 internal / 9001 | Prometheus dibatasi; Agent CT105 |
+| CT111 | Grafana / Agent | .108:3000 / 9001 | health 200; Agent CT105 |
+| CT112 | Gotify / Agent | .109:8070 / 9001 | health 200; Agent CT105 |
+| CT115 | Homepage / Agent | .110:3000 / 9001 | 200; Agent CT105 |
+| CT119 | n8n / PostgreSQL / helper / Agent | .113:5678 / internal / 9001 | healthz 200; DB/helper internal; Agent CT105 |
+| CT121 | Speedtest Tracker / Agent | .115:8765 / 9001 | 302 login; DHCP dinamis, Agent tanpa filter |
+| VM202 | Home Assistant / Observer | .21:80 / 4357 | 200 / 200 |
 
-## Matriks siapa boleh ke mana (Bab 51.2)
-- Semua VM: SSH hanya dari IPSet `admin` (PC kabel 192.168.88.252, laptop, alamat CT103).
-- VM di belakang Caddy: port layanan hanya dari `192.168.88.20`.
-- VM 205, 211, 213, 214: slot target, belum ada port layanan aktif di LAN.
-- VM 210: tidak boleh keluar ke LAN selain DNS.
+## Samba Windows
 
-## Nama domain
-| Akhiran | Dipakai untuk | Catatan |
-|---|---|---|
-| `.home.arpa` | Layanan baru (Caddy) | Standar untuk jaringan rumah; hindari `.local` (bentrok mDNS) |
-| `.lan` / `lab.local` | Nama lama Edisi 2 | Boleh berdampingan |
-| `.ts.net` | Node Tailscale Serve | Hanya terjawab lewat Tailscale |
+- \\\\192.168.88.12\\Media → Jellyfin Movies/Shows/Inbox/Review.
+- \\\\192.168.88.12\\Immich → dataset Immich terpisah.
+- \\\\192.168.88.12\\Files → folder umum.
+- Share writable untuk akun Samba labshare; kredensial tidak dicatat di repo.
 
-## Cara masuk dari luar rumah
-Tailscale CT103 online dan route `192.168.88.0/24` tampil pada status node; koneksi dari klien HP/laptop belum diuji. Setelah klien Tailscale aktif: klien -> CT103 -> IP layanan LAN. Nextcloud aktif di `http://192.168.88.112:8080`; untuk akses di luar rumah gunakan route Tailscale, jangan buka port ke internet. Perbarui aplikasi/klien sinkronisasi dari alamat lama `.20:8080` setelah cutover.
-Jangan buka port 8006, 22, atau 80 MikroTik ke internet.
+## Pembatasan akses
+
+- Agent TCP 9001 menerima sumber CT105 .105 pada CT106–112, CT115, CT119. CT121 tidak mempunyai pembatasan sumber yang sama dan menjadi pekerjaan terbuka.
+- Prometheus 9090 menerima Grafana .108 dan legacy CT104 .20; akses laptop gagal sesuai aturan.
+- PVE firewall service berjalan, tetapi firewall global PVE disabled.
+- Router DHCP pool/reservations, firewall/NAT dan port-forward tidak diperiksa 6 Nov. Jangan anggap semua port-forward kosong.
+- HTTP 200/302 bukan bukti login atau pengujian fitur penuh. Detail koneksi/storage ada di [inventaris live](16-inventaris-live-2026-11-06.md).

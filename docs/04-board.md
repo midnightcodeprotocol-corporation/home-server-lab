@@ -1,5 +1,13 @@
 # 04 - Board proyek
 
+## Audit live 6 November 2026
+- [x] Audit baca-saja PVE, guest, Docker, port, storage, backup terbaru, mount, dan probe HTTP LAN; inventaris lengkap ada di docs/16-inventaris-live-2026-11-06.md.
+- [x] Perbarui README, STATUS, daftar port, dan matriks aktual untuk memisahkan bukti live, laporan pengguna, dan hal yang belum diverifikasi.
+- [ ] CT121 Speedtest Tracker: IP .115 masih DHCP, belum masuk PBS, onboot unset, Agent TCP 9001 belum dibatasi.
+- [ ] Audit langsung MikroTik: DHCP pool/reservations, firewall/NAT, dan port forwarding. Status belum diverifikasi.
+- [ ] Tangani thin-pool autoextend/overcommit dan rencanakan backup fisik terpisah; PBS ada pada NVMe host yang sama.
+- [ ] Lanjutkan otomasi media n8n berdasarkan STATUS; jangan beri akses tulis ke Immich.
+
 Papan kanban. Perbarui dengan mencentang atau memindah baris. Status per 5 November 2026 (form magnet aktif dan akses login terverifikasi; E2E menunggu magnet legal pengguna).
 
 ## Sedang dikerjakan

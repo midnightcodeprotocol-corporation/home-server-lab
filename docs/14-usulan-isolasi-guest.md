@@ -1,5 +1,7 @@
 # Usulan susunan guest per aplikasi
 
+> **Status aktual diperiksa 6 Nov 2026:** gunakan `docs/16-inventaris-live-2026-11-06.md` untuk daftar live. CT121 Speedtest Tracker sudah berjalan di .115 (DHCP dinamis), bukan sekadar rencana. Belum termasuk PBS, onboot tidak diset, dan Agent 9001 tidak dibatasi sumber CT105. Jangan gunakan pernyataan status lama di bawah sebagai fakta terkini tanpa verifikasi.
+
 **Status: rencana disetujui dan pelaksanaan bertahap dimulai 3 November 2026.** CT106 Jellyfin, CT107 Nextcloud, CT109–112, Homepage CT115, dan n8n CT119 aktif. Pengguna mengonfirmasi login/unduh Nextcloud pascamigrasi selesai. CT119 menjalankan n8n/PostgreSQL dan helper media internal. Workflow prototipe unpublished setelah pengguna menetapkan tiga sumber intake; integrasi Portainer dan Kuma masih perlu diselesaikan.
 
 ## Dasar rancangan

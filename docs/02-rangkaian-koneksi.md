@@ -1,5 +1,7 @@
 # 02 - Rangkaian koneksi
 
+> Audit terkini 6 Nov 2026: inventaris live, guest, alamat, port, keterhubungan, dan ketidakpastian RouterOS ada di [docs/16](16-inventaris-live-2026-11-06.md). Diagram kabel/rencana di dokumen ini sebagian besar catatan historis dan belum diverifikasi ulang. Jangan menganggap proxy Caddy, VM 201–211, port forwarding, DNS DHCP, atau firewall di bawah sudah diterapkan.
+
 Dari kabel fisik sampai alur data. Diagram memakai Mermaid (tampil otomatis di GitHub).
 
 ## 1. Rangkaian fisik (kabel dan radio)

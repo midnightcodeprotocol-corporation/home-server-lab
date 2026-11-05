@@ -1,5 +1,16 @@
 # Hasil uji per fase
 
+## Audit menyeluruh PVE dan layanan — 6 November 2026
+
+- Lulus: SSH baca-saja PVE 192.168.88.10 dengan HostKeyAlias 192.168.0.200; versi PVE, VM/CT, resource, storage, job PBS, mount, port guest Docker, dan firewall guest dikumpulkan. Ringkasan bukti, alamat, MAC, endpoint, relasi, dan batas audit ada di docs/16-inventaris-live-2026-11-06.md.
+- Lulus: probe LAN Windows menunjukkan endpoint PVE/PBS, Portainer, Immich, Beszel, Grafana, Gotify, Homepage, Jellyfin, Nextcloud, n8n, qBittorrent, HA/Observer dan Speedtest Tracker merespons sesuai kode yang tercatat. Probe HTTP tidak menguji login/fungsi end-to-end.
+- Perlu tindakan: CT121 aktif di .115 dengan MAC BC:24:11:05:BE:F7, DHCP dinamis, RAM 512 MiB, onboot unset, Speedtest Tracker 8765 dan Agent latest 9001 bind semua interface tanpa filter CT105. CT121 tidak ada di job PBS dan belum ada backup PBS. Tidak ada perubahan server/router dalam sesi dokumentasi ini.
+- Perlu tindakan: firewall global Proxmox nonaktif; firewall/NAT/DHCP pool/port-forward RouterOS tidak diperiksa live. Beberapa static lease hanya laporan pengguna.
+- Perlu tindakan: PBS disk datastore 100 GiB ada pada NVMe fisik yang sama dengan PVE; guest bind mount HDD backup=0 tidak masuk backup guest. Thin pool sebelumnya mengeluarkan peringatan autoextend/overcommit.
+- Perlu tindakan: n8n masih memerlukan alur form terpadu, kategori tujuan non-Jellyfin, dan pengujian e2e. Mount helper n8n mencakup seluruh subtree Jellyfin secara RW, tanpa Immich.
+- Deviasi tanpa dampak layanan: docker ps template menghasilkan `failed to execute template: template: :1:20: executing "" at <.Config.Image>: can't evaluate field Config in type *formatter.ContainerContext`. Pemeriksaan ulang menggunakan docker inspect berhasil.
+- RouterOS tidak diubah. Password, token, secret environment, dan kunci tidak dikumpulkan atau dicatat.
+
 ## Migrasi Jellyfin ke CT106 — 4 November 2026 malam
 
 - Audit ulang Proxmox live: PVE 9.2.24; CT104 dan CT106 running; `backup-disk`, `local-lvm`, dan `pbs-store1` aktif. PBS 37.70% terpakai. Backup CT104 terbaru sebelum migrasi `ct/104/2026-11-04T11:47:49Z`, terenkripsi. Warning thin-pool overcommit kembali muncul pada backup; backup sukses dan snapshot dibersihkan. PBS tetap berada di NVMe host yang sama.
