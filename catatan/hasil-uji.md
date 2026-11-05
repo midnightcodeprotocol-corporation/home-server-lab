@@ -610,3 +610,14 @@ Pengguna memperbarui URL Nextcloud pada aplikasi/klien Windows, Android, dan iPh
 - Computer Use recovery: klik saat state capture tidak menyertakan screenshot pertama kali menghasilkan `coordinate input geometry is unavailable`; ulangi pengamatan dengan screenshot terbaru dan klik koordinat berbasis screenshot berhasil. URL Portainer hash `#!/endpoints/new` mula-mula menampilkan halaman konten kosong dengan dialog `Upgrade Portainer to Business Edition`; pulih dengan navigasi ke `#!/endpoints` dan tombol Add environment. Browser menampilkan entry setelah wizard Connect; daftar environment dan dashboard kemudian memastikan hasil `Up`.
 - Status revisi: aksi UI yang sebelumnya belum dilakukan kini selesai untuk Portainer CT108 dan monitor Kuma. Yang masih belum dilakukan adalah ganti password admin awal qBittorrent dan unduhan legal end-to-end; jangan menyatakan workflow media tiga intake sudah selesai.
 - Validasi parser YAML lokal dicoba lewat WSL, tetapi WSL tidak dapat dimulai: `The operation could not be started because a required feature is not installed. Error code: Wsl/Service/CreateInstance/CreateVm/HCS/HCS_E_SERVICE_NOT_AVAILABLE`; output juga menyatakan Virtual Machine Platform belum diaktifkan. Tidak ada perubahan Windows/WSL. Compose sudah divalidasi live dengan `docker compose config --quiet`; `git diff --check` lulus.
+
+## Verifikasi otomasi media — 5 November 2026
+
+- Backup CT119: lulus, PBS encrypted `ct/119/2026-11-05T03:51:16Z`; snapshot sementara terhapus.
+- Health helper: lulus (`{"ok":true}`), container `n8n-media-organizer` healthy. n8n HTTP `.113:5678` 200, PostgreSQL healthy.
+- Parser workflow: lulus untuk Movies, Shows, dan Review; JSON valid dan `git diff --check` lulus.
+- Pemindahan dummy Inbox → Review melalui endpoint helper: lulus (`moved: true`); dummy dibersihkan dan pencarian akhir tidak menemukan file uji.
+- Workflow diimpor kembali dengan ID existing. Jumlah workflow aktif diverifikasi tetap `0`; publikasi dan uji scheduler n8n belum dilakukan.
+- Password qBittorrent, unduhan legal, API credential torrent, direct download aman, ffprobe/katalog, dan Portainer/Kuma CT119 masih perlu penyelesaian/konfirmasi terpisah.
+- Error persis dan pemulihannya dicatat pada bagian audit lanjutan di `docs/15-workflow-media.md`; tidak ada password/token yang dicatat.
+- Error probe awal sesi: `Error response from daemon: No such container: media-organizer`; `File "<string>", line 1 ... SyntaxError: unexpected character after line continuation character`; `The term '*' is not recognized as a name of a cmdlet, function, script file, or executable program.`. Pemulihan dilakukan memakai nama container aktual `n8n-media-organizer` dan probe terpisah.

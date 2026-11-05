@@ -2,6 +2,8 @@ import json
 import os
 import re
 import stat
+import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -10,6 +12,9 @@ from urllib.parse import urlsplit
 ROOT = Path(os.environ.get("MEDIA_ROOT", "/srv/media")).resolve(strict=True)
 VIDEO_EXTENSIONS = {".mkv", ".mp4", ".avi", ".m4v", ".mov", ".webm", ".mpg", ".mpeg"}
 INVALID_COMPONENT = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
+STABILITY_SECONDS = max(0, int(os.environ.get("MEDIA_STABILITY_SECONDS", "600")))
+_observed_files = {}
+_observed_files_lock = threading.Lock()
 
 
 def reply(handler, status, body):
@@ -61,14 +66,17 @@ def valid_source(parts):
 
 
 def valid_destination(parts, source_ext):
-    if parts[0] == "Movies":
+    if parts[0] == "Review":
+        if len(parts) != 2:
+            raise ValueError("invalid_review_destination")
+    elif parts[0] == "Movies":
         if len(parts) != 3 or not re.search(r" \((?:19|20)\d{2}\)$", parts[1]):
             raise ValueError("invalid_movie_destination")
     elif parts[0] == "Shows":
         if len(parts) != 4 or not re.fullmatch(r"Season \d{2,3}", parts[2]):
             raise ValueError("invalid_show_destination")
     else:
-        raise ValueError("destination_must_be_movies_or_shows")
+            raise ValueError("destination_must_be_review_movies_or_shows")
     if Path(parts[-1]).suffix.lower() != source_ext:
         raise ValueError("extension_mismatch")
     if any(part.startswith(".") or part.endswith((".", " ")) for part in parts):
@@ -93,6 +101,8 @@ class Handler(BaseHTTPRequestHandler):
         inbox = ROOT / "Inbox"
         try:
             files = []
+            now = time.monotonic()
+            seen = set()
             with os.scandir(inbox) as entries:
                 for entry in entries:
                     if entry.name.startswith(".") or Path(entry.name).suffix.lower() not in VIDEO_EXTENSIONS:
@@ -100,7 +110,20 @@ class Handler(BaseHTTPRequestHandler):
                     info = entry.stat(follow_symlinks=False)
                     if not stat.S_ISREG(info.st_mode):
                         continue
+                    seen.add(entry.name)
+                    signature = (info.st_size, info.st_mtime_ns)
+                    with _observed_files_lock:
+                        previous = _observed_files.get(entry.name)
+                        if previous is None or previous[0] != signature:
+                            _observed_files[entry.name] = (signature, now)
+                            continue
+                        stable_since = previous[1]
+                    if now - stable_since < STABILITY_SECONDS:
+                        continue
                     files.append({"name": entry.name, "size": info.st_size, "mtime": int(info.st_mtime)})
+            with _observed_files_lock:
+                for name in set(_observed_files) - seen:
+                    _observed_files.pop(name, None)
             files.sort(key=lambda item: item["name"].casefold())
             return reply(self, 200, {"files": files})
         except OSError:
