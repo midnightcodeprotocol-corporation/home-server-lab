@@ -72,3 +72,11 @@
 - Backup terenkripsi CT119 sebelum tes terbaru `ct/119/2026-11-05T05:29:37Z` sukses dan snapshot bersih. Batas PBS satu NVMe dengan PVE tetap berlaku.
 - Pengguna perlu memastikan di qBittorrent Preferences → Web UI bahwa API key memang baru digenerate dan di n8n value tepat `Bearer ` + API key berawalan `qbt_`; jangan kirim nilainya. Workflow torrent belum dibuat/diaktifkan sampai tes autentikasi GET lulus.
 - Diagnostik execution data baca-saja tidak dapat diurai oleh parser sementara (`execution-data-parse-failed`); tidak ada credential/value yang ditampilkan. Tidak ada data torrent yang ditambahkan atau diubah oleh tes.
+
+## Tes ulang setelah pengguna mengonfirmasi format Bearer — 5 November 2026
+
+- Audit awal: repo bersih. CT119 n8n/helper/PostgreSQL berjalan; credential Header Auth live bernama `qBittorrent`, ID sama, workflow smoke mengacu ID dan nama itu. Pemeriksaan metadata `shared_credentials` dan `shared_workflow` menunjukkan keduanya pada project yang sama dengan role owner; tidak ada secret yang dibaca.
+- Workflow GET versi qBittorrent dipublikasikan sementara untuk satu tes baca-saja dan n8n direstart. Execution bertambah menjadi `error|3` (tidak sukses). Workflow uji di-unpublish dan n8n direstart kembali. Pemeriksaan akhir n8n HTTP 200, helper healthy, workflow aktif 0. Tidak ada torrent berubah.
+- Jalur HTTP tanpa auth CT119 → `192.168.88.114:8080/api/v2/app/version` memberi HTTP 403, sehingga endpoint jaringan tercapai dan melindungi API tanpa auth. Ini tidak memverifikasi nilai key.
+- Karena user sudah mengecek format `Bearer ` tetapi tes tetap gagal dan akses/project benar, langkah diagnostik berikutnya adalah generate ulang API key qBittorrent dan mengganti value credential n8n secara privat. Satu API key berlaku pada satu waktu; key lama otomatis tidak berlaku setelah rotasi. Jangan pernah menempelkan key ke chat.
+- Query metadata project pertama salah penutup ekspresi dan menghasilkan tiga kali `ERROR: syntax error at or near ";"`; query baca-saja yang diperbaiki berhasil menunjukkan project dan role sama. Tidak ada perubahan database dari query tersebut.
