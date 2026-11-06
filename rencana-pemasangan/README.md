@@ -73,6 +73,59 @@ ID berikut adalah **usulan lama**, bukan alokasi yang dijamin. Tetapkan satu per
 | VM213 | Pocket ID | Belum dipasang; rancang dampak SSO bila guest gagal. |
 | Belum ditetapkan | AMP/game server, Ollama, TrueNAS, server cetak/monitor listrik | Wishlist; jangan buat guest kosong sebelum perangkat dan kebutuhan disepakati. |
 
+## Rencana tambahan: STB sebagai control plane rumah
+
+**Belum dijalankan.** Ini rencana arsitektur, bukan keadaan live dan bukan instruksi untuk langsung mereset STB.
+
+### Homeio dan OS
+
+Homeio bukan OS yang menggantikan sistem STB. Installer resminya dipasang pada OS 64-bit Debian, Ubuntu, atau Raspberry Pi OS yang didukung; skrip memasang Docker jika belum ada, menyiapkan Homeio sebagai service, dan memakai Nginx pada port 80. Jalur Docker Compose memakai port 12026. Homeio juga dapat mengelola Docker lewat Docker socket, tetapi ini tidak otomatis memindahkan atau menggantikan Portainer. Periksa dukungan SoC/OS image spesifik STB HG680 sebelum memilih media/OS. Rujukan: [install Homeio](https://homeio.app/install), [dokumentasi Homeio](https://homeio.app/docs).
+
+Perintah yang diusulkan pengguna (`curl -fsSL https://get.homeio.app | sudo bash`) menjalankan skrip jarak jauh dengan hak root. Sebelum dipakai, unduh/tinjau isi skrip atau jalankan dry-run resmi; pastikan backup konfigurasi STB dan jalur akses lokal tersedia. Reset pabrik menghapus data/konfigurasi sehingga jangan dilakukan tanpa console/recovery image dan hasil backup yang bisa dipulihkan.
+
+### Susunan target yang diusulkan
+
+| Komponen | Target | Catatan/dependensi |
+|---|---|---|
+| OS STB HG680 | Install ulang OS 64-bit yang didukung perangkat | Validasi image/boot/recovery HG680; jangan menganggap Homeio adalah OS. Buat backup konfigurasi Tailscale, AdGuard, hostname, jaringan, dan key yang aman sebelum reset. |
+| AdGuard Home | STB | Pertahankan IP/DNS dan blocklist/config; siapkan backup config dan uji DNS lokal sebelum menjadikan resolver utama. |
+| Tailscale subnet router | STB | Login ulang dan iklankan route LAN; uji akses dari luar. Pastikan ada jalur administrasi alternatif ketika STB mati. |
+| Homeio dashboard | STB | UI install script default port 80. Periksa konflik dengan AdGuard UI/layanan HTTP dan akses admin; pilih port/hostname yang konsisten. |
+| Portainer Server | Tetap CT105 sampai rencana cutover diuji | Portainer Server perlu host Linux dengan Docker atau Kubernetes yang didukung. Rekomendasi: jangan pindah ke STB bersamaan dengan reset/AdGuard/Tailscale; siapkan cadangan/restore Portainer dan uji endpoint satu per satu. Homeio Docker manager dan Portainer adalah pilihan yang bisa berdampingan, tetapi satu control plane utama perlu dipilih. |
+| Homepage | STB hanya jika disepakati | Homepage sudah berjalan di CT115. Jika dipindah, salin config, tes port, backup, dan pertahankan CT115 rollback. Bisa juga tetap di CT115 dan ditautkan dari Homeio. |
+| Wake-on-LAN | STB mengirim magic packet ke mini PC | Aktifkan WoL di BIOS/NIC mini PC dan konfigurasi paket jaringan di STB. Uji saat berada di LAN; pastikan STB selalu mendapat daya. Tidak bergantung pada Portainer/Homepage. |
+| Reset “old PC” | Belum ditetapkan | Klarifikasi perangkat yang dimaksud. Jika yang dimaksud ThinkCentre Proxmox, factory reset akan menghapus host/guest; jangan reset sebelum backup terpisah semua data, rencana reinstall, dan restore teruji. |
+
+### Tahapan cutover control plane
+
+1. Inventaris model/revisi HG680, bootloader, OS saat ini, storage, IP/MAC, AdGuard config, Tailscale state/routes, dan cara recovery.
+2. Simpan backup konfigurasi AdGuard dan daftar layanan/route Tailscale secara privat; jangan commit key/token. Siapkan akses admin dari laptop lewat jalur LAN alternatif.
+3. Uji OS image yang tepat dan boot/recovery terlebih dahulu. Jangan reset Proxmox mini PC sebagai bagian dari reset STB.
+4. Pasang OS STB dan validasi jaringan/IP serta akses shell.
+5. Pasang Homeio secara terpisah; verifikasi port 80/12026 dan konflik dengan AdGuard UI.
+6. Kembalikan AdGuard, uji kueri DNS dari klien, baru arahkan resolver utama bila berhasil.
+7. Kembalikan Tailscale, approve subnet route, lalu uji akses dari perangkat luar. Pertahankan jalur lokal/admin cadangan.
+8. Migrasikan Portainer setelah backup/restore server dan daftar environment diuji; pindahkan Homepage hanya jika ada alasan, lalu uji reverse links/monitoring.
+9. Siapkan WoL BIOS/NIC, konfigurasi magic packet di STB, dan uji cold start mini PC. Catat hasil dan rollback.
+
+### Portainer dan Debian/LXC
+
+Portainer tidak berjalan “tanpa OS” di CT. LXC CT adalah lingkungan Linux guest dan tetap memerlukan distribusi dasar seperti Debian. Pasang Docker Engine di CT Debian, kemudian jalankan Portainer Server sebagai container; untuk mengelola Docker pada CT lain, pasang Portainer Agent di masing-masing Docker guest dan batasi akses Agent TCP 9001 ke alamat Portainer. Rujukan: [Portainer Docker Standalone](https://docs.portainer.io/start/install-ce/server/docker/linux) dan [prasyarat Portainer](https://docs.portainer.io/start/requirements-and-prerequisites). Alternatif VM juga memerlukan OS guest. Jangan memasang Docker/Portainer langsung pada host Proxmox.
+
+Homeio Docker mode juga membutuhkan Docker host/OS. Install script Homeio langsung pada STB memerlukan OS yang didukung; perintah tersebut bukan firmware flash dan tidak mengubah STB menjadi OS Homeio.
+
+### Tabel alamat dan cutover control plane
+
+| Perangkat/service | MAC/IP live sebelum reset | IP reservation sesudah reset | Port/URL | Backup/config dipulihkan | Uji lulus/tanggal |
+|---|---|---|---|---|---|
+| STB HG680 | | | | | |
+| AdGuard Home | | | DNS 53, UI: | | |
+| Tailscale subnet router | | | subnet 192.168.88.0/24 | | |
+| Homeio | | | 80 atau 12026 | | |
+| Portainer (jika dipindah) | | | 9443; Agent 9001 | | |
+| Homepage (jika dipindah) | | | 3000 | | |
+| WoL target mini PC | MAC NIC: | n/a | magic packet | | |
+
 ## Checklist per guest
 
 - [ ] ID bebas diverifikasi langsung sebelum pembuatan.
