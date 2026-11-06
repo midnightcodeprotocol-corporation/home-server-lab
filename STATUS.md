@@ -36,6 +36,8 @@
 5. Rekonsiliasi aset Immich sebelum migrasi. Pertahankan CT104 rollback.
 6. Ikuti [matriks aktual dan rencana](docs/13-matriks-rencana-aktual.md) dan [rencana isolasi guest](docs/14-usulan-isolasi-guest.md).
 
+Daftar plan per CT/VM yang bisa dibuka langsung dari README: [Daftar plan pemasangan guest](docs/13-matriks-rencana-aktual.md#daftar-plan-pemasangan-guest). Target Navidrome lama CT121 tidak berlaku karena CT121 kini Speedtest Tracker; target pengganti belum ditetapkan.
+
 Tidak ada konfigurasi server/router yang diubah dalam audit dokumentasi ini. Perintah format docker ps gagal dengan error `failed to execute template: template: :1:20: executing "" at <.Config.Image>: can't evaluate field Config in type *formatter.ContainerContext`; docker inspect kemudian berhasil. Tidak ada rahasia dicatat.
 
 Lihat [port dan akses](docs/07-port-dan-akses.md), [papan kerja](docs/04-board.md), dan [hasil uji](catatan/hasil-uji.md).

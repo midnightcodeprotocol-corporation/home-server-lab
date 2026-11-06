@@ -52,6 +52,24 @@ Alamat adalah alamat guest live saat audit. Sebagian lease DHCP dan belum diveri
 - CT100 dan VM200 template berhenti; VM201 Docker legacy berhenti.
 - CT104 tetap menjalankan Immich, Beszel, Portainer lama, serta DB/Redis Nextcloud rollback.
 
+## Plan pemasangan CT dan VM
+
+Daftar lengkap per guest beserta tahap, dependensi, dan status rencananya ada di [Matriks rencana vs aktual — Daftar plan pemasangan guest](docs/13-matriks-rencana-aktual.md#daftar-plan-pemasangan-guest). Ringkasannya:
+
+| Target usulan | Aplikasi | Status |
+|---|---|---|
+| CT113 | Beszel hub (pindah dari CT104) | Belum dibuat |
+| CT114 | Caddy + CA lokal | Belum dibuat |
+| CT116 / CT117 | Forgejo / Renovate | Belum dibuat |
+| CT118 | AFFiNE | Belum dibuat |
+| CT120 | WordPress | Belum dibuat |
+| CT122 | OnlyOffice | Belum dibuat; opsional |
+| VM203 / VM205 | k3s + Flux / Vaultwarden | Rencana lama |
+| VM210 / VM213 | Situs statis publik / Pocket ID | Rencana lama |
+| Belum ditetapkan | Navidrome | Target CT121 lama dibatalkan; CT121 kini Speedtest Tracker |
+
+Urutan prioritas bukan berarti seluruh aplikasi pasti dipasang: selesaikan keamanan/backup CT121, otomasi media, lalu evaluasi migrasi Immich sebelum memilih guest berikutnya. Target IP belum dialokasikan. Lihat juga [STATUS](STATUS.md) dan [rencana isolasi guest](docs/14-usulan-isolasi-guest.md).
+
 ## Prioritas pekerjaan terbuka
 
 1. CT121 .115 masih DHCP dinamis, belum ada onboot, belum masuk job PBS, dan Agent 9001 tanpa pembatasan sumber CT105. Belum diubah.

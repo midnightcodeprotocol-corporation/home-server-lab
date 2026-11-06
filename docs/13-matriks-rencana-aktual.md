@@ -30,4 +30,36 @@
 | Otomasi media | n8n + qBittorrent | CT119 dan CT108 aktif | Form intake, routing aman dan end-to-end belum tuntas |
 | Jaringan/backup | MikroTik, PBS, thin-pool | MikroTik tidak diaudit; PBS satu NVMe | Audit router, thin-pool dan salinan off-host |
 
+## Daftar plan pemasangan guest
+
+Baris berikut adalah rencana, bukan guest yang sudah dibuat. ID/IP hanya target lama yang masih dipertahankan bila belum bertentangan dengan keadaan live. IP target tidak dialokasikan dan wajib diperiksa konflik DHCP sebelum membuat guest.
+
+| Tahap | Guest target | Layanan/isi | Ketergantungan dan catatan |
+|---|---|---|---|
+| Prioritas operasional | CT121 sudah ada | Speedtest Tracker | Bukan pemasangan baru. Tetapkan lease, onboot, firewall Agent dan backup sebelum menganggap siap produksi. |
+| Prioritas operasional | CT119 + CT108 sudah ada | n8n + qBittorrent media automation | Selesaikan status paused, intake/kategori terpadu, tujuan folder terisolasi, dan uji end-to-end. |
+| Migrasi lanjutan | Guest belum ditetapkan | Immich khusus | Saat ini masih CT104. Rekonsiliasi jumlah aset serta uji backup/restore sebelum menetapkan guest dan jadwal pindah. |
+| Rencana | CT113 (usulan lama) | Beszel hub | Saat ini hub Beszel ada di CT104; belum dipindah. Verifikasi agent dan kebutuhan resource. |
+| Rencana | CT114 (usulan) | Caddy + CA lokal | Belum dipasang. IP belum ditetapkan; layanan langsung tetap jadi akses pemulihan jika proxy mati. |
+| Rencana | CT116 (usulan) | Forgejo | Belum dipasang; perlu putuskan akses SSH/Git dan backup repository. |
+| Rencana | CT117 (usulan) | Renovate | Belum dipasang; bergantung pada Forgejo/repository yang dikelola. |
+| Rencana | CT118 (usulan) | AFFiNE | Belum dipasang; evaluasi resource dan penyimpanan. |
+| Rencana lama | VM203 | k3s + Flux | Belum dipasang; latihan opsional, CPU host hanya 4 thread. |
+| Rencana lama | VM205 | Vaultwarden | Belum dipasang; layanan sensitif memerlukan backup dan akses privat yang dirancang dulu. |
+| Rencana lama | VM210 | Situs statis publik + Cloudflare Tunnel | Belum dipasang; isolasi jaringan dari LAN wajib dirancang. |
+| Rencana lama | VM213 | Pocket ID / SSO | Belum dipasang; evaluasi kebutuhan identity dan dampak bila layanan mati. |
+| Rencana | CT120 (usulan) | WordPress | Belum dipasang; terpisah dari situs statis. |
+| Rencana opsional | CT122 (usulan) | OnlyOffice | Belum dipasang; uji kebutuhan CPU/RAM terlebih dahulu. |
+| Rencana belum dipetakan | Belum ditetapkan | Navidrome / musik | Target lama CT121 bentrok karena CT121 kini menjalankan Speedtest Tracker; VM211 dan alamat .31 muncul di data rencana legacy, tetapi belum disetujui sebagai target pengganti. |
+| Wishlist | Belum ditetapkan | AMP/game server, Ollama, TrueNAS, server cetak, pemantauan listrik/panel surya | Jangan membuat guest sebelum ada kebutuhan, perangkat, kapasitas, dan rancangan backup yang jelas. |
+
+### Urutan kerja yang sudah disepakati
+
+1. Tuntaskan risiko backup/storage dan konfigurasi produksi CT121.
+2. Selesaikan otomasi media CT119/CT108 tanpa akses tulis ke Immich.
+3. Rekonsiliasi dan migrasikan Immich setelah backup serta pemulihannya teruji.
+4. Setelah tahap tersebut, pilih satu rencana aplikasi berikutnya dari tabel. Urutan CT113/114/116+ belum dikonfirmasi ulang; jangan menganggap semuanya harus dipasang.
+
+Tidak ada alamat IP yang ditetapkan untuk guest rencana pada tabel ini. Nomor ID usulan tidak berarti slot Proxmox sudah kosong atau aman dipakai; periksa keadaan live saat implementasi.
+
 Lease .105/.106/.107/.108/.109/.110/.112/.113/.114 pernah dilaporkan static oleh pengguna. Tidak ada pemeriksaan RouterOS live untuk memvalidasinya. CT121 .115 dinamis saat audit.

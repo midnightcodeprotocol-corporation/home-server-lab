@@ -42,7 +42,7 @@
 | Prometheus + PVE exporter | CT110 (sudah dibuat dan dipakai) | Prometheus dan exporter sebagai komponen pengambilan metrik Proxmox. | Prometheus 3.15.1 dan exporter 3.11.0 berjalan di `.107`; dari CT111 kedua target `up`. API 9090 dibatasi ke Grafana CT104 `.20` dan CT111 `.108`. Agent 2.45.3 aktif, hanya source `.105` boleh; backup PBS terenkripsi lulus. Pengguna melaporkan static lease `.107`; alamat aktif terverifikasi dari CT110, RouterOS belum diaudit langsung. Environment Portainer dilaporkan terdaftar; Agent dari CT105 merespons. Container CT104 stopped untuk rollback. |
 | Grafana | CT111 (sudah dibuat dan dipakai) | Grafana, datasource, dan dashboard. | Grafana 13.3.0 aktif di `.108:3000`; API health HTTP 200; `Home Server Overview` dan datasource `Prometheus` `.107:9090` diverifikasi; SQLite integrity `ok`. Rootfs 12 GiB; backup PBS terenkripsi berhasil. Agent 2.45.3 dibatasi ke `.105`. Pengguna melaporkan static lease `.108`; alamat aktif terverifikasi dari CT111, RouterOS belum diaudit langsung. Environment Portainer dilaporkan terdaftar; monitor Kuma ke `.108:3000` diverifikasi. CT104 lama stopped untuk rollback. |
 | Gotify | CT112 (aktif, cutover selesai) | Gotify dan data aplikasinya. | Gotify 3.1.1 healthy di `.109:8070`; data final disalin dari CT104 saat berhenti, hash cocok, DB integrity `ok`. PVE target dan Uptime Kuma mengarah ke CT112 dan pengiriman uji sukses; monitor health HTTP 200. Pengguna mengonfirmasi URL Android/iPhone sudah diperbarui dan notifikasi uji diterima. Portainer environment CT112-Gotify 2/2 container berjalan. Backup PBS terenkripsi pascamigrasi sukses. CT104 Gotify tetap berhenti sebagai rollback. |
-| Beszel hub | CT113 (baru) | Hub Beszel; agent tetap pada host/guest masing-masing. | Daftarkan ulang alamat hub pada agent bila alamat berubah; uji agent. |
+| Beszel hub | CT113 (usulan; belum dibuat) | Hub Beszel; agent tetap pada host/guest masing-masing. | Hub aktual masih di CT104. Pindah hanya setelah backup dan semua agent diuji. |
 
 CT106 menjadi host Jellyfin; CT107 Nextcloud; CT109 menjadi host Docker khusus Uptime Kuma; CT110 Prometheus/PVE exporter; CT111 Grafana; CT112 Gotify; CT115 Homepage. Lease `.112` static dikonfirmasi pengguna dan kecocokan lease/IP/MAC terlihat di WebFig. CT104 `.20` tetap berjalan untuk aplikasi lain; Nextcloud app lama serta stack Gotify/Jellyfin/Kuma/Prometheus/Grafana lama berhenti sebagai rollback. CT108, CT113, dan CT114 masih rencana. CT115 static lease `.110` dilaporkan pengguna.
 
@@ -60,7 +60,7 @@ CT106 menjadi host Jellyfin; CT107 Nextcloud; CT109 menjadi host Docker khusus U
 | n8n | CT119 (aktif) | Orchestrator otomasi umum; fase pertama media Jellyfin. | CT119 `.113`, lease static dilaporkan pengguna, MAC `BC:24:11:7F:73:F6`. Docker CE 29.9.3, Compose 5.7.0, n8n 2.46.6, PostgreSQL 18 healthy; UI HTTP 200. HDD hanya subtree Jellyfin; Inbox/Movies/Shows ada dan Immich tidak terlihat. Agent 2.45.3/firewall hanya CT105; helper media internal healthy dan tidak menerbitkan port host. Backup PBS terbaru `ct/119/2026-11-04T17:41:16Z` sukses. Workflow prototipe di-unpublish setelah kebutuhan intake link/torrent/folder; tidak ada workflow aktif. Portainer environment dan monitor Kuma belum diverifikasi. |
 | WordPress | CT120 (baru) | Belum dipasang; terpisah dari situs statis. |
 | Situs statis publik + Cloudflare Tunnel | VM210 (rencana lama, opsional) | Belum dipasang. Pertahankan isolasi dari LAN; jangan publikasikan layanan admin. |
-| Navidrome | CT121 (baru) | Belum dipasang; satu guest khusus. |
+| Navidrome | Belum ditetapkan | Belum dipasang. Target lama CT121 tidak berlaku karena CT121 sekarang Speedtest Tracker. VM211/.31 hanya ada di catatan rencana lama dan belum disetujui sebagai target. |
 | Pocket ID | VM213 (rencana lama) | Belum dipasang; guest khusus untuk identitas/SSO. |
 | OnlyOffice | CT122 (baru) | Belum dipasang; fase opsional karena penggunaan memori/CPU bisa besar. |
 | AMP + playit.gg | Belum ditetapkan | Wishlist opsional; baru rancang guest jika server game benar-benar dipilih. |
@@ -68,7 +68,7 @@ CT106 menjadi host Jellyfin; CT107 Nextcloud; CT109 menjadi host Docker khusus U
 | TrueNAS | Tidak dibuat saat ini | Wishlist. Samba sudah menyediakan share; desain disk sekarang memakai HDD untuk data aplikasi. Evaluasi lagi setelah layout disk/backup baru disepakati. |
 | Server cetak / pemantauan listrik / panel surya | Belum ditetapkan | Menunggu perangkat dan aplikasi yang akan dipakai; jangan membuat guest kosong dulu. |
 
-CT108 kini telah dibuat untuk client torrent. Guest usulan lain CT114–122 belum dibuat dan alamatnya belum dialokasikan. VM203/205/210/213 berasal dari slot rencana lama; status tersebut bukan bukti guest pernah dibuat.
+CT108 dan CT121 sekarang telah dibuat. CT121 menjalankan Speedtest Tracker; jangan gunakan kembali sebagai target Navidrome. CT113, CT114, CT116–118, CT120, dan CT122 tetap target usulan yang belum dibuat. VM203/205/210/213 adalah rencana lama, bukan bukti guest pernah dibuat. Rencana per guest dan dependensi terbaru ada di [matriks rencana vs aktual](13-matriks-rencana-aktual.md).
 
 ## Keputusan layanan file dan NAS
 
