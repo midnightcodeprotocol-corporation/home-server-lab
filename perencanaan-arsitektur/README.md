@@ -27,6 +27,7 @@ Dokumen ini melengkapi [inventaris live 6 November](../docs/16-inventaris-live-2
 8. **STB sebagai titik kegagalan tunggal:** jika STB menanggung DNS, Tailscale/subnet route, dashboard, dan WoL, kegagalannya dapat memutus beberapa jalur sekaligus.
 9. **Alamat dan ID bukan reservasi:** DHCP pool/lease/router aktual belum diperiksa pada audit terakhir yang disampaikan. `nextid=124` adalah petunjuk historis, bukan jaminan ID aman.
 10. **Reset perangkat belum direncanakan untuk dijalankan:** reset HG680 dapat menghapus OS/konfigurasi/data STB. Reset ThinkCentre dapat menghapus host, guest, dan data lokal. “Old PC” belum jelas perangkat yang dimaksud.
+11. **Ekspansi belum diputuskan:** NAS tersendiri dan node PVE kedua adalah skenario masa depan. Kebutuhan, anggaran, hardware, topologi storage, dan tujuan cluster/HA belum dipilih.
 
 ## 3. Arsitektur target yang disarankan
 
@@ -180,7 +181,61 @@ Rencana juga perlu: enkripsi, retensi harian/mingguan/bulanan yang muat, salinan
 
 Dokumentasi PBS menyarankan server backup terpisah untuk mengurangi ketergantungan pada hypervisor dan host yang sama. [PBS installation](https://pbs.proxmox.com/docs/installation.html).
 
-## 9. Fase pelaksanaan kelak
+## 9. Skenario ekspansi masa depan
+
+Kedua opsi berikut adalah **rencana kelayakan**, bukan keputusan membeli perangkat, memindahkan data, atau mengubah host. Mulai kelak dengan audit, kapasitas, tujuan, dan jalur restore. Alamat IP, hostname, disk, jenis share, ID guest, dan kapasitas belum ditetapkan.
+
+### 9.1 Bila storage dipindahkan ke NAS tersendiri
+
+```mermaid
+flowchart LR
+  Clients[Windows / Android / iPhone] --> Router[Router / switch]
+  PVE1[Proxmox node 1] -->|NFS/SMB sesuai kebutuhan| NAS[NAS: data keluarga / media]
+  PVE2[Node PVE tambahan, opsional] -->|jaringan storage| NAS
+  PVE1 --> PBS[PBS dengan datastore di failure domain terpisah]
+  PVE2 --> PBS
+  NAS -->|salinan terpisah, bukan mirror saja| Backup[Backup/offline/off-site]
+```
+
+**Pisahkan tiga peran storage:**
+
+1. **Data keluarga bersama** (file/media/foto) dapat dipertimbangkan untuk NAS melalui share yang sesuai, setelah uji SMB/NFS, hak akses, mount saat boot, latensi, dan perilaku aplikasi.
+2. **Disk VM/CT aktif** pada NAS hanya bila ada kebutuhan migrasi/akses bersama yang jelas. Ini menambah ketergantungan semua node pada NAS, switch, dan jalur storage; mulai dari data file yang lebih mudah dipulihkan.
+3. **Backup** tetap berupa salinan terpisah. RAID/mirror/snapshot NAS membantu ketersediaan atau pemulihan tertentu, tetapi tidak menggantikan backup independen. Rencanakan PBS dengan filesystem/datastore yang didukung dan disk lokal pada mesin PBS yang secara fisik terpisah dari node PVE utama, atau gunakan mekanisme remote sync PBS yang didukung; jangan menganggap share SMB/NFS biasa sebagai datastore PBS yang aman/terdukung tanpa verifikasi dokumentasi dan uji.
+
+**Tahapan rencana migrasi NAS:**
+
+1. Ukur kebutuhan usable capacity, pertumbuhan beberapa tahun, jumlah disk, redundansi, daya/noise, NIC, switch/kabel, UPS, biaya, garansi, dan kemampuan restore bila NAS gagal.
+2. Tetapkan satu pemilik tulis per dataset (misalnya file keluarga, media Jellyfin, Nextcloud, Immich). Catat UID/GID/ACL, pengguna Windows, mount, snapshot/retensi, enkripsi, dan aplikasi yang bergantung.
+3. Audit dukungan protokol dan model izin setiap aplikasi; pilih share/protokol per use case, bukan memindahkan semua mount serentak. Pastikan aplikasi database/appdata tidak dipindah ke share jaringan tanpa dukungan dan pengujian.
+4. Siapkan backup independen dan salinan konfigurasi NAS; salin data awal, sinkronkan perubahan akhir saat layanan sumber dibekukan/readonly, lalu bandingkan ukuran/jumlah dan hash sampel atau keseluruhan sesuai kemampuan.
+5. Alihkan satu layanan, uji dari Windows/Android/iPhone dan guest, restart NAS/PVE untuk memastikan mount kembali, uji permission dan restore. Pertahankan disk lama tidak berubah/readonly sampai periode validasi disepakati.
+6. Setelah semua kriteria lulus dan backup restore terbukti, baru rencanakan penggunaan ulang/pensiun disk lama. Jangan menghapus sumber sebagai bagian dari migrasi awal.
+
+**Risiko dan kriteria lulus:** NAS menjadi titik ketergantungan baru; putus jaringan, disk pool degradasi, izin berubah, atau aplikasi tidak tahan latency dapat menghentikan layanan. Lulus jika tiap share memiliki penulis utama, restart tidak merusak mount, akses keluarga benar, metrik jaringan/storage memadai, backup berjalan, dan pemulihan satu dataset berhasil. Detail implementasi storage Proxmox perlu dicocokkan dengan [panduan storage PVE](https://pve.proxmox.com/pve-docs/chapter-pvesm.html).
+
+### 9.2 Bila menambah mini PC/PC sebagai node PVE kedua
+
+Tentukan tujuan lebih dahulu:
+
+- **Kapasitas tambahan/manual pemindahan:** dua host tetap dapat dikelola terpisah dan guest dipulihkan/dipindah melalui backup. Ini memiliki dependensi cluster lebih sedikit.
+- **Satu cluster Proxmox:** pengelolaan terpusat dan kemampuan migrasi tertentu, dengan syarat jaringan cluster, versi, konfigurasi, storage, quorum, CPU, dan prosedur pemeliharaan dirancang sebelum node digabung.
+- **High availability (HA):** target terpisah dan lebih kompleks. Penambahan node saja tidak membuat layanan otomatis HA; perlu quorum, resource cadangan, storage/replikasi dan fencing/watchdog yang sesuai, serta simulasi kegagalan.
+
+**Prasyarat bila memilih cluster:**
+
+- Audit backup/restore seluruh guest dan konfigurasi; host kedua harus disiapkan dengan hostname dan IP final **sebelum** dibuat/bergabung ke cluster. Dokumentasi PVE menyatakan hostname/IP node tidak dapat diganti setelah cluster dibuat.
+- Mulai dari instalasi PVE bersih di node kedua. Jangan gabungkan host yang masih menyimpan cluster config atau guest dengan ID/data konflik tanpa rencana migrasi dan audit.
+- Pastikan versi PVE kompatibel, waktu tersinkron, DNS/nama stabil, koneksi kabel andal, dan jaringan Corosync berlatensi rendah. PVE merekomendasikan jaringan cluster yang andal dan NIC khusus; rencana link redundant dipertimbangkan jika nilai layanan membutuhkannya.
+- Untuk cluster dua node, rencanakan **QDevice** sebagai suara ketiga pada perangkat yang independen dan selalu tersedia. QDevice bukan node compute, bukan backup, dan tidak menggantikan daya/storage cadangan.
+- Periksa model/fitur CPU, kemampuan passthrough, storage lokal/shared, jaringan, RAM, konsumsi daya, kipas, UPS, serta apakah targetnya live migration. PVE menyatakan migrasi VM online hanya didukung antara CPU dari vendor yang sama; model CPU dan fitur guest tetap harus diuji.
+- Jika ingin storage bersama, desain NAS sebagai dependency tersendiri dan uji dampak saat NAS/jaringan storage mati. Shared storage dapat membantu mobilitas guest, tetapi tidak wajib untuk mulai dengan backup/restore atau migrasi disk yang direncanakan.
+
+**Tahapan rencana node kedua:** audit hardware dan kebutuhan → pilih standalone vs cluster vs HA → siapkan backup/rollback → instal dan verifikasi node kedua secara terpisah → audit versi/network/storage → desain quorum/QDevice → join cluster hanya setelah konfigurasi final disetujui → uji migrasi guest non-kritis → baru pertimbangkan HA.
+
+**Kriteria lulus:** quorum tetap sehat saat skenario putus link diuji; kedua node terlihat tanpa konflik ID/nama/IP; backup dari tiap node dipulihkan; migrasi guest uji berhasil pada CPU/storage yang dipilih; akses admin dan DNS tetap tersedia saat salah satu node mati. Jangan menjanjikan failover otomatis sebelum seluruh tes HA dan kapasitas lulus. Rujukan: [panduan cluster PVE](https://pve.proxmox.com/pve-docs/chapter-pvecm.html), [panduan HA PVE](https://pve.proxmox.com/pve-docs/chapter-ha-manager.html), dan [PBS remote/sync untuk salinan backup terpisah](https://pbs.proxmox.com/docs/managing-remotes.html).
+
+## 10. Fase pelaksanaan kelak
 
 Tidak satu pun fase berikut dimulai tanpa permintaan pelaksanaan terpisah.
 
@@ -194,6 +249,8 @@ Tidak satu pun fase berikut dimulai tanpa permintaan pelaksanaan terpisah.
 | 6. Otomasi | SSRF, salah klasifikasi, overwrite, izin luas | Batasi qBittorrent/n8n; validasi, Review, log, persetujuan | Karantina/salinan dan pemulihan workflow | Berkas uji tidak overwrite; ambigu tertahan. |
 | 7. Monitoring/akses | Duplikasi dashboard/exporter; remote access | Pilih dashboard, alarm, policy Tailscale dan akses admin | Backup konfigurasi/definisi dashboard | Alarm uji diterima; akses sesuai LAN/tailnet. |
 | 8. Opsional/local AI | CPU 4 core/4 thread dan RAM terbatas; guest layanan aktif berbagi resource | Setelah audit, pilot Ollama 4B dan/atau 9Router sebagai gateway; uji koneksi, auth, latensi, resource, dan jalur data prompt | Backup guest/data directory; rollback dengan menghentikan guest dan memulihkan config | Laptop dapat mengakses dari LAN/tailnet terpilih, tidak dari internet; resource host stabil; provider dan lokasi data prompt dipahami. |
+| 9. NAS terpisah | Kebutuhan/capacity/protokol belum diputuskan; NAS menambah dependency jaringan | Audit kapasitas & protokol; desain dataset/ACL; salin, validasi, alihkan satu layanan per kali | Salinan offline/off-site terpisah; disk sumber tetap readonly sampai restore lulus | Akses klien benar; remount pasca-restart; perbandingan data dan restore sampel lulus. |
+| 10. PVE node kedua | Tujuan standalone/cluster/HA belum diputuskan; kebutuhan quorum/Corosync/storage | Audit PC, versi, CPU, jaringan, storage; pilih topology; siapkan node bersih; cluster/QDevice/migrasi hanya jika diputuskan | Backup per node dan uji restore; rencana keluar cluster/rollback tertulis | Tidak ada konflik; quorum dan link diuji; workload uji berhasil dipindah/dipulihkan sesuai target. |
 
 Untuk setiap fase, isi tabel berikut **setelah audit**; jangan mengarang alamat atau port.
 
@@ -205,7 +262,7 @@ Untuk setiap fase, isi tabel berikut **setelah audit**; jangan mengarang alamat 
 | Guest yang ada | Dari audit | Verifikasi konflik | Dari audit | Dari audit | Dari audit | Dari audit | Termasuk guest stopped |
 | Guest target | Belum ditetapkan | Cek pool dahulu | Belum ditetapkan | Rencana | Belum ditetapkan | Belum ditetapkan | Cek ID dan IP sebelum dibuat |
 
-## 10. Keputusan yang masih terbuka
+## 11. Keputusan yang masih terbuka
 
 Jawab berurutan, satu per satu:
 
@@ -215,8 +272,10 @@ Jawab berurutan, satu per satu:
 4. Tentukan target backup independen yang realistis: disk eksternal offline, NAS/perangkat lain, off-site, atau kombinasi.
 5. Putuskan daftar layanan opsional yang benar-benar dibutuhkan setelah guest stopped dan datanya diaudit.
 6. Putuskan apakah kebutuhan Anda adalah (a) chat lokal dengan Ollama, (b) gateway 9Router untuk provider cloud, atau keduanya; integrasi 9Router sebagai backend chat Ollama perlu diuji dahulu.
+7. Jika NAS nanti dibeli, apakah tujuan pertamanya berbagi file/media, menampung disk VM/CT, atau keduanya? Ukuran data, kapasitas usable, budget, dan kebutuhan toleransi gagal disk masih perlu ditentukan.
+8. Untuk PC PVE tambahan, apakah prioritasnya menambah kapasitas, memudahkan migrasi manual, atau HA? Pilihan ini menentukan standalone vs cluster, QDevice, shared storage, dan biaya.
 
-## 11. Batas tahap ini
+## 12. Batas tahap ini
 
 - Tidak ada login server, perintah server/router, perubahan Proxmox, DHCP, guest, Portainer, instalasi, backup, atau reset.
 - Tidak ada target IP, VMID, static route, atau alamat layanan baru yang ditetapkan.

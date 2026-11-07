@@ -103,7 +103,8 @@ Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-
 
 **Fase E. Proyek dari daftar keinginan**
 - [ ] Home Assistant (+ buku perangkat yang kompatibel: kategori, foto, fungsi, kelebihan dan kekurangan)
-- [ ] NAS Nextcloud / TrueNAS
+- [ ] Kelayakan NAS tersendiri dan migrasi data bertahap; bedakan data keluarga, storage guest PVE, dan backup. Rencana di `perencanaan-arsitektur/README.md`.
+- [ ] Kelayakan PC/mini PC kedua untuk Proxmox; pilih host standalone, cluster, atau HA. Rencana quorum/QDevice dan migrasi di `perencanaan-arsitektur/README.md`.
 - [ ] Hosting server
 - [ ] Cetak dari mana saja (TP-Link MR3020)
 - [ ] Server backup

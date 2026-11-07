@@ -8,6 +8,8 @@ Catatan perencanaan menyeluruh sesi 7 November 2026: [arsitektur, fase, backup, 
 
 Pembaruan rencana 7 November: ditambahkan opsi Ollama untuk inferensi lokal CPU dan 9Router sebagai gateway API pada guest khusus setelah audit. Integrasi chat 9Router dengan backend Ollama belum dikonfirmasi; akses direncanakan hanya melalui LAN/tailnet.
 
+Pembaruan rencana 7 November: ditambahkan skenario migrasi storage ke NAS serta opsi menambah node PVE kedua. Keduanya masih evaluasi masa depan; tujuan NAS dan pilihan host standalone/cluster/HA belum diputuskan.
+
 Ringkasan percakapan Claude terkait dashboard Homepage diarsipkan di [arsip percakapan](arsip-percakapan/claude-homepage-2026-11-07/README.md); detailnya historis dan belum diverifikasi terhadap kondisi live.
 
 ## Kondisi aktual
