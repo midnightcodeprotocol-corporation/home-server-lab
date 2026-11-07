@@ -38,7 +38,7 @@ Buku panduan/PDF tetap tersedia sebagai salah satu cara menyajikan pengetahuan y
 - **Audit live terakhir yang terdokumentasi:** 6 November 2026. Periksa [STATUS](STATUS.md) dan [inventaris](docs/16-inventaris-live-2026-11-06.md); semuanya perlu dicocokkan sebelum tindakan karena dapat berubah.
 - **Fokus terbuka yang tercatat:** backup independen dan bind mount, kapasitas thin-pool, audit DHCP/firewall MikroTik, rekonsiliasi data Immich/rollback CT104, serta hardening CT121.
 - **Rencana lokal AI:** Ollama dan 9Router dicatat sebagai kandidat, bukan layanan yang sudah terpasang. Lihat rencana menyeluruh untuk batas resource, akses, dan ketidakpastian integrasi.
-- **Rencana ekspansi:** NAS tersendiri dan node PVE kedua/cluster dicatat sebagai skenario masa depan; belum ada pembelian, alamat, migrasi, atau pilihan HA yang ditetapkan.
+- **Rencana ekspansi:** NAS tersendiri, node PVE kedua/cluster, dan unit AI/LLM khusus dicatat sebagai skenario masa depan; belum ada pembelian, alamat, migrasi, hardware, atau pilihan HA yang ditetapkan.
 
 ## Struktur repo
 

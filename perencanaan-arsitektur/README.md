@@ -235,6 +235,40 @@ Tentukan tujuan lebih dahulu:
 
 **Kriteria lulus:** quorum tetap sehat saat skenario putus link diuji; kedua node terlihat tanpa konflik ID/nama/IP; backup dari tiap node dipulihkan; migrasi guest uji berhasil pada CPU/storage yang dipilih; akses admin dan DNS tetap tersedia saat salah satu node mati. Jangan menjanjikan failover otomatis sebelum seluruh tes HA dan kapasitas lulus. Rujukan: [panduan cluster PVE](https://pve.proxmox.com/pve-docs/chapter-pvecm.html), [panduan HA PVE](https://pve.proxmox.com/pve-docs/chapter-ha-manager.html), dan [PBS remote/sync untuk salinan backup terpisah](https://pbs.proxmox.com/docs/managing-remotes.html).
 
+### 9.3 Bila kelak ada unit tersendiri untuk AI/LLM
+
+```mermaid
+flowchart LR
+  Laptop[Windows laptop / klien lain] --> UI[Browser / klien API]
+  UI -->|LAN / tailnet privat| AI[Unit AI tersendiri<br/>runtime model + CPU/GPU/NPU]
+  PVE[Proxmox M710q<br/>layanan rumah tetap mandiri] --> Front[Guest Open WebUI / 9Router, opsional]
+  Front -. gateway hanya jika kompatibel .-> AI
+  AI --> Models[SSD/NVMe lokal<br/>model dan cache]
+```
+
+Unit AI ini berbeda dari node PVE kedua: ia bisa menjadi mesin Linux khusus untuk inference, atau guest pada host/cluster yang memiliki dukungan accelerator. Pilihan bare metal vs VM/passthrough baru ditentukan setelah kebutuhan, driver, isolasi, dan kompleksitas pemulihan dievaluasi. Jangan menganggap GPU yang sama akan otomatis mudah dibagikan ke beberapa guest.
+
+**Peran dan integrasi:**
+
+- Tujuan utamanya menjalankan model/inference; layanan rumah inti, DNS, backup, dan kontrol Proxmox tetap berfungsi jika unit AI mati.
+- Open WebUI/klien dapat mengirim permintaan langsung ke API runtime lokal yang didukung. Ollama dan `llama.cpp` adalah kandidat runtime; `llama.cpp` mendokumentasikan backend CPU/GPU dan API server kompatibel OpenAI. [llama.cpp](https://github.com/ggml-org/llama.cpp), [llama.cpp server](https://github.com/ggml-org/llama.cpp/tree/master/tools/server).
+- 9Router bisa menjadi lapisan gateway bila kebutuhan integrasi cocok, tetapi dukungan chat lokal Ollama belum dipastikan pada rencana ini. Uji endpoint dan format terlebih dahulu; jangan menjadikan integrasi itu prasyarat untuk mengakses AI lokal.
+- Jalur dari perangkat klien dibatasi ke LAN/tailnet dan identitas yang dipilih. Jangan expose API model ke internet; batasi firewall dan gunakan autentikasi/proxy sesuai runtime. Permintaan ke provider cloud melalui 9Router tetap mengirim data ke layanan provider tersebut.
+
+**Kelayakan perangkat sebelum membeli:**
+
+1. Definisikan workload: chat umum, coding, ringkasan/dokumen, vision, jumlah pengguna serentak, panjang konteks, dan kecepatan minimum yang terasa nyaman.
+2. Pilih model kandidat dan quantization setelah uji; hitung memori bobot + KV/context + concurrency, bukan hanya ukuran file model. Tetapkan target VRAM/RAM, storage model/cache, dan ruang pertumbuhan berdasarkan benchmark yang sesuai.
+3. Verifikasi dukungan accelerator oleh runtime/model (misalnya CUDA/HIP/SYCL/Vulkan/OpenVINO sesuai pilihan hardware), versi driver, OS, idle/puncak daya, panas, suara kipas, biaya unit, dan biaya listrik.
+4. Bandingkan mesin AI Linux khusus dengan VM di PVE. Jalur VM harus mencakup dukungan GPU passthrough, reset/isolasi perangkat, update driver, dan backup guest; bare metal mengurangi lapisan virtualisasi tetapi menambah mesin yang dipelihara.
+5. Letakkan model/cache di storage lokal unit AI. Putuskan terpisah apakah dokumen keluarga atau indeks RAG akan dikirim ke unit itu; batasi dataset, logging, retensi prompt, dan akses pengguna sebelum memakai data sensitif.
+
+**Backup, fallback, dan kriteria lulus:** model publik mungkin bisa diunduh ulang, tetapi simpan konfigurasi runtime, versi/digest model, model kustom, prompt/template, indeks/embedding, UI database, dan chat history bila ingin dipertahankan. Catat dependency dan backup set tersebut. M710q bisa tetap menjadi fallback model kecil berbasis CPU jika resource cukup, tetapi hal itu opsi dan harus diuji agar tidak mengganggu layanan produksi.
+
+Tahap pilot: audit layanan/resource dan kebutuhan → shortlist hardware tanpa membeli → benchmark model nyata pada mesin uji bila tersedia → putuskan OS/runtime dan isolasi jaringan → pasang endpoint privat tanpa data keluarga → uji beban, restart, listrik, akses Windows/Android/iPhone, backup/restore, dan fallback → baru pindahkan workload yang disepakati. Lulus jika laptop dapat memakai model dari LAN/tailnet, endpoint tidak dapat diakses dari internet, unit AI dapat dimatikan tanpa mengganggu PVE/DNS/storage, performa dan daya memenuhi target, serta data/config yang dipilih berhasil dipulihkan.
+
+Rujukan upstream: [llama.cpp: backend dan inference lokal](https://github.com/ggml-org/llama.cpp), [API server llama.cpp](https://github.com/ggml-org/llama.cpp/tree/master/tools/server), [Ollama: membuka layanan ke jaringan privat](https://github.com/ollama/ollama/blob/main/docs/faq.mdx), dan [Open WebUI: menghubungkan Ollama](https://docs.openwebui.com/getting-started/quick-start/connect-a-provider/starting-with-ollama/).
+
 ## 10. Fase pelaksanaan kelak
 
 Tidak satu pun fase berikut dimulai tanpa permintaan pelaksanaan terpisah.
@@ -251,6 +285,7 @@ Tidak satu pun fase berikut dimulai tanpa permintaan pelaksanaan terpisah.
 | 8. Opsional/local AI | CPU 4 core/4 thread dan RAM terbatas; guest layanan aktif berbagi resource | Setelah audit, pilot Ollama 4B dan/atau 9Router sebagai gateway; uji koneksi, auth, latensi, resource, dan jalur data prompt | Backup guest/data directory; rollback dengan menghentikan guest dan memulihkan config | Laptop dapat mengakses dari LAN/tailnet terpilih, tidak dari internet; resource host stabil; provider dan lokasi data prompt dipahami. |
 | 9. NAS terpisah | Kebutuhan/capacity/protokol belum diputuskan; NAS menambah dependency jaringan | Audit kapasitas & protokol; desain dataset/ACL; salin, validasi, alihkan satu layanan per kali | Salinan offline/off-site terpisah; disk sumber tetap readonly sampai restore lulus | Akses klien benar; remount pasca-restart; perbandingan data dan restore sampel lulus. |
 | 10. PVE node kedua | Tujuan standalone/cluster/HA belum diputuskan; kebutuhan quorum/Corosync/storage | Audit PC, versi, CPU, jaringan, storage; pilih topology; siapkan node bersih; cluster/QDevice/migrasi hanya jika diputuskan | Backup per node dan uji restore; rencana keluar cluster/rollback tertulis | Tidak ada konflik; quorum dan link diuji; workload uji berhasil dipindah/dipulihkan sesuai target. |
+| 11. Unit AI khusus | Workload, accelerator, kebutuhan privasi dan budget belum diketahui; GPU/driver/VRAM dan daya jadi faktor biaya | Evaluasi bare metal vs VM, benchmark model/runtime, pasang endpoint privat dan sambungkan klien melalui UI/API yang teruji | Backup runtime/config/data pilihan; model dapat diunduh ulang jika publik; fallback CPU M710q opsional | Performa/daya memenuhi target; endpoint LAN/tailnet saja; layanan PVE tetap berjalan saat unit AI mati; restore tervalidasi. |
 
 Untuk setiap fase, isi tabel berikut **setelah audit**; jangan mengarang alamat atau port.
 
@@ -274,6 +309,7 @@ Jawab berurutan, satu per satu:
 6. Putuskan apakah kebutuhan Anda adalah (a) chat lokal dengan Ollama, (b) gateway 9Router untuk provider cloud, atau keduanya; integrasi 9Router sebagai backend chat Ollama perlu diuji dahulu.
 7. Jika NAS nanti dibeli, apakah tujuan pertamanya berbagi file/media, menampung disk VM/CT, atau keduanya? Ukuran data, kapasitas usable, budget, dan kebutuhan toleransi gagal disk masih perlu ditentukan.
 8. Untuk PC PVE tambahan, apakah prioritasnya menambah kapasitas, memudahkan migrasi manual, atau HA? Pilihan ini menentukan standalone vs cluster, QDevice, shared storage, dan biaya.
+9. Untuk unit AI tersendiri, workload utama yang diharapkan apa: chat umum, coding, dokumen/knowledge base, vision, atau campuran? Ini menentukan kelas RAM/VRAM dan jenis accelerator yang layak dievaluasi.
 
 ## 12. Batas tahap ini
 

@@ -109,7 +109,7 @@ Roadmap manfaat, keamanan, backup, monitoring, dan segmentasi: `docs/12-roadmap-
 - [ ] Cetak dari mana saja (TP-Link MR3020)
 - [ ] Server backup
 - [ ] Code studio di browser
-- [ ] Server LLM (hanya bila perlu)
+- [ ] Kelayakan unit AI/LLM khusus; tentukan workload dan benchmark hardware/runtime sebelum pembelian. Rencana di `perencanaan-arsitektur/README.md`.
 - [ ] Internet kedua sebagai failover
 - [ ] Monitor listrik rumah
 - [ ] Panel surya
