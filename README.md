@@ -4,6 +4,8 @@
 
 Catatan sesi perencanaan 7 November: [arsitektur menyeluruh dan fase kerja](perencanaan-arsitektur/README.md). Ini rancangan, bukan audit live atau bukti implementasi.
 
+Arsip ringkasan percakapan Claude tentang Homepage: [buka arsip percakapan](arsip-percakapan/claude-homepage-2026-11-07/README.md). Detail di dalamnya bersifat historis.
+
 Repo ini mencatat rancangan, keadaan aktual, jaringan, endpoint layanan, backup, pekerjaan migrasi, dan rencana masa depan. Rencana dan catatan lama bukan bukti keadaan saat ini.
 
 ## Arsitektur ringkas

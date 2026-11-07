@@ -4,6 +4,8 @@
 
 Catatan perencanaan menyeluruh sesi 7 November 2026: [arsitektur, fase, backup, keamanan, dan keputusan terbuka](perencanaan-arsitektur/README.md). Catatan itu bukan audit live dan tidak menandai pekerjaan implementasi sebagai selesai.
 
+Ringkasan percakapan Claude terkait dashboard Homepage diarsipkan di [arsip percakapan](arsip-percakapan/claude-homepage-2026-11-07/README.md); detailnya historis dan belum diverifikasi terhadap kondisi live.
+
 ## Kondisi aktual
 
 - Proxmox VE 9.2.24 di 192.168.88.10, kernel 7.0.14-26-pve; RAM 23 GiB terlihat. PVE firewall global nonaktif.
