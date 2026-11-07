@@ -105,6 +105,8 @@ Semua status dan alamat berikut **[LIVE-6-NOV] menurut snapshot yang disampaikan
 | Jellyfin | CT106 historis | Media, transcoding; sedang/variabel | 8096 historis | Metadata/config; media disalin terpisah. |
 | qBittorrent | CT108 historis | Inbox/staging; variabel | WebUI 8080, TCP/UDP 6881 historis | Config/state yang dibutuhkan; data torrent ditangani sebagai data terpisah. |
 | n8n + PostgreSQL | CT119 historis | DB, helper, staging dan folder tujuan; sedang | 5678 historis; privat | DB/workflow/config terenkripsi sesuai kebutuhan; uji pemulihan workflow. |
+| Local AI runtime (Ollama) | Guest Linux khusus setelah audit | Model lokal memakai CPU/RAM; kandidat awal Qwen 3.5 4B quantized; performa CPU harus diuji dan dapat memperlambat guest lain | API 11434 hanya LAN/tailnet terpilih; antarmuka browser dapat memakai Open WebUI | Model dapat diunduh ulang; backup data/config UI dan catat versi model/runtime. |
+| 9Router | CT Linux khusus setelah audit | Gateway/router API, bukan runtime model; beban diperkirakan ringan tetapi kebutuhan resmi spesifik belum ditemukan | Dashboard/API 20128 menurut repo upstream; LAN/tailnet saja; jangan expose internet | Backup SQLite/config/data directory dan prosedur pemulihan rahasia provider tanpa menyimpan secret di repo. |
 | PBS | VM212 historis | Backup guest; sedang | UI 8007 menurut dokumentasi PBS | Datastore independen dari host; kunci pemulihan aman; uji restore berkala. |
 | Monitoring | CT104, CT109–112, CT113 historis | Exporter, storage metrik, notifikasi | Kuma 3001, Prometheus 9090, Grafana 3000, Gotify 8070 historis | Backup config/data penting; definisi dashboard disimpan. |
 | AFFiNE, Forgejo, Renovate, Vaultwarden, Pocket ID, WordPress, OnlyOffice, Navidrome, k3s, situs publik | Guest stopped/target lama | Resource dan kebutuhan belum diputuskan | Port dan cakupan akses belum ditetapkan | Wajib punya prosedur backup dan uji restore sebelum adopsi. |
@@ -157,6 +159,17 @@ Dokumentasi Tailscale menyatakan fitur subnet router memerlukan IP forwarding; r
 - **Monitoring:** Uptime Kuma untuk pemeriksaan layanan; Prometheus/Grafana untuk metrik; Beszel sebagai opsi ringkas; Gotify untuk notifikasi. Pastikan Prometheus memakai exporter yang benar sebelum menghentikan exporter CT104.
 - **Portainer Agent:** dokumentasi Portainer menyebut port default 9001 dan kebutuhan konektivitas dari Server; batasi firewall sesuai sumber tersebut. [Dokumentasi Agent](https://docs.portainer.io/admin/environments/add/docker/agent).
 
+### Kandidat local AI dan 9Router
+
+- **Ollama menjalankan model lokal.** Pada M710q tanpa GPU, jadikan Qwen 3.5 4B versi Q4 sebagai titik awal uji; file model tercatat sekitar 3,3 GB. Model 9B sekitar 6,6 GB dan akan menambah beban RAM/CPU. Ukuran file bukan seluruh kebutuhan RAM: konteks dan guest lain ikut memakai memori. Jangan menganggap model 256K context praktis pada host ini; mulai dengan konteks pendek dan ukur penggunaan resource.
+- **9Router adalah gateway API, bukan AI/model lokal.** Ia dapat menjadi endpoint bersama untuk aplikasi klien dan merutekan permintaan ke provider yang dikonfigurasi. Jika provider itu cloud, prompt keluar ke provider tersebut. Dokumentasi upstream mencatat Docker image untuk `linux/amd64` dan data aplikasi di SQLite pada data directory; port contoh dashboard/API adalah 20128. Kebutuhan CPU/RAM resmi spesifik belum ditemukan, jadi alokasikan konservatif lalu ukur.
+- **Integrasi 9Router ↔ Ollama untuk chat belum dipastikan.** Dokumentasi 9Router menyebut endpoint self-hosted secara jelas untuk STT/TTS/embedding dan juga membahas custom endpoint kompatibel OpenAI/Anthropic; belum ditemukan resep upstream eksplisit untuk chat Ollama. Rencana awal: uji integrasi hanya setelah audit, atau pakai Ollama + Open WebUI langsung untuk chat lokal.
+- **Penempatan:** gunakan guest Linux khusus setelah daftar guest/ID/IP diaudit. Jangan pasang Docker di host Proxmox. Pisahkan Ollama dan 9Router secara logis; jika resource terbatas, mulai dengan satu model kecil, satu pengguna, dan hentikan percobaan sebelum menambah layanan lain. Empat core fisik harus dibagi dengan guest yang sudah berjalan.
+- **Keamanan:** batasi port 20128 dan Ollama 11434 ke LAN admin/tailnet yang dipilih; tidak ada port-forward internet. Upstream 9Router menampilkan variabel `INITIAL_PASSWORD`, `JWT_SECRET`, `REQUIRE_API_KEY`, dan menyimpan data provider/config di data directory; ganti nilai awal, aktifkan autentikasi endpoint yang sesuai, backup direktori tersebut, dan jangan simpan credential/token di repo.
+- **UI laptop:** Open WebUI dapat menjadi antarmuka browser yang berbicara langsung dengan Ollama. Ini menambah satu aplikasi/data store yang juga perlu backup dan kontrol akses. [Panduan Open WebUI + Ollama](https://docs.openwebui.com/getting-started/quick-start/connect-a-provider/).
+
+Rujukan resmi diperiksa untuk catatan ini: [katalog Qwen 3.5 di Ollama](https://ollama.com/library/qwen3.5), [cara Ollama membuka API jaringan](https://github.com/ollama/ollama/blob/main/docs/faq.mdx), [repo 9Router dan deployment](https://github.com/decolua/9router), [fitur dan provider 9Router](https://9router.com/). Rujukan mendeskripsikan kemampuan upstream, bukan verifikasi terhadap host/guest lokal.
+
 ## 8. Storage dan backup 3-2-1
 
 1. **Data utama:** HDD Seagate 2 TB ext4 yang dilaporkan pernah aktif sebagai `/mnt/pve/backup-disk`; cocokkan mount dan fungsi aktual. Data utama bukan backup.
@@ -180,7 +193,7 @@ Tidak satu pun fase berikut dimulai tanpa permintaan pelaksanaan terpisah.
 | 5. Migrasi/konsolidasi | CT104 rollback dan exporter harus tetap tersedia | Satu layanan per migrasi; validasi sebelum pensiun sumber | Rollback ke guest/data lama | Aplikasi, data, monitoring dan backup lulus validasi. |
 | 6. Otomasi | SSRF, salah klasifikasi, overwrite, izin luas | Batasi qBittorrent/n8n; validasi, Review, log, persetujuan | Karantina/salinan dan pemulihan workflow | Berkas uji tidak overwrite; ambigu tertahan. |
 | 7. Monitoring/akses | Duplikasi dashboard/exporter; remote access | Pilih dashboard, alarm, policy Tailscale dan akses admin | Backup konfigurasi/definisi dashboard | Alarm uji diterima; akses sesuai LAN/tailnet. |
-| 8. Opsional | CPU 4 core/4 thread dan RAM terbatas; layanan sensitif | Evaluasi satu per satu sesuai nilai, kebutuhan dan resource | Backup dan rollback sebelum adopsi | Restore dan kebutuhan akses terdokumentasi sebelum dipakai. |
+| 8. Opsional/local AI | CPU 4 core/4 thread dan RAM terbatas; guest layanan aktif berbagi resource | Setelah audit, pilot Ollama 4B dan/atau 9Router sebagai gateway; uji koneksi, auth, latensi, resource, dan jalur data prompt | Backup guest/data directory; rollback dengan menghentikan guest dan memulihkan config | Laptop dapat mengakses dari LAN/tailnet terpilih, tidak dari internet; resource host stabil; provider dan lokasi data prompt dipahami. |
 
 Untuk setiap fase, isi tabel berikut **setelah audit**; jangan mengarang alamat atau port.
 
@@ -201,6 +214,7 @@ Jawab berurutan, satu per satu:
 3. Kemudian tentukan perangkat mana yang akan menjadi resolver DNS cadangan jika STB mati.
 4. Tentukan target backup independen yang realistis: disk eksternal offline, NAS/perangkat lain, off-site, atau kombinasi.
 5. Putuskan daftar layanan opsional yang benar-benar dibutuhkan setelah guest stopped dan datanya diaudit.
+6. Putuskan apakah kebutuhan Anda adalah (a) chat lokal dengan Ollama, (b) gateway 9Router untuk provider cloud, atau keduanya; integrasi 9Router sebagai backend chat Ollama perlu diuji dahulu.
 
 ## 11. Batas tahap ini
 
