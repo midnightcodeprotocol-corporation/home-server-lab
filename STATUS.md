@@ -2,6 +2,8 @@
 
 **Audit live terakhir: 6 November 2026.** Snapshot dan rincian: [inventaris live](docs/16-inventaris-live-2026-11-06.md).
 
+Catatan perencanaan menyeluruh sesi 7 November 2026: [arsitektur, fase, backup, keamanan, dan keputusan terbuka](perencanaan-arsitektur/README.md). Catatan itu bukan audit live dan tidak menandai pekerjaan implementasi sebagai selesai.
+
 ## Kondisi aktual
 
 - Proxmox VE 9.2.24 di 192.168.88.10, kernel 7.0.14-26-pve; RAM 23 GiB terlihat. PVE firewall global nonaktif.

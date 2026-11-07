@@ -2,6 +2,8 @@
 
 > Audit live terakhir: **6 November 2026**. [Inventaris lengkap](docs/16-inventaris-live-2026-11-06.md).
 
+Catatan sesi perencanaan 7 November: [arsitektur menyeluruh dan fase kerja](perencanaan-arsitektur/README.md). Ini rancangan, bukan audit live atau bukti implementasi.
+
 Repo ini mencatat rancangan, keadaan aktual, jaringan, endpoint layanan, backup, pekerjaan migrasi, dan rencana masa depan. Rencana dan catatan lama bukan bukti keadaan saat ini.
 
 ## Arsitektur ringkas
