@@ -1,5 +1,7 @@
 # Status Home Server Lab
 
+**Fungsi repo:** buku catatan kerja/basis pengetahuan hidup untuk mengumpulkan ide, rencana, data, hasil percobaan, kendala, evaluasi kelayakan, keputusan, dan optimasi. Buku/PDF adalah keluaran turunan opsional. Arah ini dicatat 7 November 2026; tidak ada perubahan server yang dilakukan.
+
 **Audit live terakhir: 6 November 2026.** Snapshot dan rincian: [inventaris live](docs/16-inventaris-live-2026-11-06.md).
 
 Catatan perencanaan menyeluruh sesi 7 November 2026: [arsitektur, fase, backup, keamanan, dan keputusan terbuka](perencanaan-arsitektur/README.md). Catatan itu bukan audit live dan tidak menandai pekerjaan implementasi sebagai selesai.

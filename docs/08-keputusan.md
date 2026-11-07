@@ -30,6 +30,7 @@
 | 26 | Repo GitHub private sebagai basis pengetahuan; rahasia tidak pernah masuk | Pemulihan konteks lintas AI | Hanya PDF |
 | 27 | **Digantikan 3 Nov 2026 atas arahan terbaru pengguna:** gunakan Prometheus. Prometheus 3.15.1 + PVE exporter 3.11.0 berjalan di CT110 dan Grafana 13.3.0 di CT111 sejak 4 Nov. PVE API memakai akun/token terbatas `PVEAuditor`; retensi Prometheus 30 hari; API Prometheus 9090 dibatasi firewall CT110 hanya ke CT104 (rollback) dan CT111, exporter hanya jaringan Docker. | Pengguna membalik keputusan sebelumnya; kontrol akses minimal dan retensi terbatas | Menganggap keputusan lama “tanpa Prometheus” masih berlaku |
 | 28 | Client torrent ditempatkan pada CT Proxmox terpisah CT108; staging download parsial dipisahkan dari Inbox Jellyfin. Hanya Inbox dan staging yang dipasang di guest; Movies/Shows dan Immich tidak dapat diakses. | Batas isolasi jelas; n8n tidak diberi shell atau mount ke guest torrent. Unduhan selesai tersedia untuk pipeline Inbox. | Menaruh client di CT119 n8n atau mengizinkan client menulis langsung ke Movies/Shows |
+| 29 | **Arahan pengguna 7 Nov 2026:** repo GitHub menjadi buku catatan kerja/basis pengetahuan hidup untuk ide, rencana, data, percobaan, kendala, evaluasi kelayakan, keputusan, dan optimasi. Handbook/PDF tetap boleh ada sebagai keluaran turunan opsional, bukan tujuan utama. | Memudahkan pengumpulan bukti dan keputusan proyek yang berkembang, bukan hanya penyusunan buku | Mengorganisasi seluruh pekerjaan terutama untuk menghasilkan bab/PDF |
 
 ## Keputusan layanan media — 4 November 2026
 

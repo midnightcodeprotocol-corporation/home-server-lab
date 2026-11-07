@@ -4,7 +4,7 @@
 
 > English summary: this private repo is the complete knowledge base of a beginner's home-server project
 > (Lenovo ThinkCentre M710q planned for Proxmox VE, MikroTik router, AdGuard Home on an STB, planned Tailscale, Docker services).
-> Read the files in the order below, then continue the work. Answer the user in **Bahasa Indonesia**.
+> This repository is a living project notebook for ideas, plans, data, experiments, obstacles, feasibility, and optimization. The handbook/PDF is an optional downstream presentation, not the repository's primary purpose. Read the files below as needed and answer in **Bahasa Indonesia**.
 
 Anda membaca repo ini karena pengguna kehilangan riwayat chat atau memori. **Semua yang perlu Anda ketahui ada di sini.** Jangan menebak: bila sesuatu tidak ada di repo, tanyakan ke pengguna.
 
@@ -13,16 +13,16 @@ Anda membaca repo ini karena pengguna kehilangan riwayat chat atau memori. **Sem
 | Urut | Berkas | Isi |
 |---|---|---|
 | 1 | `STATUS.md` | Posisi terakhir, langkah berikutnya, masalah terbuka |
-| 1a | `docs/11-rencana-kerja-ai-ssh.md` | Serah-terima dan koordinasi bila Codex/Claude mengakses server lewat SSH |
-| 2 | `docs/10-konteks-proyek.md` | Siapa pengguna, riwayat proyek, preferensi kerja |
-| 3 | `docs/00-ide-awal.md`, `docs/01-ide-akhir.md` | Tujuan dan target arsitektur |
-| 4 | `docs/02-rangkaian-koneksi.md`, `docs/03-pohon.md` | Kabel, alamat, alur, ketergantungan |
-| 5 | `docs/05-inventaris-perangkat.md`, `data/*.yaml` | Perangkat dan daftar VM/LXC (terstruktur) |
-| 6 | `docs/07-port-dan-akses.md`, `docs/08-keputusan.md` | Port, akses, keputusan dan alasannya |
-| 7 | `docs/04-board.md`, `catatan/hasil-uji.md` | Papan kerja dan hasil uji |
-| 8 | `docs/bab/` | Isi buku per bab (Bab 1-56), `docs/bab/REVISI-4.md` untuk perubahan audit terbaru |
-| 9 | `konfigurasi/` | Berkas konfigurasi siap pakai (indentasi benar) |
-| 10 | `catatan/belum-pasti.md`, `catatan/kasus-nyata-lab.md` | Hal tak pasti dan masalah nyata |
+| 1a | `laboratorium/README.md` | Cara mengumpulkan ide, rencana, data, percobaan, kendala, kelayakan dan optimasi |
+| 1b | `docs/16-inventaris-live-2026-11-06.md` | Snapshot live terakhir yang terdokumentasi; bukan status saat ini tanpa audit ulang |
+| 1c | `docs/11-rencana-kerja-ai-ssh.md` | Serah-terima/koordinasi bila akses SSH memang diminta |
+| 2 | `docs/10-konteks-proyek.md`, `docs/00-ide-awal.md`, `docs/01-ide-akhir.md` | Konteks, kebutuhan dan arsitektur target |
+| 3 | `docs/02-rangkaian-koneksi.md`, `docs/03-pohon.md`, `docs/05-inventaris-perangkat.md`, `data/*.yaml` | Topologi, dependensi dan data terstruktur |
+| 4 | `docs/07-port-dan-akses.md`, `docs/08-keputusan.md`, `docs/13-matriks-rencana-aktual.md` | Akses, keputusan, rencana dan aktual |
+| 5 | `docs/04-board.md`, `catatan/hasil-uji.md`, `laboratorium/` | Pekerjaan, hasil eksperimen, kendala dan evaluasi |
+| 6 | `konfigurasi/` | Konfigurasi contoh (bukan rahasia; bukan otomatis live) |
+| 7 | `catatan/belum-pasti.md`, `catatan/kasus-nyata-lab.md` | Ketidakpastian dan masalah nyata |
+| 8 | `docs/bab/`, `tools/book_builder/` | Materi buku/PDF turunan opsional; bukan catatan sumber tunggal |
 
 Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.yaml`, `docs/07-port-dan-akses.md`.
 
@@ -45,9 +45,10 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 3. Setiap penjelasan memuat **sisi server dan sisi klien** (Windows, Android, iPhone).
 4. Perintah di kotak kode, satu perintah per kotak, dengan penjelasan singkat.
 5. Tandai hal yang tidak pasti dengan **[BELUM PASTI]** dan jujur bila belum diverifikasi. Periksa dokumentasi resmi sebelum menulis perintah baru.
-6. Catat setiap penyimpangan dan pesan error persis ke `catatan/hasil-uji.md`.
-7. Untuk pembaruan buku: bertahap (fase), **bukan tulis ulang total**.
-8. Perintah destruktif (instal Proxmox, format disk, wipe, `qm destroy`, firewall, SSH hanya kunci) **wajib diperingatkan dulu**, dengan jalur darurat.
+6. Catat hasil uji ringkas di `catatan/hasil-uji.md`; percobaan panjang memakai `laboratorium/percobaan/TEMPLATE.md`. Sanitasi pesan error sebelum dicatat.
+7. Kumpulkan ide, laporan kendala, evaluasi kelayakan, dan optimasi memakai indeks/template di `laboratorium/`. Jangan mencampur ide dengan keputusan atau rencana dengan hasil yang benar-benar dijalankan.
+8. Perbarui pengetahuan bertahap. Handbook/PDF boleh dirapikan jika diminta atau bermanfaat, tetapi jangan menjadikannya sasaran yang memaksa semua temuan masuk ke bab buku.
+9. Perintah destruktif (instal Proxmox, format disk, wipe, `qm destroy`, firewall, SSH hanya kunci) **wajib diperingatkan dulu**, dengan jalur darurat.
 
 ## 4. Keamanan
 
@@ -57,16 +58,17 @@ Mesin pencari cepat: `data/guest.yaml` (VMID, IP, RAM, port), `data/perangkat.ya
 
 ## 5. Keterbatasan repo yang perlu Anda tahu
 
-- Isi `docs/bab/` diekstrak dari teks buku. Sebagian blok konfigurasi kehilangan indentasi atau pagar kode; gunakan `konfigurasi/` untuk konfigurasi siap pakai dan jangan menganggap teks bab sebagai berkas yang dapat langsung ditempel.
-- Seluruh isi buku **belum diuji**. Hasil uji ada di `catatan/hasil-uji.md`. Jangan menganggap perintah pasti benar.
+- `docs/bab/` dan PDF adalah materi panduan turunan dan dapat tertinggal dari catatan sumber. Sebagian blok konfigurasi kehilangan indentasi/pagar kode; gunakan `konfigurasi/` sebagai contoh yang dirapikan, lalu tetap validasi sebelum pemakaian.
+- Isi buku **belum seluruhnya diuji**. Bukti pengamatan dan eksperimen ada di `docs/16-inventaris-live-2026-11-06.md`, `catatan/hasil-uji.md`, dan laporan `laboratorium/percobaan/`. Jangan menganggap perintah atau isi buku pasti benar.
 - Butir [BELUM PASTI] terkumpul di `catatan/belum-pasti.md`.
 - Lembar Revisi 1 (errata E1-E6) tidak ada di repo; lihat `catatan/kasus-nyata-lab.md` untuk ringkasannya.
 
 ## 6. Memperbarui repo setiap sesi
 
 1. Ubah `STATUS.md` (posisi, langkah berikutnya, masalah terbuka, tanggal).
-2. Isi `catatan/hasil-uji.md` (lulus / gagal / perlu revisi, error persis).
-3. Pindahkan kartu di `docs/04-board.md`.
-4. Bila ada keputusan baru, tambahkan ke `docs/08-keputusan.md`.
-5. Bila isi bab berubah, ubah berkas di `docs/bab/` dan catat di `docs/bab/REVISI-3.md` (atau buat `REVISI-4.md`).
-6. Pesan commit: `bab X: hasil uji` atau `status: tanggal`.
+2. Catat pengamatan/data dengan tanggal dan sumber; bedakan live, laporan, historis, rencana, dan belum diverifikasi.
+3. Catat hasil percobaan/kendala/evaluasi di kategori yang sesuai; tautkan ke rencana, data, dan keputusan terkait.
+4. Pindahkan kartu `docs/04-board.md` bila prioritas/tahap kerja berubah.
+5. Bila ada keputusan baru, tambahkan ke `docs/08-keputusan.md` dengan alasan dan tanggal.
+6. Perbarui `docs/bab/` atau bangun PDF hanya bila handbook diminta atau perubahan itu memang membantu penyajian; pertahankan catatan sumber di kategorinya.
+7. Pesan commit menjelaskan isi, misalnya `catatan: hasil uji DNS 2026-11-07` atau `docs: rencana backup bind mount`.
